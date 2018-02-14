@@ -42,9 +42,9 @@
 		607FACEA1AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		607FACEB1AFB9204008FA782 /* Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests.swift; sourceTree = "<group>"; };
 		786E8F4085AB1EAA76686A50 /* Pods-SimpleNetworking_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SimpleNetworking_Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SimpleNetworking_Example/Pods-SimpleNetworking_Example.debug.xcconfig"; sourceTree = "<group>"; };
-		C874E92323916B03BF4FFDBB /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; name = README.md; path = ../README.md; sourceTree = "<group>"; };
-		CAC8024D33382CD59678C728 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
-		D1BBAE174D09E460B2541A85 /* SimpleNetworking.podspec */ = {isa = PBXFileReference; includeInIndex = 1; name = SimpleNetworking.podspec; path = ../SimpleNetworking.podspec; sourceTree = "<group>"; };
+		C874E92323916B03BF4FFDBB /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
+		CAC8024D33382CD59678C728 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
+		D1BBAE174D09E460B2541A85 /* SimpleNetworking.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = SimpleNetworking.podspec; path = ../SimpleNetworking.podspec; sourceTree = "<group>"; };
 		F15B7DB2DF217CE778DBBD79 /* Pods_SimpleNetworking_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SimpleNetworking_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F96B744E34AD6210C6BB151C /* Pods-SimpleNetworking_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SimpleNetworking_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SimpleNetworking_Tests/Pods-SimpleNetworking_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -89,11 +89,20 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		5987769D2034C4FB0095CAAD /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Classes;
+			path = SimpleNetworking/Classes;
+			sourceTree = "<group>";
+		};
 		607FACC71AFB9204008FA782 = {
 			isa = PBXGroup;
 			children = (
 				607FACF51AFB993E008FA782 /* Podspec Metadata */,
 				607FACD21AFB9204008FA782 /* Example for SimpleNetworking */,
+				5987769D2034C4FB0095CAAD /* Classes */,
 				607FACE81AFB9204008FA782 /* Tests */,
 				607FACD11AFB9204008FA782 /* Products */,
 				3D15046D874B6DAFFCCEA4F9 /* Pods */,

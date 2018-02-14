@@ -1,6 +1,6 @@
 # SimpleNetworking
 
-[![CI Status](http://img.shields.io/travis/Vasilis Panagiotopoulos/SimpleNetworking.svg?style=flat)](https://travis-ci.org/Vasilis Panagiotopoulos/SimpleNetworking)
+[![CI Status](http://img.shields.io/travis/Bill Panagiotopouplos/SimpleNetworking.svg?style=flat)](https://travis-ci.org/Bill Panagiotopouplos/SimpleNetworking)
 [![Version](https://img.shields.io/cocoapods/v/SimpleNetworking.svg?style=flat)](http://cocoapods.org/pods/SimpleNetworking)
 [![License](https://img.shields.io/cocoapods/l/SimpleNetworking.svg?style=flat)](http://cocoapods.org/pods/SimpleNetworking)
 [![Platform](https://img.shields.io/cocoapods/p/SimpleNetworking.svg?style=flat)](http://cocoapods.org/pods/SimpleNetworking)
@@ -22,7 +22,7 @@ pod 'SimpleNetworking'
 
 ## Author
 
-Vasilis Panagiotopoulos, vasilis.panagiotopoulos@intrasoft-intl.com
+Bill Panagiotopouplos, billp.dev@gmail.com
 
 ## License
 

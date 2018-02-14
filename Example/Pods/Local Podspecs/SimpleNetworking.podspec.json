@@ -1,0 +1,22 @@
+{
+  "name": "SimpleNetworking",
+  "version": "0.1.0",
+  "summary": "A short description of SimpleNetworking.",
+  "description": "TODO: Add long description of the pod here.",
+  "homepage": "https://github.com/Vasilis Panagiotopoulos/SimpleNetworking",
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE"
+  },
+  "authors": {
+    "Vasilis Panagiotopoulos": "vasilis.panagiotopoulos@intrasoft-intl.com"
+  },
+  "source": {
+    "git": "https://github.com/Vasilis Panagiotopoulos/SimpleNetworking.git",
+    "tag": "0.1.0"
+  },
+  "platforms": {
+    "ios": "8.0"
+  },
+  "source_files": "SimpleNetworking/Classes/**/*"
+}

@@ -2,8 +2,8 @@
 //  ViewController.swift
 //  SimpleNetworking
 //
-//  Created by Vasilis Panagiotopoulos on 02/14/2018.
-//  Copyright (c) 2018 Vasilis Panagiotopoulos. All rights reserved.
+//  Created by Bill Panagiotopouplos on 02/14/2018.
+//  Copyright (c) 2018 Bill Panagiotopouplos. All rights reserved.
 //
 
 import UIKit
@@ -19,6 +19,5 @@ class ViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
 }
 
