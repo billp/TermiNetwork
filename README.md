@@ -47,8 +47,11 @@ SimpleNetworking is available through [CocoaPods](http://cocoapods.org). To inst
 it, simply add the following line to your Podfile:
 
 ```ruby
-pod 'SimpleNetworking', :git => 'https://github.com/billp/SimpleNetworking.git'
-```
+use_frameworks!
+
+target "YourTarget" do
+        pod 'SimpleNetworking', :git => 'https://github.com/billp/SimpleNetworking.git'
+end```
 
 ## Author
 
