@@ -3,7 +3,7 @@
 
 ## Usage
 
-1. Create a swift file called **Environments.swift** and define your environments by creating a struct like this.
+1. Create a swift file called **Environments.swift** and define your environments by creating a struct like this. Then set your active invironment inside the setup function
 
 ```swift
 struct Environment {
@@ -20,7 +20,7 @@ struct Environment {
 
 2. Call **`Environment.setup()`** from **`application(_:didFinishLaunchingWithOptions)`**
 
-3. Use **SNCall** to create and start a request by providing method, custom headers, path and parameters, as shown bellow.
+3. Use **SNCall** to create and start a request by providing method, custom headers, path and parameters, as shown bellow
 
 ```swift
 let params = [
