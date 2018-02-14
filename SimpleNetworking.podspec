@@ -30,7 +30,7 @@ SimpleNetworking is a simple networking library that allows you to switch betwee
 
   s.ios.deployment_target = '8.0'
 
-  s.source_files = 'Classes/**/*'
+  s.source_files = 'SimpleNetworking/Classes/**/*'
   
   # s.resource_bundles = {
   #   'SimpleNetworking' => ['SimpleNetworking/Assets/*.png']
