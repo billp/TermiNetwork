@@ -3,7 +3,7 @@
 
 ## Usage
 
-1. Create a swift file called **Environments.swift** and define your environments by creating a struct like this. Then set your active invironment inside the setup function
+1. Create a swift file called **Environments.swift** and define your environments by creating a struct like this. Then set your active environment inside the setup function
 
 ```swift
 struct Environment {
