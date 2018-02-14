@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SimpleNetworking
 
 struct Environment {
     static let localhost = SNEnvironment(scheme: .https, host: "localhost", port: 8080)

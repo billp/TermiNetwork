@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum SNMethod: String {
+public enum SNMethod: String {
     case get
     case head
     case post
@@ -20,22 +20,22 @@ enum SNMethod: String {
     case patch
 }
 
-struct SNPath {
+public struct SNPath {
     var components: [String]!
     
-    init(_ components: String...) {
+    public init(_ components: String...) {
         self.components = components
     }
 }
 
-enum SNError: Error {
+public enum SNError: Error {
     case invalidURL
     case invalidParams
 }
 
-typealias path = SNPath
+public typealias path = SNPath
 
-class SNCall {
+open class SNCall {
     static var fixedHeaders = [String: String]()
     var headers: [String: String]?
     var method: SNMethod!
@@ -46,7 +46,7 @@ class SNCall {
     
     
     //MARK: - Initializers
-    init(method: SNMethod, headers: [String: String]?, cachePolicy: URLRequest.CachePolicy?, timeoutInterval: TimeInterval?, path: SNPath, params: [String: Any?]?) {
+    public init(method: SNMethod, headers: [String: String]?, cachePolicy: URLRequest.CachePolicy?, timeoutInterval: TimeInterval?, path: SNPath, params: [String: Any?]?) {
         self.method = method
         self.headers = headers
         self.path = path.components.joined(separator: "/")
@@ -55,11 +55,11 @@ class SNCall {
         self.params = params
     }
     
-    convenience init(method: SNMethod, headers: [String: String], path: SNPath, params: [String: Any?]?) {
+    public convenience init(method: SNMethod, headers: [String: String], path: SNPath, params: [String: Any?]?) {
         self.init(method: method, headers: headers, cachePolicy: nil, timeoutInterval: nil, path: path, params: params)
     }
     
-    convenience init(method: SNMethod, path: SNPath, params: [String: Any?]?) {
+    public convenience init(method: SNMethod, path: SNPath, params: [String: Any?]?) {
         self.init(method: method, headers: nil, cachePolicy: nil, timeoutInterval: nil, path: path, params: nil)
     }
     
@@ -94,7 +94,7 @@ class SNCall {
     }
     
     // MARK: - Start request
-    func start(onSuccess: @escaping (Data)->(), onFailure: @escaping (Error)->()) throws {
+    public func start(onSuccess: @escaping (Data)->(), onFailure: @escaping (Error)->()) throws {
         let session = URLSession.shared.dataTask(with: try asRequest()) { data, urlResponse, error in
             if error != nil {
                 onFailure(error!)

@@ -1,19 +1,19 @@
 {
   "name": "SimpleNetworking",
-  "version": "0.1.0",
-  "summary": "A short description of SimpleNetworking.",
-  "description": "TODO: Add long description of the pod here.",
-  "homepage": "https://github.com/Vasilis Panagiotopoulos/SimpleNetworking",
+  "version": "0.0.1",
+  "summary": "Simple networking library for Swift",
+  "description": "SimpleNetworking is a simple networking library that allows you to switch between different environments with ease.",
+  "homepage": "https://github.com/billp/SimpleNetworking",
   "license": {
     "type": "MIT",
     "file": "LICENSE"
   },
   "authors": {
-    "Vasilis Panagiotopoulos": "vasilis.panagiotopoulos@intrasoft-intl.com"
+    "Bill Panagiotopoulos": "billp.dev@gmail.com"
   },
   "source": {
-    "git": "https://github.com/Vasilis Panagiotopoulos/SimpleNetworking.git",
-    "tag": "0.1.0"
+    "git": "https://github.com/billp/SimpleNetworking.git",
+    "tag": "0.0.1"
   },
   "platforms": {
     "ios": "8.0"

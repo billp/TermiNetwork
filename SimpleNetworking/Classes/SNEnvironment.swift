@@ -8,12 +8,12 @@
 
 import Foundation
 
-enum SNURLScheme: String {
+public enum SNURLScheme: String {
     case http
     case https
 }
 
-class SNEnvironment {
+open class SNEnvironment {
     
     // MARK: - Properties
     var scheme: SNURLScheme
@@ -23,26 +23,26 @@ class SNEnvironment {
     var timeoutInterval: TimeInterval = 60
 
     // MARK: - Static properties
-    static var active: SNEnvironment!
+    public static var active: SNEnvironment!
     
     
     // MARK: - Initializers
-    init(scheme: SNURLScheme, host: String, suffix: String?, port: Int?) {
+    public init(scheme: SNURLScheme, host: String, suffix: String?, port: Int?) {
         self.scheme = scheme
         self.host = host
         self.suffix = suffix
         self.port = port
     }
     
-    convenience init(scheme: SNURLScheme, host: String, port: Int) {
+    public convenience init(scheme: SNURLScheme, host: String, port: Int) {
         self.init(scheme: scheme, host: host, suffix: nil, port: port)
     }
     
-    convenience init(scheme: SNURLScheme, host: String, suffix: String) {
+    public convenience init(scheme: SNURLScheme, host: String, suffix: String) {
         self.init(scheme: scheme, host: host, suffix: suffix, port: nil)
     }
     
-    convenience init(scheme: SNURLScheme, host: String, suffix: String, port: Int) {
+    public convenience init(scheme: SNURLScheme, host: String, suffix: String, port: Int) {
         self.init(scheme: scheme, host: host, suffix: suffix, port: port)
     }
 }
@@ -50,7 +50,7 @@ class SNEnvironment {
 
 // MARK: - CustomStringConvertible
 extension SNEnvironment: CustomStringConvertible {
-    var description: String {
+    public var description: String {
         var urlComponents = [String]()
         urlComponents.append(scheme.rawValue + ":/")
         urlComponents.append(host)

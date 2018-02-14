@@ -1,7 +1,7 @@
 PODS:
   - Nimble (7.0.2)
   - Quick (1.2.0)
-  - SimpleNetworking (0.1.0)
+  - SimpleNetworking (0.0.1)
 
 DEPENDENCIES:
   - Nimble (~> 7.0.2)
@@ -15,8 +15,8 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   Nimble: bfe1f814edabba69ff145cb1283e04ed636a67f2
   Quick: 58d203b1c5e27fff7229c4c1ae445ad7069a7a08
-  SimpleNetworking: 5995048e8fb95f5554ac2157c1e439203aacd948
+  SimpleNetworking: 795327ee2fbf437fde64bc962e612c0eeb5601b6
 
 PODFILE CHECKSUM: 7812ee7ba025c85b7ea47e929ea0360d25540172
 
-COCOAPODS: 1.3.1
+COCOAPODS: 1.4.0
