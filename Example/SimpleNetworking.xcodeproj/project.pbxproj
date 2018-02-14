@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		598776A12034C7030095CAAD /* SNCall.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5987769F2034C7020095CAAD /* SNCall.swift */; };
 		598776A22034C7030095CAAD /* SNEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 598776A02034C7020095CAAD /* SNEnvironment.swift */; };
+		598776A42034CD630095CAAD /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 598776A32034CD630095CAAD /* Environment.swift */; };
 		607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD51AFB9204008FA782 /* AppDelegate.swift */; };
 		607FACD81AFB9204008FA782 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD71AFB9204008FA782 /* ViewController.swift */; };
 		607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 607FACD91AFB9204008FA782 /* Main.storyboard */; };
@@ -35,6 +36,7 @@
 		43A6CA7A0F98CA011641C63A /* Pods_SimpleNetworking_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SimpleNetworking_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5987769F2034C7020095CAAD /* SNCall.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SNCall.swift; sourceTree = "<group>"; };
 		598776A02034C7020095CAAD /* SNEnvironment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SNEnvironment.swift; sourceTree = "<group>"; };
+		598776A32034CD630095CAAD /* Environment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
 		607FACD01AFB9204008FA782 /* SimpleNetworking_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SimpleNetworking_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACD41AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		607FACD51AFB9204008FA782 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -134,6 +136,7 @@
 				607FACDC1AFB9204008FA782 /* Images.xcassets */,
 				607FACDE1AFB9204008FA782 /* LaunchScreen.xib */,
 				607FACD31AFB9204008FA782 /* Supporting Files */,
+				598776A32034CD630095CAAD /* Environment.swift */,
 			);
 			name = "Example for SimpleNetworking";
 			path = SimpleNetworking;
@@ -394,6 +397,7 @@
 				607FACD81AFB9204008FA782 /* ViewController.swift in Sources */,
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
 				598776A12034C7030095CAAD /* SNCall.swift in Sources */,
+				598776A42034CD630095CAAD /* Environment.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
