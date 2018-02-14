@@ -1,9 +1,10 @@
 # SimpleNetworking
 
 
-## Example
+## Usage
 
-- Define your environments by creating a struct like this
+1. Create a swift file called **Environments.swift** and define your environments by creating a struct like this.
+
 ```swift
 struct Environment {
     static let localhost = SNEnvironment(scheme: .https, host: "localhost", port: 8080)
@@ -16,10 +17,12 @@ struct Environment {
 }
 
 ```
-- Call `Environment.setup()` from `application(_:didFinishLaunchingWithOptions)`
 
-```
+2. Call **`Environment.setup()`** from **`application(_:didFinishLaunchingWithOptions)`**
 
+3. Use **SNCall** to create and start a request by providing method, custom headers, path and parameters, as shown bellow.
+
+```swift
 let params = [
     "sort_by": "first_name",
     "mode": "ascending"
@@ -35,7 +38,8 @@ try? SNCall(method: .get, headers: headers, path: path("users", "list"), params:
     //Do something with error
 })
 ```
-## Requirements
+
+The generated URL from the above request is `https://mydevserver.com/v1/users/list`. You can use any of the following request methods: **get, head, post, put, delete, connect, options, trace, patch**
 
 ## Installation
 
