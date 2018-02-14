@@ -1,14 +1,40 @@
 # SimpleNetworking
 
-[![CI Status](http://img.shields.io/travis/Bill Panagiotopouplos/SimpleNetworking.svg?style=flat)](https://travis-ci.org/Bill Panagiotopouplos/SimpleNetworking)
-[![Version](https://img.shields.io/cocoapods/v/SimpleNetworking.svg?style=flat)](http://cocoapods.org/pods/SimpleNetworking)
-[![License](https://img.shields.io/cocoapods/l/SimpleNetworking.svg?style=flat)](http://cocoapods.org/pods/SimpleNetworking)
-[![Platform](https://img.shields.io/cocoapods/p/SimpleNetworking.svg?style=flat)](http://cocoapods.org/pods/SimpleNetworking)
 
 ## Example
 
-To run the example project, clone the repo, and run `pod install` from the Example directory first.
+- Define your environments by creating a struct like this
+```swift
+struct Environment {
+    static let localhost = SNEnvironment(scheme: .https, host: "localhost", port: 8080)
+    static let dev = SNEnvironment(scheme: .https, host: "mydevserver.com", suffix: "v1")
+    static let production = SNEnvironment(scheme: .https, host: "my-production-server.com", suffix: "v1")
 
+    static func setup() {
+        SNEnvironment.active = Environment.dev
+    }
+}
+
+```
+- Call `Environment.setup()` from `application(_:didFinishLaunchingWithOptions)`
+
+```
+
+let params = [
+    "sort_by": "first_name",
+    "mode": "ascending"
+]
+
+let headers = [
+    "Content-type": "application/json"
+]
+
+try? SNCall(method: .get, headers: headers, path: path("users", "list"), params: params).start(onSuccess: { data in
+    //Do something with data
+}, onFailure: { error in
+    //Do something with error
+})
+```
 ## Requirements
 
 ## Installation
@@ -17,7 +43,7 @@ SimpleNetworking is available through [CocoaPods](http://cocoapods.org). To inst
 it, simply add the following line to your Podfile:
 
 ```ruby
-pod 'SimpleNetworking'
+pod 'SimpleNetworking', :git => 'https://github.com/billp/SimpleNetworking.git'
 ```
 
 ## Author
