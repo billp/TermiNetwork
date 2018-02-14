@@ -51,7 +51,8 @@ use_frameworks!
 
 target "YourTarget" do
         pod 'SimpleNetworking', :git => 'https://github.com/billp/SimpleNetworking.git'
-end```
+end
+```
 
 ## Author
 
