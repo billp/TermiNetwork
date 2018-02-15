@@ -9,12 +9,20 @@
 import Foundation
 import SimpleNetworking
 
-struct Environment {
-    static let localhost = SNEnvironment(scheme: .https, host: "localhost", port: 8080)
-    static let dev = SNEnvironment(scheme: .https, host: "mydevserver.com", suffix: "v1")
-    static let production = SNEnvironment(scheme: .https, host: "my-production-server.com", suffix: "v1")
+
+enum Environment {
+    case localhost
+    case dev
+    case production
     
-    static func setup() {
-        SNEnvironment.active = Environment.dev
+    func configure() -> SNEnvironment {
+        switch self {
+        case .localhost:
+            return SNEnvironment(scheme: .https, host: "localhost", port: 8080)
+        case .dev:
+            return SNEnvironment(scheme: .https, host: "mydevserver.com", suffix: "v1")
+        case .production:
+            return SNEnvironment(scheme: .https, host: "my-production-server.com", suffix: "v1")
+        }
     }
 }

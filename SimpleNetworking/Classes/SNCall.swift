@@ -8,6 +8,10 @@
 
 import Foundation
 
+public typealias SNSuccessCallback = (Data)->()
+public typealias SNFailureCallback = (Error)->()
+
+
 public enum SNMethod: String {
     case get
     case head
@@ -20,20 +24,16 @@ public enum SNMethod: String {
     case patch
 }
 
-public struct SNPath {
-    var components: [String]!
-    
-    public init(_ components: String...) {
-        self.components = components
-    }
-}
-
 public enum SNError: Error {
     case invalidURL
     case invalidParams
 }
 
-public typealias path = SNPath
+public typealias SNRouteReturnType = (method: SNMethod, path: SNPath, params: [String: Any?]?, headers: [String: String]?)
+
+public protocol SNRouteProtocol {
+    func construct() -> SNRouteReturnType
+}
 
 open class SNCall {
     static var fixedHeaders = [String: String]()
@@ -43,7 +43,6 @@ open class SNCall {
     var cachePolicy: URLRequest.CachePolicy?
     var timeoutInterval: TimeInterval?
     var params: [String: Any?]?
-    
     
     //MARK: - Initializers
     public init(method: SNMethod, headers: [String: String]?, cachePolicy: URLRequest.CachePolicy?, timeoutInterval: TimeInterval?, path: SNPath, params: [String: Any?]?) {
@@ -62,7 +61,12 @@ open class SNCall {
     public convenience init(method: SNMethod, path: SNPath, params: [String: Any?]?) {
         self.init(method: method, headers: nil, cachePolicy: nil, timeoutInterval: nil, path: path, params: nil)
     }
-    
+
+    public convenience init(route: SNRouteProtocol) {
+        let params = route.construct()
+        
+        self.init(method: params.method, headers: params.headers, cachePolicy: nil, timeoutInterval: nil, path: params.path, params: params.params)
+    }
     
     // MARK: - Create request
     func asRequest() throws -> URLRequest {
@@ -94,7 +98,7 @@ open class SNCall {
     }
     
     // MARK: - Start request
-    public func start(onSuccess: @escaping (Data)->(), onFailure: @escaping (Error)->()) throws {
+    public func start(onSuccess: @escaping SNSuccessCallback, onFailure: @escaping SNFailureCallback) throws {
         let session = URLSession.shared.dataTask(with: try asRequest()) { data, urlResponse, error in
             if error != nil {
                 onFailure(error!)
@@ -105,6 +109,4 @@ open class SNCall {
         
         session.resume()
     }
-    
-    
 }
