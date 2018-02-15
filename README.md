@@ -35,7 +35,7 @@ SNEnvironment.env = Environment.production
 
 3. Create your models represented with Codable. (Only Codable serialization is supported at the moment)
 
-Example models: FoodCategories, FoodCategory
+Example models: **FoodCategories**, **FoodCategory**
 
 ```swift
 struct FoodCategories: Codable {
@@ -101,7 +101,7 @@ enum APIFoodRouter: SNRouteProtocol {
     }
 }
 ```
-In your helper funcs section you need to define your model class along with **SNSuccessCallback** that determines the type of the response data which is being returned. Deserialization takes place automatically.
+> In your helper funcs section you need to define your model class along with **SNSuccessCallback** that determines the type of the response data which is being returned. Deserialization takes place automatically.
 
 5. Finally use your helper functions anywhere in your project
 ```swift
@@ -112,7 +112,7 @@ APIFoodRouter.getCategories(onSuccess: { categories in
 }
 ```
 
-categories returned from onSuccess are of type FoodCategories
+categories returned from **onSuccess** are of type **FoodCategories**
 
 > If you run the project after following all these steps you will get an error because **http://** is not allowed due to security. You need to add "NSAppTransportSecurity" (Dictionary) > "NSAllowsArbitraryLoads" (Boolean) > YES. But this is just for the demo, please don't do it to your own projects :)
 
