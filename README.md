@@ -72,7 +72,7 @@ struct FoodCategory : Codable {
 
 4. Create your a router class that comforms to SNRouteProtocol. There is no limit for a number router classes that you can create :)
 
-```
+```swift
 enum APIFoodRouter: SNRouteProtocol {
     // Define your routes
     case categories
