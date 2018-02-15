@@ -147,6 +147,10 @@ target "YourTarget" do
 end
 ```
 
+## Contribution
+
+Feel free to contribute to the project by creating a pull request and/or by reporting any issue(s) you find
+
 ## Author
 
 Bill Panagiotopouplos, billp.dev@gmail.com
