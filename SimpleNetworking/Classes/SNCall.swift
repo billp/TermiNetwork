@@ -8,7 +8,7 @@
 
 import Foundation
 
-public typealias SNSuccessCallback = (Data)->()
+public typealias SNSuccessCallback<T> = (T)->()
 public typealias SNFailureCallback = (Error)->()
 
 
@@ -70,7 +70,7 @@ open class SNCall {
     
     // MARK: - Create request
     func asRequest() throws -> URLRequest {
-        guard let url = URL(string: SNEnvironment.active.description) else {
+        guard let url = URL(string: SNEnvironment.active.description + "/" + path) else {
             throw SNError.invalidURL
         }
         
@@ -98,12 +98,17 @@ open class SNCall {
     }
     
     // MARK: - Start request
-    public func start(onSuccess: @escaping SNSuccessCallback, onFailure: @escaping SNFailureCallback) throws {
+    public func start<T>(onSuccess: @escaping SNSuccessCallback<T>, onFailure: @escaping SNFailureCallback) throws where T: Decodable {
         let session = URLSession.shared.dataTask(with: try asRequest()) { data, urlResponse, error in
             if error != nil {
                 onFailure(error!)
             } else if data != nil {
-                onSuccess(data!)
+                let jsonDecoder = JSONDecoder()
+                let object = try! jsonDecoder.decode(T.self, from: data!)
+
+                DispatchQueue.main.sync {
+                    onSuccess(object)
+                }
             }
         }
         

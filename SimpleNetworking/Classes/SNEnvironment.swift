@@ -19,7 +19,7 @@ open class SNEnvironment {
     var scheme: SNURLScheme
     var host: String
     var port: Int?
-    var suffix: String?
+    var suffix: SNPath?
     var timeoutInterval: TimeInterval = 60
 
     // MARK: - Static properties
@@ -27,7 +27,7 @@ open class SNEnvironment {
     
     
     // MARK: - Initializers
-    public init(scheme: SNURLScheme, host: String, suffix: String?, port: Int?) {
+    public init(scheme: SNURLScheme, host: String, suffix: SNPath?, port: Int?) {
         self.scheme = scheme
         self.host = host
         self.suffix = suffix
@@ -38,11 +38,11 @@ open class SNEnvironment {
         self.init(scheme: scheme, host: host, suffix: nil, port: port)
     }
     
-    public convenience init(scheme: SNURLScheme, host: String, suffix: String) {
+    public convenience init(scheme: SNURLScheme, host: String, suffix: SNPath) {
         self.init(scheme: scheme, host: host, suffix: suffix, port: nil)
     }
     
-    public convenience init(scheme: SNURLScheme, host: String, suffix: String, port: Int) {
+    public convenience init(scheme: SNURLScheme, host: String, suffix: SNPath, port: Int) {
         self.init(scheme: scheme, host: host, suffix: suffix, port: port)
     }
 }
@@ -59,7 +59,7 @@ extension SNEnvironment: CustomStringConvertible {
             urlComponents.append(":" + String(describing: port!))
         }
         if suffix != nil {
-            urlComponents.append(suffix!)
+            urlComponents.append(suffix!.components.joined(separator: "/"))
         }
         
         return urlComponents.joined(separator: "/")
