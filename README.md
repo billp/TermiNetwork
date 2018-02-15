@@ -106,15 +106,15 @@ In your helper funcs section you need to define your model class along with **SN
 5. Finally use your helper functions anywhere in your project
 ```swift
 APIFoodRouter.getCategories(onSuccess: { categories in
-    self.categories = categories.categories
-    self.tableView.reloadData()
-    self.tableView.isHidden = false
+    debugPrint(categories.categories.map({ $0.strCategory }))
 }) { error in
     debugPrint(error)
 }
 ```
 
 categories returned from onSuccess are of type FoodCategories
+
+> If you run the project after following all these steps you will get an error because **http://** is not allowed due to security. You need to add "NSAppTransportSecurity" (Dictionary) > "NSAllowsArbitraryLoads" (Boolean) > YES. But this is just for the demo, please don't do it to your own projects :)
 
 ### Use SNCall independently
 
