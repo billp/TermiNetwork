@@ -7,6 +7,8 @@ SimpleNetworking is a networking library written with Swift 4.0 that supports mu
 1. Create a swift file called **Environments.swift** that comforms to SNEnvironmentProtocol and define your environments by creating an enum as shown bellow. 
 
 ```swift
+import SimpleNetworking
+
 enum Environment: SNEnvironmentProtocol {
     case localhost
     case dev
@@ -74,6 +76,8 @@ struct FoodCategory : Codable {
 4. Create your router class that comforms to SNRouteProtocol. There is no limit for a number router classes that you can create :)
 
 ```swift
+import SimpleNetworking
+
 enum APIFoodRouter: SNRouteProtocol {
     // Define your routes
     case categories
