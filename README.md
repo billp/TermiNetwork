@@ -3,10 +3,10 @@
 
 ## Usage
 
-1. Create a swift file called **Environments.swift** and define your environments by creating an enum like this. 
+1. Create a swift file called **Environments.swift** that comforms to SNEnvironmentProtocol and define your environments by creating an enum like this. 
 
 ```swift
-enum Environment {
+enum Environment: SNEnvironmentProtocol {
     case localhost
     case dev
     case production
@@ -30,11 +30,23 @@ enum Environment {
 SNEnvironment.env = Environment.production
 ```
 
-4. Create your models represented with Codable. (Only Codable serialization is supported at the moment)
+3. Create your models represented with Codable. (Only Codable serialization is supported at the moment)
 
-Example model: FoodCategory
+Example models: FoodCategories, FoodCategory
 
 ```swift
+struct FoodCategories: Codable {
+    	let categories: [FoodCategory]
+
+	enum CodingKeys: String, CodingKey {
+		case categories = "categories"
+	}
+	init(from decoder: Decoder) throws {
+		let values = try decoder.container(keyedBy: CodingKeys.self)
+		categories = try values.decode([FoodCategory].self, forKey: .categories)
+	}
+}
+
 struct FoodCategory : Codable {
 	let idCategory: String
 	let strCategory: String
@@ -58,8 +70,46 @@ struct FoodCategory : Codable {
 
 ```
 
-5. 
+4. Create your a router class that comforms to SNRouteProtocol. There is no limit for a number router classes that you can create :)
 
+```
+enum APIFoodRouter: SNRouteProtocol {
+    // Define your routes
+    case categories
+    
+    // Set method, path, params, headers for each route
+    internal func construct() -> SNRouteReturnType {
+        switch self {
+        case .categories:
+            return (
+                method: .get,
+                path: path("categories.php"),
+                params: nil,
+                headers: nil
+            )
+        }
+    }
+    
+    // Create static helper functions for each route
+    static func getCategories(onSuccess: @escaping SNSuccessCallback<FoodRootClass>, onFailure: @escaping SNFailureCallback) {
+        try? SNCall(route: APIFoodRouter.categories).start(onSuccess: onSuccess, onFailure: onFailure)
+    }
+}
+```
+In your helper funcs section you need to define your model class along with **SNSuccessCallback** which determines the type of the response data that is returned. Serialization takes place automatically.
+
+5. Finally use your helper functions anywhere in your project
+```swift
+APIFoodRouter.getCategories(onSuccess: { categories in
+    self.categories = categories.categories!
+    self.tableView.reloadData()
+    self.tableView.isHidden = false
+}) { error in
+    debugPrint(error)
+}
+```
+
+categories are of type FoodCategories
 
 ### Use SNCall independently
 
