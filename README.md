@@ -1,6 +1,6 @@
 # SimpleNetworking
 
-SimpleNetworking is a networking library written with Swift 4.0 that supports multi-environment configuration, routing and automatic serialization (with Codable).
+SimpleNetworking is a networking library written with Swift 4.0 that supports multi-environment configuration, routing and automatic deserialization (with Codable).
 
 ## Usage
 
@@ -71,7 +71,7 @@ struct FoodCategory : Codable {
 
 ```
 
-4. Create your a router class that comforms to SNRouteProtocol. There is no limit for a number router classes that you can create :)
+4. Create your router class that comforms to SNRouteProtocol. There is no limit for a number router classes that you can create :)
 
 ```swift
 enum APIFoodRouter: SNRouteProtocol {
@@ -97,7 +97,7 @@ enum APIFoodRouter: SNRouteProtocol {
     }
 }
 ```
-In your helper funcs section you need to define your model class along with **SNSuccessCallback** that determines the type of the response data which is being returned. Serialization takes place automatically.
+In your helper funcs section you need to define your model class along with **SNSuccessCallback** that determines the type of the response data which is being returned. Deserialization takes place automatically.
 
 5. Finally use your helper functions anywhere in your project
 ```swift
@@ -110,7 +110,7 @@ APIFoodRouter.getCategories(onSuccess: { categories in
 }
 ```
 
-categories are of type FoodCategories
+categories returned from onSuccess are of type FoodCategories
 
 ### Use SNCall independently
 
