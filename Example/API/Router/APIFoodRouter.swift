@@ -27,7 +27,7 @@ enum APIFoodRouter: SNRouteProtocol {
     }
     
     // Create static helper functions for each route
-    static func getCategories(onSuccess: @escaping SNSuccessCallback<FoodRootClass>, onFailure: @escaping SNFailureCallback) {
+    static func getCategories(onSuccess: @escaping SNSuccessCallback<FoodCategories>, onFailure: @escaping SNFailureCallback) {
         try? SNCall(route: APIFoodRouter.categories).start(onSuccess: onSuccess, onFailure: onFailure)
     }
 }

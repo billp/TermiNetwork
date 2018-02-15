@@ -7,15 +7,15 @@
 
 import Foundation
 
-struct FoodRootClass : Codable {
+struct FoodCategories: Codable {
 
-	let categories : [FoodCategory]?
+	let categories: [FoodCategory]
 
     enum CodingKeys: String, CodingKey {
 		case categories = "categories"
 	}
 	init(from decoder: Decoder) throws {
 		let values = try decoder.container(keyedBy: CodingKeys.self)
-		categories = try values.decodeIfPresent([FoodCategory].self, forKey: .categories)
+		categories = try values.decode([FoodCategory].self, forKey: .categories)
 	}
 }

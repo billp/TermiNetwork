@@ -25,16 +25,13 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        
         APIFoodRouter.getCategories(onSuccess: { categories in
-            self.categories = categories.categories!
+            self.categories = categories.categories
             self.tableView.reloadData()
             self.tableView.isHidden = false
         }) { error in
             debugPrint(error)
         }
-
-
     }
 
     override func didReceiveMemoryWarning() {
