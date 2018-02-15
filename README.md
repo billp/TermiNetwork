@@ -25,7 +25,7 @@ enum Environment: SNEnvironmentProtocol {
 }
 ```
 
-2. Set your active environment in **`application(_:didFinishLaunchingWithOptions)`** or everywhere you want, in your application's initialization code.
+2. Set your active environment in **`application(_:didFinishLaunchingWithOptions)`** or everywhere else you want, in your application's initialization code.
 
 ```
 SNEnvironment.env = Environment.production
@@ -97,7 +97,7 @@ enum APIFoodRouter: SNRouteProtocol {
     }
 }
 ```
-In your helper funcs section you need to define your model class along with **SNSuccessCallback** which determines the type of the response data that is returned. Serialization takes place automatically.
+In your helper funcs section you need to define your model class along with **SNSuccessCallback** that determines the type of the response data which is being returned. Serialization takes place automatically.
 
 5. Finally use your helper functions anywhere in your project
 ```swift
