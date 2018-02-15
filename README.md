@@ -1,10 +1,10 @@
 # SimpleNetworking
 
-SimpleNetworking is a networking library written with Swift 4 that supports multi-environment configuration, routing and automatic serialization (with Codable)
+SimpleNetworking is a networking library written with Swift 4 that supports multi-environment configuration, routing and automatic serialization (with Codable).
 
 ## Usage
 
-1. Create a swift file called **Environments.swift** that comforms to SNEnvironmentProtocol and define your environments by creating an enum like this. 
+1. Create a swift file called **Environments.swift** that comforms to SNEnvironmentProtocol and define your environments by creating an enum as shown bellow. 
 
 ```swift
 enum Environment: SNEnvironmentProtocol {
