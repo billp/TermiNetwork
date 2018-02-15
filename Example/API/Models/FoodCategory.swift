@@ -8,23 +8,22 @@
 import Foundation
 
 struct FoodCategory : Codable {
+	let idCategory: String
+	let strCategory: String
+	let strCategoryDescription: String
+	let strCategoryThumb: String
 
-	let idCategory : String?
-	let strCategory : String?
-	let strCategoryDescription : String?
-	let strCategoryThumb : String?
-
-	enum CodingKeys: String, CodingKey {
-		case idCategory = "idCategory"
-		case strCategory = "strCategory"
-		case strCategoryDescription = "strCategoryDescription"
-		case strCategoryThumb = "strCategoryThumb"
+	enum CodingKeys: CodingKey {
+		case idCategory
+		case strCategory
+		case strCategoryDescription
+		case strCategoryThumb
 	}
 	init(from decoder: Decoder) throws {
 		let values = try decoder.container(keyedBy: CodingKeys.self)
-		idCategory = try values.decodeIfPresent(String.self, forKey: .idCategory)
-		strCategory = try values.decodeIfPresent(String.self, forKey: .strCategory)
-		strCategoryDescription = try values.decodeIfPresent(String.self, forKey: .strCategoryDescription)
-		strCategoryThumb = try values.decodeIfPresent(String.self, forKey: .strCategoryThumb)
+		idCategory = try values.decode(String.self, forKey: .idCategory)
+		strCategory = try values.decode(String.self, forKey: .strCategory)
+		strCategoryDescription = try values.decode(String.self, forKey: .strCategoryDescription)
+		strCategoryThumb = try values.decode(String.self, forKey: .strCategoryThumb)
 	}
 }

@@ -35,6 +35,10 @@ public protocol SNRouteProtocol {
     func construct() -> SNRouteReturnType
 }
 
+public protocol SNEnvironmentProtocol {
+    func configure() -> SNEnvironment
+}
+
 open class SNCall {
     static var fixedHeaders = [String: String]()
     var headers: [String: String]?
@@ -69,12 +73,12 @@ open class SNCall {
     }
     
     // MARK: - Create request
-    func asRequest() throws -> URLRequest {
-        guard let url = URL(string: SNEnvironment.active.description + "/" + path) else {
+    public func asRequest() throws -> URLRequest {
+        guard let url = URL(string: SNEnvironment.current.description + "/" + path) else {
             throw SNError.invalidURL
         }
         
-        var request = URLRequest(url: url.appendingPathComponent(path), cachePolicy: .useProtocolCachePolicy, timeoutInterval: SNEnvironment.active.timeoutInterval)
+        var request = URLRequest(url: url.appendingPathComponent(path), cachePolicy: .useProtocolCachePolicy, timeoutInterval: SNEnvironment.current.timeoutInterval)
         
         params?.merge(SNCall.fixedHeaders, uniquingKeysWith: { (_, new) in new })
         

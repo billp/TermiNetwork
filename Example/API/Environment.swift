@@ -10,7 +10,7 @@ import Foundation
 import SimpleNetworking
 
 
-enum Environment {
+enum Environment: SNEnvironmentProtocol {
     case localhost
     case dev
     case production

@@ -22,10 +22,14 @@ open class SNEnvironment {
     var suffix: SNPath?
     var timeoutInterval: TimeInterval = 60
 
-    // MARK: - Static properties
-    public static var active: SNEnvironment!
-    
-    
+    // MARK: - Static members
+    internal static var current: SNEnvironment!
+    public static var env: SNEnvironmentProtocol! {
+        didSet {
+            current = env.configure()
+        }
+    }
+        
     // MARK: - Initializers
     public init(scheme: SNURLScheme, host: String, suffix: SNPath?, port: Int?) {
         self.scheme = scheme
