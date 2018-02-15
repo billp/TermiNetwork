@@ -114,7 +114,7 @@ categories are of type FoodCategories
 
 ### Use SNCall independently
 
-You can use the SNCall class to create a NSRequest and use it with another library such as Alamofire by providing method, custom headers, path and parameters, as shown bellow
+You can use the SNCall class to create a URLRequest and use it with another library such as Alamofire by providing method, custom headers, path and parameters, as shown bellow
 
 ```swift    
 let params = [
