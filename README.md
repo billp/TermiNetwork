@@ -116,7 +116,7 @@ categories returned from **onSuccess** are of type **FoodCategories**
 
 > If you run the project after following all these steps you will get an error because **http://** is not allowed due to security. You need to add "NSAppTransportSecurity" (Dictionary) > "NSAllowsArbitraryLoads" (Boolean) > YES. But this is just for the demo, please don't do it to your own projects :)
 
-### Use SNCall independently
+### Use of SNCall independently
 
 You can use the SNCall class to create a URLRequest and use it with another library such as Alamofire by providing method, custom headers, path and parameters, as shown bellow
 
