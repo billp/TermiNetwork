@@ -106,7 +106,7 @@ In your helper funcs section you need to define your model class along with **SN
 5. Finally use your helper functions anywhere in your project
 ```swift
 APIFoodRouter.getCategories(onSuccess: { categories in
-    self.categories = categories.categories!
+    self.categories = categories.categories
     self.tableView.reloadData()
     self.tableView.isHidden = false
 }) { error in
