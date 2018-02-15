@@ -18,9 +18,18 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
+        self.title = "SimpleNetworking Demo"
+        self.tableView.isHidden = true
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        
         APIFoodRouter.getCategories(onSuccess: { categories in
             self.categories = categories.categories!
             self.tableView.reloadData()
+            self.tableView.isHidden = false
         }) { error in
             debugPrint(error)
         }
