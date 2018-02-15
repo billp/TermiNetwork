@@ -3,26 +3,69 @@
 
 ## Usage
 
-1. Create a swift file called **Environments.swift** and define your environments by creating a struct like this. Then set your active environment inside the setup function
+1. Create a swift file called **Environments.swift** and define your environments by creating an enum like this. 
 
 ```swift
-struct Environment {
-    static let localhost = SNEnvironment(scheme: .https, host: "localhost", port: 8080)
-    static let dev = SNEnvironment(scheme: .https, host: "mydevserver.com", suffix: "v1")
-    static let production = SNEnvironment(scheme: .https, host: "my-production-server.com", suffix: "v1")
-
-    static func setup() {
-        SNEnvironment.active = Environment.dev
+enum Environment {
+    case localhost
+    case dev
+    case production
+    
+    func configure() -> SNEnvironment {
+        switch self {
+        case .localhost:
+            return SNEnvironment(scheme: .https, host: "localhost", port: 8080)
+        case .dev:
+            return SNEnvironment(scheme: .https, host: "mydevserver.com", suffix: path("v1"))
+        case .production:
+            return SNEnvironment(scheme: .http, host: "www.themealdb.com", suffix: path("api", "json", "v1", "1"))
+        }
     }
+}
+```
+
+2. Set your active environment in **`application(_:didFinishLaunchingWithOptions)`** or everywhere you want, in your application's initialization code.
+
+```
+SNEnvironment.env = Environment.production
+```
+
+4. Create your models represented with Codable. (Only Codable serialization is supported at the moment)
+
+Example model: FoodCategory
+
+```swift
+struct FoodCategory : Codable {
+	let idCategory: String
+	let strCategory: String
+	let strCategoryDescription: String
+	let strCategoryThumb: String
+
+	enum CodingKeys: CodingKey {
+		case idCategory
+		case strCategory
+		case strCategoryDescription
+		case strCategoryThumb
+	}
+	init(from decoder: Decoder) throws {
+		let values = try decoder.container(keyedBy: CodingKeys.self)
+		idCategory = try values.decode(String.self, forKey: .idCategory)
+		strCategory = try values.decode(String.self, forKey: .strCategory)
+		strCategoryDescription = try values.decode(String.self, forKey: .strCategoryDescription)
+		strCategoryThumb = try values.decode(String.self, forKey: .strCategoryThumb)
+	}
 }
 
 ```
 
-2. Call **`Environment.setup()`** from **`application(_:didFinishLaunchingWithOptions)`**
+5. 
 
-3. Use **SNCall** to create and start a request by providing method, custom headers, path and parameters, as shown bellow
 
-```swift
+### Use SNCall independently
+
+You can use the SNCall class to create a NSRequest and use it with another library such as Alamofire by providing method, custom headers, path and parameters, as shown bellow
+
+```swift    
 let params = [
     "sort_by": "first_name",
     "mode": "ascending"
@@ -32,14 +75,13 @@ let headers = [
     "Content-type": "application/json"
 ]
 
-try? SNCall(method: .get, headers: headers, path: path("users", "list"), params: params).start(onSuccess: { data in
-    //Do something with data
-}, onFailure: { error in
-    //Do something with error
-})
+let request = try? SNCall(method: .get, headers: headers, path: path("users", "list"), params: params).asRequest()
 ```
 
-The generated URL from the above request is `https://mydevserver.com/v1/users/list`. You can use any of the following request methods: **get, head, post, put, delete, connect, options, trace, patch**
+
+### Supported Request Methods
+
+You can use any of the following request methods: **get, head, post, put, delete, connect, options, trace, patch**
 
 ## Installation
 
