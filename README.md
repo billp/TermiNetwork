@@ -1,6 +1,6 @@
 # SimpleNetworking
 
-SimpleNetworking is a networking library written with Swift 4 that supports multi-environment configuration, routing and automatic serialization (with Codable).
+SimpleNetworking is a networking library written with Swift 4.0 that supports multi-environment configuration, routing and automatic serialization (with Codable).
 
 ## Usage
 
