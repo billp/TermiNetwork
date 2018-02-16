@@ -51,6 +51,12 @@ extension ViewController {
         
         cell.titleLabel.text = category.strCategory
         cell.descriptionLabel.text = category.strCategoryDescription
+
+        APICustomHelpers.getImage(url: "http://" + category.strCategoryThumb, onSuccess: { image in
+            cell.thumbImageView.image = image
+        }) { error in
+            debugPrint(error)
+        }
         
         return cell
     }

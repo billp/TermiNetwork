@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		598776A42034CD630095CAAD /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 598776A32034CD630095CAAD /* Environment.swift */; };
+		59DB7F982036EF9D003E91FC /* APICustomHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59DB7F972036EF9D003E91FC /* APICustomHelpers.swift */; };
 		59FC8F8520359E1A00A2D2E6 /* APIFoodRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59FC8F8420359E1A00A2D2E6 /* APIFoodRouter.swift */; };
 		59FC8F8B20359E4E00A2D2E6 /* FoodCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59FC8F8820359E4E00A2D2E6 /* FoodCategory.swift */; };
 		59FC8F8C20359E4E00A2D2E6 /* FoodCategories.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59FC8F8920359E4E00A2D2E6 /* FoodCategories.swift */; };
@@ -37,6 +38,7 @@
 		222E2B4D7C3DF3090DFBB526 /* Pods-SimpleNetworking_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SimpleNetworking_Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-SimpleNetworking_Example/Pods-SimpleNetworking_Example.release.xcconfig"; sourceTree = "<group>"; };
 		43A6CA7A0F98CA011641C63A /* Pods_SimpleNetworking_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SimpleNetworking_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		598776A32034CD630095CAAD /* Environment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
+		59DB7F972036EF9D003E91FC /* APICustomHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APICustomHelpers.swift; sourceTree = "<group>"; };
 		59FC8F8420359E1A00A2D2E6 /* APIFoodRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIFoodRouter.swift; sourceTree = "<group>"; };
 		59FC8F8820359E4E00A2D2E6 /* FoodCategory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FoodCategory.swift; sourceTree = "<group>"; };
 		59FC8F8920359E4E00A2D2E6 /* FoodCategories.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FoodCategories.swift; sourceTree = "<group>"; };
@@ -122,6 +124,7 @@
 			isa = PBXGroup;
 			children = (
 				59FC8F8420359E1A00A2D2E6 /* APIFoodRouter.swift */,
+				59DB7F972036EF9D003E91FC /* APICustomHelpers.swift */,
 			);
 			path = Router;
 			sourceTree = "<group>";
@@ -423,6 +426,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				607FACD81AFB9204008FA782 /* ViewController.swift in Sources */,
+				59DB7F982036EF9D003E91FC /* APICustomHelpers.swift in Sources */,
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
 				59FC8F8F2035A51F00A2D2E6 /* FoodCategoryCell.swift in Sources */,
 				59FC8F8C20359E4E00A2D2E6 /* FoodCategories.swift in Sources */,
@@ -473,6 +477,7 @@
 		607FACED1AFB9204008FA782 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -526,6 +531,7 @@
 		607FACEE1AFB9204008FA782 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";

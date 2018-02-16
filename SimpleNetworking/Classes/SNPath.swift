@@ -13,6 +13,15 @@ public struct SNPath {
     public init(_ components: String...) {
         self.components = components
     }
+    
+    public init(_ components: [String]) {
+        self.components = components
+    }
+}
+
+internal enum SNPathType: Error {
+    case normal
+    case full
 }
 
 public typealias path = SNPath

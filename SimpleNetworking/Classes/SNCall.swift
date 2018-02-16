@@ -27,6 +27,13 @@ public enum SNMethod: String {
 public enum SNError: Error {
     case invalidURL
     case invalidParams
+    case responseDataIsEmpty
+    case responseInvalidImageData
+}
+
+public enum SNCallSerializationType {
+    case JSON
+    case image
 }
 
 public typealias SNRouteReturnType = (method: SNMethod, path: SNPath, params: [String: Any?]?, headers: [String: String]?)
@@ -47,6 +54,7 @@ open class SNCall {
     var cachePolicy: URLRequest.CachePolicy?
     var timeoutInterval: TimeInterval?
     var params: [String: Any?]?
+    private var pathType: SNPathType = .normal
     
     //MARK: - Initializers
     public init(method: SNMethod, headers: [String: String]?, cachePolicy: URLRequest.CachePolicy?, timeoutInterval: TimeInterval?, path: SNPath, params: [String: Any?]?) {
@@ -72,13 +80,22 @@ open class SNCall {
         self.init(method: params.method, headers: params.headers, cachePolicy: nil, timeoutInterval: nil, path: params.path, params: params.params)
     }
     
+    // Convenience method for passing a string as path instead of path
+    public convenience init(method: SNMethod, url: String, params: [String: Any?]?) {
+        self.init(method: method, headers: nil, cachePolicy: nil, timeoutInterval: nil, path: SNPath("-"), params: nil)
+        self.pathType = .full
+        self.path = url
+    }
+    
     // MARK: - Create request
     public func asRequest() throws -> URLRequest {
-        guard let url = URL(string: SNEnvironment.current.description + "/" + path) else {
+        let urlString = pathType == .normal ? SNEnvironment.current.description + "/" + path : path
+        
+        guard let url = URL(string: urlString) else {
             throw SNError.invalidURL
         }
         
-        var request = URLRequest(url: url.appendingPathComponent(path), cachePolicy: .useProtocolCachePolicy, timeoutInterval: SNEnvironment.current.timeoutInterval)
+        var request = URLRequest(url: url, cachePolicy: .useProtocolCachePolicy, timeoutInterval: SNEnvironment.current.timeoutInterval)
         
         params?.merge(SNCall.fixedHeaders, uniquingKeysWith: { (_, new) in new })
         
@@ -101,18 +118,47 @@ open class SNCall {
         return request
     }
     
-    // MARK: - Start request
+    // MARK: - Start requests
+    
+    // Deserialize objects with Decodable
     public func start<T>(onSuccess: @escaping SNSuccessCallback<T>, onFailure: @escaping SNFailureCallback) throws where T: Decodable {
         let session = URLSession.shared.dataTask(with: try asRequest()) { data, urlResponse, error in
             if error != nil {
                 onFailure(error!)
-            } else if data != nil {
+            }
+            else if data != nil {
                 let jsonDecoder = JSONDecoder()
                 let object = try! jsonDecoder.decode(T.self, from: data!)
-
+                
                 DispatchQueue.main.sync {
                     onSuccess(object)
                 }
+            } else {
+                onFailure(SNError.responseDataIsEmpty)
+            }
+        }
+        
+        session.resume()
+    }
+    
+    // Deserialize objects with UIImage
+    public func start<T>(onSuccess: @escaping SNSuccessCallback<T>, onFailure: @escaping SNFailureCallback) throws where T: UIImage {
+        let session = URLSession.shared.dataTask(with: try asRequest()) { data, urlResponse, error in
+            if error != nil {
+                onFailure(error!)
+            }
+            else if data != nil {
+                let image = T(data: data!)
+                
+                if image == nil {
+                    onFailure(SNError.responseInvalidImageData)
+                } else {
+                    DispatchQueue.main.sync {
+                        onSuccess(image!)
+                    }
+                }
+            } else {
+                onFailure(SNError.responseDataIsEmpty)
             }
         }
         
