@@ -80,7 +80,7 @@ open class SNCall {
         self.init(method: params.method, headers: params.headers, cachePolicy: nil, timeoutInterval: nil, path: params.path, params: params.params)
     }
     
-    // Convenience method for passing a string as path instead of path
+    // Convenience method for passing a string instead of path
     public convenience init(method: SNMethod, url: String, params: [String: Any?]?) {
         self.init(method: method, headers: nil, cachePolicy: nil, timeoutInterval: nil, path: SNPath("-"), params: nil)
         self.pathType = .full
@@ -118,50 +118,56 @@ open class SNCall {
         return request
     }
     
+    // MARK: - Helper methods
+    private func sessionDataTask(request: URLRequest, completionHandler: @escaping (Data)->(), onFailure: @escaping SNFailureCallback) throws -> URLSessionDataTask {
+        return URLSession.shared.dataTask(with: request) { data, urlResponse, error in
+            if error != nil {
+                onFailure(error!)
+            }
+            if data == nil {
+                onFailure(SNError.responseDataIsEmpty)
+            }
+            
+            completionHandler(data!)
+        }
+    }
+    
     // MARK: - Start requests
     
     // Deserialize objects with Decodable
     public func start<T>(onSuccess: @escaping SNSuccessCallback<T>, onFailure: @escaping SNFailureCallback) throws where T: Decodable {
-        let session = URLSession.shared.dataTask(with: try asRequest()) { data, urlResponse, error in
-            if error != nil {
-                onFailure(error!)
+        try sessionDataTask(request: try asRequest(), completionHandler: { data in
+            let jsonDecoder = JSONDecoder()
+            let object = try! jsonDecoder.decode(T.self, from: data)
+            
+            DispatchQueue.main.sync {
+                onSuccess(object)
             }
-            else if data != nil {
-                let jsonDecoder = JSONDecoder()
-                let object = try! jsonDecoder.decode(T.self, from: data!)
-                
-                DispatchQueue.main.sync {
-                    onSuccess(object)
-                }
-            } else {
-                onFailure(SNError.responseDataIsEmpty)
-            }
-        }
-        
-        session.resume()
+
+        }, onFailure: onFailure).resume()
     }
     
     // Deserialize objects with UIImage
     public func start<T>(onSuccess: @escaping SNSuccessCallback<T>, onFailure: @escaping SNFailureCallback) throws where T: UIImage {
-        let session = URLSession.shared.dataTask(with: try asRequest()) { data, urlResponse, error in
-            if error != nil {
-                onFailure(error!)
-            }
-            else if data != nil {
-                let image = T(data: data!)
-                
-                if image == nil {
-                    onFailure(SNError.responseInvalidImageData)
-                } else {
-                    DispatchQueue.main.sync {
-                        onSuccess(image!)
-                    }
-                }
+        try sessionDataTask(request: try asRequest(), completionHandler: { data in
+            let image = T(data: data)
+            
+            if image == nil {
+                onFailure(SNError.responseInvalidImageData)
             } else {
-                onFailure(SNError.responseDataIsEmpty)
+                DispatchQueue.main.sync {
+                    onSuccess(image!)
+                }
             }
-        }
-        
-        session.resume()
+        }, onFailure: onFailure).resume()
+    }
+    
+    // For any other object
+    public func start(onSuccess: @escaping SNSuccessCallback<Data>, onFailure: @escaping SNFailureCallback) throws {
+        try sessionDataTask(request: try asRequest(), completionHandler: { data in
+            DispatchQueue.main.sync {
+                onSuccess(data)
+            }
+        }, onFailure: onFailure).resume()
     }
 }
