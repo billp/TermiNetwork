@@ -4,9 +4,11 @@ SimpleNetworking is a networking library written with Swift 4.0 that supports mu
 
 ## Usage
 
-1. Create a swift file called **Environments.swift** that comforms to SNEnvironmentProtocol and define your environments by creating an enum as shown bellow. 
+1. Create a swift file called **Environments.swift** that conforms to SNEnvironmentProtocol and define your environments by creating an enum as shown bellow. 
 
 ```swift
+import SimpleNetworking
+
 enum Environment: SNEnvironmentProtocol {
     case localhost
     case dev
@@ -33,7 +35,7 @@ SNEnvironment.env = Environment.production
 
 3. Create your models represented with Codable. (Only Codable serialization is supported at the moment)
 
-Example models: FoodCategories, FoodCategory
+Example models: **FoodCategories**, **FoodCategory**
 
 ```swift
 struct FoodCategories: Codable {
@@ -71,9 +73,11 @@ struct FoodCategory : Codable {
 
 ```
 
-4. Create your router class that comforms to SNRouteProtocol. There is no limit for a number router classes that you can create :)
+4. Create your router class that conforms to SNRouteProtocol. There is no limit for a number router classes that you can create :)
 
 ```swift
+import SimpleNetworking
+
 enum APIFoodRouter: SNRouteProtocol {
     // Define your routes
     case categories
@@ -92,27 +96,27 @@ enum APIFoodRouter: SNRouteProtocol {
     }
     
     // Create static helper functions for each route
-    static func getCategories(onSuccess: @escaping SNSuccessCallback<FoodRootClass>, onFailure: @escaping SNFailureCallback) {
+    static func getCategories(onSuccess: @escaping SNSuccessCallback<FoodCategories>, onFailure: @escaping SNFailureCallback) {
         try? SNCall(route: APIFoodRouter.categories).start(onSuccess: onSuccess, onFailure: onFailure)
     }
 }
 ```
-In your helper funcs section you need to define your model class along with **SNSuccessCallback** that determines the type of the response data which is being returned. Deserialization takes place automatically.
+> In your helper funcs section you need to define your model class along with **SNSuccessCallback** that determines the type of the response data which is being returned. Deserialization takes place automatically.
 
 5. Finally use your helper functions anywhere in your project
 ```swift
 APIFoodRouter.getCategories(onSuccess: { categories in
-    self.categories = categories.categories!
-    self.tableView.reloadData()
-    self.tableView.isHidden = false
+    debugPrint(categories.categories.map({ $0.strCategory }))
 }) { error in
     debugPrint(error)
 }
 ```
 
-categories returned from onSuccess are of type FoodCategories
+categories returned from **onSuccess** are of type **FoodCategories**
 
-### Use SNCall independently
+> If you run the project after following all these steps you will get an error because **http://** is not allowed due to security. You need to add "NSAppTransportSecurity" (Dictionary) > "NSAllowsArbitraryLoads" (Boolean) > YES. But this is just for the demo, please don't do it to your own projects :)
+
+### Use of SNCall independently
 
 You can use the SNCall class to create a URLRequest and use it with another library such as Alamofire by providing method, custom headers, path and parameters, as shown bellow
 
