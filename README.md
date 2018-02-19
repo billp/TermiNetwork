@@ -3,9 +3,9 @@
 SimpleNetworking is a networking library written with Swift 4.0 that supports multi-environment configuration, routing and automatic deserialization (currently **Codable** and **UIImage** deserialization is supported).
 
 # Features
-- [x] Multi-environment configuration
-- [x] Routing
-- [x] Automatic deserialization with Codable and UIImage
+- [x] Multi-environment configuration (by conforming **SNEnvironmentProtocol**)
+- [x] Routing (by conforming **SNRouteProtocol**)
+- [x] Automatic deserialization with Codable and UIImage (by passing the type in **SNSuccessCallback**)
 
 ## Usage
 
@@ -120,6 +120,28 @@ APIFoodRouter.getCategories(onSuccess: { categories in
 categories returned from **onSuccess** are of type **FoodCategories**
 
 > If you run the project after following all these steps you will get an error because **http://** is not allowed due to security. You need to add "NSAppTransportSecurity" (Dictionary) > "NSAllowsArbitraryLoads" (Boolean) > YES. But this is just for the demo, please don't do it to your own projects :)
+
+### Deserializing images
+
+Image deserialization is as easy as deserializing with Codable, just pass UIImage in SNSuccessCallback and you will get the actual UIImage object ready to use. If the response is not an image, SNFailureCallback gets called with the appropriate error. Define your helper as shown bellow:
+
+```swift
+struct APICustomHelpers {
+    static func getImage(url: String, onSuccess: @escaping SNSuccessCallback<UIImage>, onFailure: @escaping SNFailureCallback) {
+        try? SNCall(method: .get, url: url, params: nil).start(onSuccess: onSuccess, onFailure: onFailure)
+    }
+}
+```
+
+And finally call the helper wherever you need:
+
+```swift
+APICustomHelpers.getImage(url: "https://picsum.photos/240/240", onSuccess: { image in
+    thumbImageView.image = image
+}) { error in
+    debugPrint(error)
+}
+```
 
 ### Use of SNCall independently
 
