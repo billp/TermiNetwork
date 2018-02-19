@@ -2,6 +2,11 @@
 
 SimpleNetworking is a networking library written with Swift 4.0 that supports multi-environment configuration, routing and automatic deserialization (currently **Codable** and **UIImage** deserialization is supported).
 
+# Features
+- [x] Multi-environment configuration
+- [x] Routing
+- [x] Automatic deserialization with Codable and UIImage
+
 ## Usage
 
 1. Create a swift file called **Environments.swift** that conforms to SNEnvironmentProtocol and define your environments by creating an enum as shown bellow. 
@@ -150,6 +155,12 @@ target "YourTarget" do
         pod 'SimpleNetworking', :git => 'https://github.com/billp/SimpleNetworking.git'
 end
 ```
+
+# TODO
+- [ ] Write test cases
+- [ ] Add support for canceling a request
+- [ ] Add support for downloading/uploading files
+
 
 ## Contribution
 
