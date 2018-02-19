@@ -5,7 +5,7 @@ SimpleNetworking is a networking library written with Swift 4.0 that supports mu
 # Features
 - [x] Multi-environment configuration (by conforming **SNEnvironmentProtocol**)
 - [x] Routing (by conforming **SNRouteProtocol**)
-- [x] Automatic deserialization with Codable and UIImage (by passing the type in **SNSuccessCallback**)
+- [x] Automatic deserialization with **Codable** and **UIImage** (by passing the type in **SNSuccessCallback**)
 
 ## Usage
 
