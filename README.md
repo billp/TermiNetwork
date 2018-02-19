@@ -38,7 +38,7 @@ enum Environment: SNEnvironmentProtocol {
 SNEnvironment.env = Environment.production
 ```
 
-3. Create your models represented with Codable. (Only Codable serialization is supported at the moment)
+3. Create your models represented with **Codable**.
 
 Example models: **FoodCategories**, **FoodCategory**
 
