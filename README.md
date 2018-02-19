@@ -123,7 +123,7 @@ categories returned from **onSuccess** are of type **FoodCategories**
 
 ### Deserializing images
 
-Image deserialization is as easy as deserializing with Codable, just pass UIImage in SNSuccessCallback and you will get the actual UIImage object ready to use. If the response is not an image, SNFailureCallback gets called with the appropriate error. Define your helper as shown bellow:
+Image deserialization is as easy as deserializing with Codable, just pass **UIImage** in **SNSuccessCallback** and you will get the actual **UIImage** object ready to use. If the response is not an image, SNFailureCallback gets called with the appropriate error. Define your helper as shown bellow:
 
 ```swift
 struct APICustomHelpers {
