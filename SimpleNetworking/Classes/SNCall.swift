@@ -55,6 +55,7 @@ open class SNCall {
     var timeoutInterval: TimeInterval?
     var params: [String: Any?]?
     private var pathType: SNPathType = .normal
+    private var dataTask: URLSessionDataTask!
     
     //MARK: - Initializers
     public init(method: SNMethod, headers: [String: String]?, cachePolicy: URLRequest.CachePolicy?, timeoutInterval: TimeInterval?, path: SNPath, params: [String: Any?]?) {
@@ -118,18 +119,29 @@ open class SNCall {
         return request
     }
     
+    // Cancel data task
+    public func cancel() {
+        dataTask.cancel()
+    }
+    
     // MARK: - Helper methods
     private func sessionDataTask(request: URLRequest, completionHandler: @escaping (Data)->(), onFailure: @escaping SNFailureCallback) throws -> URLSessionDataTask {
-        return URLSession.shared.dataTask(with: request) { data, urlResponse, error in
+        dataTask = URLSession.shared.dataTask(with: request) { data, urlResponse, error in
             if error != nil {
-                onFailure(error!)
+                DispatchQueue.main.sync {
+                    onFailure(error!)
+                }
             }
-            if data == nil {
-                onFailure(SNError.responseDataIsEmpty)
+            else if data == nil {
+                DispatchQueue.main.sync {
+                    onFailure(SNError.responseDataIsEmpty)
+                }
+            } else {
+                completionHandler(data!)
             }
-            
-            completionHandler(data!)
         }
+        
+        return dataTask
     }
     
     // MARK: - Start requests
@@ -153,7 +165,9 @@ open class SNCall {
             let image = T(data: data)
             
             if image == nil {
-                onFailure(SNError.responseInvalidImageData)
+                DispatchQueue.main.sync {
+                    onFailure(SNError.responseInvalidImageData)
+                }
             } else {
                 DispatchQueue.main.sync {
                     onSuccess(image!)

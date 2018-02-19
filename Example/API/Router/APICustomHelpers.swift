@@ -10,7 +10,10 @@ import Foundation
 import SimpleNetworking
 
 struct APICustomHelpers {
-    static func getImage(url: String, onSuccess: @escaping SNSuccessCallback<UIImage>, onFailure: @escaping SNFailureCallback) {
-        try? SNCall(method: .get, url: url, params: nil).start(onSuccess: onSuccess, onFailure: onFailure)
+    static func getImage(url: String, onSuccess: @escaping SNSuccessCallback<UIImage>, onFailure: @escaping SNFailureCallback) throws -> SNCall {
+        let call = SNCall(method: .get, url: url, params: nil)
+        try call.start(onSuccess: onSuccess, onFailure: onFailure)
+        
+        return call
     }
 }
