@@ -55,7 +55,7 @@ open class SNCall {
     var timeoutInterval: TimeInterval?
     var params: [String: Any?]?
     private var pathType: SNPathType = .normal
-    private var dataTask: URLSessionDataTask!
+    private var dataTask: URLSessionDataTask?
     
     //MARK: - Initializers
     public init(method: SNMethod, headers: [String: String]?, cachePolicy: URLRequest.CachePolicy?, timeoutInterval: TimeInterval?, path: SNPath, params: [String: Any?]?) {
@@ -121,7 +121,7 @@ open class SNCall {
     
     // Cancel data task
     public func cancel() {
-        dataTask.cancel()
+        dataTask?.cancel()
     }
     
     // MARK: - Helper methods
@@ -141,7 +141,7 @@ open class SNCall {
             }
         }
         
-        return dataTask
+        return dataTask!
     }
     
     // MARK: - Start requests
