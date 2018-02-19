@@ -160,6 +160,17 @@ let headers = [
 let request = try? SNCall(method: .get, headers: headers, path: path("users", "list"), params: params).asRequest()
 ```
 
+### Cancel a request
+You can cancel a request which is executing by storing a reference of **SNCall** to a variable and then by calling the **.cancel()** func like this
+
+```swift
+//Keep a reference of SNCall
+let call = SNCall(method: .get, url: url, params: nil)
+try call.start(onSuccess: onSuccess, onFailure: onFailure)
+
+//Cancel anytime you want
+call.cancel()
+```
 
 ### Supported Request Methods
 
@@ -180,9 +191,8 @@ end
 
 # TODO
 - [ ] Write test cases
-- [ ] Add support for canceling a request
+- [x] Add support for canceling a request
 - [ ] Add support for downloading/uploading files
-
 
 ## Contribution
 
