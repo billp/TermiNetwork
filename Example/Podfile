@@ -1,9 +1,9 @@
 use_frameworks!
 
-target 'SimpleNetworking_Example' do
-  pod 'SimpleNetworking', :path => '../'
+target 'TermiNetwork_Example' do
+  pod 'TermiNetwork', :path => '../'
 
-  target 'SimpleNetworking_Tests' do
+  target 'TermiNetwork_Tests' do
     inherit! :search_paths
 
     pod 'Quick', '~> 1.2.0'

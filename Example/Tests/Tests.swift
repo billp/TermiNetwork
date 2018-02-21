@@ -2,7 +2,7 @@
 
 import Quick
 import Nimble
-import SimpleNetworking
+import TermiNetwork
 
 class TableOfContentsSpec: QuickSpec {
     override func spec() {
