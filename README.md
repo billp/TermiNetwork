@@ -1,6 +1,6 @@
 # TermiNetwork
 
-SimpleNetworking is a networking library written with Swift 4.0 that supports multi-environment configuration, routing and automatic deserialization (currently **Codable** and **UIImage** deserialization is supported).
+TermiNetwork is a networking library written with Swift 4.0 that supports multi-environment configuration, routing and automatic deserialization (currently **Codable** and **UIImage** deserialization is supported).
 
 # Features
 - [x] Multi-environment configuration (by conforming **TNEnvironmentProtocol**)
@@ -12,7 +12,7 @@ SimpleNetworking is a networking library written with Swift 4.0 that supports mu
 1. Create a swift file called **Environments.swift** that conforms to **TNEnvironmentProtocol** and define your environments by creating an enum as shown bellow.
 
 ```swift
-import SimpleNetworking
+import TermiNetwork
 
 enum Environment: TNEnvironmentProtocol {
     case localhost
@@ -80,7 +80,7 @@ struct FoodCategory : Codable {
 4. Create your router class that conforms to **TNRouteProtocol**. There is no limit for a number router classes that you can create :)
 
 ```swift
-import SimpleNetworking
+import TermiNetwork
 
 enum APIFoodRouter: TNRouteProtocol {
     // Define your routes
@@ -177,7 +177,7 @@ You can use any of the following request methods: **get, head, post, put, delete
 
 ## Installation
 
-SimpleNetworking is available through [CocoaPods](http://cocoapods.org). To install
+TermiNetwork is available through [CocoaPods](http://cocoapods.org). To install
 it, simply add the following line to your Podfile:
 
 ```ruby
@@ -203,5 +203,5 @@ Bill Panagiotopouplos, billp.dev@gmail.com
 
 ## License
 
-SimpleNetworking is available under the MIT license. See the LICENSE file for more info.
+TermiNetwork is available under the MIT license. See the LICENSE file for more info.
 
