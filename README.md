@@ -184,7 +184,7 @@ it, simply add the following line to your Podfile:
 use_frameworks!
 
 target "YourTarget" do
-pod 'SimpleNetworking', :git => 'https://github.com/billp/TermiNetwork.git'
+    pod 'TermiNetwork', :git => 'https://github.com/billp/TermiNetwork.git'
 end
 ```
 
