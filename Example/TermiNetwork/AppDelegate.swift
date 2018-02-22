@@ -19,7 +19,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         
         TNEnvironment.env = Environment.production
-        
+        TNEnvironment.verbose = true
+    
         return true
     }
 

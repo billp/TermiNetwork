@@ -9,7 +9,7 @@
 import Foundation
 
 public typealias TNSuccessCallback<T> = (T)->()
-public typealias TNFailureCallback = (Error)->()
+public typealias TNFailureCallback = (Error, Data?)->()
 
 
 public enum TNMethod: String {
@@ -30,6 +30,7 @@ public enum TNError: Error {
     case responseDataIsEmpty
     case responseInvalidImageData
     case environmentNotSet
+    case cannotDeserialize
 }
 
 public enum TNCallSerializationType {
@@ -48,7 +49,7 @@ open class TNCall {
     var headers: [String: String]?
     var method: TNMethod!
     var path: String
-    var cachePolicy: URLRequest.CachePolicy?
+    var cachePolicy: URLRequest.CachePolicy
     var timeoutInterval: TimeInterval?
     var params: [String: Any?]?
     private var pathType: SNPathType = .normal
@@ -59,7 +60,7 @@ open class TNCall {
         self.method = method
         self.headers = headers
         self.path = path.components.joined(separator: "/")
-        self.cachePolicy = cachePolicy
+        self.cachePolicy = cachePolicy ?? .useProtocolCachePolicy
         self.timeoutInterval = timeoutInterval
         self.params = params
     }
@@ -95,25 +96,22 @@ open class TNCall {
             throw TNError.invalidURL
         }
         
-        var request = URLRequest(url: url, cachePolicy: .useProtocolCachePolicy, timeoutInterval: currentEnvironment.timeoutInterval)
+        var request = URLRequest(url: url, cachePolicy: cachePolicy, timeoutInterval: currentEnvironment.timeoutInterval)
         
         params?.merge(TNCall.fixedHeaders, uniquingKeysWith: { (_, new) in new })
         
         request.allHTTPHeaderFields = params as? [String : String]
         request.httpMethod = method.rawValue
         
-        if cachePolicy != nil {
-            request.cachePolicy = cachePolicy!
-        }
         if timeoutInterval != nil {
             request.timeoutInterval = timeoutInterval!
         }
         if params != nil {
-            do {
-                request.httpBody = try JSONSerialization.data(withJSONObject: params!, options: .prettyPrinted)
-            } catch {
-                throw TNError.invalidParams
-            }
+            let formBody = params?.map({ (arg) -> String in
+                return arg.key + "=" + String(describing: arg.value!)
+            }).joined(separator: "&")
+            
+            request.httpBody = formBody?.data(using: String.Encoding.utf8)
         }
         return request
     }
@@ -127,13 +125,17 @@ open class TNCall {
     private func sessionDataTask(request: URLRequest, completionHandler: @escaping (Data)->(), onFailure: @escaping TNFailureCallback) throws -> URLSessionDataTask {
         dataTask = URLSession.shared.dataTask(with: request) { data, urlResponse, error in
             if error != nil {
+                _ = TNLog(call: self, message: "Request error:" + (error?.localizedDescription ?? "")! + ", urlResponse:" + (urlResponse?.description ?? "")!)
+                
                 DispatchQueue.main.sync {
-                    onFailure(error!)
+                    onFailure(error!, data)
                 }
             }
             else if data == nil {
+                _ = TNLog(call: self, message: "Empty body received from")
+                
                 DispatchQueue.main.sync {
-                    onFailure(TNError.responseDataIsEmpty)
+                    onFailure(TNError.responseDataIsEmpty, data)
                 }
             } else {
                 completionHandler(data!)
@@ -147,10 +149,19 @@ open class TNCall {
     
     // Deserialize objects with Decodable
     public func start<T>(onSuccess: @escaping TNSuccessCallback<T>, onFailure: @escaping TNFailureCallback) throws where T: Decodable {
-        try sessionDataTask(request: try asRequest(), completionHandler: { data in
-            let jsonDecoder = JSONDecoder()
-            let object = try! jsonDecoder.decode(T.self, from: data)
+        let request = try asRequest()
+
+        try sessionDataTask(request: request, completionHandler: { data in
             
+            guard let object: T = try? data.deserializeJSONData() else {
+                _ = TNLog(call: self, message: "Cannot deserialize data. Check your models", responseData: data)
+
+                onFailure(TNError.cannotDeserialize, data)
+                return
+            }
+            
+            _ = TNLog(call: self, message: "Successfully deserialized data", responseData: data)
+
             DispatchQueue.main.sync {
                 onSuccess(object)
             }
@@ -160,15 +171,21 @@ open class TNCall {
     
     // Deserialize objects with UIImage
     public func start<T>(onSuccess: @escaping TNSuccessCallback<T>, onFailure: @escaping TNFailureCallback) throws where T: UIImage {
-        try sessionDataTask(request: try asRequest(), completionHandler: { data in
+        let request = try asRequest()
+        
+        try sessionDataTask(request: request, completionHandler: { data in
             let image = T(data: data)
             
             if image == nil {
+                _ = TNLog(call: self, message: "Unable to deserialize image (data not an image)")
+
                 DispatchQueue.main.sync {
-                    onFailure(TNError.responseInvalidImageData)
+                    onFailure(TNError.responseInvalidImageData, data)
                 }
             } else {
                 DispatchQueue.main.sync {
+                    _ = TNLog(call: self, message: "Successfully deserialized image")
+
                     onSuccess(image!)
                 }
             }

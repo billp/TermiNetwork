@@ -29,7 +29,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             self.categories = categories.categories
             self.tableView.reloadData()
             self.tableView.isHidden = false
-        }) { error in
+        }) { error, data in
             debugPrint(error)
         }
     }

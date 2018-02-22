@@ -53,6 +53,13 @@
 		594C21A5203D92DF00FFE7A6 /* TNCall.swift in Sources */ = {isa = PBXBuildFile; fileRef = 594C21A1203D92DF00FFE7A6 /* TNCall.swift */; };
 		594C21A6203D92DF00FFE7A6 /* TNPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 594C21A2203D92DF00FFE7A6 /* TNPath.swift */; };
 		594C21A7203D92DF00FFE7A6 /* TNEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 594C21A4203D92DF00FFE7A6 /* TNEnvironment.swift */; };
+		59E7F131203F018C0085B680 /* TNLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59E7F130203F018C0085B680 /* TNLog.swift */; };
+		59E7F132203F018C0085B680 /* TNLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59E7F130203F018C0085B680 /* TNLog.swift */; };
+		59E7F135203F08C00085B680 /* Data+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59E7F134203F08C00085B680 /* Data+Extensions.swift */; };
+		59E7F136203F0D560085B680 /* TNEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 594C21A4203D92DF00FFE7A6 /* TNEnvironment.swift */; };
+		59E7F137203F0D630085B680 /* TNPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 594C21A2203D92DF00FFE7A6 /* TNPath.swift */; };
+		59E7F138203F122D0085B680 /* TNCall.swift in Sources */ = {isa = PBXBuildFile; fileRef = 594C21A1203D92DF00FFE7A6 /* TNCall.swift */; };
+		59E7F139203F123C0085B680 /* Data+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59E7F134203F08C00085B680 /* Data+Extensions.swift */; };
 		5AB9DB61D62D8BF7B1C734B373F361E7 /* CurrentTestCaseTracker.h in Headers */ = {isa = PBXBuildFile; fileRef = 0F18AD3DFDC80322BBE0B149EC31BCC7 /* CurrentTestCaseTracker.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		5BF274C2DEF332ED79B1CD15CFEC3498 /* ThrowError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47578CD4C4970729A947555C915B2317 /* ThrowError.swift */; settings = {COMPILER_FLAGS = "-DPRODUCT_NAME=Nimble/Nimble"; }; };
 		5D874B2740887C3E3412804A87940131 /* XCTestSuite+QuickTestSuiteBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D9A924C203A11767BBF4D9C3737DA5D /* XCTestSuite+QuickTestSuiteBuilder.m */; };
@@ -211,6 +218,8 @@
 		594C21A1203D92DF00FFE7A6 /* TNCall.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TNCall.swift; sourceTree = "<group>"; };
 		594C21A2203D92DF00FFE7A6 /* TNPath.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TNPath.swift; sourceTree = "<group>"; };
 		594C21A4203D92DF00FFE7A6 /* TNEnvironment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TNEnvironment.swift; sourceTree = "<group>"; };
+		59E7F130203F018C0085B680 /* TNLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TNLog.swift; sourceTree = "<group>"; };
+		59E7F134203F08C00085B680 /* Data+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+Extensions.swift"; sourceTree = "<group>"; };
 		59F5B3AA331B378FF452B2B3606423C6 /* Quick-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Quick-prefix.pch"; sourceTree = "<group>"; };
 		5B2C6C14E073DF27057385E78204993B /* Pods-TermiNetwork_Tests-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-TermiNetwork_Tests-dummy.m"; sourceTree = "<group>"; };
 		5B6377AFB413CFE0D7598BCBF91E3FFB /* Pods-TermiNetwork_Tests-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-TermiNetwork_Tests-acknowledgements.plist"; sourceTree = "<group>"; };
@@ -416,12 +425,22 @@
 		594C21A0203D92DF00FFE7A6 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				59E7F133203F08750085B680 /* Extensions */,
 				594C21A1203D92DF00FFE7A6 /* TNCall.swift */,
 				594C21A2203D92DF00FFE7A6 /* TNPath.swift */,
 				594C21A4203D92DF00FFE7A6 /* TNEnvironment.swift */,
+				59E7F130203F018C0085B680 /* TNLog.swift */,
 			);
 			name = Classes;
 			path = TermiNetwork/Classes;
+			sourceTree = "<group>";
+		};
+		59E7F133203F08750085B680 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				59E7F134203F08C00085B680 /* Data+Extensions.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 		6821C4369E3A53CDB80882F6567B7B2E /* Development Pods */ = {
@@ -867,8 +886,11 @@
 				3C66D2692E811DAE57A244A67E7AC555 /* BeVoid.swift in Sources */,
 				A74537420FF0CEDC6B9E82E1DC4C2B15 /* Contain.swift in Sources */,
 				25D1805055756CAA69A167CA03B2465C /* ContainElementSatisfying.swift in Sources */,
+				59E7F138203F122D0085B680 /* TNCall.swift in Sources */,
 				A272932A4DF9AC2D3B0A21AC70606F6D /* CwlBadInstructionException.swift in Sources */,
+				59E7F137203F0D630085B680 /* TNPath.swift in Sources */,
 				C2467221FCD579800B9CD8FBBDB10B4D /* CwlCatchBadInstruction.swift in Sources */,
+				59E7F136203F0D560085B680 /* TNEnvironment.swift in Sources */,
 				7B5222991D1C53DF737242CA6C90012C /* CwlCatchException.m in Sources */,
 				42EAAE8CFB95F2352FCE036F263263E1 /* CwlCatchException.swift in Sources */,
 				41C783192F7ECD485C8C6384D30CBF11 /* CwlDarwinDefinitions.swift in Sources */,
@@ -906,6 +928,8 @@
 				3B3A88E074630B1EBC2139F4F70F0443 /* ThrowAssertion.swift in Sources */,
 				5BF274C2DEF332ED79B1CD15CFEC3498 /* ThrowError.swift in Sources */,
 				29A65FF7D1752DFFF87F5DC8F55CE859 /* ToSucceed.swift in Sources */,
+				59E7F139203F123C0085B680 /* Data+Extensions.swift in Sources */,
+				59E7F131203F018C0085B680 /* TNLog.swift in Sources */,
 				A61ADD214AA182EEB2AC95EA3F3D658F /* XCTestObservationCenter+Register.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -917,7 +941,9 @@
 				CB7F248B1ED0B601258BD21E3AE27BAC /* TermiNetwork-dummy.m in Sources */,
 				594C21A7203D92DF00FFE7A6 /* TNEnvironment.swift in Sources */,
 				594C21A6203D92DF00FFE7A6 /* TNPath.swift in Sources */,
+				59E7F135203F08C00085B680 /* Data+Extensions.swift in Sources */,
 				594C21A5203D92DF00FFE7A6 /* TNCall.swift in Sources */,
+				59E7F132203F018C0085B680 /* TNLog.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -1,8 +1,9 @@
 //
-//  SNPath.swift
-//  Nimble
+//  Environment.swift
+//  ServiceRouter
 //
 //  Created by Vasilis Panagiotopoulos on 15/02/2018.
+//  Copyright © 2018 Vasilis Panagiotopoulos. All rights reserved.
 //
 
 import Foundation

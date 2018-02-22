@@ -18,7 +18,6 @@ public enum TNURLScheme: String {
 }
 
 open class TNEnvironment {
-    
     // MARK: - Properties
     var scheme: TNURLScheme
     var host: String
@@ -33,6 +32,7 @@ open class TNEnvironment {
             current = env.configure()
         }
     }
+    public static var verbose = false
         
     // MARK: - Initializers
     public init(scheme: TNURLScheme, host: String, suffix: TNPath?, port: Int?) {
