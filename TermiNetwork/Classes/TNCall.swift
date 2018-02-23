@@ -33,6 +33,7 @@ public enum TNError: Error {
     case cannotDeserialize
     case networkError(Error)
     case notSuccess(Int)
+    case cancelled(Error)
 }
 
 public enum TNCallSerializationType {
@@ -131,8 +132,13 @@ open class TNCall {
             var customError: TNError?
             var statusCode: Int?
             
-            if let networkError = error {
-                customError = TNError.networkError(networkError)
+            // Error handling
+            if let error = error {
+                if (error as NSError).code == NSURLErrorCancelled {
+                    customError = TNError.cancelled(error)
+                } else {
+                    customError = TNError.networkError(error)
+                }
             }
             
             if let response = urlResponse as? HTTPURLResponse{

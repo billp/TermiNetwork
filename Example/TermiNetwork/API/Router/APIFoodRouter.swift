@@ -40,12 +40,18 @@ enum APIFoodRouter: TNRouteProtocol {
         try! TNCall(route: APIFoodRouter.categories).start(onSuccess: onSuccess, onFailure: onFailure)
     }
     
-    static func testCall(onSuccess: @escaping TNSuccessCallback<Data>, onFailure: @escaping TNFailureCallback) {
+    static func testFailureCall(onSuccess: @escaping TNSuccessCallback<Data>, onFailure: @escaping TNFailureCallback) {
         try! TNCall(route: APIFoodRouter.test).start(onSuccess: onSuccess, onFailure: { error, data in
             
             switch error {
             case .notSuccess(let statusCode):
                 debugPrint("Status code " + String(statusCode))
+                break
+            case .networkError(let error):
+                debugPrint("Network error: " + error.localizedDescription)
+                break
+            case .cancelled(let error):
+                debugPrint("Request cancelled with error: " + error.localizedDescription)
                 break
             default: break
             }
