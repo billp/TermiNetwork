@@ -30,4 +30,12 @@ enum APIFoodRouter: TNRouteProtocol {
     static func getCategories(onSuccess: @escaping TNSuccessCallback<FoodCategories>, onFailure: @escaping TNFailureCallback) {
         try! TNCall(route: APIFoodRouter.categories).start(onSuccess: onSuccess, onFailure: onFailure)
     }
+    
+    static func testCall(onSuccess: @escaping TNSuccessCallback<Data>, onFailure: @escaping TNFailureCallback) {
+        try! TNCall(route: APIFoodRouter.categories).start(onSuccess: onSuccess, onFailure: { error, data, statusCode in
+            if statusCode == 400 {
+                //Do something
+            }
+        })
+    }
 }

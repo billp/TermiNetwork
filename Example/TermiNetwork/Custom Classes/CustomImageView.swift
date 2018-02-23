@@ -19,7 +19,7 @@ class CustomImageView: UIImageView {
             
             call = try! APICustomHelpers.getImage(url: url, onSuccess: { image in
                 self.image = image
-            }, onFailure: { error, data  in
+            }, onFailure: { error, data, responseUrl   in
                 self.image = nil
             })
         }

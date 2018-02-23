@@ -9,7 +9,7 @@
 import Foundation
 
 public typealias TNSuccessCallback<T> = (T)->()
-public typealias TNFailureCallback = (Error, Data?)->()
+public typealias TNFailureCallback = (Error, Data?, Int?)->()
 
 
 public enum TNMethod: String {
@@ -31,6 +31,7 @@ public enum TNError: Error {
     case responseInvalidImageData
     case environmentNotSet
     case cannotDeserialize
+    case notSuccess
 }
 
 public enum TNCallSerializationType {
@@ -113,6 +114,7 @@ open class TNCall {
             
             request.httpBody = formBody?.data(using: String.Encoding.utf8)
         }
+        
         return request
     }
     
@@ -123,19 +125,31 @@ open class TNCall {
     
     // MARK: - Helper methods
     private func sessionDataTask(request: URLRequest, completionHandler: @escaping (Data)->(), onFailure: @escaping TNFailureCallback) throws -> URLSessionDataTask {
+        
         dataTask = URLSession.shared.dataTask(with: request) { data, urlResponse, error in
-            if error != nil {
+            var customError = error
+            var statusCode: Int?
+            
+            if let response = urlResponse as? HTTPURLResponse{
+                statusCode = response.statusCode as Int?
+            
+                if statusCode != nil && statusCode! / 100 != 2 {
+                    customError = TNError.notSuccess
+                }
+            }
+            
+            if customError != nil {
                 _ = TNLog(call: self, message: "Request error:" + (error?.localizedDescription ?? "")! + ", urlResponse:" + (urlResponse?.description ?? "")!)
                 
                 DispatchQueue.main.sync {
-                    onFailure(error!, data)
+                    onFailure(error!, data, statusCode)
                 }
             }
             else if data == nil {
                 _ = TNLog(call: self, message: "Empty body received from")
                 
                 DispatchQueue.main.sync {
-                    onFailure(TNError.responseDataIsEmpty, data)
+                    onFailure(TNError.responseDataIsEmpty, data, statusCode)
                 }
             } else {
                 completionHandler(data!)
@@ -156,7 +170,7 @@ open class TNCall {
             guard let object: T = try? data.deserializeJSONData() else {
                 _ = TNLog(call: self, message: "Cannot deserialize data. Check your models", responseData: data)
 
-                onFailure(TNError.cannotDeserialize, data)
+                onFailure(TNError.cannotDeserialize, data, nil)
                 return
             }
             
@@ -180,7 +194,7 @@ open class TNCall {
                 _ = TNLog(call: self, message: "Unable to deserialize image (data not an image)")
 
                 DispatchQueue.main.sync {
-                    onFailure(TNError.responseInvalidImageData, data)
+                    onFailure(TNError.responseInvalidImageData, data, nil)
                 }
             } else {
                 DispatchQueue.main.sync {
