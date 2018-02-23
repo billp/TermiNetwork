@@ -12,6 +12,7 @@ import TermiNetwork
 enum APIFoodRouter: TNRouteProtocol {
     // Define your routes
     case categories
+    case test
     
     // Set method, path, params, headers for each route
     internal func construct() -> TNRouteReturnType {
@@ -23,7 +24,15 @@ enum APIFoodRouter: TNRouteProtocol {
                 params: nil,
                 headers: nil
             )
+        case .test:
+            return (
+                method: .post,
+                path: path("categories.php2"),
+                params: nil,
+                headers: nil
+            )
         }
+        
     }
     
     // Create static helper functions for each route
@@ -32,10 +41,16 @@ enum APIFoodRouter: TNRouteProtocol {
     }
     
     static func testCall(onSuccess: @escaping TNSuccessCallback<Data>, onFailure: @escaping TNFailureCallback) {
-        try! TNCall(route: APIFoodRouter.categories).start(onSuccess: onSuccess, onFailure: { error, data, statusCode in
-            if statusCode == 400 {
-                //Do something
+        try! TNCall(route: APIFoodRouter.test).start(onSuccess: onSuccess, onFailure: { error, data in
+            
+            switch error {
+            case .notSuccess(let statusCode):
+                debugPrint("Status code " + String(statusCode))
+                break
+            default: break
             }
+            
+            onFailure(error, data)
         })
     }
 }
