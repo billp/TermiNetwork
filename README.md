@@ -285,7 +285,7 @@ Feel free to contribute to the project by creating a pull request and/or by repo
 
 ## Author
 
-Bill Panagiotopouplos, billp.dev@gmail.com
+Bill Panagiotopoulos, billp.dev@gmail.com
 
 ## Contributors
 
