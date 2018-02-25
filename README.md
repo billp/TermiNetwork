@@ -121,7 +121,7 @@ categories returned from **onSuccess** are of type **FoodCategories**
 
 > If you run the project after following all these steps you will get an error because **http://** is not allowed due to security. You need to add "NSAppTransportSecurity" (Dictionary) > "NSAllowsArbitraryLoads" (Boolean) > YES. But this is just for the demo, please don't do it to your own projects :)
 
-### Deserializing images
+### Image Deserialization
 
 Image deserialization is as easy as deserializing with Codable, just pass **UIImage** in **TNSuccessCallback** and you will get the actual **UIImage** object ready to use. If the response is not an image, **TNFailureCallback** gets called with the appropriate error. Define your helper as shown bellow:
 
@@ -143,7 +143,7 @@ APICustomHelpers.getImage(url: "https://picsum.photos/240/240", onSuccess: { ima
 }
 ```
 
-### Use of **TNCall** independently
+### Use of **TNCall** Independently
 
 You can use the **TNCall** class to create a **URLRequest** and use it with another library such as Alamofire by providing method, custom headers, path and parameters, as shown bellow
 
@@ -160,7 +160,7 @@ let headers = [
 let request = try? TNCall(method: .get, headers: headers, path: path("users", "list"), params: params).asRequest()
 ```
 
-### Request cancellation
+### Request Cancellation
 You can cancel a request which is executing by storing a reference of **TNCall** to a variable and then by calling the **.cancel()** func like this
 
 ```swift
@@ -276,6 +276,7 @@ You can turn on verbose mode to see what's going on in terminal for each request
 # TODO
 - [ ] Write test cases
 - [x] Add support for request cancelation
+- [x] Error handling
 - [ ] Add support for downloading/uploading files
 
 ## Contribution
@@ -288,7 +289,7 @@ Bill Panagiotopouplos, billp.dev@gmail.com
 
 ## Contributors
 
-Alex Athanasiadis
+Alex Athanasiadis, alexanderathan@gmail.com
 
 ## License
 
