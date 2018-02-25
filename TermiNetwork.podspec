@@ -24,7 +24,7 @@ TermiNetwork is a networking library written with Swift 4.0 that supports multi-
   s.homepage         = 'https://github.com/billp.dev@gmail.com/TermiNetwork'
   # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
-  s.author           = { 'billp.dev@gmail.com' => 'vasilis.panagiotopoulos@intrasoft-intl.com' }
+  s.author           = { 'Bill Panagiotopoulos' => 'billp.dev@gmail.com' }
   s.source           = { :git => 'https://github.com/billp.dev@gmail.com/TermiNetwork.git', :tag => s.version.to_s }
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
