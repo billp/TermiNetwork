@@ -245,13 +245,13 @@ static func testFailureCall(onSuccess: @escaping TNSuccessCallback<Data>, onFail
 You can set headers to be automatically included to every **TNCall** by setting your headers to the static var **fixedHeaders** (useful when you have to include authorization token in headers)
 
 ```swift
-    TNCall.fixedHeaders = ["Authorization": "[YOUR TOKEN]"]
+TNCall.fixedHeaders = ["Authorization": "[YOUR TOKEN]"]
 ```
 
 ## Cache Policy and Timeout Interval
 You can set a cache policy and timeout interval that is suitable to your needs by using the convenience initializer of TNCall
 ```swift
-    try? TNCall(route: APIFoodRouter.categories, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: 5).start(onSuccess: onSuccess, onFailure: onFailure)
+try? TNCall(route: APIFoodRouter.categories, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: 5).start(onSuccess: onSuccess, onFailure: onFailure)
 ```
 
 > More info about cachePolicy you can find at Apple's documentation: https://developer.apple.com/documentation/foundation/nsurlrequest.cachepolicy
