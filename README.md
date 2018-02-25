@@ -185,11 +185,12 @@ There are two groups of errors that you can handle, the first group includes tho
 
 Available error cases to catch:
 
-- environmentNotSet
-- invalidURL
-- invalidParams
+- **environmentNotSet**
+- **invalidURL**
+- **invalidParams**
 
-Example:
+#### Example
+
 ```swift
 static func getCategories(onSuccess: @escaping TNSuccessCallback<FoodCategories>, onFailure: @escaping TNFailureCallback) {
     do {
@@ -207,7 +208,7 @@ static func getCategories(onSuccess: @escaping TNSuccessCallback<FoodCategories>
 ```
 ### Errors after request execution
 
-Available error cases with onFailure closure:
+Available error cases in **onFailure** closure:
 
 - **responseDataIsEmpty**: the server response body is empty. You can avoid this error by setting **TNCall.allowEmptyResponseBody** to **true** 
 - **responseInvalidImageData**: in case of image deserialization
@@ -216,7 +217,7 @@ Available error cases with onFailure closure:
 - **notSuccess(Int)**: The server's response is not success, that is http status code is different to **2xx**. The status code is returned so you can do whatever you need with it
 - **cancelled(Error)**: When you cancel a request by calling the **.cancel()** func you will get this error, along with the error from URLSessionDataTask.
 
-Example
+#### Example
 
 ```swift
 static func testFailureCall(onSuccess: @escaping TNSuccessCallback<Data>, onFailure: @escaping TNFailureCallback) {
@@ -241,19 +242,19 @@ static func testFailureCall(onSuccess: @escaping TNSuccessCallback<Data>, onFail
 ```
 
 ## Fixed Headers
-You can set headers to be automatically included to every TNCall by setting your headers to the static var **fixedHeaders** (useful when you have to include authorization token in headers)
+You can set headers to be automatically included to every **TNCall** by setting your headers to the static var **fixedHeaders** (useful when you have to include authorization token in headers)
 
 ```swift
     TNCall.fixedHeaders = ["Authorization": "[YOUR TOKEN]"]
 ```
 
-## Cache policy and Timeout
-You can set a cache policy and time out interval that is suitable to your needs by using the complete initializer of TNCall
+## Cache Policy and Timeout Interval
+You can set a cache policy and timeout interval that is suitable to your needs by using the convenience initializer of TNCall
 ```swift
     try? TNCall(route: APIFoodRouter.categories, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: 5).start(onSuccess: onSuccess, onFailure: onFailure)
 ```
 
-More info about cachePolicy you can find at Apple's documentation: https://developer.apple.com/documentation/foundation/nsurlrequest.cachepolicy
+> More info about cachePolicy you can find at Apple's documentation: https://developer.apple.com/documentation/foundation/nsurlrequest.cachepolicy
 
 ## Installation
 
