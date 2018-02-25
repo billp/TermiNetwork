@@ -37,7 +37,20 @@ enum APIFoodRouter: TNRouteProtocol {
     
     // Create static helper functions for each route
     static func getCategories(onSuccess: @escaping TNSuccessCallback<FoodCategories>, onFailure: @escaping TNFailureCallback) {
-        try! TNCall(route: APIFoodRouter.categories).start(onSuccess: onSuccess, onFailure: onFailure)
+        do {
+            try TNCall(route: APIFoodRouter.categories).start(onSuccess: onSuccess, onFailure: onFailure)
+        } catch TNRequestError.environmentNotSet {
+            debugPrint("invalid url")
+        } catch TNRequestError.invalidURL {
+            debugPrint("invalid url")
+        } catch TNRequestError.invalidParams {
+            debugPrint("invalid params")
+        } catch {
+            debugPrint("any other error")
+        }
+        
+        try? TNCall(route: APIFoodRouter.categories, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: 5).start(onSuccess: onSuccess, onFailure: onFailure)
+
     }
     
     static func testFailureCall(onSuccess: @escaping TNSuccessCallback<Data>, onFailure: @escaping TNFailureCallback) {

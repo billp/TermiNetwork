@@ -5,6 +5,7 @@ TermiNetwork is a networking library written with Swift 4.0 that supports multi-
 # Features
 - [x] Multi-environment configuration (by conforming **TNEnvironmentProtocol**)
 - [x] Routing (by conforming **TNRouteProtocol**)
+- [x] Error handling support
 - [x] Automatic deserialization with **Codable** and **UIImage** (by passing the type in **TNSuccessCallback**)
 
 ## Usage
@@ -90,18 +91,18 @@ enum APIFoodRouter: TNRouteProtocol {
     internal func construct() -> TNRouteReturnType {
         switch self {
             case .categories:
-        return (
-            method: .get,
-            path: path("categories.php"),
-            params: nil,
-            headers: nil
-        )
+            return (
+                method: .get,
+                path: path("categories.php"),
+                params: nil,
+                headers: nil
+            )
+        }
     }
-}
 
-// Create static helper functions for each route
-static func getCategories(onSuccess: @escaping TNSuccessCallback<FoodCategories>, onFailure: @escaping TNFailureCallback) {
-    try? TNCall(route: APIFoodRouter.categories).start(onSuccess: onSuccess, onFailure: onFailure)
+    // Create static helper functions for each route
+    static func getCategories(onSuccess: @escaping TNSuccessCallback<FoodCategories>, onFailure: @escaping TNFailureCallback) {
+        try? TNCall(route: APIFoodRouter.categories).start(onSuccess: onSuccess, onFailure: onFailure)
     }
 }
 ```
@@ -159,7 +160,7 @@ let headers = [
 let request = try? TNCall(method: .get, headers: headers, path: path("users", "list"), params: params).asRequest()
 ```
 
-### Cancel a request
+### Request cancellation
 You can cancel a request which is executing by storing a reference of **TNCall** to a variable and then by calling the **.cancel()** func like this
 
 ```swift
@@ -175,6 +176,85 @@ call.cancel()
 
 You can use any of the following request methods: **get, head, post, put, delete, connect, options, trace, patch**
 
+
+## Error Handling
+
+There are two groups of errors that you can handle, the first group includes those that can be handled before request execution (e.g. invalid url, params), with try/catch, and the second group includes those that can be handled after request execution (e.g. empty response from server,  server error, etc...), passed in **onFailure** closure.
+
+### Errors before request execution
+
+Available error cases to catch:
+
+- environmentNotSet
+- invalidURL
+- invalidParams
+
+Example:
+```swift
+static func getCategories(onSuccess: @escaping TNSuccessCallback<FoodCategories>, onFailure: @escaping TNFailureCallback) {
+    do {
+        try TNCall(route: APIFoodRouter.categories).start(onSuccess: onSuccess, onFailure: onFailure)
+    } catch TNRequestError.environmentNotSet {
+        debugPrint("invalid url")
+    } catch TNRequestError.invalidURL {
+        debugPrint("invalid url")
+    } catch TNRequestError.invalidParams {
+        debugPrint("invalid params")
+    } catch {
+        debugPrint("any other error")
+    }
+}
+```
+### Errors after request execution
+
+Available error cases with onFailure closure:
+
+- **responseDataIsEmpty**: the server response body is empty. You can avoid this error by setting **TNCall.allowEmptyResponseBody** to **true** 
+- **responseInvalidImageData**: in case of image deserialization
+- **cannotDeserialize**: e.g. your model structure doesn't match with the server's response
+- **networkError(Error)**: e.g. time out error, contains the error from URLSessionDataTask, in case you need it
+- **notSuccess(Int)**: The server's response is not success, that is http status code is different to **2xx**. The status code is returned so you can do whatever you need with it
+- **cancelled(Error)**: When you cancel a request by calling the **.cancel()** func you will get this error, along with the error from URLSessionDataTask.
+
+Example
+
+```swift
+static func testFailureCall(onSuccess: @escaping TNSuccessCallback<Data>, onFailure: @escaping TNFailureCallback) {
+    try! TNCall(route: APIFoodRouter.test).start(onSuccess: onSuccess, onFailure: { error, data in
+        switch error {
+            case .notSuccess(let statusCode):
+                debugPrint("Status code " + String(statusCode))
+                break
+            case .networkError(let error):
+                debugPrint("Network error: " + error.localizedDescription)
+                break
+            case .cancelled(let error):
+                debugPrint("Request cancelled with error: " + error.localizedDescription)
+                break
+            default: break
+        }
+
+        //execute the passed onFailure block (for completion)
+        onFailure(error, data)
+    })
+}
+```
+
+## Fixed Headers
+You can set headers to be automatically included to every TNCall by setting your headers to the static var **fixedHeaders** (useful when you have to include authorization token in headers)
+
+```swift
+    TNCall.fixedHeaders = ["Authorization": "[YOUR TOKEN]"]
+```
+
+## Cache policy and Timeout
+You can set a cache policy and time out interval that is suitable to your needs by using the complete initializer of TNCall
+```swift
+    try? TNCall(route: APIFoodRouter.categories, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: 5).start(onSuccess: onSuccess, onFailure: onFailure)
+```
+
+More info about cachePolicy you can find at Apple's documentation: https://developer.apple.com/documentation/foundation/nsurlrequest.cachepolicy
+
 ## Installation
 
 TermiNetwork is available through [CocoaPods](http://cocoapods.org). To install
@@ -188,9 +268,13 @@ target "YourTarget" do
 end
 ```
 
+## Logging
+
+You can turn on verbose mode to see what's going on in terminal for each request by setting the **TNEnvironment.verbose** to **true**
+
 # TODO
 - [ ] Write test cases
-- [x] Add support for canceling a request
+- [x] Add support for request cancelation
 - [ ] Add support for downloading/uploading files
 
 ## Contribution
@@ -200,6 +284,10 @@ Feel free to contribute to the project by creating a pull request and/or by repo
 ## Author
 
 Bill Panagiotopouplos, billp.dev@gmail.com
+
+## Contributors
+
+Alex Athanasiadis
 
 ## License
 

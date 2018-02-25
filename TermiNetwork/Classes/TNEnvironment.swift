@@ -1,6 +1,6 @@
 //
-//  Environment.swift
-//  ServiceRouter
+//  TNEnvironment.swift
+//  TermiNetwork
 //
 //  Created by Vasilis Panagiotopoulos on 14/02/2018.
 //  Copyright © 2018 Vasilis Panagiotopoulos. All rights reserved.

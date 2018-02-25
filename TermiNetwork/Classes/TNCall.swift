@@ -1,6 +1,6 @@
 //
-//  SRCall.swift
-//  ServiceRouter
+//  TNCall.swift
+//  TermiNetwork
 //
 //  Created by Vasilis Panagiotopoulos on 14/02/2018.
 //  Copyright © 2018 Vasilis Panagiotopoulos. All rights reserved.
@@ -8,10 +8,13 @@
 
 import Foundation
 
+//MARK: - Custom types
 public typealias TNSuccessCallback<T> = (T)->()
-public typealias TNFailureCallback = (TNError, Data?)->()
+public typealias TNFailureCallback = (TNResponseError, Data?)->()
+public typealias TNRouteReturnType = (method: TNMethod, path: TNPath, params: [String: Any?]?, headers: [String: String]?)
 
 
+//MARK: - Enums
 public enum TNMethod: String {
     case get
     case head
@@ -24,31 +27,22 @@ public enum TNMethod: String {
     case patch
 }
 
-public enum TNError: Error {
-    case invalidURL
-    case invalidParams
-    case responseDataIsEmpty
-    case responseInvalidImageData
-    case environmentNotSet
-    case cannotDeserialize
-    case networkError(Error)
-    case notSuccess(Int)
-    case cancelled(Error)
-}
-
 public enum TNCallSerializationType {
     case JSON
     case image
 }
 
-public typealias TNRouteReturnType = (method: TNMethod, path: TNPath, params: [String: Any?]?, headers: [String: String]?)
-
+// MARK: - Protocols
 public protocol TNRouteProtocol {
     func construct() -> TNRouteReturnType
 }
 
 open class TNCall {
-    static var fixedHeaders = [String: String]()
+    //MARK: - Static properties
+    public static var fixedHeaders = [String: String]()
+    public static var allowEmptyResponseBody = false
+    
+    //MARK: - Instance properties
     var headers: [String: String]?
     var method: TNMethod!
     var path: String
@@ -82,6 +76,12 @@ open class TNCall {
         self.init(method: params.method, headers: params.headers, cachePolicy: nil, timeoutInterval: nil, path: params.path, params: params.params)
     }
     
+    public convenience init(route: TNRouteProtocol, cachePolicy: URLRequest.CachePolicy?, timeoutInterval: TimeInterval?) {
+        let params = route.construct()
+        
+        self.init(method: params.method, headers: params.headers, cachePolicy: cachePolicy, timeoutInterval: timeoutInterval, path: params.path, params: params.params)
+    }
+    
     // Convenience method for passing a string instead of path
     public convenience init(method: TNMethod, url: String, params: [String: Any?]?) {
         self.init(method: method, headers: nil, cachePolicy: nil, timeoutInterval: nil, path: TNPath("-"), params: nil)
@@ -91,12 +91,12 @@ open class TNCall {
     
     // MARK: - Create request
     public func asRequest() throws -> URLRequest {
-        guard let currentEnvironment = TNEnvironment.current else { throw TNError.environmentNotSet }
+        guard let currentEnvironment = TNEnvironment.current else { throw TNRequestError.environmentNotSet }
         
         let urlString = pathType == .normal ? currentEnvironment.description + "/" + path : path
         
         guard let url = URL(string: urlString) else {
-            throw TNError.invalidURL
+            throw TNRequestError.invalidURL
         }
         
         var request = URLRequest(url: url, cachePolicy: cachePolicy, timeoutInterval: currentEnvironment.timeoutInterval)
@@ -116,11 +116,10 @@ open class TNCall {
             
             request.httpBody = formBody?.data(using: String.Encoding.utf8)
         }
-        
         return request
     }
     
-    // Cancel data task
+    // Cancelation
     public func cancel() {
         dataTask?.cancel()
     }
@@ -129,15 +128,15 @@ open class TNCall {
     private func sessionDataTask(request: URLRequest, completionHandler: @escaping (Data)->(), onFailure: @escaping TNFailureCallback) throws -> URLSessionDataTask {
         
         dataTask = URLSession.shared.dataTask(with: request) { data, urlResponse, error in
-            var customError: TNError?
+            var customError: TNResponseError?
             var statusCode: Int?
             
             // Error handling
             if let error = error {
                 if (error as NSError).code == NSURLErrorCancelled {
-                    customError = TNError.cancelled(error)
+                    customError = TNResponseError.cancelled(error)
                 } else {
-                    customError = TNError.networkError(error)
+                    customError = TNResponseError.networkError(error)
                 }
             }
             
@@ -145,7 +144,7 @@ open class TNCall {
                 statusCode = response.statusCode as Int?
             
                 if statusCode != nil && statusCode! / 100 != 2 {
-                    customError = TNError.notSuccess(statusCode!)
+                    customError = TNResponseError.notSuccess(statusCode!)
                 }
             }
             
@@ -156,11 +155,11 @@ open class TNCall {
                     onFailure(customError!, data)
                 }
             }
-            else if data == nil {
+            else if data == nil && !TNCall.allowEmptyResponseBody {
                 _ = TNLog(call: self, message: "Empty body received")
                 
                 DispatchQueue.main.sync {
-                    onFailure(TNError.responseDataIsEmpty, data)
+                    onFailure(TNResponseError.responseDataIsEmpty, data)
                 }
             } else {
                 completionHandler(data!)
@@ -181,7 +180,7 @@ open class TNCall {
             guard let object: T = try? data.deserializeJSONData() else {
                 _ = TNLog(call: self, message: "Cannot deserialize data. Check your models", responseData: data)
 
-                onFailure(TNError.cannotDeserialize, data)
+                onFailure(TNResponseError.cannotDeserialize, data)
                 return
             }
             
@@ -190,7 +189,6 @@ open class TNCall {
             DispatchQueue.main.sync {
                 onSuccess(object)
             }
-
         }, onFailure: onFailure).resume()
     }
     
@@ -205,7 +203,7 @@ open class TNCall {
                 _ = TNLog(call: self, message: "Unable to deserialize image (data not an image)")
 
                 DispatchQueue.main.sync {
-                    onFailure(TNError.responseInvalidImageData, data)
+                    onFailure(TNResponseError.responseInvalidImageData, data)
                 }
             } else {
                 DispatchQueue.main.sync {
