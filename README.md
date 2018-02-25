@@ -196,7 +196,7 @@ static func getCategories(onSuccess: @escaping TNSuccessCallback<FoodCategories>
     do {
         try TNCall(route: APIFoodRouter.categories).start(onSuccess: onSuccess, onFailure: onFailure)
     } catch TNRequestError.environmentNotSet {
-        debugPrint("invalid url")
+        debugPrint("environment not set")
     } catch TNRequestError.invalidURL {
         debugPrint("invalid url")
     } catch TNRequestError.invalidParams {

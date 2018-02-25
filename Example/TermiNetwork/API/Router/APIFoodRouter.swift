@@ -40,7 +40,7 @@ enum APIFoodRouter: TNRouteProtocol {
         do {
             try TNCall(route: APIFoodRouter.categories).start(onSuccess: onSuccess, onFailure: onFailure)
         } catch TNRequestError.environmentNotSet {
-            debugPrint("invalid url")
+            debugPrint("environment not set")
         } catch TNRequestError.invalidURL {
             debugPrint("invalid url")
         } catch TNRequestError.invalidParams {
