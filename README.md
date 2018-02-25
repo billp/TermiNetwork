@@ -256,6 +256,10 @@ try? TNCall(route: APIFoodRouter.categories, cachePolicy: .reloadIgnoringLocalCa
 
 > More info about cachePolicy you can find at Apple's documentation: https://developer.apple.com/documentation/foundation/nsurlrequest.cachepolicy
 
+## Logging
+
+You can turn on verbose mode to see what's going on in terminal for each request by setting the **TNEnvironment.verbose** to **true**
+
 ## Installation
 
 TermiNetwork is available through [CocoaPods](http://cocoapods.org). To install
@@ -269,11 +273,7 @@ target "YourTarget" do
 end
 ```
 
-## Logging
-
-You can turn on verbose mode to see what's going on in terminal for each request by setting the **TNEnvironment.verbose** to **true**
-
-# TODO
+## TODO
 - [ ] Write test cases
 - [x] Add support for request cancelation
 - [x] Error handling
