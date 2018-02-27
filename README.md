@@ -106,7 +106,7 @@ enum APIFoodRouter: TNRouteProtocol {
     }
 }
 ```
-> In your helper funcs section you need to define your model class along with **TNSuccessCallback** that determines the type of the response data which is being returned. Deserialization takes place automatically.
+> In your helper methods section you need to define your model class along with **TNSuccessCallback** that determines the type of the response data which is being returned. Deserialization takes place automatically.
 
 5. Finally use your helper functions anywhere in your project
 ```swift
@@ -161,7 +161,7 @@ let request = try? TNCall(method: .get, headers: headers, path: path("users", "l
 ```
 
 ### Request Cancellation
-You can cancel a request which is executing by storing a reference of **TNCall** to a variable and then by calling the **.cancel()** func like this
+You can cancel a request which is executing by storing a reference of **TNCall** to a variable and then by calling the **.cancel()** method like this
 
 ```swift
 //Keep a reference of TNCall
@@ -215,7 +215,7 @@ Available error cases in **onFailure** closure:
 - **cannotDeserialize**: e.g. your model structure doesn't match with the server's response
 - **networkError(Error)**: e.g. time out error, contains the error from URLSessionDataTask, in case you need it
 - **notSuccess(Int)**: The server's response is not success, that is http status code is different to **2xx**. The status code is returned so you can do whatever you need with it
-- **cancelled(Error)**: When you cancel a request by calling the **.cancel()** func you will get this error, along with the error from URLSessionDataTask.
+- **cancelled(Error)**: When you cancel a request by calling the **.cancel()** method you will get this error, along with the error from URLSessionDataTask.
 
 #### Example
 
@@ -285,7 +285,7 @@ Feel free to contribute to the project by creating a pull request and/or by repo
 
 ## Author
 
-Bill Panagiotopouplos, billp.dev@gmail.com
+Bill Panagiotopoulos, billp.dev@gmail.com
 
 ## Contributors
 
