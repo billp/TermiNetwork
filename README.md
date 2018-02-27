@@ -36,7 +36,7 @@ enum Environment: TNEnvironmentProtocol {
 2. Set your active environment in **`application(_:didFinishLaunchingWithOptions)`** or everywhere else you want, in your application's initialization code.
 
 ```
-TNEnvironment.env = Environment.production
+TNEnvironment.set(Environment.production)
 ```
 
 3. Create your models represented with **Codable**.
