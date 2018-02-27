@@ -1,11 +1,7 @@
 PODS:
-  - Nimble (7.0.3)
-  - Quick (1.2.0)
-  - TermiNetwork (0.1.0)
+  - TermiNetwork (0.1.1)
 
 DEPENDENCIES:
-  - Nimble (~> 7.0.2)
-  - Quick (~> 1.2.0)
   - TermiNetwork (from `../`)
 
 EXTERNAL SOURCES:
@@ -13,10 +9,8 @@ EXTERNAL SOURCES:
     :path: ../
 
 SPEC CHECKSUMS:
-  Nimble: 7f5a9c447a33002645a071bddafbfb24ea70e0ac
-  Quick: 58d203b1c5e27fff7229c4c1ae445ad7069a7a08
-  TermiNetwork: 8666ee72b956bb77043d225c45d44656e23ec8a8
+  TermiNetwork: f93752c8b4b55ddc09d5faa8d9a674888f6243c4
 
-PODFILE CHECKSUM: b964e3344b5693fbb9d5ee1ae9f6f12272a85f07
+PODFILE CHECKSUM: 49cbd2ca3249ef486aa566b59a4c48effe5e325f
 
 COCOAPODS: 1.4.0

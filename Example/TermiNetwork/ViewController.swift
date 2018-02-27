@@ -51,7 +51,7 @@ extension ViewController {
         
         cell.titleLabel.text = category.strCategory
         cell.descriptionLabel.text = category.strCategoryDescription
-        cell.thumbImageView.url = "http://" + category.strCategoryThumb
+        cell.thumbImageView.url = category.strCategoryThumb
         
         return cell
     }

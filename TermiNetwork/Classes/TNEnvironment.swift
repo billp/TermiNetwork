@@ -26,12 +26,12 @@ open class TNEnvironment {
     var timeoutInterval: TimeInterval = 60
 
     // MARK: - Static members
-    internal static var current: TNEnvironment!
-    public static var env: TNEnvironmentProtocol! {
-        didSet {
-            current = env.configure()
-        }
+    public static var current: TNEnvironment!
+    
+    public static func set(_ environment: TNEnvironmentProtocol) {
+        current = environment.configure()
     }
+    
     public static var verbose = false
         
     // MARK: - Initializers
@@ -42,16 +42,16 @@ open class TNEnvironment {
         self.port = port
     }
     
+    public convenience init(scheme: TNURLScheme, host: String) {
+        self.init(scheme: scheme, host: host, suffix: nil, port: nil)
+    }
+    
     public convenience init(scheme: TNURLScheme, host: String, port: Int) {
         self.init(scheme: scheme, host: host, suffix: nil, port: port)
     }
     
     public convenience init(scheme: TNURLScheme, host: String, suffix: TNPath) {
         self.init(scheme: scheme, host: host, suffix: suffix, port: nil)
-    }
-    
-    public convenience init(scheme: TNURLScheme, host: String, suffix: TNPath, port: Int) {
-        self.init(scheme: scheme, host: host, suffix: suffix, port: port)
     }
 }
 
@@ -61,11 +61,8 @@ extension TNEnvironment: CustomStringConvertible {
     public var description: String {
         var urlComponents = [String]()
         urlComponents.append(scheme.rawValue + ":/")
-        urlComponents.append(host)
+        urlComponents.append(port != nil ? host + ":" + String(describing: port!) : host)
         
-        if port != nil {
-            urlComponents.append(":" + String(describing: port!))
-        }
         if suffix != nil {
             urlComponents.append(suffix!.components.joined(separator: "/"))
         }
