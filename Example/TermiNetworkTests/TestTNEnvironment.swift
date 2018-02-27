@@ -24,7 +24,7 @@ enum Environment: TNEnvironmentProtocol {
         case .httpHostWithPortAndSuffix:
             return TNEnvironment(scheme: .http, host: "localhost", suffix: path("v1", "json"), port: 8080)
         case .httpsHostWithPortAndSuffix:
-            return TNEnvironment(scheme: .https, host: "google.com", suffix: path("v1", "json"), port: 8080)
+            return TNEnvironment(scheme: .https, host: "google.com", suffix: path("v3", "test", "foo", "bar"), port: 8080)
 
         }
     }
@@ -54,6 +54,6 @@ class TestTNEnvironment: XCTestCase {
         XCTAssert(TNEnvironment.current.description == "http://localhost:8080/v1/json")
 
         TNEnvironment.set(Environment.httpsHostWithPortAndSuffix)
-        XCTAssert(TNEnvironment.current.description == "https://google.com:8080/v1/json")
+        XCTAssert(TNEnvironment.current.description == "https://google.com:8080/v3/test/foo/bar")
     }
 }
