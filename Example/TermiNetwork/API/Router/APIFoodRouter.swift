@@ -43,8 +43,6 @@ enum APIFoodRouter: TNRouteProtocol {
             debugPrint("environment not set")
         } catch TNRequestError.invalidURL {
             debugPrint("invalid url")
-        } catch TNRequestError.invalidParams {
-            debugPrint("invalid params")
         } catch {
             debugPrint("any other error")
         }

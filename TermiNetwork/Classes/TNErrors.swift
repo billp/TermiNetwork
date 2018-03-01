@@ -11,7 +11,6 @@ import Foundation
 // Errors before execution of a request
 public enum TNRequestError: Error {
     case invalidURL
-    case invalidParams
     case environmentNotSet
 }
 
