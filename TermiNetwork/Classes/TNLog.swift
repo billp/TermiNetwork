@@ -14,13 +14,13 @@ internal class TNLog {
         
         let url: String! = (try? call.asRequest().url?.absoluteString) ?? ""
         
-        debugPrint("|=== TermiNetwork verbose BEGIN ===|")
-        debugPrint("|> URL: " + url)
-        debugPrint("|> Message: " + message)
+        print("|=== TermiNetwork verbose BEGIN ===|")
+        print("|> URL: " + url)
+        print("|> Message: " + message)
         if let data = responseData {
-            debugPrint("|> Data: " + (data.toString() ?? "[non-printable]")!)
+            print("|> Data: " + (data.toString() ?? "[non-printable]")!)
         }
-        debugPrint("|=== TermiNetwork verbose   END ===|")
-        debugPrint()
+        print("|=== TermiNetwork verbose   END ===|")
+        print()
     }
 }
