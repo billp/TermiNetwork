@@ -71,9 +71,9 @@ open class TNCall {
     }
 
     public convenience init(route: TNRouteProtocol) {
-        let params = route.construct()
+        let route = route.construct()
         
-        self.init(method: params.method, headers: params.headers, cachePolicy: nil, timeoutInterval: nil, path: params.path, params: params.params)
+        self.init(method: route.method, headers: route.headers, cachePolicy: nil, timeoutInterval: nil, path: route.path, params: route.params)
     }
     
     public convenience init(route: TNRouteProtocol, cachePolicy: URLRequest.CachePolicy?, timeoutInterval: TimeInterval?) {
@@ -102,10 +102,10 @@ open class TNCall {
         var request = URLRequest(url: url, cachePolicy: cachePolicy, timeoutInterval: currentEnvironment.timeoutInterval)
         
         headers?.merge(TNCall.fixedHeaders, uniquingKeysWith: { (_, new) in new })
-        
+
         if let headers = headers {
-            for (headerFieldKey, headerFieldValue) in headers {
-                request.addValue(headerFieldValue, forHTTPHeaderField: headerFieldKey)
+            for (key, value) in headers {
+                request.addValue(value, forHTTPHeaderField: key)
             }
         }
         

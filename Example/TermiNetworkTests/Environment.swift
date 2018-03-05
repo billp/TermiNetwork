@@ -14,6 +14,7 @@ enum Environment: TNEnvironmentProtocol {
     case httpHostWithPort
     case httpHostWithPortAndSuffix
     case httpsHostWithPortAndSuffix
+    case termiNetworkLocal
     
     func configure() -> TNEnvironment {
         switch self {
@@ -25,7 +26,8 @@ enum Environment: TNEnvironmentProtocol {
             return TNEnvironment(scheme: .http, host: "localhost", suffix: path("v1", "json"), port: 8080)
         case .httpsHostWithPortAndSuffix:
             return TNEnvironment(scheme: .https, host: "google.com", suffix: path("v3", "test", "foo", "bar"), port: 8080)
-            
+        case .termiNetworkLocal:
+            return TNEnvironment(scheme: .http, host: "localhost", suffix: nil, port: 3000)
         }
     }
 }

@@ -22,7 +22,7 @@ enum APIFoodRouter: TNRouteProtocol {
                 method: .get,
                 path: path("categories.php"),
                 params: nil,
-                headers: nil
+                headers: ["h": "v", "h2": "v2"]
             )
         case .test:
             return (
