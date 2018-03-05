@@ -38,7 +38,7 @@ enum APIFoodRouter: TNRouteProtocol {
     // Create static helper functions for each route
     static func getCategories(onSuccess: @escaping TNSuccessCallback<FoodCategories>, onFailure: @escaping TNFailureCallback) {
         do {
-            try TNCall(route: APIFoodRouter.categories).start(onSuccess: onSuccess, onFailure: onFailure)
+            try TNCall(route: self.categories).start(onSuccess: onSuccess, onFailure: onFailure)
         } catch TNRequestError.environmentNotSet {
             debugPrint("environment not set")
         } catch TNRequestError.invalidURL {

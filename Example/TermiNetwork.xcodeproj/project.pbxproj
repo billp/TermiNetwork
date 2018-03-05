@@ -17,6 +17,8 @@
 		594C21BC203D9F9B00FFE7A6 /* APICustomHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 594C21B7203D9F9B00FFE7A6 /* APICustomHelpers.swift */; };
 		594C21BD203D9F9B00FFE7A6 /* APIFoodRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 594C21B8203D9F9B00FFE7A6 /* APIFoodRouter.swift */; };
 		595BA53720459A2F0029D903 /* TestTNEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 595BA53620459A2F0029D903 /* TestTNEnvironment.swift */; };
+		59F3986E204D33FF00C7381B /* TestTNCallErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59F3986D204D33FF00C7381B /* TestTNCallErrors.swift */; };
+		59F39870204D369D00C7381B /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59F3986F204D369D00C7381B /* Environment.swift */; };
 		607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD51AFB9204008FA782 /* AppDelegate.swift */; };
 		607FACD81AFB9204008FA782 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD71AFB9204008FA782 /* ViewController.swift */; };
 		607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDC1AFB9204008FA782 /* Images.xcassets */; };
@@ -46,6 +48,8 @@
 		595BA53420459A2E0029D903 /* TermiNetworkTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TermiNetworkTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		595BA53620459A2F0029D903 /* TestTNEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestTNEnvironment.swift; sourceTree = "<group>"; };
 		595BA53820459A2F0029D903 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		59F3986D204D33FF00C7381B /* TestTNCallErrors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestTNCallErrors.swift; sourceTree = "<group>"; };
+		59F3986F204D369D00C7381B /* Environment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
 		607FACD01AFB9204008FA782 /* TermiNetwork_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TermiNetwork_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACD41AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		607FACD51AFB9204008FA782 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -135,6 +139,8 @@
 		595BA53520459A2F0029D903 /* TermiNetworkTests */ = {
 			isa = PBXGroup;
 			children = (
+				59F3986F204D369D00C7381B /* Environment.swift */,
+				59F3986D204D33FF00C7381B /* TestTNCallErrors.swift */,
 				595BA53620459A2F0029D903 /* TestTNEnvironment.swift */,
 				595BA53820459A2F0029D903 /* Info.plist */,
 			);
@@ -368,6 +374,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				59F3986E204D33FF00C7381B /* TestTNCallErrors.swift in Sources */,
+				59F39870204D369D00C7381B /* Environment.swift in Sources */,
 				595BA53720459A2F0029D903 /* TestTNEnvironment.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

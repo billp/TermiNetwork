@@ -103,9 +103,12 @@ open class TNCall {
         
         params?.merge(TNCall.fixedHeaders, uniquingKeysWith: { (_, new) in new })
         
-        for (headerFieldKey, headerFieldValue) in params! {
-            request.addValue(headerFieldValue as! String, forHTTPHeaderField: headerFieldKey)
+        if let params = params {
+            for (headerFieldKey, headerFieldValue) in params {
+                request.addValue(headerFieldValue as! String, forHTTPHeaderField: headerFieldKey)
+            }
         }
+        
         request.httpMethod = method.rawValue
         
         if timeoutInterval != nil {
