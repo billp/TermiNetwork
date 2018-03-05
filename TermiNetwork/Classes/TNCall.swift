@@ -101,11 +101,11 @@ open class TNCall {
         
         var request = URLRequest(url: url, cachePolicy: cachePolicy, timeoutInterval: currentEnvironment.timeoutInterval)
         
-        params?.merge(TNCall.fixedHeaders, uniquingKeysWith: { (_, new) in new })
+        headers?.merge(TNCall.fixedHeaders, uniquingKeysWith: { (_, new) in new })
         
-        if let params = params {
-            for (headerFieldKey, headerFieldValue) in params {
-                request.addValue(headerFieldValue as! String, forHTTPHeaderField: headerFieldKey)
+        if let headers = headers {
+            for (headerFieldKey, headerFieldValue) in headers {
+                request.addValue(headerFieldValue, forHTTPHeaderField: headerFieldKey)
             }
         }
         
