@@ -22,7 +22,7 @@ enum APIFoodRouter: TNRouteProtocol {
                 method: .get,
                 path: path("categories.php"),
                 params: nil,
-                headers: ["h": "v", "h2": "v2"]
+                headers: nil
             )
         case .test:
             return (
@@ -50,7 +50,7 @@ enum APIFoodRouter: TNRouteProtocol {
         try? TNCall(route: APIFoodRouter.categories, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: 5).start(onSuccess: onSuccess, onFailure: onFailure)
     }*/
     
-    static func testFailureCall(onSuccess: @escaping TNSuccessCallback<Data>, onFailure: @escaping TNFailureCallback) {
+    /*static func testFailureCall(onSuccess: @escaping TNSuccessCallback<Data>, onFailure: @escaping TNFailureCallback) {
         try! TNCall(route: APIFoodRouter.test).start(onSuccess: onSuccess, onFailure: { error, data in
             
             switch error {
@@ -68,5 +68,5 @@ enum APIFoodRouter: TNRouteProtocol {
             
             onFailure(error, data)
         })
-    }
+    }*/
 }
