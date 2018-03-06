@@ -143,6 +143,41 @@ APICustomHelpers.getImage(url: "https://picsum.photos/240/240", onSuccess: { ima
 }
 ```
 
+### Built-in Router Helpers
+
+If you find yourself writting helpers that doesn't do anything complex (like handling http error codes) and your Router class begins to grow for no reason, **TNRouteProtocol** comes with 3 helper methods that you can use directly from your Router class to ease your life. 
+
+1. For deserializing model
+
+```swift
+try? APIFoodRouter.makeCall(route: APIFoodRouter.categories, responseType: FoodCategories.self, onSuccess: { categories in
+    self.categories = categories.categories
+    self.tableView.reloadData()
+    self.tableView.isHidden = false
+}) { error, data in
+    debugPrint(error)
+}
+```
+
+2. For deserializing image
+
+```swift
+try? APIFoodRouter.makeCall(route: APIFoodRouter.categoryImage(imageID: 12345), responseType: UIImage.self, onSuccess: { image in
+    //do something with image
+}) { error, data in
+    debugPrint(error)
+}
+```
+
+3. For any other case
+```swift
+try? APIFoodRouter.makeCall(route: APIFoodRouter.testPlainText, onSuccess: { data in
+    // Do something with data
+}) { error, data in
+    debugPrint(error)
+}
+```
+
 ### Use of **TNCall** Independently
 
 You can use the **TNCall** class to create a **URLRequest** and use it with another library such as Alamofire by providing method, custom headers, path and parameters, as shown bellow
