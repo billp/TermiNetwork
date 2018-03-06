@@ -8,11 +8,10 @@
 
 import Foundation
 
-struct HeaderRootClass : Codable {
+struct TestHeader: Codable {
     
     let authorization : String?
     let customHeader : String?
-    
     
     enum CodingKeys: String, CodingKey {
         case authorization = "HTTP_AUTHORIZATION"

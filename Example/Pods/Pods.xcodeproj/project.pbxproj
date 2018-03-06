@@ -15,6 +15,7 @@
 		47D0C1D6667845163069B08EA1BAB0F7 /* TermiNetwork-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = E1997F7B4EE7F9705715240A299427D4 /* TermiNetwork-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		487C67A12D6226D50DA76E61BEA5CCC4 /* TNEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5716423C35CBB7C2365F812316BF6A86 /* TNEnvironment.swift */; };
 		4F4E48DBE78A8FF1594219C0A6FF425F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6604A7D69453B4569E4E4827FB9155A9 /* Foundation.framework */; };
+		59CBE65D204F0CF00044F79B /* TNRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59CBE65B204F0C760044F79B /* TNRouter.swift */; };
 		766B63B92419929FEC7394590786517E /* TNLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D08F0B61BC925B9C0A1B73E2A629F35 /* TNLog.swift */; };
 		9B9678100881C44F2E22372774E58A1D /* Pods-TermiNetwork_Example-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 915CC8F1608DB7C9CCCE3E4AB76DE5CC /* Pods-TermiNetwork_Example-dummy.m */; };
 		AF4D4E13978DE9630413EB060D2146BA /* Pods-TermiNetwork_Example-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = C84144F80DBEB025E6B0D6C16432188B /* Pods-TermiNetwork_Example-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -40,6 +41,7 @@
 		549303A44A49F76762CA2EE752F79A43 /* TermiNetwork.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = TermiNetwork.modulemap; sourceTree = "<group>"; };
 		5716423C35CBB7C2365F812316BF6A86 /* TNEnvironment.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = TNEnvironment.swift; path = TermiNetwork/Classes/TNEnvironment.swift; sourceTree = "<group>"; };
 		587F687CF37149CE0B132C26C61F8426 /* Pods_TermiNetwork_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TermiNetwork_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		59CBE65B204F0C760044F79B /* TNRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TNRouter.swift; path = TermiNetwork/Classes/TNRouter.swift; sourceTree = "<group>"; };
 		5E7DC7B4DC5F826229E5E19634C6CF84 /* TermiNetwork.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = TermiNetwork.xcconfig; sourceTree = "<group>"; };
 		6604A7D69453B4569E4E4827FB9155A9 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.3.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		6FCD0BA4EF7C1249CEC7F908B5E6BCA0 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -143,6 +145,7 @@
 				7638CA04EE9A0DB6EF98F0A511FDA878 /* TNErrors.swift */,
 				2D08F0B61BC925B9C0A1B73E2A629F35 /* TNLog.swift */,
 				A60535DCF6C97AE5C4603463A1BED7A2 /* TNPath.swift */,
+				59CBE65B204F0C760044F79B /* TNRouter.swift */,
 				E3A99B18E96E7898E7444EC56F255749 /* Extensions */,
 				04B25A32FB1B68A8A471CD3FACFC7A53 /* Pod */,
 				2DBAEBC20A58F34593B1908D3C0299EF /* Support Files */,
@@ -267,6 +270,11 @@
 			attributes = {
 				LastSwiftUpdateCheck = 0930;
 				LastUpgradeCheck = 0930;
+				TargetAttributes = {
+					C6F049F5A05E1D9B49F9971C1B755A29 = {
+						LastSwiftMigration = 0920;
+					};
+				};
 			};
 			buildConfigurationList = 2D8E8EC45A3A1A1D94AE762CB5028504 /* Build configuration list for PBXProject "Pods" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -295,6 +303,7 @@
 				05939C7677552367C716F62F206961EE /* TermiNetwork-dummy.m in Sources */,
 				0B19ADFA6C416B020E6795E50B4C6365 /* TNCall.swift in Sources */,
 				487C67A12D6226D50DA76E61BEA5CCC4 /* TNEnvironment.swift in Sources */,
+				59CBE65D204F0CF00044F79B /* TNRouter.swift in Sources */,
 				41F0E84536B98BFDCE1756C1F1EFE35D /* TNErrors.swift in Sources */,
 				766B63B92419929FEC7394590786517E /* TNLog.swift in Sources */,
 				0B4771C0313A46ECA3832A7D48673389 /* TNPath.swift in Sources */,
@@ -478,6 +487,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 861A72041E7258837294BC3893469F72 /* Pods-TermiNetwork_Example.release.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
@@ -501,6 +511,7 @@
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -512,6 +523,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 7547E4F2BA6E5C5F138F86AB065E67F6 /* Pods-TermiNetwork_Example.debug.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
@@ -536,6 +548,7 @@
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";

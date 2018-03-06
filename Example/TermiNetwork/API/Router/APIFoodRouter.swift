@@ -36,7 +36,7 @@ enum APIFoodRouter: TNRouteProtocol {
     }
     
     // Create static helper functions for each route
-    static func getCategories(onSuccess: @escaping TNSuccessCallback<FoodCategories>, onFailure: @escaping TNFailureCallback) {
+    /*static func getCategories(onSuccess: @escaping TNSuccessCallback<FoodCategories>, onFailure: @escaping TNFailureCallback) {
         do {
             try TNCall(route: self.categories).start(onSuccess: onSuccess, onFailure: onFailure)
         } catch TNRequestError.environmentNotSet {
@@ -48,8 +48,7 @@ enum APIFoodRouter: TNRouteProtocol {
         }
         
         try? TNCall(route: APIFoodRouter.categories, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: 5).start(onSuccess: onSuccess, onFailure: onFailure)
-
-    }
+    }*/
     
     static func testFailureCall(onSuccess: @escaping TNSuccessCallback<Data>, onFailure: @escaping TNFailureCallback) {
         try! TNCall(route: APIFoodRouter.test).start(onSuccess: onSuccess, onFailure: { error, data in

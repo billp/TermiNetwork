@@ -25,7 +25,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        APIFoodRouter.getCategories(onSuccess: { categories in
+        APIFoodRouter.makeCall(route: APIFoodRouter.categories, responseType: FoodCategories.self, onSuccess: { categories in
             self.categories = categories.categories
             self.tableView.reloadData()
             self.tableView.isHidden = false

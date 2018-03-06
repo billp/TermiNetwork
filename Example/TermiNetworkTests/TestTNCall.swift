@@ -25,9 +25,24 @@ class TestTNCall: XCTestCase {
     func testHeaders() {
         let expectation = XCTestExpectation(description: "Test headers")
 
-        APIRouter.testHeadersCall(onSuccess: { object in
+        APIRouter.makeCall(route: APIRouter.testHeaders, responseType: TestHeader.self, onSuccess: { object in
             XCTAssert(object.authorization == "XKJajkBXAUIbakbxjkasbxjkas")
             XCTAssert(object.customHeader == "test!!!!")
+            expectation.fulfill()
+        }) { error, _ in
+            XCTAssert(false)
+            expectation.fulfill()
+        }
+        
+        wait(for: [expectation], timeout: 10)
+    }
+    
+    func testGetParams() {
+        let expectation = XCTestExpectation(description: "Test get params")
+                
+        APIRouter.makeCall(route: APIRouter.testGetParams(value1: "value1", value2: "value2"), responseType: TestParam.self, onSuccess: { object in
+            XCTAssert(object.param1 == "value1")
+            XCTAssert(object.param2 == "value2")
             expectation.fulfill()
         }) { error, _ in
             XCTAssert(false)

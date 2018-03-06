@@ -11,7 +11,6 @@ import Foundation
 //MARK: - Custom types
 public typealias TNSuccessCallback<T> = (T)->()
 public typealias TNFailureCallback = (TNResponseError, Data?)->()
-public typealias TNRouteReturnType = (method: TNMethod, path: TNPath, params: [String: Any?]?, headers: [String: String]?)
 
 
 //MARK: - Enums
@@ -30,11 +29,6 @@ public enum TNMethod: String {
 public enum TNCallSerializationType {
     case JSON
     case image
-}
-
-// MARK: - Protocols
-public protocol TNRouteProtocol {
-    func construct() -> TNRouteReturnType
 }
 
 open class TNCall {
@@ -93,9 +87,29 @@ open class TNCall {
     public func asRequest() throws -> URLRequest {
         guard let currentEnvironment = TNEnvironment.current else { throw TNRequestError.environmentNotSet }
         
-        let urlString = pathType == .normal ? currentEnvironment.description + "/" + path : path
+        let urlString = NSMutableString()
         
-        guard let url = URL(string: urlString) else {
+        if pathType == .normal {
+            urlString.setString(currentEnvironment.description + "/" + path)
+        }  else {
+            urlString.setString(path)
+        }
+        
+        // Create query string from the given params
+        let queryString = try params?.map { param -> String in
+            if let key = param.key.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed), let value = (param.value as? String)?.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) {
+                return key + "=" + value
+            } else {
+                throw TNRequestError.invalidParams
+            }
+        }.joined(separator: "&")
+        
+        // Append query string to url in case of .get method
+        if method == .get && queryString != nil {
+            urlString.append("?" + queryString!)
+        }
+        
+        guard let url = URL(string: urlString as String) else {
             throw TNRequestError.invalidURL
         }
         
@@ -114,13 +128,12 @@ open class TNCall {
         if timeoutInterval != nil {
             request.timeoutInterval = timeoutInterval!
         }
-        if params != nil {
-            let formBody = params?.map({ (arg) -> String in
-                return arg.key + "=" + String(describing: arg.value!)
-            }).joined(separator: "&")
-            
-            request.httpBody = formBody?.data(using: String.Encoding.utf8)
+        
+        // Set body params if method is not get
+        if method != .get {
+            request.httpBody = queryString?.data(using: .utf8)
         }
+
         return request
     }
     
@@ -188,7 +201,7 @@ open class TNCall {
                 onFailure(TNResponseError.cannotDeserialize, data)
                 return
             }
-            
+
             _ = TNLog(call: self, message: "Successfully deserialized data", responseData: data)
 
             DispatchQueue.main.sync {
