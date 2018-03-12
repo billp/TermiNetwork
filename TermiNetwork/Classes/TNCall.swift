@@ -115,6 +115,9 @@ open class TNCall {
         
         var request = URLRequest(url: url, cachePolicy: cachePolicy, timeoutInterval: currentEnvironment.timeoutInterval)
         
+        if headers == nil && TNCall.fixedHeaders.keys.count > 0 {
+            headers = [:]
+        }
         headers?.merge(TNCall.fixedHeaders, uniquingKeysWith: { (_, new) in new })
 
         if let headers = headers {
