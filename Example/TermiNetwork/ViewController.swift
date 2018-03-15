@@ -30,7 +30,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             self.tableView.reloadData()
             self.tableView.isHidden = false
         }) { error, data in
-            debugPrint(error)
+            debugPrint(error.localizedDescription)
         }
     }
 

@@ -25,7 +25,7 @@ class TestTNCall: XCTestCase {
     func testHeaders() {
         let expectation = XCTestExpectation(description: "Test headers")
 
-        try? APIRouter.makeCall(route: APIRouter.testHeaders, responseType: TestHeader.self, onSuccess: { object in
+        try? APIRouter.makeCall(route: APIRouter.testHeaders, responseType: TestHeaders.self, onSuccess: { object in
             XCTAssert(object.authorization == "XKJajkBXAUIbakbxjkasbxjkas")
             XCTAssert(object.customHeader == "test!!!!")
             expectation.fulfill()

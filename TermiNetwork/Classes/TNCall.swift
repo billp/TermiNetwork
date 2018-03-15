@@ -198,13 +198,16 @@ open class TNCall {
 
         try sessionDataTask(request: request, completionHandler: { data in
             
-            guard let object: T = try? data.deserializeJSONData() else {
+            let object: T!
+            
+            do {
+                object = try data.deserializeJSONData() as T
+            } catch let error {
                 _ = TNLog(call: self, message: "Cannot deserialize data. Check your models", responseData: data)
-
-                onFailure(TNResponseError.cannotDeserialize, data)
+                onFailure(TNResponseError.cannotDeserialize(error), data)
                 return
             }
-
+            
             _ = TNLog(call: self, message: "Successfully deserialized data", responseData: data)
 
             DispatchQueue.main.sync {

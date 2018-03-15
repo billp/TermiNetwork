@@ -22,7 +22,7 @@
 		59F39870204D369D00C7381B /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59F3986F204D369D00C7381B /* Environment.swift */; };
 		59F39872204D6AE300C7381B /* TestTNCall.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59F39871204D6AE300C7381B /* TestTNCall.swift */; };
 		59F39874204D6B5200C7381B /* APIRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59F39873204D6B5200C7381B /* APIRouter.swift */; };
-		59F39877204D6CBB00C7381B /* TestHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59F39876204D6CBB00C7381B /* TestHeader.swift */; };
+		59F39877204D6CBB00C7381B /* TestHeaders.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59F39876204D6CBB00C7381B /* TestHeaders.swift */; };
 		607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD51AFB9204008FA782 /* AppDelegate.swift */; };
 		607FACD81AFB9204008FA782 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD71AFB9204008FA782 /* ViewController.swift */; };
 		607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDC1AFB9204008FA782 /* Images.xcassets */; };
@@ -57,7 +57,7 @@
 		59F3986F204D369D00C7381B /* Environment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
 		59F39871204D6AE300C7381B /* TestTNCall.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestTNCall.swift; sourceTree = "<group>"; };
 		59F39873204D6B5200C7381B /* APIRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIRouter.swift; sourceTree = "<group>"; };
-		59F39876204D6CBB00C7381B /* TestHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestHeader.swift; sourceTree = "<group>"; };
+		59F39876204D6CBB00C7381B /* TestHeaders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestHeaders.swift; sourceTree = "<group>"; };
 		607FACD01AFB9204008FA782 /* TermiNetwork_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TermiNetwork_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACD41AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		607FACD51AFB9204008FA782 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -161,7 +161,7 @@
 		59F39875204D6CA700C7381B /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				59F39876204D6CBB00C7381B /* TestHeader.swift */,
+				59F39876204D6CBB00C7381B /* TestHeaders.swift */,
 				599F992B204EBC1D009F2B17 /* TestParams.swift */,
 			);
 			path = Models;
@@ -394,7 +394,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				59F39877204D6CBB00C7381B /* TestHeader.swift in Sources */,
+				59F39877204D6CBB00C7381B /* TestHeaders.swift in Sources */,
 				599F992C204EBC1D009F2B17 /* TestParams.swift in Sources */,
 				59F3986E204D33FF00C7381B /* TestTNCallErrors.swift in Sources */,
 				59F39872204D6AE300C7381B /* TestTNCall.swift in Sources */,

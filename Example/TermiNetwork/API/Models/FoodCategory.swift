@@ -19,11 +19,5 @@ struct FoodCategory : Codable {
 		case strCategoryDescription
 		case strCategoryThumb
 	}
-	init(from decoder: Decoder) throws {
-		let values = try decoder.container(keyedBy: CodingKeys.self)
-		idCategory = try values.decode(String.self, forKey: .idCategory)
-		strCategory = try values.decode(String.self, forKey: .strCategory)
-		strCategoryDescription = try values.decode(String.self, forKey: .strCategoryDescription)
-		strCategoryThumb = try values.decode(String.self, forKey: .strCategoryThumb)
-	}
+	
 }

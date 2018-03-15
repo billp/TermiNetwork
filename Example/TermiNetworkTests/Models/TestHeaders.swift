@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct TestHeader: Codable {
+struct TestHeaders: Codable {
     
     let authorization : String?
     let customHeader : String?
