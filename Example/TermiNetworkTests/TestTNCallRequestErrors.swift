@@ -10,7 +10,7 @@
 import XCTest
 import TermiNetwork
 
-class TestTNCallErrors: XCTestCase {
+class TestTNCallRequestErrors: XCTestCase {
     
     override func setUp() {
         super.setUp()
@@ -34,6 +34,25 @@ class TestTNCallErrors: XCTestCase {
         } catch {
             XCTAssert(false)
         }
-        
+    }
+    
+    func testInvalidURL() {
+        do {
+            try _ = TNCall(method: .get, url: "http://εεε.google.κωμ", params: nil).asRequest()
+            XCTAssert(false)
+        } catch TNRequestError.invalidURL {
+            XCTAssert(true)
+        } catch {
+            XCTAssert(false)
+        }
+    }
+    
+    func testValidURL() {
+        do {
+            try _ = TNCall(method: .get, url: "http://www.google.com", params: nil).asRequest()
+            XCTAssert(true)
+        } catch {
+            XCTAssert(false)
+        }
     }
 }
