@@ -14,6 +14,8 @@ enum APIRouter: TNRouteProtocol {
     case testHeaders
     case testGetParams(value1: String, value2: String)
     case testPostParams
+    case testEmptyBody
+    case testImage(imageName: String)
     
     // Set method, path, params, headers for each route
     internal func construct() -> TNRouteReturnType {
@@ -37,6 +39,20 @@ enum APIRouter: TNRouteProtocol {
                 method: .post,
                 path: path("test_params"),
                 params: ["key1": "value1", "key2": "value2"],
+                headers: nil
+            )
+        case .testEmptyBody:
+            return (
+                method: .get,
+                path: path("test_empty_response"),
+                params: nil,
+                headers: nil
+            )
+        case .testImage(let imageName):
+            return (
+                method: .get,
+                path: path(imageName),
+                params: nil,
                 headers: nil
             )
         }

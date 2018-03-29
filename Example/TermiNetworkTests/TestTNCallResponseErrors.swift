@@ -15,6 +15,7 @@ class TestTNCallResponseErrors: XCTestCase {
     override func setUp() {
         super.setUp()
         // Put setup code here. This method is called before the invocation of each test method in the class.
+        TNEnvironment.set(Environment.termiNetworkLocal)
     }
     
     override func tearDown() {
@@ -23,19 +24,89 @@ class TestTNCallResponseErrors: XCTestCase {
     }
     
     func testResponseDataIsEmpty() {
+        TNCall.allowEmptyResponseBody = false
+
+        let expectation = XCTestExpectation(description: "Test Empty Response Body")
+        var failed = false
        
+        try? APIRouter.makeCall(route: APIRouter.testEmptyBody, onSuccess: { data in
+            expectation.fulfill()
+            failed = true
+        }, onFailure: { error, data in
+            expectation.fulfill()
+            switch error {
+            case .responseDataIsEmpty:
+                failed = false
+            default:
+                failed = true
+            }
+        })
+        
+        wait(for: [expectation], timeout: 10)
+        
+        XCTAssert(!failed)
     }
     
     func testResponseDataIsNotEmpty() {
+        TNCall.allowEmptyResponseBody = true
         
+        let expectation = XCTestExpectation(description: "Test Not Empty Response Body")
+        var failed = false
+        
+        try? APIRouter.makeCall(route: APIRouter.testEmptyBody, onSuccess: { data in
+            expectation.fulfill()
+            failed = false
+        }, onFailure: { error, data in
+            expectation.fulfill()
+            failed = true
+        })
+        
+        wait(for: [expectation], timeout: 10)
+        
+        XCTAssert(!failed)
     }
     
     func testResponseInvalidImageData() {
+        TNCall.allowEmptyResponseBody = true
         
+        let expectation = XCTestExpectation(description: "Test Empty Response Body")
+        var failed = false
+        
+        try? APIRouter.makeCall(route: APIRouter.testPostParams, responseType: UIImage.self, onSuccess: { image in
+            expectation.fulfill()
+            failed = true
+        }, onFailure: { error, data in
+            expectation.fulfill()
+            switch error {
+            case .responseInvalidImageData:
+                failed = false
+            default:
+                failed = true
+            }
+        })
+        
+        wait(for: [expectation], timeout: 10)
+        
+        XCTAssert(!failed)
     }
     
     func testResponseValidImageData() {
+        TNCall.allowEmptyResponseBody = true
         
+        let expectation = XCTestExpectation(description: "Test Empty Response Body")
+        var failed = false
+        
+        try? APIRouter.makeCall(route: APIRouter.testImage(imageName: "sample.jpeg"), responseType: UIImage.self, onSuccess: { image in
+            expectation.fulfill()
+            failed = false
+        }, onFailure: { error, data in
+            expectation.fulfill()
+            failed = true
+        })
+        
+        wait(for: [expectation], timeout: 10)
+        
+        XCTAssert(!failed)
     }
     
     func testResponseCannotDeserialize() {

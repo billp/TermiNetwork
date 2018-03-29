@@ -176,7 +176,7 @@ open class TNCall {
                     onFailure(customError!, data)
                 }
             }
-            else if data == nil && !TNCall.allowEmptyResponseBody {
+            else if (data == nil || data!.isEmpty) && !TNCall.allowEmptyResponseBody {
                 _ = TNLog(call: self, message: "Empty body received")
                 
                 DispatchQueue.main.sync {
