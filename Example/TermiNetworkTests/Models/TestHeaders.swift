@@ -17,9 +17,4 @@ struct TestHeaders: Codable {
         case authorization = "HTTP_AUTHORIZATION"
         case customHeader = "HTTP_CUSTOM_HEADER"
     }
-    init(from decoder: Decoder) throws {
-        let values = try decoder.container(keyedBy: CodingKeys.self)
-        authorization = try values.decodeIfPresent(String.self, forKey: .authorization)
-        customHeader = try values.decodeIfPresent(String.self, forKey: .customHeader)
-    }
 }
