@@ -240,10 +240,12 @@ Available error cases in **onFailure** closure:
 
 - **responseDataIsEmpty**: the server response body is empty. You can avoid this error by setting **TNCall.allowEmptyResponseBody** to **true** 
 - **responseInvalidImageData**: in case of image deserialization
-- **cannotDeserialize**: e.g. your model structure doesn't match with the server's response
+- **cannotDeserialize(Error)**: e.g. your model structure doesn't match with the server's response. It returns the error thrown by deserializer (DecodingError.dataCorrupted)
 - **networkError(Error)**: e.g. time out error, contains the error from URLSessionDataTask, in case you need it
 - **notSuccess(Int)**: The server's response is not success, that is http status code is different to **2xx**. The status code is returned so you can do whatever you need with it
 - **cancelled(Error)**: When you cancel a request by calling the **.cancel()** method you will get this error, along with the error from URLSessionDataTask.
+
+In any case you can use the **error.localizedDescription method** to get a readable error message in onFailure callback.
 
 #### Example
 
