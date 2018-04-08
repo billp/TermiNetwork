@@ -45,52 +45,40 @@ Example models: **FoodCategories**, **FoodCategory**
 
 ```swift
 struct FoodCategories: Codable {
-    let categories: [FoodCategory]
+
+	let categories: [FoodCategory]
 
     enum CodingKeys: String, CodingKey {
-        case categories = "categories"
-    }
-    init(from decoder: Decoder) throws {
-        let values = try decoder.container(keyedBy: CodingKeys.self)
-        categories = try values.decode([FoodCategory].self, forKey: .categories)
-    }
+		case categories
+	}
 }
 
 struct FoodCategory : Codable {
-    let idCategory: String
-    let strCategory: String
-    let strCategoryDescription: String
-    let strCategoryThumb: String
+	let idCategory: String
+	let strCategory: String
+	let strCategoryDescription: String
+	let strCategoryThumb: String
 
-    enum CodingKeys: CodingKey {
-        case idCategory
-        case strCategory
-        case strCategoryDescription
-        case strCategoryThumb
-    }
-    init(from decoder: Decoder) throws {
-        let values = try decoder.container(keyedBy: CodingKeys.self)
-        idCategory = try values.decode(String.self, forKey: .idCategory)
-        strCategory = try values.decode(String.self, forKey: .strCategory)
-        strCategoryDescription = try values.decode(String.self, forKey: .strCategoryDescription)
-        strCategoryThumb = try values.decode(String.self, forKey: .strCategoryThumb)
-    }
+	enum CodingKeys: CodingKey {
+		case idCategory
+		case strCategory
+		case strCategoryDescription
+		case strCategoryThumb
+	}
 }
 ```
 
 4. Create your router class that conforms to **TNRouteProtocol**. There is no limit for a number router classes that you can create :)
 
 ```swift
-import TermiNetwork
-
 enum APIFoodRouter: TNRouteProtocol {
     // Define your routes
     case categories
-
+    
     // Set method, path, params, headers for each route
     internal func construct() -> TNRouteReturnType {
         switch self {
-            case .categories:
+        case .categories:
             return (
                 method: .get,
                 path: path("categories.php"),
@@ -99,10 +87,18 @@ enum APIFoodRouter: TNRouteProtocol {
             )
         }
     }
-
+    
     // Create static helper functions for each route
     static func getCategories(onSuccess: @escaping TNSuccessCallback<FoodCategories>, onFailure: @escaping TNFailureCallback) {
-        try? TNCall(route: APIFoodRouter.categories).start(onSuccess: onSuccess, onFailure: onFailure)
+        do {
+            try TNCall(route: self.categories).start(onSuccess: onSuccess, onFailure: onFailure)
+        } catch TNRequestError.environmentNotSet {
+            debugPrint("environment not set")
+        } catch TNRequestError.invalidURL {
+            debugPrint("invalid url")
+        } catch {
+            debugPrint("any other error")
+        }
     }
 }
 ```
@@ -143,9 +139,9 @@ APICustomHelpers.getImage(url: "https://picsum.photos/240/240", onSuccess: { ima
 }
 ```
 
-### Built-in Router Helpers
+### Built-in Router Helpers 
 
-If you find yourself writting helpers that doesn't do anything complex (like handling http error codes) and your Router class begins to grow for no reason, **TNRouteProtocol** comes with 3 helper methods that you can use directly from your Router class to ease your life. 
+If you are finding yourself writing helpers that don't do anything complex (like handling http error codes) and your Router class begins to grow for no reason, **TNRouteProtocol** comes with 3 helper methods that you can use directly from your Router class to ease your life. 
 
 1. For deserializing model
 
@@ -171,7 +167,7 @@ try? APIFoodRouter.makeCall(route: APIFoodRouter.categoryImage(imageID: 12345), 
 
 3. For any other case
 ```swift
-try? APIFoodRouter.makeCall(route: APIFoodRouter.testPlainText, onSuccess: { data in
+try? APIFoodRouter.makeCall(route: APIFoodRouter.getPlainText, onSuccess: { data in
     // Do something with data
 }) { error, data in
     debugPrint(error)
@@ -192,7 +188,7 @@ let headers = [
     "Content-type": "application/json"
 ]
 
-let request = try? TNCall(method: .get, headers: headers, path: path("users", "list"), params: params).asRequest()
+let request: URLRequest? = try? TNCall(method: .get, headers: headers, path: path("users", "list"), params: params).asRequest()
 ```
 
 ### Request Cancellation
