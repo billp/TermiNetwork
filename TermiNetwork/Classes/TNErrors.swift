@@ -47,10 +47,14 @@ extension TNResponseError: LocalizedError {
             return NSLocalizedString("The response data is not a valid image", comment: "TNResponseError")
         case .cannotDeserialize(let error):
             let debugDescription = (error as NSError).userInfo["NSDebugDescription"] as! String
-            let errorKey = ((error as NSError).userInfo["NSCodingPath"] as! [Any]).last!
-            let fullDescription = "\(debugDescription) Key: \(errorKey)"
-            return NSLocalizedString("Cannot deserialize object: \(fullDescription)", comment: "TNResponseError")
-        case .networkError(let error):
+            var errorKeys = ""
+            if let codingPath = (error as NSError).userInfo["NSCodingPath"] as? [CodingKey] {
+                errorKeys = (codingPath.count > 0 ? " Key(s): " : "") + codingPath.map({
+                    $0.stringValue
+                }).joined(separator: ", ")
+            }
+            let fullDescription = "\(debugDescription)\(errorKeys)"
+            return NSLocalizedString("Cannot deserialize object: \(fullDescription)", comment: "TNResponseError")        case .networkError(let error):
             return NSLocalizedString("Network error: \(error)", comment: "TNResponseError")
         case .notSuccess(let error):
             return NSLocalizedString("The request doesn't return 2xx status code: \(error)", comment: "TNResponseError")
