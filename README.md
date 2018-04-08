@@ -260,7 +260,8 @@ static func testFailureCall(onSuccess: @escaping TNSuccessCallback<Data>, onFail
             case .cancelled(let error):
                 debugPrint("Request cancelled with error: " + error.localizedDescription)
                 break
-            default: break
+            default: 
+	    	debugPrint("Error: " + error.localizedDescription)
         }
 
         //execute the passed onFailure block (for completion)
