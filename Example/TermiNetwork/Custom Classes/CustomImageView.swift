@@ -24,5 +24,4 @@ class CustomImageView: UIImageView {
             })
         }
     }
-
 }

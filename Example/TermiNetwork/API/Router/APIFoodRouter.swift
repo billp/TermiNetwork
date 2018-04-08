@@ -12,7 +12,6 @@ import TermiNetwork
 enum APIFoodRouter: TNRouteProtocol {
     // Define your routes
     case categories
-    case test
     
     // Set method, path, params, headers for each route
     internal func construct() -> TNRouteReturnType {
@@ -24,19 +23,11 @@ enum APIFoodRouter: TNRouteProtocol {
                 params: nil,
                 headers: nil
             )
-        case .test:
-            return (
-                method: .post,
-                path: path("categories.php2"),
-                params: nil,
-                headers: nil
-            )
         }
-        
     }
     
     // Create static helper functions for each route
-    /*static func getCategories(onSuccess: @escaping TNSuccessCallback<FoodCategories>, onFailure: @escaping TNFailureCallback) {
+    static func getCategories(onSuccess: @escaping TNSuccessCallback<FoodCategories>, onFailure: @escaping TNFailureCallback) {
         do {
             try TNCall(route: self.categories).start(onSuccess: onSuccess, onFailure: onFailure)
         } catch TNRequestError.environmentNotSet {
@@ -46,27 +37,5 @@ enum APIFoodRouter: TNRouteProtocol {
         } catch {
             debugPrint("any other error")
         }
-        
-        try? TNCall(route: APIFoodRouter.categories, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: 5).start(onSuccess: onSuccess, onFailure: onFailure)
-    }*/
-    
-    /*static func testFailureCall(onSuccess: @escaping TNSuccessCallback<Data>, onFailure: @escaping TNFailureCallback) {
-        try! TNCall(route: APIFoodRouter.test).start(onSuccess: onSuccess, onFailure: { error, data in
-            
-            switch error {
-            case .notSuccess(let statusCode):
-                debugPrint("Status code " + String(statusCode))
-                break
-            case .networkError(let error):
-                debugPrint("Network error: " + error.localizedDescription)
-                break
-            case .cancelled(let error):
-                debugPrint("Request cancelled with error: " + error.localizedDescription)
-                break
-            default: break
-            }
-            
-            onFailure(error, data)
-        })
-    }*/
+    }
 }

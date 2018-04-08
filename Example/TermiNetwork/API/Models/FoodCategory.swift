@@ -19,5 +19,4 @@ struct FoodCategory : Codable {
 		case strCategoryDescription
 		case strCategoryThumb
 	}
-	
 }
