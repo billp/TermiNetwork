@@ -306,7 +306,7 @@ end
 ```
 
 ## TODO
-- [ ] Write test cases
+- [x] Write test cases
 - [x] Add support for request cancelation
 - [x] Error handling
 - [ ] Add support for downloading/uploading files
