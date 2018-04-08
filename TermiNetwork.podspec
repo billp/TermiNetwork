@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'TermiNetwork'
-  s.version          = '0.1'
+  s.version          = 'v0.1'
   s.summary          = 'A Networking Library written in Swift 4.0'
 
 # This description is used to generate tags and improve search results.
@@ -21,7 +21,7 @@ Pod::Spec.new do |s|
 TermiNetwork is a networking library written with Swift 4.0 that supports multi-environment configuration, routing and automatic deserialization (currently Codable and UIImage deserialization is supported).
                        DESC
 
-  s.homepage         = 'https://github.com/billp.dev@gmail.com/TermiNetwork'
+  s.homepage         = 'https://github.com/billp/TermiNetwork.git'
   # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'Bill Panagiotopoulos' => 'billp.dev@gmail.com' }
