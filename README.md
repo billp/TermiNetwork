@@ -245,7 +245,7 @@ Available error cases in **onFailure** closure:
 - **notSuccess(Int)**: The server's response is not success, that is http status code is different to **2xx**. The status code is returned so you can do whatever you need with it
 - **cancelled(Error)**: When you cancel a request by calling the **.cancel()** method you will get this error, along with the error from URLSessionDataTask.
 
-In any case you can use the **error.localizedDescription method** to get a readable error message in onFailure callback.
+In any case you can use the **error.localizedDescription** method to get a readable error message in onFailure callback.
 
 #### Example
 
