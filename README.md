@@ -8,6 +8,20 @@ TermiNetwork is a networking library written with Swift 4.0 that supports multi-
 - [x] Error handling support
 - [x] Automatic deserialization with **Codable** and **UIImage** (by passing the type in **TNSuccessCallback**)
 
+## Installation
+
+TermiNetwork is available through [CocoaPods](http://cocoapods.org). To install
+it, simply add the following lines to your Podfile:
+
+```ruby
+platform :ios, '9.0'
+use_frameworks!
+
+target 'YourTarget' do
+    pod 'TermiNetwork', '~> 0.1'
+end
+```
+
 ## Usage
 
 1. Create a swift file called **Environments.swift** that conforms to **TNEnvironmentProtocol** and define your environments by creating an enum as shown bellow.
@@ -290,19 +304,6 @@ try? TNCall(route: APIFoodRouter.categories, cachePolicy: .reloadIgnoringLocalCa
 ## Logging
 
 You can turn on verbose mode to see what's going on in terminal for each request by setting the **TNEnvironment.verbose** to **true**
-
-## Installation
-
-TermiNetwork is available through [CocoaPods](http://cocoapods.org). To install
-it, simply add the following line to your Podfile:
-
-```ruby
-use_frameworks!
-
-target "YourTarget" do
-    pod 'TermiNetwork', :git => 'https://github.com/billp/TermiNetwork.git'
-end
-```
 
 ## TODO
 - [x] Write test cases
