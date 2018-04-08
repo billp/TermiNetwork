@@ -96,9 +96,9 @@ open class TNCall {
         }
         
         // Create query string from the given params
-        let queryString = try params?.map { param -> String in
-            if let key = param.key.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed), let value = String(describing: param.value!).addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) {
-                return key + "=" + value
+        let queryString = try params?.filter({ $0.value != nil }).map { param -> String in
+            if let value = String(describing: param.value!).addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) {
+                return param.key + "=" + value
             } else {
                 throw TNRequestError.invalidParams
             }

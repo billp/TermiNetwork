@@ -24,7 +24,7 @@ class TestTNCall: XCTestCase {
     
     func testHeaders() {
         let expectation = XCTestExpectation(description: "Test headers")
-        var failed = false
+        var failed = true
 
         try? APIRouter.makeCall(route: APIRouter.testHeaders, responseType: TestHeaders.self, onSuccess: { object in
             failed = !(object.authorization == "XKJajkBXAUIbakbxjkasbxjkas" && object.customHeader == "test!!!!")
@@ -39,10 +39,11 @@ class TestTNCall: XCTestCase {
     
     func testGetParams() {
         let expectation = XCTestExpectation(description: "Test get params")
-        var failed = false
+        var failed = true
 
-        try? APIRouter.makeCall(route: APIRouter.testGetParams(value1: "value1", value2: "value2"), responseType: TestParam.self, onSuccess: { object in
-            failed = !(object.param1 == "value1" && object.param2 == "value2")
+        try? APIRouter.makeCall(route: APIRouter.testGetParams(value1: true, value2: 3, value3: 5.13453124189, value4: "test", value5: nil), responseType: TestParam.self, onSuccess: { object in
+            failed = !(object.param1 == "true" && object.param2 == "3" && object.param3 == "5.13453124189" && object.param4 == "test" && object.param5 == nil)
+            failed = false
             expectation.fulfill()
         }) { error, _ in
             expectation.fulfill()

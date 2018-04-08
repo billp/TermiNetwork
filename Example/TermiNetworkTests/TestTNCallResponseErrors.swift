@@ -134,7 +134,7 @@ class TestTNCallResponseErrors: XCTestCase {
         let expectation = XCTestExpectation(description: "Test Respons Can Deserialize")
         var failed = true
         
-        try? APIRouter.makeCall(route: APIRouter.testGetParams(value1: "a", value2: "b"), responseType: TestParam.self, onSuccess: { data in
+        try? APIRouter.makeCall(route: APIRouter.testGetParams(value1: false, value2: 3, value3: 1.32, value4: "Test", value5: nil), responseType: TestParam.self, onSuccess: { data in
             expectation.fulfill()
             failed = false
             
