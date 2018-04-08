@@ -8,8 +8,8 @@
 
 Pod::Spec.new do |s|
   s.name             = 'TermiNetwork'
-  s.version          = '0.1.2'
-  s.summary          = 'A Networking Library written with Swift 4.0'
+  s.version          = '0.1'
+  s.summary          = 'A Networking Library written in Swift 4.0'
 
 # This description is used to generate tags and improve search results.
 #   * Think: What does it do? Why did you write it? What is the focus?
@@ -25,7 +25,7 @@ TermiNetwork is a networking library written with Swift 4.0 that supports multi-
   # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'Bill Panagiotopoulos' => 'billp.dev@gmail.com' }
-  s.source           = { :git => 'https://github.com/billp.dev@gmail.com/TermiNetwork.git', :tag => s.version.to_s }
+  s.source           = { :git => 'https://github.com/billp/TermiNetwork.git', :tag => s.version.to_s }
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
   s.ios.deployment_target = '8.0'
