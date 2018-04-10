@@ -288,16 +288,16 @@ static func testFailureCall(onSuccess: @escaping TNSuccessCallback<Data>, onFail
                 debugPrint("Status code " + String(statusCode))
                 break
             case .networkError(let error):
-                debugPrint("Network error: " + error.localizedDescription)
+                debugPrint("Network error: " + error)
                 break
             case .cancelled(let error):
-                debugPrint("Request cancelled with error: " + error.localizedDescription)
+                debugPrint("Request cancelled with error: " + error)
                 break
             default: 
-	    	debugPrint("Error: " + error.localizedDescription)
+                debugPrint("Error: " + error.localizedDescription)
         }
 
-        //execute the passed onFailure block (for completion)
+        //Fallthrough to the passed onFailure block
         onFailure(error, data)
     })
 }
