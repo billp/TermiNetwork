@@ -62,7 +62,7 @@ struct FoodCategories: Codable {
 
 	let categories: [FoodCategory]
 
-    enum CodingKeys: String, CodingKey {
+    	enum CodingKeys: String, CodingKey {
 		case categories
 	}
 }
