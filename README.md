@@ -8,6 +8,20 @@ TermiNetwork is a networking library written with Swift 4.0 that supports multi-
 - [x] Error handling support
 - [x] Automatic deserialization with **Codable** and **UIImage** (by passing the type in **TNSuccessCallback**)
 
+## Installation
+
+TermiNetwork is available through [CocoaPods](http://cocoapods.org). To install
+it, simply add the following lines to your Podfile:
+
+```ruby
+platform :ios, '9.0'
+use_frameworks!
+
+target 'YourTarget' do
+    pod 'TermiNetwork', '~> 0.1'
+end
+```
+
 ## Usage
 
 1. Create a swift file called **Environments.swift** that conforms to **TNEnvironmentProtocol** and define your environments by creating an enum as shown bellow.
@@ -48,7 +62,7 @@ struct FoodCategories: Codable {
 
 	let categories: [FoodCategory]
 
-    enum CodingKeys: String, CodingKey {
+    	enum CodingKeys: String, CodingKey {
 		case categories
 	}
 }
@@ -240,10 +254,12 @@ Available error cases in **onFailure** closure:
 
 - **responseDataIsEmpty**: the server response body is empty. You can avoid this error by setting **TNCall.allowEmptyResponseBody** to **true** 
 - **responseInvalidImageData**: in case of image deserialization
-- **cannotDeserialize**: e.g. your model structure doesn't match with the server's response
+- **cannotDeserialize(Error)**: e.g. your model structure doesn't match with the server's response. It returns the error thrown by deserializer (DecodingError.dataCorrupted)
 - **networkError(Error)**: e.g. time out error, contains the error from URLSessionDataTask, in case you need it
 - **notSuccess(Int)**: The server's response is not success, that is http status code is different to **2xx**. The status code is returned so you can do whatever you need with it
 - **cancelled(Error)**: When you cancel a request by calling the **.cancel()** method you will get this error, along with the error from URLSessionDataTask.
+
+In any case you can use the **error.localizedDescription** method to get a readable error message in onFailure callback.
 
 #### Example
 
@@ -260,7 +276,8 @@ static func testFailureCall(onSuccess: @escaping TNSuccessCallback<Data>, onFail
             case .cancelled(let error):
                 debugPrint("Request cancelled with error: " + error.localizedDescription)
                 break
-            default: break
+            default: 
+	    	debugPrint("Error: " + error.localizedDescription)
         }
 
         //execute the passed onFailure block (for completion)
@@ -287,19 +304,6 @@ try? TNCall(route: APIFoodRouter.categories, cachePolicy: .reloadIgnoringLocalCa
 ## Logging
 
 You can turn on verbose mode to see what's going on in terminal for each request by setting the **TNEnvironment.verbose** to **true**
-
-## Installation
-
-TermiNetwork is available through [CocoaPods](http://cocoapods.org). To install
-it, simply add the following line to your Podfile:
-
-```ruby
-use_frameworks!
-
-target "YourTarget" do
-    pod 'TermiNetwork', :git => 'https://github.com/billp/TermiNetwork.git'
-end
-```
 
 ## TODO
 - [x] Write test cases
