@@ -26,11 +26,6 @@ public enum TNMethod: String {
     case patch
 }
 
-public enum TNCallSerializationType {
-    case JSON
-    case image
-}
-
 open class TNCall {
     //MARK: - Static properties
     public static var fixedHeaders = [String: String]()
