@@ -137,10 +137,11 @@ enum APIFoodRouter: TNRouteProtocol {
 5. Finally use your helper functions anywhere in your project
 ```swift
 APIFoodRouter.getCategories(onSuccess: { categories in
-    debugPrint(categories.categories.map({ $0.strCategory }))
-}) { error in
-    debugPrint(error)
-}
+    self.categories = categories.categories
+    self.tableView.reloadData()
+}, onFailure: { error, data in
+    debugPrint(error.localizedDescription)
+})
 ```
 
 categories returned from **onSuccess** are of type **FoodCategories**
