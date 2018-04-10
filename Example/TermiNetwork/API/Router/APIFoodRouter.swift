@@ -21,7 +21,7 @@ enum APIFoodRouter: TNRouteProtocol {
         case .categories:
             return (
                 method: .get,
-                path: path("categories"), // Generates: http(s)://.../categories
+                path: path("categories.php"), // Generates: http(s)://.../categories.php
                 params: nil,
                 headers: nil
             )

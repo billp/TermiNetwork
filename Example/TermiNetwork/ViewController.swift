@@ -30,12 +30,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             self.tableView.reloadData()
             self.tableView.isHidden = false
         }, onFailure: { error, data in
-            switch error {
-            case .cannotDeserialize(_):
-                debugPrint(error.localizedDescription)
-            default:
-                break
-            }
+            debugPrint(error.localizedDescription)
         })
     }
 
