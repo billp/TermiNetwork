@@ -26,6 +26,11 @@ public enum TNMethod: String {
     case patch
 }
 
+public enum TNRequestBodyType: String {
+    case xWWWFormURLEncoded = "application/x-www-form-urlencoded"
+    case JSON = "application/json"
+}
+
 open class TNCall {
     //MARK: - Static properties
     public static var fixedHeaders = [String: String]()
@@ -38,6 +43,9 @@ open class TNCall {
     var cachePolicy: URLRequest.CachePolicy
     var timeoutInterval: TimeInterval?
     var params: [String: Any?]?
+    var bodyType: TNRequestBodyType = .xWWWFormURLEncoded
+    var cachedRequest: URLRequest?
+    
     private var pathType: SNPathType = .normal
     private var dataTask: URLSessionDataTask?
     
@@ -82,6 +90,10 @@ open class TNCall {
     public func asRequest() throws -> URLRequest {
         guard let currentEnvironment = TNEnvironment.current else { throw TNRequestError.environmentNotSet }
         
+        if cachedRequest != nil {
+            return cachedRequest!
+        }
+        
         let urlString = NSMutableString()
         
         if pathType == .normal {
@@ -110,27 +122,40 @@ open class TNCall {
         
         var request = URLRequest(url: url, cachePolicy: cachePolicy, timeoutInterval: currentEnvironment.timeoutInterval)
         
+        // Add headers
         if headers == nil && TNCall.fixedHeaders.keys.count > 0 {
             headers = [:]
         }
         headers?.merge(TNCall.fixedHeaders, uniquingKeysWith: { (_, new) in new })
-
+        
         if let headers = headers {
             for (key, value) in headers {
                 request.addValue(value, forHTTPHeaderField: key)
             }
         }
-        
-        request.httpMethod = method.rawValue
-        
-        if timeoutInterval != nil {
-            request.timeoutInterval = timeoutInterval!
+        if let timeoutInterval = timeoutInterval {
+            request.timeoutInterval = timeoutInterval
         }
+        
+        // Set http method
+        request.httpMethod = method.rawValue
         
         // Set body params if method is not get
         if method != .get {
-            request.httpBody = queryString?.data(using: .utf8)
+            request.addValue(bodyType.rawValue, forHTTPHeaderField: "Content-Type")
+            
+            if bodyType == .xWWWFormURLEncoded {
+                request.httpBody = queryString?.data(using: .utf8)
+            } else {
+                do {
+                    try JSONSerialization.data(withJSONObject: params ?? [], options: .prettyPrinted)
+                } catch {
+                    throw TNRequestError.invalidParams
+                }
+            }
         }
+        
+        cachedRequest = request
 
         return request
     }

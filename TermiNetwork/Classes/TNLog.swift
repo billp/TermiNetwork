@@ -12,10 +12,12 @@ internal class TNLog {
     init(call: TNCall, message: String, responseData: Data? = nil) {
         guard TNEnvironment.verbose else { return }
         
-        let url: String! = (try? call.asRequest().url?.absoluteString) ?? ""
+        let url = call.cachedRequest?.url?.absoluteString ?? "n/a"
+        let headers = call.cachedRequest?.allHTTPHeaderFields?.description ?? "n/a"
         
         print("|=== TermiNetwork verbose BEGIN ===|")
         print("|> URL: " + url)
+        print("|> Request Headers: " + headers)
         print("|> Message: " + message)
         if let data = responseData {
             print("|> Data: " + (data.toString() ?? "[non-printable]")!)
