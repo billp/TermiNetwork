@@ -142,7 +142,7 @@ open class TNCall {
         
         // Set body params if method is not get
         if method != .get {
-            request.addValue(bodyType.rawValue, forHTTPHeaderField: "Content-Type")
+           // request.addValue(bodyType.rawValue, forHTTPHeaderField: "Content-Type")
             
             if bodyType == .xWWWFormURLEncoded {
                 request.httpBody = queryString?.data(using: .utf8)

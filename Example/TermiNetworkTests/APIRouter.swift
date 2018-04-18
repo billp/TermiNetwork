@@ -13,9 +13,9 @@ enum APIRouter: TNRouteProtocol {
     // Define your routes
     case testHeaders
     case testGetParams(value1: Bool, value2: Int, value3: Double, value4: String, value5: String?)
+    case testPostParams(value1: Bool, value2: Int, value3: Double, value4: String, value5: String?)
     case testInvalidParams(value1: String, value2: String)
     case testStatusCode(code: Int)
-    case testPostParams
     case testEmptyBody
     case testImage(imageName: String)
     
@@ -30,6 +30,13 @@ enum APIRouter: TNRouteProtocol {
                 headers: ["Authorization": "XKJajkBXAUIbakbxjkasbxjkas", "Custom-Header": "test!!!!"]
             )
         case let .testGetParams(value1, value2, value3, value4, value5):
+            return (
+                method: .get,
+                path: path("test_params"),
+                params: ["key1": value1, "key2": value2, "key3": value3, "key4": value4, "key5": value5],
+                headers: nil
+            )
+        case let .testPostParams(value1, value2, value3, value4, value5):
             return (
                 method: .post,
                 path: path("test_params"),

@@ -71,7 +71,7 @@ class TestTNCallResponseErrors: XCTestCase {
         let expectation = XCTestExpectation(description: "Test Empty Response Body")
         var failed = true
         
-        try? APIRouter.makeCall(route: APIRouter.testPostParams, responseType: UIImage.self, onSuccess: { image in
+        try? APIRouter.makeCall(route: APIRouter.testPostParams(value1: false, value2: 1, value3: 2, value4: "", value5: nil), responseType: UIImage.self, onSuccess: { image in
             expectation.fulfill()
             failed = true
         }, onFailure: { error, data in
