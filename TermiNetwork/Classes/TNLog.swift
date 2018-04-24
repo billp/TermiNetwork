@@ -20,7 +20,7 @@ internal class TNLog {
         print("|> Request Headers: " + headers)
         print("|> Message: " + message)
         if let data = responseData {
-            print("|> Data: " + (data.toString() ?? "[non-printable]")!)
+            print("|> Response: " + (data.toString() ?? "[non-printable]")!)
         }
         print("|=== TermiNetwork verbose   END ===|")
         print()

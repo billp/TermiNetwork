@@ -35,7 +35,8 @@ open class TNCall {
     //MARK: - Static properties
     public static var fixedHeaders = [String: String]()
     public static var allowEmptyResponseBody = false
-    
+    public static var requestBodyType: TNRequestBodyType = .xWWWFormURLEncoded
+
     //MARK: - Instance properties
     var headers: [String: String]?
     var method: TNMethod!
@@ -43,7 +44,6 @@ open class TNCall {
     var cachePolicy: URLRequest.CachePolicy
     var timeoutInterval: TimeInterval?
     var params: [String: Any?]?
-    var bodyType: TNRequestBodyType = .xWWWFormURLEncoded
     var cachedRequest: URLRequest?
     
     private var pathType: SNPathType = .normal
@@ -142,13 +142,13 @@ open class TNCall {
         
         // Set body params if method is not get
         if method != .get {
-           // request.addValue(bodyType.rawValue, forHTTPHeaderField: "Content-Type")
+            request.addValue(TNCall.requestBodyType.rawValue, forHTTPHeaderField: "Content-Type")
             
-            if bodyType == .xWWWFormURLEncoded {
+            if TNCall.requestBodyType == .xWWWFormURLEncoded {
                 request.httpBody = queryString?.data(using: .utf8)
             } else {
                 do {
-                    try JSONSerialization.data(withJSONObject: params ?? [], options: .prettyPrinted)
+                    request.httpBody = try JSONSerialization.data(withJSONObject: params ?? [], options: .prettyPrinted)
                 } catch {
                     throw TNRequestError.invalidParams
                 }
@@ -180,8 +180,7 @@ open class TNCall {
                     customError = TNResponseError.networkError(error)
                 }
             }
-            
-            if let response = urlResponse as? HTTPURLResponse{
+            else if let response = urlResponse as? HTTPURLResponse {
                 statusCode = response.statusCode as Int?
             
                 if statusCode != nil && statusCode! / 100 != 2 {
@@ -223,7 +222,7 @@ open class TNCall {
             do {
                 object = try data.deserializeJSONData() as T
             } catch let error {
-                _ = TNLog(call: self, message: "Cannot deserialize data. Check your models", responseData: data)
+                _ = TNLog(call: self, message: error.localizedDescription, responseData: data)
                 onFailure(TNResponseError.cannotDeserialize(error), data)
                 return
             }

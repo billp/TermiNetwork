@@ -20,6 +20,8 @@ class TestTNCall: XCTestCase {
     override func tearDown() {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
         super.tearDown()
+
+        TNCall.requestBodyType = .xWWWFormURLEncoded
     }
     
     func testHeaders() {
@@ -55,12 +57,29 @@ class TestTNCall: XCTestCase {
     }
     
     func testPostParams() {
-        let expectation = XCTestExpectation(description: "Test get params")
+        let expectation = XCTestExpectation(description: "Test post params")
         var failed = true
         
         try? APIRouter.makeCall(route: APIRouter.testPostParams(value1: true, value2: 3, value3: 5.13453124189, value4: "test", value5: nil), responseType: TestParam.self, onSuccess: { object in
             failed = !(object.param1 == "true" && object.param2 == "3" && object.param3 == "5.13453124189" && object.param4 == "test" && object.param5 == nil)
-            failed = false
+            expectation.fulfill()
+        }) { error, _ in
+            expectation.fulfill()
+        }
+        
+        wait(for: [expectation], timeout: 10)
+        
+        XCTAssert(!failed)
+    }
+    
+    func testJSONRequestPostParams() {
+        let expectation = XCTestExpectation(description: "Test JSON post params")
+        var failed = true
+        
+        TNCall.requestBodyType = .JSON
+        
+        try? APIRouter.makeCall(route: APIRouter.testPostParams(value1: true, value2: 3, value3: 5.13453124189, value4: "test", value5: nil), responseType: TestJSONParams.self, onSuccess: { object in
+            failed = !(object.param1 == true && object.param2 == 3 && object.param3 == 5.13453124189 && object.param4 == "test" && object.param5 == nil)
             expectation.fulfill()
         }) { error, _ in
             expectation.fulfill()

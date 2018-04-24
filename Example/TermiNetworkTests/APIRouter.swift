@@ -57,13 +57,6 @@ enum APIRouter: TNRouteProtocol {
                 params: ["status_code": code],
                 headers: nil
             )
-        case .testPostParams:
-            return (
-                method: .post,
-                path: path("test_params"),
-                params: ["key1": "value1", "key2": "value2"],
-                headers: nil
-            )
         case .testEmptyBody:
             return (
                 method: .get,
