@@ -239,6 +239,14 @@ call.cancel()
 You can use any of the following request methods: **get, head, post, put, delete, connect, options, trace, patch**
 
 
+## Request Body Type
+
+By default params are sent with **application/x-www-form-urlencoded** as Content-Type in each request that posts data to server (via POST, PATCH, etc.). You can also send params encoded as **JSON** by setting the TNRequestBodyType as follows:
+
+```swift
+TNCall.requestBodyType = .JSON // The default value is .xWWWFormURLEncoded
+```
+
 ## Error Handling
 
 There are two groups of errors that you can handle, the first group includes those that can be handled before request execution (e.g. invalid url, params), with try/catch, and the second group includes those that can be handled after request execution (e.g. empty response from server,  server error, etc...), passed in **onFailure** closure.
