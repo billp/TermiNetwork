@@ -1,8 +1,5 @@
 language: objective-c
 osx_image: xcode9.3
-before_install:
-    - brew update
-    - brew upgrade xctool
 script:  
     - xctool -workspace Example/TermiNetwork.xcworkspace -scheme TermiNetwork-Example -sdk iphonesimulator build-for-testing 
     - xctool -workspace Example/TermiNetwork.xcworkspace -scheme TermiNetwork-Example -sdk iphonesimulator run-tests 
