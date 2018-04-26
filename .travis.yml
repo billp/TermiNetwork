@@ -1,6 +1,6 @@
 language: objective-c
 before_install:
     - brew update
-    - brew install xctool
-script: xctool -workspace Example/TermiNetwork.xcodeproj -scheme TermiNetwork test
+    - brew upgrade xctool
+script: xctool -workspace Example/TermiNetwork.xcworkspace -scheme TermiNetwork-Example -sdk iphonesimulator run-tests 
 

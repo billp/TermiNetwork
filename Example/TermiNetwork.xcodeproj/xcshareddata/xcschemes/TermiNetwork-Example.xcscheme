@@ -46,26 +46,6 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "607FACE41AFB9204008FA782"
-               BuildableName = "TermiNetwork_Tests.xctest"
-               BlueprintName = "TermiNetwork_Tests"
-               ReferencedContainer = "container:TermiNetwork.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "595BA525204599B60029D903"
-               BuildableName = "TermiNetwork_ExampleTests.xctest"
-               BlueprintName = "TermiNetwork_ExampleTests"
-               ReferencedContainer = "container:TermiNetwork.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
                BlueprintIdentifier = "595BA53320459A2E0029D903"
                BuildableName = "TermiNetworkTests.xctest"
                BlueprintName = "TermiNetworkTests"
