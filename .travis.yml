@@ -1,6 +1,6 @@
 language: objective-c
 osx_image: xcode9.3
 script:  
-    - xctool -workspace Example/TermiNetwork.xcworkspace -scheme TermiNetwork-Example -sdk iphonesimulator build-for-testing 
+    - xcodebuild clean build -workspace Example/TermiNetwork.xcworkspace -scheme TermiNetwork CODE_SIGNING_REQUIRED=NO
     - xctool -workspace Example/TermiNetwork.xcworkspace -scheme TermiNetwork-Example -sdk iphonesimulator run-tests 
 
