@@ -15,13 +15,14 @@ class TestTNCallResponseErrors: XCTestCase {
     override func setUp() {
         super.setUp()
         // Put setup code here. This method is called before the invocation of each test method in the class.
-        TNEnvironment.set(Environment.termiNetworkLocal)
+        TNEnvironment.set(Environment.termiNetworkRemote)
         TNCall.allowEmptyResponseBody = false
     }
     
     override func tearDown() {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
         super.tearDown()
+        TNEnvironment.set(Environment.termiNetworkRemote)
     }
     
     func testResponseDataIsEmpty() {
@@ -111,14 +112,14 @@ class TestTNCallResponseErrors: XCTestCase {
         var failed = true
         
         try? APIRouter.makeCall(route: APIRouter.testInvalidParams(value1: "a", value2: "b"), responseType: TestParam.self, onSuccess: { data in
-            expectation.fulfill()
             failed = true
-            
+            expectation.fulfill()
         }, onFailure: { error, data in
             switch error {
             case .cannotDeserialize(_):
                 failed = false
             default:
+                debugPrint("failed with: " + error.localizedDescription)
                 failed = true
             }
             
@@ -131,16 +132,16 @@ class TestTNCallResponseErrors: XCTestCase {
     }
     
     func testResponseCanDeserialize() {
-        let expectation = XCTestExpectation(description: "Test Respons Can Deserialize")
+        let expectation = XCTestExpectation(description: "Test Response Can Deserialize")
         var failed = true
         
         try? APIRouter.makeCall(route: APIRouter.testGetParams(value1: false, value2: 3, value3: 1.32, value4: "Test", value5: nil), responseType: TestParam.self, onSuccess: { data in
-            expectation.fulfill()
             failed = false
-            
-        }, onFailure: { error, data in
             expectation.fulfill()
+        }, onFailure: { error, data in
+            debugPrint("failed with: " + error.localizedDescription)
             failed = true
+            expectation.fulfill()
         })
         
         wait(for: [expectation], timeout: 10)
@@ -151,18 +152,18 @@ class TestTNCallResponseErrors: XCTestCase {
     func testNetworkError() {
         TNEnvironment.set(Environment.invalidHost)
         
-        let expectation = XCTestExpectation(description: "Test Response Cannot Deserialize")
+        let expectation = XCTestExpectation(description: "Test Response Network Error")
         var failed = true
         
         try? APIRouter.makeCall(route: APIRouter.testInvalidParams(value1: "a", value2: "b"), onSuccess: { data in
-            expectation.fulfill()
             failed = true
-            
+            expectation.fulfill()
         }, onFailure: { error, data in
             switch error {
             case .networkError(_):
                 failed = false
             default:
+                debugPrint("failed with: " + error.localizedDescription)
                 failed = true
             }
             

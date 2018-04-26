@@ -14,6 +14,7 @@ class TestTNCallRequestErrors: XCTestCase {
     override func setUp() {
         super.setUp()
         // Put setup code here. This method is called before the invocation of each test method in the class.
+        TNEnvironment.set(Environment.termiNetworkRemote)
     }
     
     override func tearDown() {
@@ -22,6 +23,8 @@ class TestTNCallRequestErrors: XCTestCase {
     }
     
     func testEnvironmentNotSet() {
+        TNEnvironment.current = nil
+        
         do {
             try TNCall(method: .get, url: "http://www.google.com", params: nil).start(onSuccess: { data in
                 XCTAssert(false)
