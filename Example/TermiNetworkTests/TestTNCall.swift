@@ -89,4 +89,82 @@ class TestTNCall: XCTestCase {
         
         XCTAssert(!failed)
     }
+    
+    func testBeforeAllRequests() {
+        let expectation = XCTestExpectation(description: "Test beforeEachRequestCallback")
+        self.sampleRequest()
+
+        TNCall.afterAllRequestsBlock = {
+            TNCall.beforeAllRequestsBlock = {
+                expectation.fulfill()
+            }
+            
+            self.sampleRequest()
+            self.sampleRequest()
+            self.sampleRequest()
+        }
+        
+        
+
+        wait(for: [expectation], timeout: 10)
+
+        XCTAssert(true)
+    }
+    
+    func testAfterAllRequests() {
+        let expectation = XCTestExpectation(description: "Test beforeEachRequestCallback")
+        
+        TNCall.afterAllRequestsBlock = {
+            expectation.fulfill()
+        }
+        
+        sampleRequest()
+        sampleRequest()
+        sampleRequest()
+        
+        wait(for: [expectation], timeout: 10)
+        
+        XCTAssert(true)
+    }
+    
+    func testBeforeEachRequest() {
+        let expectation = XCTestExpectation(description: "Test beforeEachRequestCallback")
+        var failed = true
+        
+        TNCall.beforeEachRequestBlock = { _ in
+            expectation.fulfill()
+            failed = false
+        }
+        
+        sampleRequest()
+        
+        wait(for: [expectation], timeout: 10)
+        XCTAssert(!failed)
+    }
+    
+    func testAfterEachRequest() {
+        let expectation = XCTestExpectation(description: "Test afterEachRequestCallback")
+        var failed = true
+        
+        TNCall.afterEachRequestBlock = { call, data, URLResponse, error in
+            failed = false
+            expectation.fulfill()
+        }
+        
+        sampleRequest()
+        
+        wait(for: [expectation], timeout: 10)
+        XCTAssert(!failed)
+    }
+    
+    
+    func sampleRequest(successCallback: (()->())? = nil) {
+        
+        TNCall.requestBodyType = .JSON
+        
+        try? APIRouter.makeCall(route: APIRouter.testPostParams(value1: true, value2: 3, value3: 5.13453124189, value4: "test", value5: nil), responseType: TestJSONParams.self, onSuccess: { object in
+            successCallback?()
+        }) { error, _ in
+        }
+    }
 }

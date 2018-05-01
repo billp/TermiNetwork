@@ -11,7 +11,10 @@ import Foundation
 //MARK: - Custom types
 public typealias TNSuccessCallback<T> = (T)->()
 public typealias TNFailureCallback = (TNResponseError, Data?)->()
-
+public typealias TNBeforeAllRequestsCallback = ()->()
+public typealias TNAfterAllRequestsCallback = ()->()
+public typealias TNBeforeEachRequestCallback = (TNCall)->()
+public typealias TNAfterEachRequestCallback = (TNCall, Data?, URLResponse?, Error?)->()
 
 //MARK: - Enums
 public enum TNMethod: String {
@@ -46,8 +49,15 @@ open class TNCall {
     var params: [String: Any?]?
     var cachedRequest: URLRequest?
     
+    // Hooks
+    public static var beforeAllRequestsBlock: TNBeforeAllRequestsCallback?
+    public static var afterAllRequestsBlock: TNAfterAllRequestsCallback?
+    public static var beforeEachRequestBlock: TNBeforeEachRequestCallback?
+    public static var afterEachRequestBlock: TNAfterEachRequestCallback?
+    
     private var pathType: SNPathType = .normal
     private var dataTask: URLSessionDataTask?
+    static private var numberOfRequestsStarted: Int = 0
     
     //MARK: - Initializers
     public init(method: TNMethod, headers: [String: String]?, cachePolicy: URLRequest.CachePolicy?, timeoutInterval: TimeInterval?, path: TNPath, params: [String: Any?]?) {
@@ -166,11 +176,24 @@ open class TNCall {
     }
     
     // MARK: - Helper methods
-    private func sessionDataTask(request: URLRequest, completionHandler: @escaping (Data)->(), onFailure: @escaping TNFailureCallback) throws -> URLSessionDataTask {
+    private func sessionDataTask(request: URLRequest, completionHandler: @escaping (Data)->(), onFailure: @escaping TNFailureCallback) -> URLSessionDataTask {
+        
+        // Call hooks if needed
+        if TNCall.numberOfRequestsStarted == 0 {
+            TNCall.beforeAllRequestsBlock?()
+        }
+        TNCall.beforeEachRequestBlock?(self)
+        TNCall.numberOfRequestsStarted += 1
         
         dataTask = URLSession.shared.dataTask(with: request) { data, urlResponse, error in
             var customError: TNResponseError?
             var statusCode: Int?
+            
+            TNCall.numberOfRequestsStarted -= 1
+            TNCall.afterEachRequestBlock?(self, data, urlResponse, error)
+            if TNCall.numberOfRequestsStarted == 0 {
+                TNCall.afterAllRequestsBlock?()
+            }
             
             // Error handling
             if let error = error {
@@ -215,7 +238,7 @@ open class TNCall {
     public func start<T>(onSuccess: @escaping TNSuccessCallback<T>, onFailure: @escaping TNFailureCallback) throws where T: Decodable {
         let request = try asRequest()
 
-        try sessionDataTask(request: request, completionHandler: { data in
+        sessionDataTask(request: request, completionHandler: { data in
             
             let object: T!
             
@@ -239,7 +262,7 @@ open class TNCall {
     public func start<T>(onSuccess: @escaping TNSuccessCallback<T>, onFailure: @escaping TNFailureCallback) throws where T: UIImage {
         let request = try asRequest()
         
-        try sessionDataTask(request: request, completionHandler: { data in
+        sessionDataTask(request: request, completionHandler: { data in
             let image = T(data: data)
             
             if image == nil {
@@ -260,7 +283,7 @@ open class TNCall {
     
     // For any other object
     public func start(onSuccess: @escaping TNSuccessCallback<Data>, onFailure: @escaping TNFailureCallback) throws {
-        try sessionDataTask(request: try asRequest(), completionHandler: { data in
+        sessionDataTask(request: try asRequest(), completionHandler: { data in
             DispatchQueue.main.sync {
                 onSuccess(data)
             }
