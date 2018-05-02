@@ -350,6 +350,16 @@ TNCall.afterEachRequestBlock = { call, data, urlResponse, error in // call: TNCa
 }
 ```
 
+If you don't want a request take part to beforeAllRequests/afterAllRequests hooks (e.g. a request that downloads thumbnails and adds it to an UIImageView), set the TNCall's ***skipBeforeAfterAllRequestsHooks*** property to ***true*** like this
+```swift
+static func getImage(url: String, onSuccess: @escaping TNSuccessCallback<UIImage>, onFailure: @escaping TNFailureCallback) throws -> TNCall {
+	let call = TNCall(method: .get, url: url, params: nil)
+        call.skipBeforeAfterAllRequestsHooks = true
+        try call.start(onSuccess: onSuccess, onFailure: onFailure)
+        
+        return call
+}
+```
 
 ## Logging
 
