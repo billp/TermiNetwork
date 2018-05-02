@@ -48,6 +48,7 @@ open class TNCall {
     var timeoutInterval: TimeInterval?
     var params: [String: Any?]?
     var cachedRequest: URLRequest?
+    public var skipBeforeAfterAllRequestsHooks: Bool = false
     
     // Hooks
     public static var beforeAllRequestsBlock: TNBeforeAllRequestsCallback?
@@ -176,22 +177,22 @@ open class TNCall {
     }
     
     // MARK: - Helper methods
-    private func sessionDataTask(request: URLRequest, skipBeforeAfterAllRequestsHooks: Bool = false, completionHandler: @escaping (Data)->(), onFailure: @escaping TNFailureCallback) -> URLSessionDataTask {
+    private func sessionDataTask(request: URLRequest, completionHandler: ((Data)->())?, onFailure: TNFailureCallback?) -> URLSessionDataTask {
         
         // Call hooks if needed
         if TNCall.numberOfRequestsStarted == 0 && !skipBeforeAfterAllRequestsHooks {
             TNCall.beforeAllRequestsBlock?()
         }
         TNCall.beforeEachRequestBlock?(self)
-        increaseStartedRequests(skipBeforeAfterAllRequestsHooks: skipBeforeAfterAllRequestsHooks)
+        increaseStartedRequests()
         
         dataTask = URLSession.shared.dataTask(with: request) { data, urlResponse, error in
             var customError: TNResponseError?
             var statusCode: Int?
             
-            self.decreaseStartedRequests(skipBeforeAfterAllRequestsHooks: skipBeforeAfterAllRequestsHooks)
+            self.decreaseStartedRequests()
             TNCall.afterEachRequestBlock?(self, data, urlResponse, error)
-            if TNCall.numberOfRequestsStarted == 0 && !skipBeforeAfterAllRequestsHooks {
+            if TNCall.numberOfRequestsStarted == 0 && !self.skipBeforeAfterAllRequestsHooks {
                 TNCall.afterAllRequestsBlock?()
             }
             
@@ -215,29 +216,29 @@ open class TNCall {
                 _ = TNLog(call: self, message: "Error: " + (error?.localizedDescription ?? "")! + ", urlResponse:" + (urlResponse?.description ?? "")!)
                 
                 DispatchQueue.main.sync {
-                    onFailure(customError!, data)
+                    onFailure?(customError!, data)
                 }
             }
             else if (data == nil || data!.isEmpty) && !TNCall.allowEmptyResponseBody {
                 _ = TNLog(call: self, message: "Empty body received")
                 
                 DispatchQueue.main.sync {
-                    onFailure(TNResponseError.responseDataIsEmpty, data)
+                    onFailure?(TNResponseError.responseDataIsEmpty, data)
                 }
             } else {
-                completionHandler(data!)
+                completionHandler?(data!)
             }
         }
         
         return dataTask!
     }
     
-    func increaseStartedRequests(skipBeforeAfterAllRequestsHooks: Bool) {
+    func increaseStartedRequests() {
         if !skipBeforeAfterAllRequestsHooks {
             TNCall.numberOfRequestsStarted += 1
         }
     }
-    func decreaseStartedRequests(skipBeforeAfterAllRequestsHooks: Bool) {
+    func decreaseStartedRequests() {
         if !skipBeforeAfterAllRequestsHooks {
             TNCall.numberOfRequestsStarted -= 1
         }
@@ -246,10 +247,10 @@ open class TNCall {
     // MARK: - Start requests
     
     // Deserialize objects with Decodable
-    public func start<T>(skipBeforeAfterAllRequestsHooks: Bool = false, onSuccess: @escaping TNSuccessCallback<T>, onFailure: @escaping TNFailureCallback) throws where T: Decodable {
+    public func start<T>(onSuccess: TNSuccessCallback<T>?, onFailure: TNFailureCallback?) throws where T: Decodable {
         let request = try asRequest()
 
-        sessionDataTask(request: request, skipBeforeAfterAllRequestsHooks: skipBeforeAfterAllRequestsHooks, completionHandler: { data in
+        sessionDataTask(request: request, completionHandler: { data in
             
             let object: T!
             
@@ -257,20 +258,20 @@ open class TNCall {
                 object = try data.deserializeJSONData() as T
             } catch let error {
                 _ = TNLog(call: self, message: error.localizedDescription, responseData: data)
-                onFailure(TNResponseError.cannotDeserialize(error), data)
+                onFailure?(TNResponseError.cannotDeserialize(error), data)
                 return
             }
             
             _ = TNLog(call: self, message: "Successfully deserialized data", responseData: data)
 
             DispatchQueue.main.sync {
-                onSuccess(object)
+                onSuccess?(object)
             }
         }, onFailure: onFailure).resume()
     }
     
     // Deserialize objects with UIImage
-    public func start<T>(skipBeforeAfterAllRequestsHooks: Bool = false, onSuccess: @escaping TNSuccessCallback<T>, onFailure: @escaping TNFailureCallback) throws where T: UIImage {
+    public func start<T>(onSuccess: TNSuccessCallback<T>?, onFailure: TNFailureCallback?) throws where T: UIImage {
         let request = try asRequest()
         
         sessionDataTask(request: request, completionHandler: { data in
@@ -280,23 +281,23 @@ open class TNCall {
                 _ = TNLog(call: self, message: "Unable to deserialize image (data not an image)")
 
                 DispatchQueue.main.sync {
-                    onFailure(TNResponseError.responseInvalidImageData, data)
+                    onFailure?(TNResponseError.responseInvalidImageData, data)
                 }
             } else {
                 DispatchQueue.main.sync {
                     _ = TNLog(call: self, message: "Successfully deserialized image")
 
-                    onSuccess(image!)
+                    onSuccess?(image!)
                 }
             }
         }, onFailure: onFailure).resume()
     }
     
     // For any other object
-    public func start(skipBeforeAfterAllRequestsHooks: Bool = false, onSuccess: @escaping TNSuccessCallback<Data>, onFailure: @escaping TNFailureCallback) throws {
+    public func start(onSuccess: TNSuccessCallback<Data>?, onFailure: TNFailureCallback?) throws {
         sessionDataTask(request: try asRequest(), completionHandler: { data in
             DispatchQueue.main.sync {
-                onSuccess(data)
+                onSuccess?(data)
             }
         }, onFailure: onFailure).resume()
     }

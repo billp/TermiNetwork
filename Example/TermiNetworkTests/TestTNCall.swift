@@ -123,7 +123,7 @@ class TestTNCall: XCTestCase {
                     failed = true
                 }
                 
-                self.sampleRequest(skipBeforeAfterAllRequestsHooks: true, successCallback: {
+                self.sampleRequest(skipBeforeAfterAllRequestsHooks: true, onSuccess: { _ in
                     expectation.fulfill()
                 })
             }
@@ -140,16 +140,12 @@ class TestTNCall: XCTestCase {
         var failed = false
         
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2) {
-            self.sampleRequest()
-            
+            self.sampleRequest(skipBeforeAfterAllRequestsHooks: true, onSuccess: { _ in
+                expectation.fulfill()
+            })
+
             TNCall.afterAllRequestsBlock = {
-                TNCall.afterAllRequestsBlock = {
-                    failed = true
-                }
-                
-                self.sampleRequest(skipBeforeAfterAllRequestsHooks: true, successCallback: {
-                    expectation.fulfill()
-                })
+                failed = true
             }
         }
         
@@ -199,20 +195,20 @@ class TestTNCall: XCTestCase {
             expectation.fulfill()
         }
         
-        sampleRequest()
+        sampleRequest(onSuccess: { _ in })
         
         wait(for: [expectation], timeout: 10)
         XCTAssert(!failed)
     }
     
     
-    func sampleRequest(skipBeforeAfterAllRequestsHooks: Bool = false, successCallback: (()->())? = nil) {
+    func sampleRequest(skipBeforeAfterAllRequestsHooks: Bool = false, onSuccess: TNSuccessCallback<TestJSONParams>? = nil) {
         
         TNCall.requestBodyType = .JSON
         
-        try? APIRouter.makeCall(route: APIRouter.testPostParams(value1: true, value2: 3, value3: 5.13453124189, value4: "test", value5: nil), skipBeforeAfterAllRequestsHooks: skipBeforeAfterAllRequestsHooks, responseType: TestJSONParams.self, onSuccess: { object in
-            successCallback?()
-        }) { error, _ in
-        }
+        let call = TNCall(route: APIRouter.testPostParams(value1: true, value2: 3, value3: 5.13453124189, value4: "test", value5: nil))
+        call.skipBeforeAfterAllRequestsHooks = skipBeforeAfterAllRequestsHooks
+        
+        try? call.start(onSuccess: onSuccess, onFailure: nil)
     }
 }
