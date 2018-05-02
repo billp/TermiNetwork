@@ -111,6 +111,27 @@ class TestTNCall: XCTestCase {
         XCTAssert(true)
     }
     
+    func testBeforeAllRequestsSkipHooks() {
+        let expectation = XCTestExpectation(description: "Test beforeEachRequestCallback skip hooks")
+        self.sampleRequest()
+        var failed = false
+        
+        TNCall.afterAllRequestsBlock = {
+            debugPrint("aaab")
+            TNCall.beforeAllRequestsBlock = {
+                failed = true
+            }
+            
+            self.sampleRequest(skipBeforeAfterAllRequestsHooks: true, successCallback: {
+                expectation.fulfill()
+            })
+        }
+        
+        wait(for: [expectation], timeout: 10)
+        
+        XCTAssert(!failed)
+    }
+    
     func testAfterAllRequests() {
         let expectation = XCTestExpectation(description: "Test beforeEachRequestCallback")
         
@@ -158,11 +179,11 @@ class TestTNCall: XCTestCase {
     }
     
     
-    func sampleRequest(successCallback: (()->())? = nil) {
+    func sampleRequest(skipBeforeAfterAllRequestsHooks: Bool = false, successCallback: (()->())? = nil) {
         
         TNCall.requestBodyType = .JSON
         
-        try? APIRouter.makeCall(route: APIRouter.testPostParams(value1: true, value2: 3, value3: 5.13453124189, value4: "test", value5: nil), responseType: TestJSONParams.self, onSuccess: { object in
+        try? APIRouter.makeCall(route: APIRouter.testPostParams(value1: true, value2: 3, value3: 5.13453124189, value4: "test", value5: nil), skipBeforeAfterAllRequestsHooks: skipBeforeAfterAllRequestsHooks, responseType: TestJSONParams.self, onSuccess: { object in
             successCallback?()
         }) { error, _ in
         }

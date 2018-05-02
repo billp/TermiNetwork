@@ -176,20 +176,20 @@ open class TNCall {
     }
     
     // MARK: - Helper methods
-    private func sessionDataTask(request: URLRequest, completionHandler: @escaping (Data)->(), onFailure: @escaping TNFailureCallback) -> URLSessionDataTask {
+    private func sessionDataTask(request: URLRequest, skipBeforeAfterAllRequestsHooks: Bool = false, completionHandler: @escaping (Data)->(), onFailure: @escaping TNFailureCallback) -> URLSessionDataTask {
         
         // Call hooks if needed
         if TNCall.numberOfRequestsStarted == 0 {
             TNCall.beforeAllRequestsBlock?()
         }
         TNCall.beforeEachRequestBlock?(self)
-        TNCall.numberOfRequestsStarted += 1
+        increaseStartedRequests(skipBeforeAfterAllRequestsHooks: skipBeforeAfterAllRequestsHooks)
         
         dataTask = URLSession.shared.dataTask(with: request) { data, urlResponse, error in
             var customError: TNResponseError?
             var statusCode: Int?
             
-            TNCall.numberOfRequestsStarted -= 1
+            self.decreaseStartedRequests(skipBeforeAfterAllRequestsHooks: skipBeforeAfterAllRequestsHooks)
             TNCall.afterEachRequestBlock?(self, data, urlResponse, error)
             if TNCall.numberOfRequestsStarted == 0 {
                 TNCall.afterAllRequestsBlock?()
@@ -232,13 +232,24 @@ open class TNCall {
         return dataTask!
     }
     
+    func increaseStartedRequests(skipBeforeAfterAllRequestsHooks: Bool) {
+        if !skipBeforeAfterAllRequestsHooks {
+            TNCall.numberOfRequestsStarted += 1
+        }
+    }
+    func decreaseStartedRequests(skipBeforeAfterAllRequestsHooks: Bool) {
+        if !skipBeforeAfterAllRequestsHooks {
+            TNCall.numberOfRequestsStarted -= 1
+        }
+    }
+    
     // MARK: - Start requests
     
     // Deserialize objects with Decodable
-    public func start<T>(onSuccess: @escaping TNSuccessCallback<T>, onFailure: @escaping TNFailureCallback) throws where T: Decodable {
+    public func start<T>(skipBeforeAfterAllRequestsHooks: Bool = false, onSuccess: @escaping TNSuccessCallback<T>, onFailure: @escaping TNFailureCallback) throws where T: Decodable {
         let request = try asRequest()
 
-        sessionDataTask(request: request, completionHandler: { data in
+        sessionDataTask(request: request, skipBeforeAfterAllRequestsHooks: skipBeforeAfterAllRequestsHooks, completionHandler: { data in
             
             let object: T!
             
@@ -259,7 +270,7 @@ open class TNCall {
     }
     
     // Deserialize objects with UIImage
-    public func start<T>(onSuccess: @escaping TNSuccessCallback<T>, onFailure: @escaping TNFailureCallback) throws where T: UIImage {
+    public func start<T>(skipBeforeAfterAllRequestsHooks: Bool = false, onSuccess: @escaping TNSuccessCallback<T>, onFailure: @escaping TNFailureCallback) throws where T: UIImage {
         let request = try asRequest()
         
         sessionDataTask(request: request, completionHandler: { data in
@@ -282,7 +293,7 @@ open class TNCall {
     }
     
     // For any other object
-    public func start(onSuccess: @escaping TNSuccessCallback<Data>, onFailure: @escaping TNFailureCallback) throws {
+    public func start(skipBeforeAfterAllRequestsHooks: Bool = false, onSuccess: @escaping TNSuccessCallback<Data>, onFailure: @escaping TNFailureCallback) throws {
         sessionDataTask(request: try asRequest(), completionHandler: { data in
             DispatchQueue.main.sync {
                 onSuccess(data)
