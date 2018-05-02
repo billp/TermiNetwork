@@ -181,7 +181,9 @@ open class TNCall {
         
         // Call hooks if needed
         if TNCall.numberOfRequestsStarted == 0 && !skipBeforeAfterAllRequestsHooks {
-            TNCall.beforeAllRequestsBlock?()
+            DispatchQueue.main.async {
+                TNCall.beforeAllRequestsBlock?()
+            }
         }
         TNCall.beforeEachRequestBlock?(self)
         increaseStartedRequests()
@@ -193,7 +195,9 @@ open class TNCall {
             self.decreaseStartedRequests()
             TNCall.afterEachRequestBlock?(self, data, urlResponse, error)
             if TNCall.numberOfRequestsStarted == 0 && !self.skipBeforeAfterAllRequestsHooks {
-                TNCall.afterAllRequestsBlock?()
+                DispatchQueue.main.async {
+                    TNCall.afterAllRequestsBlock?()
+                }
             }
             
             // Error handling
@@ -296,7 +300,7 @@ open class TNCall {
     // For any other object
     public func start(onSuccess: TNSuccessCallback<Data>?, onFailure: TNFailureCallback?) throws {
         sessionDataTask(request: try asRequest(), completionHandler: { data in
-            DispatchQueue.main.sync {
+            DispatchQueue.main.async {
                 onSuccess?(data)
             }
         }, onFailure: onFailure).resume()

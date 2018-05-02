@@ -8,6 +8,7 @@
 
 import UIKit
 import TermiNetwork
+import SVProgressHUD
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -20,6 +21,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         TNEnvironment.set(Environment.production)
         TNEnvironment.verbose = true
+        
+        TNCall.beforeAllRequestsBlock = {
+            SVProgressHUD.show()
+        }
+        
+        TNCall.afterAllRequestsBlock = {
+            SVProgressHUD.dismiss()
+        }
         
         return true
     }

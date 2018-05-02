@@ -1,16 +1,23 @@
 PODS:
-  - TermiNetwork (0.1.1)
+  - SVProgressHUD (2.2.5)
+  - TermiNetwork (0.2)
 
 DEPENDENCIES:
+  - SVProgressHUD
   - TermiNetwork (from `../`)
+
+SPEC REPOS:
+  https://github.com/CocoaPods/Specs.git:
+    - SVProgressHUD
 
 EXTERNAL SOURCES:
   TermiNetwork:
-    :path: ../
+    :path: "../"
 
 SPEC CHECKSUMS:
-  TermiNetwork: f93752c8b4b55ddc09d5faa8d9a674888f6243c4
+  SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
+  TermiNetwork: 60dbf89c49d6f491017e996bc637e1ffdbbc925b
 
-PODFILE CHECKSUM: 49cbd2ca3249ef486aa566b59a4c48effe5e325f
+PODFILE CHECKSUM: af8b5f936ba5753b3879a1b53e3f4c098f948f9d
 
-COCOAPODS: 1.4.0
+COCOAPODS: 1.5.0
