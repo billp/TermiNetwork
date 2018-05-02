@@ -328,6 +328,29 @@ try? TNCall(route: APIFoodRouter.categories, cachePolicy: .reloadIgnoringLocalCa
 
 > More info about cachePolicy you can find at Apple's documentation: https://developer.apple.com/documentation/foundation/nsurlrequest.cachepolicy
 
+## Hooks
+Hooks are running before and/or after request execution and allow you to run a block of code automatically. Supported hooks are:
+
+```swift
+
+TNCall.beforeAllRequestsBlock = {
+    // e.g. show progress loader
+}
+
+TNCall.afterAllRequestsBlock = {
+    // e.g. hide progress loader
+}
+
+TNCall.beforeEachRequestBlock = { call in // call: TNCall 
+    // e.g. print log
+}
+
+TNCall.afterEachRequestBlock = { call, data, urlResponse, error in // call: TNCall, data: Data, urlResponse: URLResponse, error: Error
+    // e.g. print log
+}
+```
+
+
 ## Logging
 
 You can turn on verbose mode to see what's going on in terminal for each request by setting the **TNEnvironment.verbose** to **true**
