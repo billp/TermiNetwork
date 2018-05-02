@@ -113,19 +113,46 @@ class TestTNCall: XCTestCase {
     
     func testBeforeAllRequestsSkipHooks() {
         let expectation = XCTestExpectation(description: "Test beforeEachRequestCallback skip hooks")
-        self.sampleRequest()
         var failed = false
         
-        TNCall.afterAllRequestsBlock = {
-            debugPrint("aaab")
-            TNCall.beforeAllRequestsBlock = {
-                failed = true
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2) {
+            self.sampleRequest()
+
+            TNCall.afterAllRequestsBlock = {
+                TNCall.beforeAllRequestsBlock = {
+                    failed = true
+                }
+                
+                self.sampleRequest(skipBeforeAfterAllRequestsHooks: true, successCallback: {
+                    expectation.fulfill()
+                })
             }
-            
-            self.sampleRequest(skipBeforeAfterAllRequestsHooks: true, successCallback: {
-                expectation.fulfill()
-            })
         }
+        
+        
+        wait(for: [expectation], timeout: 10)
+        
+        XCTAssert(!failed)
+    }
+    
+    func testAfterAllRequestsSkipHooks() {
+        let expectation = XCTestExpectation(description: "Test beforeEachRequestCallback skip hooks")
+        var failed = false
+        
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2) {
+            self.sampleRequest()
+            
+            TNCall.afterAllRequestsBlock = {
+                TNCall.afterAllRequestsBlock = {
+                    failed = true
+                }
+                
+                self.sampleRequest(skipBeforeAfterAllRequestsHooks: true, successCallback: {
+                    expectation.fulfill()
+                })
+            }
+        }
+        
         
         wait(for: [expectation], timeout: 10)
         

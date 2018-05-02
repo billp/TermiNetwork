@@ -179,7 +179,7 @@ open class TNCall {
     private func sessionDataTask(request: URLRequest, skipBeforeAfterAllRequestsHooks: Bool = false, completionHandler: @escaping (Data)->(), onFailure: @escaping TNFailureCallback) -> URLSessionDataTask {
         
         // Call hooks if needed
-        if TNCall.numberOfRequestsStarted == 0 {
+        if TNCall.numberOfRequestsStarted == 0 && !skipBeforeAfterAllRequestsHooks {
             TNCall.beforeAllRequestsBlock?()
         }
         TNCall.beforeEachRequestBlock?(self)
@@ -191,7 +191,7 @@ open class TNCall {
             
             self.decreaseStartedRequests(skipBeforeAfterAllRequestsHooks: skipBeforeAfterAllRequestsHooks)
             TNCall.afterEachRequestBlock?(self, data, urlResponse, error)
-            if TNCall.numberOfRequestsStarted == 0 {
+            if TNCall.numberOfRequestsStarted == 0 && !skipBeforeAfterAllRequestsHooks {
                 TNCall.afterAllRequestsBlock?()
             }
             
