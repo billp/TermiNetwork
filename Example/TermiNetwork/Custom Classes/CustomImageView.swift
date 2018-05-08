@@ -14,14 +14,7 @@ class CustomImageView: UIImageView {
     
     var url: String! {
         didSet {
-            call?.cancel()
-            image = nil
-            
-            call = try! APICustomHelpers.getImage(url: url, onSuccess: { image in
-                self.image = image
-            }, onFailure: { error, data in
-                self.image = nil
-            })
+            self.setRemoteImage(url: url)
         }
     }
 }

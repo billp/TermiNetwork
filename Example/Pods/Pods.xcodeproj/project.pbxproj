@@ -20,6 +20,7 @@
 		45912D6BA4827FD0CCBC9242694F092E /* Pods-TermiNetwork_Example-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 915CC8F1608DB7C9CCCE3E4AB76DE5CC /* Pods-TermiNetwork_Example-dummy.m */; };
 		55D3B4DF93AA5A7DB616D2886929D13D /* SVProgressHUD-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 6941A9A472630895CED61BF8945A0A86 /* SVProgressHUD-dummy.m */; };
 		5704D6A4D1DCA4D8E1300FDC87E8BF5E /* Pods-TermiNetwork_Example-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = C84144F80DBEB025E6B0D6C16432188B /* Pods-TermiNetwork_Example-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		59B7A77920A1E85C005FE146 /* UIImageView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59B7A77720A1E17A005FE146 /* UIImageView+Extensions.swift */; };
 		6CA583938BDBDA21F5619DAEA1177D2F /* TNRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C8DC2F714F5DC96A8993405627139D4 /* TNRouter.swift */; };
 		8002A6337BAC15CE7A571D51E273A588 /* TNCall.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC751BBF65F7719E64526102E964970F /* TNCall.swift */; };
 		86C40BF47CF2B22A61F272CA3496A0B7 /* SVProgressAnimatedView.h in Headers */ = {isa = PBXBuildFile; fileRef = 9E71CFC73DB55784D0519F97BA41F995 /* SVProgressAnimatedView.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -53,21 +54,22 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		038F1B68F9318407074BBD84AAB335EA /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; path = README.md; sourceTree = "<group>"; };
+		038F1B68F9318407074BBD84AAB335EA /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		13F1780D405E5E55AF019E6238EDF5F5 /* SVProgressHUD-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "SVProgressHUD-prefix.pch"; sourceTree = "<group>"; };
 		1A2B9DE3366B1C5305DC7E5784E16F95 /* SVProgressHUD.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; name = SVProgressHUD.bundle; path = SVProgressHUD/SVProgressHUD.bundle; sourceTree = "<group>"; };
-		1F328A301CAC14E1CFA84D6B25E86B02 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; path = LICENSE; sourceTree = "<group>"; };
+		1F328A301CAC14E1CFA84D6B25E86B02 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		2149B7D5C42A2C4EAFAE8A33BB39A077 /* TermiNetwork.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = TermiNetwork.xcconfig; sourceTree = "<group>"; };
 		2CDC9F27823E18CB972FB8AFD6B120F6 /* SVProgressHUD.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SVProgressHUD.h; path = SVProgressHUD/SVProgressHUD.h; sourceTree = "<group>"; };
-		2FC9BD8EBA81B230CD80CA5490396BA1 /* TermiNetwork.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = TermiNetwork.framework; path = TermiNetwork.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		2FC9BD8EBA81B230CD80CA5490396BA1 /* TermiNetwork.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = TermiNetwork.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		33491DC4D5557AEF25BB0D662C7597FB /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		375EC4D5BAA325127274889B6254FCDB /* TNErrors.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = TNErrors.swift; path = TermiNetwork/Classes/TNErrors.swift; sourceTree = "<group>"; };
 		3C8DC2F714F5DC96A8993405627139D4 /* TNRouter.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = TNRouter.swift; path = TermiNetwork/Classes/TNRouter.swift; sourceTree = "<group>"; };
 		54F9A0E952988935C32EDDB1429D7133 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.3.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
-		67FA4ABF3DE9885D9F5B949B4EA717CA /* Pods_TermiNetwork_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_TermiNetwork_Example.framework; path = "Pods-TermiNetwork_Example.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		59B7A77720A1E17A005FE146 /* UIImageView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+Extensions.swift"; sourceTree = "<group>"; };
+		67FA4ABF3DE9885D9F5B949B4EA717CA /* Pods_TermiNetwork_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TermiNetwork_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		689467ACD19D7F44FA1E4CF9E57C9AF3 /* TermiNetwork-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "TermiNetwork-umbrella.h"; sourceTree = "<group>"; };
 		6941A9A472630895CED61BF8945A0A86 /* SVProgressHUD-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "SVProgressHUD-dummy.m"; sourceTree = "<group>"; };
-		6ADDD305EFC3557D0EAA74BC24467FF0 /* SVProgressHUD.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = SVProgressHUD.framework; path = SVProgressHUD.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		6ADDD305EFC3557D0EAA74BC24467FF0 /* SVProgressHUD.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SVProgressHUD.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6FB225AEBCD31AA5B9E07CFFD10C0C6E /* TNPath.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = TNPath.swift; path = TermiNetwork/Classes/TNPath.swift; sourceTree = "<group>"; };
 		6FB56B61BC6307DD6817B6AE4B4C918F /* TermiNetwork-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "TermiNetwork-prefix.pch"; sourceTree = "<group>"; };
 		7547E4F2BA6E5C5F138F86AB065E67F6 /* Pods-TermiNetwork_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-TermiNetwork_Example.debug.xcconfig"; sourceTree = "<group>"; };
@@ -77,8 +79,8 @@
 		88394A9F7202438925D60A0F891A588B /* TermiNetwork.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = TermiNetwork.modulemap; sourceTree = "<group>"; };
 		90472E3720EFE6450F84EEF017AFE11B /* TNLog.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = TNLog.swift; path = TermiNetwork/Classes/TNLog.swift; sourceTree = "<group>"; };
 		915CC8F1608DB7C9CCCE3E4AB76DE5CC /* Pods-TermiNetwork_Example-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-TermiNetwork_Example-dummy.m"; sourceTree = "<group>"; };
-		91AF260318FF265AA96D518F74AB0618 /* TermiNetwork.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; lastKnownFileType = text; path = TermiNetwork.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		91AF260318FF265AA96D518F74AB0618 /* TermiNetwork.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; path = TermiNetwork.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		95C8CC4DB956FA1BFFFABA96BB8BD34C /* SVProgressHUD.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = SVProgressHUD.xcconfig; sourceTree = "<group>"; };
 		9A1296BE4DDEB09F3CF2072C7073D7B3 /* SVRadialGradientLayer.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SVRadialGradientLayer.h; path = SVProgressHUD/SVRadialGradientLayer.h; sourceTree = "<group>"; };
 		9CBBC812CF086412F219140D2EC70D16 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -178,7 +180,6 @@
 				9E09F6F6417032AB83C07907A8D7E815 /* Resources */,
 				BDC61CEF31816FD6D8B51AE120CBDECB /* Support Files */,
 			);
-			name = SVProgressHUD;
 			path = SVProgressHUD;
 			sourceTree = "<group>";
 		};
@@ -297,6 +298,7 @@
 			isa = PBXGroup;
 			children = (
 				C45429560A1E4730E45247A2B5AB557E /* Data+Extensions.swift */,
+				59B7A77720A1E17A005FE146 /* UIImageView+Extensions.swift */,
 			);
 			name = Extensions;
 			path = TermiNetwork/Classes/Extensions;
@@ -398,6 +400,11 @@
 			attributes = {
 				LastSwiftUpdateCheck = 0930;
 				LastUpgradeCheck = 0930;
+				TargetAttributes = {
+					9755B732F732F87A64384AE17542ABA1 = {
+						LastSwiftMigration = 0930;
+					};
+				};
 			};
 			buildConfigurationList = 2D8E8EC45A3A1A1D94AE762CB5028504 /* Build configuration list for PBXProject "Pods" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -455,6 +462,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B84B846DC7F70E860BF1E0B66DA09E2C /* Data+Extensions.swift in Sources */,
+				59B7A77920A1E85C005FE146 /* UIImageView+Extensions.swift in Sources */,
 				EB08897289BFCE20541780AA1F84ED34 /* TermiNetwork-dummy.m in Sources */,
 				8002A6337BAC15CE7A571D51E273A588 /* TNCall.swift in Sources */,
 				8E802D0D6B05CCE57D6D25AD7D0DB2BE /* TNEnvironment.swift in Sources */,
@@ -519,6 +527,7 @@
 			baseConfigurationReference = 7547E4F2BA6E5C5F138F86AB065E67F6 /* Pods-TermiNetwork_Example.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
@@ -543,6 +552,7 @@
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -707,6 +717,7 @@
 			baseConfigurationReference = 861A72041E7258837294BC3893469F72 /* Pods-TermiNetwork_Example.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
@@ -730,6 +741,7 @@
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
