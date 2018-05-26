@@ -10,11 +10,11 @@ import Foundation
 
 //MARK: - Custom types
 public typealias TNSuccessCallback<T> = (T)->()
-public typealias TNFailureCallback = (TNResponseError, Data?)->()
+public typealias TNFailureCallback = (_ error: TNResponseError, _ data: Data?)->()
 public typealias TNBeforeAllRequestsCallback = ()->()
 public typealias TNAfterAllRequestsCallback = ()->()
-public typealias TNBeforeEachRequestCallback = (TNCall)->()
-public typealias TNAfterEachRequestCallback = (TNCall, Data?, URLResponse?, Error?)->()
+public typealias TNBeforeEachRequestCallback = (_ call: TNCall)->()
+public typealias TNAfterEachRequestCallback = (_ call: TNCall, _ data: Data?, _ response: URLResponse?, _ error: Error?)->()
 
 //MARK: - Enums
 public enum TNMethod: String {
@@ -34,31 +34,32 @@ public enum TNRequestBodyType: String {
     case JSON = "application/json"
 }
 
-open class TNCall {
+open class TNCall: TNOperation {
     //MARK: - Static properties
     public static var fixedHeaders = [String: String]()
     public static var allowEmptyResponseBody = false
     public static var requestBodyType: TNRequestBodyType = .xWWWFormURLEncoded
+    static private var numberOfRequestsStarted: Int = 0
 
     //MARK: - Instance properties
-    var headers: [String: String]?
-    var method: TNMethod!
-    var path: String
-    var cachePolicy: URLRequest.CachePolicy
-    var timeoutInterval: TimeInterval?
-    var params: [String: Any?]?
-    var cachedRequest: URLRequest?
+    private var headers: [String: String]?
+    private var method: TNMethod!
+    private var path: String
+    private var cachePolicy: URLRequest.CachePolicy
+    private var timeoutInterval: TimeInterval?
+    private var params: [String: Any?]?
+    private var pathType: SNPathType = .normal
+    private var dataTask: URLSessionDataTask?
     public var skipBeforeAfterAllRequestsHooks: Bool = false
-    
+    internal var cachedRequest: URLRequest!
+
     // Hooks
     public static var beforeAllRequestsBlock: TNBeforeAllRequestsCallback?
     public static var afterAllRequestsBlock: TNAfterAllRequestsCallback?
     public static var beforeEachRequestBlock: TNBeforeEachRequestCallback?
     public static var afterEachRequestBlock: TNAfterEachRequestCallback?
     
-    private var pathType: SNPathType = .normal
-    private var dataTask: URLSessionDataTask?
-    static private var numberOfRequestsStarted: Int = 0
+    static private var defaultQueue: OperationQueue = OperationQueue()
     
     //MARK: - Initializers
     public init(method: TNMethod, headers: [String: String]?, cachePolicy: URLRequest.CachePolicy?, timeoutInterval: TimeInterval?, path: TNPath, params: [String: Any?]?) {
@@ -172,7 +173,8 @@ open class TNCall {
     }
     
     // Cancelation
-    public func cancel() {
+    open override func cancel() {
+        super.cancel()
         dataTask?.cancel()
     }
     
@@ -188,7 +190,7 @@ open class TNCall {
         TNCall.beforeEachRequestBlock?(self)
         increaseStartedRequests()
         
-        dataTask = URLSession.shared.dataTask(with: request) { data, urlResponse, error in
+        let dataTask = URLSession.shared.dataTask(with: request) { data, urlResponse, error in
             var customError: TNResponseError?
             var statusCode: Int?
             
@@ -234,7 +236,7 @@ open class TNCall {
             }
         }
         
-        return dataTask!
+        return dataTask
     }
     
     func increaseStartedRequests() {
@@ -248,14 +250,28 @@ open class TNCall {
         }
     }
     
-    // MARK: - Start requests
+    // MARK: - Operation
+    open override func start() {
+        _executing = true
+        _finished = false
+        dataTask?.resume()
+    }
+    
+    func handleDataTaskCompleted() {
+        _executing = false
+        _finished = true
+    }
+    
+    func handleDataTaskFailure() {
+        _executing = false
+        _finished = true
+    }
     
     // Deserialize objects with Decodable
-    public func start<T>(onSuccess: TNSuccessCallback<T>?, onFailure: TNFailureCallback?) throws where T: Decodable {
+    public func start<T>(queue: OperationQueue? = nil, onSuccess: TNSuccessCallback<T>?, onFailure: TNFailureCallback?) throws where T: Decodable {
         let request = try asRequest()
-
-        sessionDataTask(request: request, completionHandler: { data in
-            
+        
+        dataTask = sessionDataTask(request: request, completionHandler: { data in
             let object: T!
             
             do {
@@ -271,14 +287,21 @@ open class TNCall {
             DispatchQueue.main.sync {
                 onSuccess?(object)
             }
-        }, onFailure: onFailure).resume()
+            
+            self.handleDataTaskCompleted()
+        }, onFailure: { error, data in
+            onFailure?(error, data)
+            self.handleDataTaskFailure()
+        })
+        
+        (queue ?? TNCall.defaultQueue).addOperation(self)
     }
     
     // Deserialize objects with UIImage
-    public func start<T>(onSuccess: TNSuccessCallback<T>?, onFailure: TNFailureCallback?) throws where T: UIImage {
+    public func start<T>(queue: OperationQueue? = nil, onSuccess: TNSuccessCallback<T>?, onFailure: TNFailureCallback?) throws where T: UIImage {
         let request = try asRequest()
         
-        sessionDataTask(request: request, completionHandler: { data in
+        dataTask = sessionDataTask(request: request, completionHandler: { data in
             let image = T(data: data)
             
             if image == nil {
@@ -294,15 +317,19 @@ open class TNCall {
                     onSuccess?(image!)
                 }
             }
-        }, onFailure: onFailure).resume()
+        }, onFailure: onFailure)
+        
+        (queue ?? TNCall.defaultQueue).addOperation(self)
     }
     
     // For any other object
-    public func start(onSuccess: TNSuccessCallback<Data>?, onFailure: TNFailureCallback?) throws {
-        sessionDataTask(request: try asRequest(), completionHandler: { data in
+    public func start(queue: OperationQueue? = nil, onSuccess: TNSuccessCallback<Data>?, onFailure: TNFailureCallback?) throws {
+        dataTask = sessionDataTask(request: try asRequest(), completionHandler: { data in
             DispatchQueue.main.async {
                 onSuccess?(data)
             }
-        }, onFailure: onFailure).resume()
+        }, onFailure: onFailure)
+        
+        (queue ?? TNCall.defaultQueue).addOperation(self)
     }
 }

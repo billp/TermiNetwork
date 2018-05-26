@@ -20,6 +20,8 @@
 		45912D6BA4827FD0CCBC9242694F092E /* Pods-TermiNetwork_Example-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 915CC8F1608DB7C9CCCE3E4AB76DE5CC /* Pods-TermiNetwork_Example-dummy.m */; };
 		55D3B4DF93AA5A7DB616D2886929D13D /* SVProgressHUD-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 6941A9A472630895CED61BF8945A0A86 /* SVProgressHUD-dummy.m */; };
 		5704D6A4D1DCA4D8E1300FDC87E8BF5E /* Pods-TermiNetwork_Example-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = C84144F80DBEB025E6B0D6C16432188B /* Pods-TermiNetwork_Example-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		594E0F8720B94DF6006378C3 /* TNOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 594E0F8620B94DF6006378C3 /* TNOperation.swift */; };
+		594E0F8820B94E47006378C3 /* TNOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 594E0F8620B94DF6006378C3 /* TNOperation.swift */; };
 		59B7A77920A1E85C005FE146 /* UIImageView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59B7A77720A1E17A005FE146 /* UIImageView+Extensions.swift */; };
 		6CA583938BDBDA21F5619DAEA1177D2F /* TNRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C8DC2F714F5DC96A8993405627139D4 /* TNRouter.swift */; };
 		8002A6337BAC15CE7A571D51E273A588 /* TNCall.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC751BBF65F7719E64526102E964970F /* TNCall.swift */; };
@@ -65,6 +67,7 @@
 		375EC4D5BAA325127274889B6254FCDB /* TNErrors.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = TNErrors.swift; path = TermiNetwork/Classes/TNErrors.swift; sourceTree = "<group>"; };
 		3C8DC2F714F5DC96A8993405627139D4 /* TNRouter.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = TNRouter.swift; path = TermiNetwork/Classes/TNRouter.swift; sourceTree = "<group>"; };
 		54F9A0E952988935C32EDDB1429D7133 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.3.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		594E0F8620B94DF6006378C3 /* TNOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TNOperation.swift; path = TermiNetwork/Classes/TNOperation.swift; sourceTree = "<group>"; };
 		59B7A77720A1E17A005FE146 /* UIImageView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+Extensions.swift"; sourceTree = "<group>"; };
 		67FA4ABF3DE9885D9F5B949B4EA717CA /* Pods_TermiNetwork_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TermiNetwork_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		689467ACD19D7F44FA1E4CF9E57C9AF3 /* TermiNetwork-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "TermiNetwork-umbrella.h"; sourceTree = "<group>"; };
@@ -136,12 +139,13 @@
 		3911EA491C877F960CB8AF01ACBCDB0A /* TermiNetwork */ = {
 			isa = PBXGroup;
 			children = (
-				AC751BBF65F7719E64526102E964970F /* TNCall.swift */,
 				DC54F14DB9029A8AABF8A9FF7B5DB580 /* TNEnvironment.swift */,
-				375EC4D5BAA325127274889B6254FCDB /* TNErrors.swift */,
-				90472E3720EFE6450F84EEF017AFE11B /* TNLog.swift */,
+				594E0F8620B94DF6006378C3 /* TNOperation.swift */,
+				AC751BBF65F7719E64526102E964970F /* TNCall.swift */,
 				6FB225AEBCD31AA5B9E07CFFD10C0C6E /* TNPath.swift */,
 				3C8DC2F714F5DC96A8993405627139D4 /* TNRouter.swift */,
+				375EC4D5BAA325127274889B6254FCDB /* TNErrors.swift */,
+				90472E3720EFE6450F84EEF017AFE11B /* TNLog.swift */,
 				F2D7B60264B64684E63BC29FC34B3C7E /* Extensions */,
 				CF483861B784CFB3E3E87DF79843CBA2 /* Pod */,
 				C808B94F121EA0926BF4A6430C36A08E /* Support Files */,
@@ -454,6 +458,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				45912D6BA4827FD0CCBC9242694F092E /* Pods-TermiNetwork_Example-dummy.m in Sources */,
+				594E0F8720B94DF6006378C3 /* TNOperation.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -464,6 +469,7 @@
 				B84B846DC7F70E860BF1E0B66DA09E2C /* Data+Extensions.swift in Sources */,
 				59B7A77920A1E85C005FE146 /* UIImageView+Extensions.swift in Sources */,
 				EB08897289BFCE20541780AA1F84ED34 /* TermiNetwork-dummy.m in Sources */,
+				594E0F8820B94E47006378C3 /* TNOperation.swift in Sources */,
 				8002A6337BAC15CE7A571D51E273A588 /* TNCall.swift in Sources */,
 				8E802D0D6B05CCE57D6D25AD7D0DB2BE /* TNEnvironment.swift in Sources */,
 				E64067354EBC6422D4FE6CC152A2DD6B /* TNErrors.swift in Sources */,

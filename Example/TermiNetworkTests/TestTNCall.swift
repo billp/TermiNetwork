@@ -56,6 +56,23 @@ class TestTNCall: XCTestCase {
         XCTAssert(!failed)
     }
     
+    func testGetParamsEscaped() {
+        let expectation = XCTestExpectation(description: "Test get params")
+        var failed = true
+        
+        try? APIRouter.makeCall(route: APIRouter.testGetParams(value1: true, value2: 3, value3: 5.13453124189, value4: "τεστ", value5: nil), responseType: TestParam.self, onSuccess: { object in
+            failed = !(object.param1 == "true" && object.param2 == "3" && object.param3 == "5.13453124189" && object.param4 == "τεστ" && object.param5 == nil)
+            failed = false
+            expectation.fulfill()
+        }) { error, _ in
+            expectation.fulfill()
+        }
+        
+        wait(for: [expectation], timeout: 10)
+        
+        XCTAssert(!failed)
+    }
+    
     func testPostParams() {
         let expectation = XCTestExpectation(description: "Test post params")
         var failed = true
