@@ -29,14 +29,13 @@ extension UIImageView {
          - preprocessImage: a block of code that preprocess the image before showing. It should return the new image. This block will run in the background thread (optional)
          - onFinish: a block of code executed after the completion of the download image request. It may fail so error will be returned in that case (optional)
      */
-    public func setRemoteImage(url: String, defaultImage: UIImage? = nil, beforeStart: (()->())? = nil, preprocessImage: ((UIImage)->(UIImage))? = nil, onFinish: ((UIImage?, Error?)->())? = nil) {
-        UIImageView.activeCallsHashMap[url]?.cancel()
+    public func setRemoteImage(url: String, defaultImage: UIImage? = nil, beforeStart: (()->())? = nil, preprocessImage: ((UIImage)->(UIImage))? = nil, onFinish: ((UIImage?, Error?)->())? = nil) throws {
         
         self.image = defaultImage
         
         beforeStart?()
         
-        UIImageView.activeCallsHashMap[url] = try! UIImageView.downloadImage(url: url, onSuccess: { image in
+        setActiveCallInImageView(try UIImageView.downloadImage(url: url, onSuccess: { image in
             var image = image
             
             DispatchQueue.global(qos: .background).async {
@@ -52,6 +51,19 @@ extension UIImageView {
             self.image = nil
             UIImageView.activeCallsHashMap[url] = nil
             onFinish?(nil, error)
-        })
+        }))
+    }
+    
+    // MARK: - Helpers
+    private func getAddress() -> String {
+        return String(describing: Unmanaged.passUnretained(self).toOpaque())
+    }
+    
+    private func cancelActiveCallInImageView() {
+        UIImageView.activeCallsHashMap[getAddress()]?.cancel()
+    }
+    
+    private func setActiveCallInImageView(_ call: TNCall) {
+        UIImageView.activeCallsHashMap[getAddress()] = call
     }
 }

@@ -50,16 +50,17 @@ open class TNCall: TNOperation {
     private var params: [String: Any?]?
     private var pathType: SNPathType = .normal
     private var dataTask: URLSessionDataTask?
+    private var currentQueue: TNQueue!
+    
     public var skipBeforeAfterAllRequestsHooks: Bool = false
     internal var cachedRequest: URLRequest!
+    
 
     // Hooks
     public static var beforeAllRequestsBlock: TNBeforeAllRequestsCallback?
     public static var afterAllRequestsBlock: TNAfterAllRequestsCallback?
     public static var beforeEachRequestBlock: TNBeforeEachRequestCallback?
     public static var afterEachRequestBlock: TNAfterEachRequestCallback?
-    
-    static private var defaultQueue: OperationQueue = OperationQueue()
     
     //MARK: - Initializers
     public init(method: TNMethod, headers: [String: String]?, cachePolicy: URLRequest.CachePolicy?, timeoutInterval: TimeInterval?, path: TNPath, params: [String: Any?]?) {
@@ -263,15 +264,22 @@ open class TNCall: TNOperation {
     }
     
     func handleDataTaskFailure() {
+        switch currentQueue.failureMode {
+        case .continue:
+            break
+        case .stop:
+            currentQueue.cancelAllOperations()
+        }
+        
         _executing = false
         _finished = true
     }
     
     // Deserialize objects with Decodable
-    public func start<T>(queue: OperationQueue? = nil, onSuccess: TNSuccessCallback<T>?, onFailure: TNFailureCallback?) throws where T: Decodable {
-        let request = try asRequest()
+    public func start<T>(queue: TNQueue? = TNQueue.shared, onSuccess: TNSuccessCallback<T>?, onFailure: TNFailureCallback?) throws where T: Decodable {
+        currentQueue = queue ?? TNQueue.shared
         
-        dataTask = sessionDataTask(request: request, completionHandler: { data in
+        dataTask = sessionDataTask(request: try asRequest(), completionHandler: { data in
             let object: T!
             
             do {
@@ -294,14 +302,14 @@ open class TNCall: TNOperation {
             self.handleDataTaskFailure()
         })
         
-        (queue ?? TNCall.defaultQueue).addOperation(self)
+        currentQueue.addOperation(self)
     }
     
     // Deserialize objects with UIImage
-    public func start<T>(queue: OperationQueue? = nil, onSuccess: TNSuccessCallback<T>?, onFailure: TNFailureCallback?) throws where T: UIImage {
-        let request = try asRequest()
+    public func start<T>(queue: TNQueue? = TNQueue.shared, onSuccess: TNSuccessCallback<T>?, onFailure: TNFailureCallback?) throws where T: UIImage {
+        currentQueue = queue
         
-        dataTask = sessionDataTask(request: request, completionHandler: { data in
+        dataTask = sessionDataTask(request: try asRequest(), completionHandler: { data in
             let image = T(data: data)
             
             if image == nil {
@@ -319,17 +327,19 @@ open class TNCall: TNOperation {
             }
         }, onFailure: onFailure)
         
-        (queue ?? TNCall.defaultQueue).addOperation(self)
+        currentQueue.addOperation(self)
     }
     
     // For any other object
-    public func start(queue: OperationQueue? = nil, onSuccess: TNSuccessCallback<Data>?, onFailure: TNFailureCallback?) throws {
+    public func start(queue: TNQueue? = TNQueue.shared, onSuccess: TNSuccessCallback<Data>?, onFailure: TNFailureCallback?) throws {
+        currentQueue = queue
+        
         dataTask = sessionDataTask(request: try asRequest(), completionHandler: { data in
             DispatchQueue.main.async {
                 onSuccess?(data)
             }
         }, onFailure: onFailure)
         
-        (queue ?? TNCall.defaultQueue).addOperation(self)
+        currentQueue.addOperation(self)
     }
 }
