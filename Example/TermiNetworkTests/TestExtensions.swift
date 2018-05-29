@@ -30,7 +30,7 @@ class TestExtensions: XCTestCase {
         var tmp = 0
         
         let imageView = UIImageView()
-        imageView.setRemoteImage(url: sampleImageURL, defaultImage: nil, beforeStart: {
+        try? imageView.setRemoteImage(url: sampleImageURL, defaultImage: nil, beforeStart: {
             tmp += 1
         }, preprocessImage: { image in
             tmp += 1
