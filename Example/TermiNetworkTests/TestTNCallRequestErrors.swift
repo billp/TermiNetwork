@@ -1,5 +1,5 @@
 //
-//  TestTNCallErrors.swift
+//  TestTNCallRequestErrors.swift
 //  TermiNetworkTests
 //
 //  Created by Vasilis Panagiotopoulos on 05/03/2018.

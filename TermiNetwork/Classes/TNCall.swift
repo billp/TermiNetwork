@@ -287,6 +287,7 @@ open class TNCall: TNOperation {
             } catch let error {
                 _ = TNLog(call: self, message: error.localizedDescription, responseData: data)
                 onFailure?(TNResponseError.cannotDeserialize(error), data)
+                self.handleDataTaskFailure()
                 return
             }
             
@@ -318,14 +319,19 @@ open class TNCall: TNOperation {
                 DispatchQueue.main.sync {
                     onFailure?(TNResponseError.responseInvalidImageData, data)
                 }
+                self.handleDataTaskFailure()
             } else {
                 DispatchQueue.main.sync {
                     _ = TNLog(call: self, message: "Successfully deserialized image")
 
                     onSuccess?(image!)
                 }
+                self.handleDataTaskCompleted()
             }
-        }, onFailure: onFailure)
+        }, onFailure: { error, data in
+            onFailure?(error, data)
+            self.handleDataTaskFailure()
+        })
         
         currentQueue.addOperation(self)
     }
@@ -338,7 +344,11 @@ open class TNCall: TNOperation {
             DispatchQueue.main.async {
                 onSuccess?(data)
             }
-        }, onFailure: onFailure)
+            self.handleDataTaskCompleted()
+        }, onFailure: { error, data in
+            onFailure?(error, data)
+            self.handleDataTaskFailure()
+        })
         
         currentQueue.addOperation(self)
     }

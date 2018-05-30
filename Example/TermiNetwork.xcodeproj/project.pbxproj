@@ -18,6 +18,7 @@
 		594C21BC203D9F9B00FFE7A6 /* APICustomHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 594C21B7203D9F9B00FFE7A6 /* APICustomHelpers.swift */; };
 		594C21BD203D9F9B00FFE7A6 /* APIFoodRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 594C21B8203D9F9B00FFE7A6 /* APIFoodRouter.swift */; };
 		595BA53720459A2F0029D903 /* TestTNEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 595BA53620459A2F0029D903 /* TestTNEnvironment.swift */; };
+		597EF4D420BF2AF100DB9981 /* TestTNQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 597EF4D320BF2AF100DB9981 /* TestTNQueue.swift */; };
 		599F992C204EBC1D009F2B17 /* TestParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 599F992B204EBC1D009F2B17 /* TestParams.swift */; };
 		59B81ADE208F71E3007D38AF /* TestJSONParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59B81ADD208F71E3007D38AF /* TestJSONParams.swift */; };
 		59C7C63120A4B29200F8A47C /* TestExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59C7C63020A4B29200F8A47C /* TestExtensions.swift */; };
@@ -56,6 +57,7 @@
 		595BA53420459A2E0029D903 /* TermiNetworkTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TermiNetworkTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		595BA53620459A2F0029D903 /* TestTNEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestTNEnvironment.swift; sourceTree = "<group>"; };
 		595BA53820459A2F0029D903 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		597EF4D320BF2AF100DB9981 /* TestTNQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestTNQueue.swift; sourceTree = "<group>"; };
 		599F992B204EBC1D009F2B17 /* TestParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestParams.swift; sourceTree = "<group>"; };
 		59B45DC2209A65B40079F56E /* SVProgressHUD.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = SVProgressHUD.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		59B45DC4209A65E90079F56E /* SVProgressHUD.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = SVProgressHUD.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -167,6 +169,7 @@
 				595BA53620459A2F0029D903 /* TestTNEnvironment.swift */,
 				59F39871204D6AE300C7381B /* TestTNCall.swift */,
 				59C7C63020A4B29200F8A47C /* TestExtensions.swift */,
+				597EF4D320BF2AF100DB9981 /* TestTNQueue.swift */,
 				595BA53820459A2F0029D903 /* Info.plist */,
 			);
 			path = TermiNetworkTests;
@@ -404,6 +407,7 @@
 				59F39877204D6CBB00C7381B /* TestHeaders.swift in Sources */,
 				599F992C204EBC1D009F2B17 /* TestParams.swift in Sources */,
 				59B81ADE208F71E3007D38AF /* TestJSONParams.swift in Sources */,
+				597EF4D420BF2AF100DB9981 /* TestTNQueue.swift in Sources */,
 				59C7C63120A4B29200F8A47C /* TestExtensions.swift in Sources */,
 				59F3986E204D33FF00C7381B /* TestTNCallRequestErrors.swift in Sources */,
 				59329622206A4ABB007BB456 /* TestTNCallResponseErrors.swift in Sources */,
