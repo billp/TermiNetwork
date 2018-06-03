@@ -8,7 +8,7 @@
 import Foundation
 
 enum TNQueueFailureMode {
-    case stop
+    case cancelAll
     case `continue`
 }
 
@@ -16,5 +16,9 @@ open class TNQueue: OperationQueue {
     // MARK: - Static variables
     open static var shared = TNQueue()
     
-    var failureMode: TNQueueFailureMode = .continue
+    var failureMode: TNQueueFailureMode!
+    
+    init(failureMode: TNQueueFailureMode = .continue) {
+        self.failureMode = failureMode
+    }
 }

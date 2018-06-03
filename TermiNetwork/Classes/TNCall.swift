@@ -55,7 +55,6 @@ open class TNCall: TNOperation {
     public var skipBeforeAfterAllRequestsHooks: Bool = false
     internal var cachedRequest: URLRequest!
     
-
     // Hooks
     public static var beforeAllRequestsBlock: TNBeforeAllRequestsCallback?
     public static var afterAllRequestsBlock: TNAfterAllRequestsCallback?
@@ -63,6 +62,18 @@ open class TNCall: TNOperation {
     public static var afterEachRequestBlock: TNAfterEachRequestCallback?
     
     //MARK: - Initializers
+    /**
+     Initializes a TNCall request
+     
+     - parameters:
+         - method:
+            The http method of request, e.g. .get, .post, .head, etc.
+         - headers: A Dictionary of header values, etc. ["Content-type": "text/html"] (optional)
+         - cachePolicy: Cache policy of type URLRequest.CachePolicy. See Apple's documentation for details (optional)
+         - timeoutInterval: Timeout interval of request in seconds (optional)
+         - path: The path that is appended to your Environments current hostname and prefix. Use 'path(...)' for this, e.g. path("user", "5"), it generates http//website.com/user/5
+         - params: A Dictionary that is send as request params. If method is .get it automatically appends them to url, otherwise it sets them as request body.
+     */
     public init(method: TNMethod, headers: [String: String]?, cachePolicy: URLRequest.CachePolicy?, timeoutInterval: TimeInterval?, path: TNPath, params: [String: Any?]?) {
         self.method = method
         self.headers = headers
@@ -72,20 +83,52 @@ open class TNCall: TNOperation {
         self.params = params
     }
     
+    /**
+     Initializes a TNCall request
+     
+     - parameters:
+         - method:
+         The http method of request, e.g. .get, .post, .head, etc.
+         - headers: A Dictionary of header values, etc. ["Content-type": "text/html"] (optional)
+         - path: The path that is appended to your Environments current hostname and prefix. Use 'path(...)' for this, e.g. path("user", "5"), it generates http//website.com/user/5
+         - params: A Dictionary that is send as request params. If method is .get it automatically appends them to url, otherwise it sets them as request body.
+     */
     public convenience init(method: TNMethod, headers: [String: String], path: TNPath, params: [String: Any?]?) {
         self.init(method: method, headers: headers, cachePolicy: nil, timeoutInterval: nil, path: path, params: params)
     }
     
+    /**
+     Initializes a TNCall request
+     
+     - parameters:
+         - method:
+         The http method of request, e.g. .get, .post, .head, etc.
+         - path: The path that is appended to your Environments current hostname and prefix. Use 'path(...)' for this, e.g. path("user", "5"), it generates http//website.com/user/5
+         - params: A Dictionary that is send as request params. If method is .get it automatically appends them to url, otherwise it sets them as request body.
+     */
     public convenience init(method: TNMethod, path: TNPath, params: [String: Any?]?) {
         self.init(method: method, headers: nil, cachePolicy: nil, timeoutInterval: nil, path: path, params: nil)
     }
 
+    /**
+     Initializes a TNCall request
+     
+     - parameters:
+         - route: a TNRouteProtocol enum value
+     */
     public convenience init(route: TNRouteProtocol) {
         let route = route.construct()
         
         self.init(method: route.method, headers: route.headers, cachePolicy: nil, timeoutInterval: nil, path: route.path, params: route.params)
     }
     
+    /**
+     Initializes a TNCall request
+     
+     - parameters:
+        - route: a TNRouteProtocol enum value
+        - cachePolicy: Cache policy of type URLRequest.CachePolicy. See Apple's documentation for details (optional)
+     */
     public convenience init(route: TNRouteProtocol, cachePolicy: URLRequest.CachePolicy?, timeoutInterval: TimeInterval?) {
         let params = route.construct()
         
@@ -93,6 +136,14 @@ open class TNCall: TNOperation {
     }
     
     // Convenience method for passing a string instead of path
+    /**
+     Initializes a TNCall request
+     
+     - parameters:
+        - route: a TNRouteProtocol enum value
+        - cachePolicy: Cache policy of type URLRequest.CachePolicy. See Apple's documentation for details (optional)
+        - params: A Dictionary that is send as request params. If method is .get it automatically appends them to url, otherwise it sets them as request body.
+     */
     public convenience init(method: TNMethod, url: String, params: [String: Any?]?) {
         self.init(method: method, headers: nil, cachePolicy: nil, timeoutInterval: nil, path: TNPath("-"), params: nil)
         self.pathType = .full
@@ -100,6 +151,9 @@ open class TNCall: TNOperation {
     }
     
     // MARK: - Create request
+    /**
+     Converts a TNCall instance to asRequest
+    */
     public func asRequest() throws -> URLRequest {
         guard let currentEnvironment = TNEnvironment.current else { throw TNRequestError.environmentNotSet }
         
@@ -174,6 +228,9 @@ open class TNCall: TNOperation {
     }
     
     // Cancelation
+    /**
+     Cancels a TNCall started request
+     */
     open override func cancel() {
         super.cancel()
         dataTask?.cancel()
@@ -240,12 +297,12 @@ open class TNCall: TNOperation {
         return dataTask
     }
     
-    func increaseStartedRequests() {
+    private func increaseStartedRequests() {
         if !skipBeforeAfterAllRequestsHooks {
             TNCall.numberOfRequestsStarted += 1
         }
     }
-    func decreaseStartedRequests() {
+    private func decreaseStartedRequests() {
         if !skipBeforeAfterAllRequestsHooks {
             TNCall.numberOfRequestsStarted -= 1
         }
@@ -267,8 +324,10 @@ open class TNCall: TNOperation {
         switch currentQueue.failureMode {
         case .continue:
             break
-        case .stop:
+        case .cancelAll:
             currentQueue.cancelAllOperations()
+        default:
+            break
         }
         
         _executing = false
@@ -276,6 +335,14 @@ open class TNCall: TNOperation {
     }
     
     // Deserialize objects with Decodable
+    /**
+     Adds a request to a queue and starts it's execution. The response object in success callback is of type Decodable
+     
+     - parameters:
+        - queue: A TNQueue instance. If no queue is specified it uses the default one. (optional)
+        - onSuccess: specifies a success callback of type TNSuccessCallback<T> (optional)
+        - onFailure: specifies a failure callback of type TNFailureCallback<T> (optional)
+     */
     public func start<T>(queue: TNQueue? = TNQueue.shared, onSuccess: TNSuccessCallback<T>?, onFailure: TNFailureCallback?) throws where T: Decodable {
         currentQueue = queue ?? TNQueue.shared
         
@@ -307,6 +374,14 @@ open class TNCall: TNOperation {
     }
     
     // Deserialize objects with UIImage
+    /**
+     Adds a request to a queue and starts it's execution. The response object in success callback is of type UIImage
+     
+     - parameters:
+         - queue: A TNQueue instance. If no queue is specified it uses the default one. (optional)
+         - onSuccess: specifies a success callback of type TNSuccessCallback<T> (optional)
+         - onFailure: specifies a failure callback of type TNFailureCallback<T> (optional)
+     */
     public func start<T>(queue: TNQueue? = TNQueue.shared, onSuccess: TNSuccessCallback<T>?, onFailure: TNFailureCallback?) throws where T: UIImage {
         currentQueue = queue
         
@@ -337,6 +412,14 @@ open class TNCall: TNOperation {
     }
     
     // For any other object
+    /**
+     Adds a request to a queue and starts it's execution. The response object in success callback is of type Data
+     
+     - parameters:
+         - queue: A TNQueue instance. If no queue is specified it uses the default one. (optional)
+         - onSuccess: specifies a success callback of type TNSuccessCallback<T> (optional)
+         - onFailure: specifies a failure callback of type TNFailureCallback<T> (optional)
+     */
     public func start(queue: TNQueue? = TNQueue.shared, onSuccess: TNSuccessCallback<Data>?, onFailure: TNFailureCallback?) throws {
         currentQueue = queue
         

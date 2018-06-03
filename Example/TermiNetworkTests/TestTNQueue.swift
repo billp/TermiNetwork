@@ -31,7 +31,7 @@ class TestTNQueue: XCTestCase {
             expectation.fulfill()
         }
         
-        for _ in 1...8 {
+        for _ in 1...numberOfRequests {
             try? TNCall(method: .get, url: "http://google.com", params: nil).start(queue: queue, onSuccess: { _ in
                 numberOfRequests -= 1
             }) { error, data in
@@ -43,5 +43,55 @@ class TestTNQueue: XCTestCase {
         wait(for: [expectation], timeout: 10)
 
         XCTAssert(numberOfRequests == 0)
+    }
+    
+    func testQueueCancellation() {
+        var numberOfRequests = 8
+        let queue = TNQueue()
+        let expectation = XCTestExpectation(description: "Test queue")
+        
+        TNCall.afterAllRequestsBlock = {
+            expectation.fulfill()
+        }
+        
+        for _ in 1...numberOfRequests {
+            try? TNCall(method: .get, url: "http://google.com", params: nil).start(queue: queue, onSuccess: { _ in
+                numberOfRequests -= 1
+            }) { error, data in
+                numberOfRequests -= 1
+            }
+        }
+        
+        queue.cancelAllOperations()
+        
+        wait(for: [expectation], timeout: 10)
+        
+        XCTAssert(queue.operationCount == 0)
+    }
+    
+    func testQueueFailureMode() {
+        var numberOfRequests = 8
+        let queue = TNQueue()
+        let expectation = XCTestExpectation(description: "Test queue")
+        
+        queue.maxConcurrentOperationCount = 1
+        
+        TNCall.afterAllRequestsBlock = {
+            expectation.fulfill()
+        }
+        
+        for _ in 1...8 {
+            try? TNCall(method: .get, url: "http://google.com", params: nil).start(queue: queue, onSuccess: { _ in
+                numberOfRequests -= 1
+            }) { error, data in
+                numberOfRequests -= 1
+            }
+        }
+        
+        queue.cancelAllOperations()
+        
+        wait(for: [expectation], timeout: 10)
+        
+        XCTAssert(queue.operationCount == 0)
     }
 }
