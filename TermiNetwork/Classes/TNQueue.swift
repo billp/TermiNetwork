@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum TNQueueFailureMode {
+public enum TNQueueFailureMode {
     case cancelAll
     case `continue`
 }
@@ -18,7 +18,7 @@ open class TNQueue: OperationQueue {
     
     var failureMode: TNQueueFailureMode!
     
-    init(failureMode: TNQueueFailureMode = .continue) {
+    public init(failureMode: TNQueueFailureMode = .continue) {
         self.failureMode = failureMode
     }
 }
