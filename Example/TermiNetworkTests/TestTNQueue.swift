@@ -51,7 +51,9 @@ class TestTNQueue: XCTestCase {
         let expectation = XCTestExpectation(description: "Test queue")
         
         TNCall.afterAllRequestsBlock = {
-            expectation.fulfill()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: {
+                expectation.fulfill()
+            })
         }
         
         for _ in 1...numberOfRequests {
@@ -64,7 +66,7 @@ class TestTNQueue: XCTestCase {
         
         queue.cancelAllOperations()
         
-        wait(for: [expectation], timeout: 10)
+        wait(for: [expectation], timeout: 20)
         
         XCTAssert(queue.operationCount == 0)
     }
@@ -80,7 +82,7 @@ class TestTNQueue: XCTestCase {
             try? TNCall(method: .get, url: "http://google.com", params: nil).start(queue: queue, onSuccess: { _ in
                 numberOfRequests -= 1
                 queue.cancelAllOperations()
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: {
                     expectation.fulfill()
                 })
             }) { error, data in
@@ -88,7 +90,7 @@ class TestTNQueue: XCTestCase {
             }
         }
         
-        wait(for: [expectation], timeout: 10)
+        wait(for: [expectation], timeout: 20)
         
         XCTAssert(queue.operationCount == 0)
     }

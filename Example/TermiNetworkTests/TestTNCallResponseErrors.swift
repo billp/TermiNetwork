@@ -221,6 +221,5 @@ class TestTNCallResponseErrors: XCTestCase {
         wait(for: [expectation], timeout: 10)
 
         XCTAssert(!failed)
-
     }
 }
