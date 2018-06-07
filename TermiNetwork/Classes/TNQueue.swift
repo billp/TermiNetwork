@@ -18,6 +18,12 @@ open class TNQueue: OperationQueue {
     
     var failureMode: TNQueueFailureMode!
     
+    /**
+     Initializes a new queue.
+     
+     - parameters:
+        - failureMode: Supported values are .continue (continues the execution of queue even if a request fails, this is the default) and .cancelAll (cancels all the remaining requests in queue)
+     */
     public init(failureMode: TNQueueFailureMode = .continue) {
         self.failureMode = failureMode
     }
