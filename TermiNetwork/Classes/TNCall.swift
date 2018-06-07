@@ -43,7 +43,7 @@ open class TNCall: TNOperation {
 
     //MARK: - Instance properties
     private var headers: [String: String]?
-    private var method: TNMethod!
+    internal var method: TNMethod!
     private var path: String
     private var cachePolicy: URLRequest.CachePolicy
     private var timeoutInterval: TimeInterval?
@@ -358,7 +358,7 @@ open class TNCall: TNOperation {
                 return
             }
             
-            _ = TNLog(call: self, message: "Successfully deserialized data", responseData: data)
+            _ = TNLog(call: self, message: "Successfully deserialized data (\(String(describing: T.self)))", responseData: data)
 
             DispatchQueue.main.sync {
                 onSuccess?(object)

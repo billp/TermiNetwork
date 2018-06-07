@@ -35,6 +35,8 @@ extension UIImageView {
         
         beforeStart?()
         
+        cancelActiveCallInImageView()
+        
         setActiveCallInImageView(try UIImageView.downloadImage(url: url, onSuccess: { image in
             var image = image
             
@@ -43,13 +45,11 @@ extension UIImageView {
                 
                 DispatchQueue.main.async {
                     self.image = image
-                    UIImageView.activeCallsHashMap[url] = nil
                     onFinish?(image, nil)
                 }
             }
         }, onFailure: { error, data in
             self.image = nil
-            UIImageView.activeCallsHashMap[url] = nil
             onFinish?(nil, error)
         }))
     }

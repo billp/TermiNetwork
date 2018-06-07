@@ -18,7 +18,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
-        self.title = "TermiNetwork Demo"
         self.tableView.isHidden = true
     }
     
@@ -54,5 +53,9 @@ extension ViewController {
         cell.thumbImageView.url = category.strCategoryThumb
         
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
     }
 }

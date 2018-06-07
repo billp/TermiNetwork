@@ -76,19 +76,17 @@ class TestTNQueue: XCTestCase {
         
         queue.maxConcurrentOperationCount = 1
         
-        TNCall.afterAllRequestsBlock = {
-            expectation.fulfill()
-        }
-        
         for _ in 1...8 {
             try? TNCall(method: .get, url: "http://google.com", params: nil).start(queue: queue, onSuccess: { _ in
                 numberOfRequests -= 1
+                queue.cancelAllOperations()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
+                    expectation.fulfill()
+                })
             }) { error, data in
                 numberOfRequests -= 1
             }
         }
-        
-        queue.cancelAllOperations()
         
         wait(for: [expectation], timeout: 10)
         

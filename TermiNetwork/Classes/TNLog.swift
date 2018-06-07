@@ -13,16 +13,23 @@ internal class TNLog {
         guard TNEnvironment.verbose else { return }
         
         let url = call.cachedRequest?.url?.absoluteString ?? "n/a"
-        let headers = call.cachedRequest?.allHTTPHeaderFields?.description ?? "n/a"
+        let headers = call.cachedRequest?.allHTTPHeaderFields
         
-        print("|=== TermiNetwork verbose BEGIN ===|")
-        print("|> URL: " + url)
-        print("|> Request Headers: " + headers)
-        print("|> Message: " + message)
-        if let data = responseData {
-            print("|> Response: " + (data.toString() ?? "[non-printable]")!)
+        print("----------------------------------")
+        print(">>> TermiNetwork request BEGIN <<<")
+        print("----------------------------------")
+        print("URL             : " + url)
+        print("Method          : " + call.method.rawValue)
+        if let headers = headers, headers.keys.count > 0 {
+            print("Request Headers : " + headers.description)
         }
-        print("|=== TermiNetwork verbose   END ===|")
+        print("Message         : " + message)
+        if let data = responseData {
+            print("Response        : \n" + (data.toJSONString() ?? "[non-printable]")!)
+        }
+        print("--------------------------------")
+        print(">>> TermiNetwork request END <<<")
+        print("--------------------------------")
         print()
     }
 }
