@@ -42,11 +42,11 @@ open class TNCall: TNOperation {
     static private var numberOfRequestsStarted: Int = 0
 
     //MARK: - Instance properties
-    private var headers: [String: String]?
     internal var method: TNMethod!
+    private var headers: [String: String]?
+    public var cachePolicy: URLRequest.CachePolicy
+    public var timeoutInterval: TimeInterval?
     private var path: String
-    private var cachePolicy: URLRequest.CachePolicy
-    private var timeoutInterval: TimeInterval?
     private var params: [String: Any?]?
     private var pathType: SNPathType = .normal
     private var dataTask: URLSessionDataTask?

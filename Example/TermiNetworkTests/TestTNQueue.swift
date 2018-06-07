@@ -71,22 +71,58 @@ class TestTNQueue: XCTestCase {
         XCTAssert(queue.operationCount == 0)
     }
     
-    func testQueueFailureMode() {
+    func testQueueFailureModeCancelAll() {
         var numberOfRequests = 8
-        let queue = TNQueue()
+        let queue = TNQueue(failureMode: .cancelAll)
         let expectation = XCTestExpectation(description: "Test queue")
         
         queue.maxConcurrentOperationCount = 1
         
-        for _ in 1...8 {
-            try? TNCall(method: .get, url: "http://google.com", params: nil).start(queue: queue, onSuccess: { _ in
+        for index in 1...8 {
+            let url = index == 1 ? "http://localhost.unkownhost" : "http://google.com"
+            
+            let call = TNCall(method: .get, url: url, params: nil)
+            
+            try? call.start(queue: queue, onSuccess: { _ in
                 numberOfRequests -= 1
-                queue.cancelAllOperations()
+            }) { error, data in
+                
+                if case .cancelled(_) = error {
+                } else {
+                    numberOfRequests -= 1
+                }
+                
                 DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: {
                     expectation.fulfill()
                 })
-            }) { error, data in
+            }
+        }
+        
+        wait(for: [expectation], timeout: 20)
+        
+        XCTAssert(queue.operationCount == 0 && numberOfRequests > 0)
+    }
+    
+    func testQueueFailureModeContinue() {
+        var numberOfRequests = 8
+        let queue = TNQueue(failureMode: .cancelAll)
+        let expectation = XCTestExpectation(description: "Test queue")
+        
+        queue.maxConcurrentOperationCount = 1
+        
+        TNCall.afterAllRequestsBlock = {
+            expectation.fulfill()
+        }
+        
+        for index in 1...8 {
+            let url = index == 1 ? "http://localhost.unkownhost" : "http://google.com"
+            
+            let call = TNCall(method: .get, url: url, params: nil)
+            
+            try? call.start(queue: queue, onSuccess: { _ in
                 numberOfRequests -= 1
+            }) { error, data in
+                
             }
         }
         
