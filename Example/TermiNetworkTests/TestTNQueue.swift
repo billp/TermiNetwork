@@ -111,7 +111,9 @@ class TestTNQueue: XCTestCase {
         queue.maxConcurrentOperationCount = 1
         
         TNCall.afterAllRequestsBlock = {
-            expectation.fulfill()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: {
+                expectation.fulfill()
+            })
         }
         
         for index in 1...8 {
