@@ -314,7 +314,7 @@ static func testFailureCall(onSuccess: @escaping TNSuccessCallback<Data>, onFail
 ```
 
 ## Queues
-All **TNCall** requests are added to a **TNQueue** (**TNQueue.shared**) by default under the hood . You can also initialize your own **TNQueue** and set your own params that meet your needs. Bellow you can see an example of how you can initialize your own queue.
+When you call the **.start(...)** method of **TNCall**, it's added to a default **TNQueue** (**TNQueue.shared**) under the hood. You can also initialize your own **TNQueue** and set your own params that meet your needs. Bellow you can see an example of how you can initialize your own queue.
 
 ```swift
 let myQueue = TNQueue(failureMode: .continue) // You can set also .cancelAll
