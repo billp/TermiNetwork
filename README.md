@@ -342,6 +342,7 @@ You can set a cache policy and timeout interval that is suitable to your needs b
 ```swift
 try? TNCall(route: APIFoodRouter.categories, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: 5).start(onSuccess: onSuccess, onFailure: onFailure)
 ```
+> More info about cachePolicy you can find at Apple's documentation: https://developer.apple.com/documentation/foundation/nsurlrequest.cachepolicy
 
 ## UIImageView Extension
 You can use the **setRemoteImage** method of UIImageView to download an image from a remote server
@@ -357,10 +358,6 @@ imageView.setRemoteImage(url: "http://www.website.com/image.jpg", defaultImage: 
 	imageView.activityIndicator.stopAnimating()
 }
 ```
-
-## Logging
-
-> More info about cachePolicy you can find at Apple's documentation: https://developer.apple.com/documentation/foundation/nsurlrequest.cachepolicy
 
 ## Hooks
 Hooks are running before and/or after request execution and allow you to run a block of code automatically. Supported hooks are:
