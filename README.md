@@ -314,7 +314,7 @@ static func testFailureCall(onSuccess: @escaping TNSuccessCallback<Data>, onFail
 ```
 
 ## Queues
-All **TNCall** requests are added to a **TNQueue** by default under the hood. You can also initialize your own **TNQueue** and set your own params that meet your needs. Bellow you can see an example of how you can initialize your own queue.
+All **TNCall** requests are added to a **TNQueue** (**TNQueue.shared**) by default under the hood . You can also initialize your own **TNQueue** and set your own params that meet your needs. Bellow you can see an example of how you can initialize your own queue.
 
 ```swift
 let myQueue = TNQueue(failureMode: .continue) // You can set also .cancelAll
@@ -327,6 +327,8 @@ try? TNCall(method: .get, url: "http://www.google.com", params: nil).start(queue
 }
 
 ```
+Because **TNQueue** is a subclass of **OperationQueue**, you can use all the properties/methods of its parent, like for example **.cancelAllOperations()** which cancels all the requests in queue.
+
 
 ## Fixed Headers
 You can set headers to be automatically included to every **TNCall** by setting your headers to the static var **fixedHeaders** (useful when you have to include authorization token in headers)
