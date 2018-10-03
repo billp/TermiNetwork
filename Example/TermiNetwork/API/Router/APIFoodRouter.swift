@@ -12,7 +12,7 @@ import TermiNetwork
 enum APIFoodRouter: TNRouteProtocol {
     // Define your routes
     case categories
-    case category(id: Int)
+    case filter(categoryTitle: String)
     case createCategory(title: String)
     
     // Set method, path, params, headers for each route
@@ -25,11 +25,11 @@ enum APIFoodRouter: TNRouteProtocol {
                 params: nil,
                 headers: nil
             )
-        case .category(let id):
+        case .filter(let categoryTitle):
             return (
                 method: .get,
-                path: path("category", String(id)), // Generates: http(s)://.../category/1236
-                params: nil,
+                path: path("search.php"), // Generates: http(s)://.../category/1236
+                params: ["filter": categoryTitle],
                 headers: nil
             )
         case .createCategory(let title):

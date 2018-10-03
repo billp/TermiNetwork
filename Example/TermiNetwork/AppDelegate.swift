@@ -30,6 +30,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             SVProgressHUD.dismiss()
         }
         
+        try? TNRouter.makeCall(route: APIFoodRouter.filter(categoryTitle: "Seafood"), responseType: FoodCategory.self, onSuccess: { category in
+            print(category)
+        }) { (error, data) in
+            if case .notSuccess(let code) = error {
+                print(code)
+            }
+        }
+        
         return true
     }
 

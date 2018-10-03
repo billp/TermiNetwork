@@ -17,6 +17,7 @@
 		594C21BB203D9F9B00FFE7A6 /* FoodCategories.swift in Sources */ = {isa = PBXBuildFile; fileRef = 594C21B5203D9F9B00FFE7A6 /* FoodCategories.swift */; };
 		594C21BC203D9F9B00FFE7A6 /* APICustomHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 594C21B7203D9F9B00FFE7A6 /* APICustomHelpers.swift */; };
 		594C21BD203D9F9B00FFE7A6 /* APIFoodRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 594C21B8203D9F9B00FFE7A6 /* APIFoodRouter.swift */; };
+		594D5937216502CD00B0C0EE /* Meal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 594D5936216502CD00B0C0EE /* Meal.swift */; };
 		595BA53720459A2F0029D903 /* TestTNEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 595BA53620459A2F0029D903 /* TestTNEnvironment.swift */; };
 		597EF4D420BF2AF100DB9981 /* TestTNQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 597EF4D320BF2AF100DB9981 /* TestTNQueue.swift */; };
 		599F992C204EBC1D009F2B17 /* TestParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 599F992B204EBC1D009F2B17 /* TestParams.swift */; };
@@ -54,6 +55,7 @@
 		594C21B5203D9F9B00FFE7A6 /* FoodCategories.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FoodCategories.swift; sourceTree = "<group>"; };
 		594C21B7203D9F9B00FFE7A6 /* APICustomHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APICustomHelpers.swift; sourceTree = "<group>"; };
 		594C21B8203D9F9B00FFE7A6 /* APIFoodRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIFoodRouter.swift; sourceTree = "<group>"; };
+		594D5936216502CD00B0C0EE /* Meal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Meal.swift; sourceTree = "<group>"; };
 		595BA53420459A2E0029D903 /* TermiNetworkTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TermiNetworkTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		595BA53620459A2F0029D903 /* TestTNEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestTNEnvironment.swift; sourceTree = "<group>"; };
 		595BA53820459A2F0029D903 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -145,6 +147,7 @@
 			children = (
 				594C21B4203D9F9B00FFE7A6 /* FoodCategory.swift */,
 				594C21B5203D9F9B00FFE7A6 /* FoodCategories.swift */,
+				594D5936216502CD00B0C0EE /* Meal.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -423,6 +426,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				594D5937216502CD00B0C0EE /* Meal.swift in Sources */,
 				594C21AE203D9EC300FFE7A6 /* FoodCategoryCell.swift in Sources */,
 				594C21BC203D9F9B00FFE7A6 /* APICustomHelpers.swift in Sources */,
 				594C21BA203D9F9B00FFE7A6 /* FoodCategory.swift in Sources */,
@@ -479,11 +483,11 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REEXPORTED_FRAMEWORK_NAMES = "$(inherited)";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TermiNetwork_Example.app/TermiNetwork_Example";
-				VALID_ARCHS = "arm64 armv7 i386 x86_64 armv7s";
+				VALID_ARCHS = "i386 x86_64";
 			};
 			name = Debug;
 		};
@@ -507,11 +511,11 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.billp.TermiNetworkTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REEXPORTED_FRAMEWORK_NAMES = "$(inherited)";
-				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TermiNetwork_Example.app/TermiNetwork_Example";
-				VALID_ARCHS = "arm64 armv7 i386 x86_64 armv7s";
+				VALID_ARCHS = "i386 x86_64";
 			};
 			name = Release;
 		};
