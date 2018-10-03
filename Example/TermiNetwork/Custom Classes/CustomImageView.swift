@@ -14,7 +14,7 @@ class CustomImageView: UIImageView {
     
     var url: String! {
         didSet {
-            try? self.setRemoteImage(url: url)
+            try? self.setRemoteImage(url: url, defaultImage: nil, beforeStart: nil, preprocessImage: nil, onFinish: nil)
         }
     }
 }

@@ -14,7 +14,7 @@ public enum TNQueueFailureMode {
 
 open class TNQueue: OperationQueue {
     // MARK: - Static variables
-    open static var shared = TNQueue()
+    public static var shared = TNQueue()
     
     var failureMode: TNQueueFailureMode!
     

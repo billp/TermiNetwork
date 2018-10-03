@@ -31,7 +31,7 @@ enum Environment: TNEnvironmentProtocol {
         case .termiNetworkLocal:
             return TNEnvironment(scheme: .http, host: "localhost", suffix: nil, port: 3000)
         case .termiNetworkRemote:
-            return TNEnvironment(scheme: .http, host: "returnfalse.net", suffix: nil, port: 3000)
+            return TNEnvironment(scheme: .https, host: "terminetwork-rails-app.herokuapp.com")
         case .invalidHost:
             return TNEnvironment(scheme: .http, host: "localhostt", suffix: nil, port: 1234)
         }

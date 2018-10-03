@@ -322,9 +322,9 @@ open class TNCall: TNOperation {
     
     func handleDataTaskFailure() {
         switch currentQueue.failureMode {
-        case .continue:
+        case .continue?:
             break
-        case .cancelAll:
+        case .cancelAll?:
             currentQueue.cancelAllOperations()
         default:
             break

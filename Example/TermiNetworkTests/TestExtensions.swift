@@ -11,7 +11,7 @@ import TermiNetwork
 
 class TestExtensions: XCTestCase {
     
-    let sampleImageURL = "http://returnfalse.net:3000/sample.jpeg"
+    lazy var sampleImageURL = TNEnvironment.current.description + "/sample.jpeg"
     
     override func setUp() {
         super.setUp()
@@ -25,7 +25,7 @@ class TestExtensions: XCTestCase {
     }
     
     func testImageViewRemoteURL() {
-        let expectation = XCTestExpectation(description: "Test beforeEachRequestCallback")
+        let expectation = XCTestExpectation(description: "Test testImageViewRemoteURL")
         var failed = true
         var tmp = 0
         
@@ -44,7 +44,7 @@ class TestExtensions: XCTestCase {
             expectation.fulfill()
         }
         
-        wait(for: [expectation], timeout: 10)
+        wait(for: [expectation], timeout: 60)
         XCTAssert(!failed)
     }
 }
