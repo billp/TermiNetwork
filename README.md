@@ -20,7 +20,7 @@ platform :ios, '9.0'
 use_frameworks!
 
 target 'YourTarget' do
-    pod 'TermiNetwork', '~> 0.2.1'
+    pod 'TermiNetwork', '~> 0.2.2'
 end
 ```
 
