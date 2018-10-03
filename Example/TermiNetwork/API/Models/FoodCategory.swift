@@ -12,11 +12,4 @@ struct FoodCategory : Codable {
 	let strCategory: String
 	let strCategoryDescription: String
 	let strCategoryThumb: String
-
-	enum CodingKeys: CodingKey {
-		case idCategory
-		case strCategory
-		case strCategoryDescription
-		case strCategoryThumb
-	}
 }
