@@ -318,6 +318,8 @@ open class TNCall: TNOperation {
     func handleDataTaskCompleted() {
         _executing = false
         _finished = true
+        
+        currentQueue.operationFinished(error: false)
     }
     
     func handleDataTaskFailure() {
@@ -332,6 +334,8 @@ open class TNCall: TNOperation {
         
         _executing = false
         _finished = true
+        
+        currentQueue.operationFinished(error: true)
     }
     
     // Deserialize objects with Decodable
