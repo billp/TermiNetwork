@@ -10,7 +10,7 @@ import UIKit
 import TermiNetwork
 
 class CustomImageView: UIImageView {
-    var call: TNCall?
+    var call: TNRequest?
     
     var url: String! {
         didSet {

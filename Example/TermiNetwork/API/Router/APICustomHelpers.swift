@@ -10,8 +10,8 @@ import Foundation
 import TermiNetwork
 
 struct APICustomHelpers {
-    static func getImage(url: String, onSuccess: @escaping TNSuccessCallback<UIImage>, onFailure: @escaping TNFailureCallback) throws -> TNCall {
-        let call = TNCall(method: .get, url: url, params: nil)
+    static func getImage(url: String, onSuccess: @escaping TNSuccessCallback<UIImage>, onFailure: @escaping TNFailureCallback) throws -> TNRequest {
+        let call = TNRequest(method: .get, url: url, params: nil)
         call.skipBeforeAfterAllRequestsHooks = true
         try call.start(onSuccess: onSuccess, onFailure: onFailure)
         

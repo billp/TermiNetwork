@@ -27,12 +27,12 @@ class TestTNQueue: XCTestCase {
         let queue = TNQueue()
         let expectation = XCTestExpectation(description: "Test queue")
 
-        TNCall.afterAllRequestsBlock = {
+        queue.completedCallback = { error in
             expectation.fulfill()
         }
         
         for _ in 1...numberOfRequests {
-            try? TNCall(method: .get, url: "http://google.com", params: nil).start(queue: queue, onSuccess: { _ in
+            try? TNRequest(method: .get, url: "http://google.com", params: nil).start(queue: queue, onSuccess: { _ in
                 numberOfRequests -= 1
             }) { error, data in
                 numberOfRequests -= 1
@@ -58,7 +58,7 @@ class TestTNQueue: XCTestCase {
         }
         
         for index in 0...numberOfRequests-1 {
-            try? TNCall(method: .get, url: urls[index], params: nil).start(queue: queue, onSuccess: { _ in
+            try? TNRequest(method: .get, url: urls[index], params: nil).start(queue: queue, onSuccess: { _ in
                 numberOfRequests -= 1
             }) { error, data in
                 numberOfRequests -= 1
@@ -85,7 +85,7 @@ class TestTNQueue: XCTestCase {
         }
         
         for index in 0...numberOfRequests-1 {
-            try? TNCall(method: .get, url: urls[index], params: nil).start(queue: queue, onSuccess: { _ in
+            try? TNRequest(method: .get, url: urls[index], params: nil).start(queue: queue, onSuccess: { _ in
                 numberOfRequests -= 1
             }) { _, _ in
                 numberOfRequests -= 1
@@ -111,7 +111,7 @@ class TestTNQueue: XCTestCase {
         }
         
         for index in 0...numberOfRequests-1 {
-            try? TNCall(method: .get, url: urls[index], params: nil).start(queue: queue, onSuccess: { _ in
+            try? TNRequest(method: .get, url: urls[index], params: nil).start(queue: queue, onSuccess: { _ in
                 numberOfRequests -= 1
             }) { error, data in
                 numberOfRequests -= 1
@@ -136,7 +136,7 @@ class TestTNQueue: XCTestCase {
         }
         
         for index in 0...numberOfRequests-1 {
-            try? TNCall(method: .get, url: urls[index], params: nil).start(queue: queue, onSuccess: { _ in
+            try? TNRequest(method: .get, url: urls[index], params: nil).start(queue: queue, onSuccess: { _ in
                 numberOfRequests -= 1
             }) { _, _ in }
         }
@@ -151,14 +151,14 @@ class TestTNQueue: XCTestCase {
         let queue = TNQueue()
         let expectation = XCTestExpectation(description: "testQueueCancellation")
         
-        TNCall.afterAllRequestsBlock = {
+        TNRequest.afterAllRequestsBlock = {
             DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: {
                 expectation.fulfill()
             })
         }
         
         for _ in 1...numberOfRequests {
-            try? TNCall(method: .get, url: "http://google.com", params: nil).start(queue: queue, onSuccess: { _ in
+            try? TNRequest(method: .get, url: "http://google.com", params: nil).start(queue: queue, onSuccess: { _ in
                 numberOfRequests -= 1
             }) { error, data in
                 numberOfRequests -= 1
@@ -182,7 +182,7 @@ class TestTNQueue: XCTestCase {
         for index in 1...8 {
             let url = index == 5 ? "http://localhost.unkownhost" : "http://google.com"
             
-            let call = TNCall(method: .get, url: url, params: nil)
+            let call = TNRequest(method: .get, url: url, params: nil)
             
             try? call.start(queue: queue, onSuccess: { _ in
                 numberOfRequests -= 1
@@ -211,7 +211,7 @@ class TestTNQueue: XCTestCase {
         
         queue.maxConcurrentOperationCount = 1
         
-        TNCall.afterAllRequestsBlock = {
+        TNRequest.afterAllRequestsBlock = {
             DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: {
                 expectation.fulfill()
             })
@@ -220,7 +220,7 @@ class TestTNQueue: XCTestCase {
         for index in 1...8 {
             let url = index == 1 ? "http://localhost.unkownhost" : "http://google.com"
             
-            let call = TNCall(method: .get, url: url, params: nil)
+            let call = TNRequest(method: .get, url: url, params: nil)
             
             try? call.start(queue: queue, onSuccess: { _ in
                 numberOfRequests -= 1

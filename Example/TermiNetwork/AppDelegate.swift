@@ -22,11 +22,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         TNEnvironment.set(Environment.production)
         TNEnvironment.verbose = true
         
-        TNCall.beforeAllRequestsBlock = {
+        TNRequest.beforeAllRequestsBlock = {
             SVProgressHUD.show()
         }
         
-        TNCall.afterAllRequestsBlock = {
+        TNRequest.afterAllRequestsBlock = {
             SVProgressHUD.dismiss()
         }
         

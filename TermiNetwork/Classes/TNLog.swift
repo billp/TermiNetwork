@@ -9,7 +9,7 @@
 import Foundation
 
 internal class TNLog {
-    init(call: TNCall, message: String, responseData: Data? = nil) {
+    init(call: TNRequest, message: String, responseData: Data? = nil) {
         guard TNEnvironment.verbose else { return }
         
         let url = call.cachedRequest?.url?.absoluteString ?? "n/a"

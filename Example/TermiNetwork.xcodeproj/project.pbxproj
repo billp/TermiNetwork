@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		11AF8F30AD70DDC6D7F330C2 /* Pods_TermiNetwork_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9CE2EB115537B49E5697580B /* Pods_TermiNetwork_Example.framework */; };
-		59329622206A4ABB007BB456 /* TestTNCallResponseErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59329621206A4ABB007BB456 /* TestTNCallResponseErrors.swift */; };
+		59329622206A4ABB007BB456 /* TestTNRequestResponseErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59329621206A4ABB007BB456 /* TestTNRequestResponseErrors.swift */; };
 		594C21A9203D9EA100FFE7A6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 594C21A8203D9EA100FFE7A6 /* Main.storyboard */; };
 		594C21AE203D9EC300FFE7A6 /* FoodCategoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 594C21AB203D9EC300FFE7A6 /* FoodCategoryCell.swift */; };
 		594C21AF203D9EC300FFE7A6 /* CustomImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 594C21AD203D9EC300FFE7A6 /* CustomImageView.swift */; };
@@ -23,9 +23,9 @@
 		599F992C204EBC1D009F2B17 /* TestParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 599F992B204EBC1D009F2B17 /* TestParams.swift */; };
 		59B81ADE208F71E3007D38AF /* TestJSONParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59B81ADD208F71E3007D38AF /* TestJSONParams.swift */; };
 		59C7C63120A4B29200F8A47C /* TestExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59C7C63020A4B29200F8A47C /* TestExtensions.swift */; };
-		59F3986E204D33FF00C7381B /* TestTNCallRequestErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59F3986D204D33FF00C7381B /* TestTNCallRequestErrors.swift */; };
+		59F3986E204D33FF00C7381B /* TestTNRequestErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59F3986D204D33FF00C7381B /* TestTNRequestErrors.swift */; };
 		59F39870204D369D00C7381B /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59F3986F204D369D00C7381B /* Environment.swift */; };
-		59F39872204D6AE300C7381B /* TestTNCall.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59F39871204D6AE300C7381B /* TestTNCall.swift */; };
+		59F39872204D6AE300C7381B /* TestTNRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59F39871204D6AE300C7381B /* TestTNRequest.swift */; };
 		59F39874204D6B5200C7381B /* APIRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59F39873204D6B5200C7381B /* APIRouter.swift */; };
 		59F39877204D6CBB00C7381B /* TestHeaders.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59F39876204D6CBB00C7381B /* TestHeaders.swift */; };
 		607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD51AFB9204008FA782 /* AppDelegate.swift */; };
@@ -46,7 +46,7 @@
 
 /* Begin PBXFileReference section */
 		10D658E7716536E837A73EFF /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
-		59329621206A4ABB007BB456 /* TestTNCallResponseErrors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestTNCallResponseErrors.swift; sourceTree = "<group>"; };
+		59329621206A4ABB007BB456 /* TestTNRequestResponseErrors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestTNRequestResponseErrors.swift; sourceTree = "<group>"; };
 		594C21A8203D9EA100FFE7A6 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		594C21AB203D9EC300FFE7A6 /* FoodCategoryCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FoodCategoryCell.swift; sourceTree = "<group>"; };
 		594C21AD203D9EC300FFE7A6 /* CustomImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomImageView.swift; sourceTree = "<group>"; };
@@ -69,9 +69,9 @@
 		59B45DCC209A68960079F56E /* SVProgressHUD.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = SVProgressHUD.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		59B81ADD208F71E3007D38AF /* TestJSONParams.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestJSONParams.swift; sourceTree = "<group>"; };
 		59C7C63020A4B29200F8A47C /* TestExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestExtensions.swift; sourceTree = "<group>"; };
-		59F3986D204D33FF00C7381B /* TestTNCallRequestErrors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestTNCallRequestErrors.swift; sourceTree = "<group>"; };
+		59F3986D204D33FF00C7381B /* TestTNRequestErrors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestTNRequestErrors.swift; sourceTree = "<group>"; };
 		59F3986F204D369D00C7381B /* Environment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
-		59F39871204D6AE300C7381B /* TestTNCall.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestTNCall.swift; sourceTree = "<group>"; };
+		59F39871204D6AE300C7381B /* TestTNRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestTNRequest.swift; sourceTree = "<group>"; };
 		59F39873204D6B5200C7381B /* APIRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIRouter.swift; sourceTree = "<group>"; };
 		59F39876204D6CBB00C7381B /* TestHeaders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestHeaders.swift; sourceTree = "<group>"; };
 		607FACD01AFB9204008FA782 /* TermiNetwork_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TermiNetwork_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -167,10 +167,10 @@
 				59F39875204D6CA700C7381B /* Models */,
 				59F3986F204D369D00C7381B /* Environment.swift */,
 				59F39873204D6B5200C7381B /* APIRouter.swift */,
-				59F3986D204D33FF00C7381B /* TestTNCallRequestErrors.swift */,
-				59329621206A4ABB007BB456 /* TestTNCallResponseErrors.swift */,
+				59F3986D204D33FF00C7381B /* TestTNRequestErrors.swift */,
+				59329621206A4ABB007BB456 /* TestTNRequestResponseErrors.swift */,
 				595BA53620459A2F0029D903 /* TestTNEnvironment.swift */,
-				59F39871204D6AE300C7381B /* TestTNCall.swift */,
+				59F39871204D6AE300C7381B /* TestTNRequest.swift */,
 				59C7C63020A4B29200F8A47C /* TestExtensions.swift */,
 				597EF4D320BF2AF100DB9981 /* TestTNQueue.swift */,
 				595BA53820459A2F0029D903 /* Info.plist */,
@@ -413,9 +413,9 @@
 				59B81ADE208F71E3007D38AF /* TestJSONParams.swift in Sources */,
 				597EF4D420BF2AF100DB9981 /* TestTNQueue.swift in Sources */,
 				59C7C63120A4B29200F8A47C /* TestExtensions.swift in Sources */,
-				59F3986E204D33FF00C7381B /* TestTNCallRequestErrors.swift in Sources */,
-				59329622206A4ABB007BB456 /* TestTNCallResponseErrors.swift in Sources */,
-				59F39872204D6AE300C7381B /* TestTNCall.swift in Sources */,
+				59F3986E204D33FF00C7381B /* TestTNRequestErrors.swift in Sources */,
+				59329622206A4ABB007BB456 /* TestTNRequestResponseErrors.swift in Sources */,
+				59F39872204D6AE300C7381B /* TestTNRequest.swift in Sources */,
 				59F39874204D6B5200C7381B /* APIRouter.swift in Sources */,
 				59F39870204D369D00C7381B /* Environment.swift in Sources */,
 				595BA53720459A2F0029D903 /* TestTNEnvironment.swift in Sources */,

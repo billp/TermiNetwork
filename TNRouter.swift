@@ -8,7 +8,7 @@ import Foundation
 
 open class TNRouter {
     /**
-     Wrapper method that starts a TNCall requess. The response object in success callback is of type Decodable.
+     Wrapper method that starts a TNRequest requess. The response object in success callback is of type Decodable.
      
      - parameters:
      - queue: A TNQueue instance. If no queue is specified it uses the default one. (optional)
@@ -18,14 +18,14 @@ open class TNRouter {
      - onFailure: specifies a failure callback of type TNFailureCallback<T> (optional)
      */
     public static func makeCall<T, R: TNRouteProtocol>(queue: TNQueue? = TNQueue.shared, skipBeforeAfterAllRequestsHooks: Bool = true, route: R, responseType: T.Type, onSuccess: @escaping TNSuccessCallback<T>, onFailure: @escaping TNFailureCallback) throws where T: Decodable {
-        let call = TNCall(route: route)
+        let call = TNRequest(route: route)
         call.skipBeforeAfterAllRequestsHooks = skipBeforeAfterAllRequestsHooks
         
         try call.start(queue: queue, onSuccess: onSuccess, onFailure: onFailure)
     }
     
     /**
-     Wrapper method that starts a TNCall requess. The response object in success callback is of type UIImage.
+     Wrapper method that starts a TNRequest requess. The response object in success callback is of type UIImage.
      
      - parameters:
      - queue: A TNQueue instance. If no queue is specified it uses the default one. (optional)
@@ -35,13 +35,13 @@ open class TNRouter {
      - onFailure: specifies a failure callback of type TNFailureCallback<T> (optional)
      */
     public static func makeCall<T, R: TNRouteProtocol>(queue: TNQueue? = TNQueue.shared, skipBeforeAfterAllRequestsHooks: Bool = true, route: R, responseType: T.Type, onSuccess: @escaping TNSuccessCallback<T>, onFailure: @escaping TNFailureCallback) throws where T: UIImage {
-        let call = TNCall(route: route)
+        let call = TNRequest(route: route)
         call.skipBeforeAfterAllRequestsHooks = skipBeforeAfterAllRequestsHooks
         try call.start(queue: queue, onSuccess: onSuccess, onFailure: onFailure)
     }
     
     /**
-     Wrapper method that starts a TNCall requess. The response object in success callback is of type Data.
+     Wrapper method that starts a TNRequest requess. The response object in success callback is of type Data.
      
      - parameters:
      - queue: A TNQueue instance. If no queue is specified it uses the default one. (optional)
@@ -51,7 +51,7 @@ open class TNRouter {
      - onFailure: specifies a failure callback of type TNFailureCallback<T> (optional)
      */
     public static func makeCall<R: TNRouteProtocol>(queue: TNQueue? = TNQueue.shared, skipBeforeAfterAllRequestsHooks: Bool = true, route: R, onSuccess: @escaping TNSuccessCallback<Data>, onFailure: @escaping TNFailureCallback) throws {
-        let call = TNCall(route: route)
+        let call = TNRequest(route: route)
         call.skipBeforeAfterAllRequestsHooks = skipBeforeAfterAllRequestsHooks
         try call.start(queue: queue, onSuccess: onSuccess, onFailure: onFailure)
     }

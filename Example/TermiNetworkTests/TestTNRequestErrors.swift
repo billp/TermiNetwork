@@ -1,5 +1,5 @@
 //
-//  TestTNCallRequestErrors.swift
+//  TestTNRequestErrors.swift
 //  TermiNetworkTests
 //
 //  Created by Vasilis Panagiotopoulos on 05/03/2018.
@@ -10,7 +10,7 @@
 import XCTest
 import TermiNetwork
 
-class TestTNCallRequestErrors: XCTestCase {
+class TestTNRequestErrors: XCTestCase {
     override func setUp() {
         super.setUp()
         // Put setup code here. This method is called before the invocation of each test method in the class.
@@ -26,7 +26,7 @@ class TestTNCallRequestErrors: XCTestCase {
         TNEnvironment.current = nil
         
         do {
-            try TNCall(method: .get, url: "http://www.google.com", params: nil).start(onSuccess: { data in
+            try TNRequest(method: .get, url: "http://www.google.com", params: nil).start(onSuccess: { data in
                 XCTAssert(false)
             }) { error, data in
                 XCTAssert(false)
@@ -40,7 +40,7 @@ class TestTNCallRequestErrors: XCTestCase {
     
     func testInvalidURL() {
         do {
-            try _ = TNCall(method: .get, url: "http://εεε.google.κωμ", params: nil).asRequest()
+            try _ = TNRequest(method: .get, url: "http://εεε.google.κωμ", params: nil).asRequest()
             XCTAssert(false)
         } catch TNRequestError.invalidURL {
             XCTAssert(true)
@@ -51,7 +51,7 @@ class TestTNCallRequestErrors: XCTestCase {
     
     func testValidURL() {
         do {
-            try _ = TNCall(method: .get, url: "http://www.google.com", params: nil).asRequest()
+            try _ = TNRequest(method: .get, url: "http://www.google.com", params: nil).asRequest()
             XCTAssert(true)
         } catch {
             XCTAssert(false)

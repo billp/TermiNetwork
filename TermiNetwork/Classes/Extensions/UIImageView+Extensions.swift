@@ -8,11 +8,11 @@
 import UIKit
 
 extension UIImageView {
-    private static var activeCallsHashMap: [String: TNCall] = [:]
+    private static var activeRequestsHashMap: [String: TNRequest] = [:]
     
  
-    fileprivate static func downloadImage(url: String, onSuccess: @escaping TNSuccessCallback<UIImage>, onFailure: @escaping TNFailureCallback) throws -> TNCall {
-        let call = TNCall(method: .get, url: url, params: nil)
+    fileprivate static func downloadImage(url: String, onSuccess: @escaping TNSuccessCallback<UIImage>, onFailure: @escaping TNFailureCallback) throws -> TNRequest {
+        let call = TNRequest(method: .get, url: url, params: nil)
         call.skipBeforeAfterAllRequestsHooks = true
         try call.start(onSuccess: onSuccess, onFailure: onFailure)
         
@@ -60,10 +60,10 @@ extension UIImageView {
     }
     
     private func cancelActiveCallInImageView() {
-        UIImageView.activeCallsHashMap[getAddress()]?.cancel()
+        UIImageView.activeRequestsHashMap[getAddress()]?.cancel()
     }
     
-    private func setActiveCallInImageView(_ call: TNCall) {
-        UIImageView.activeCallsHashMap[getAddress()] = call
+    private func setActiveCallInImageView(_ call: TNRequest) {
+        UIImageView.activeRequestsHashMap[getAddress()] = call
     }
 }

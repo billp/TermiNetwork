@@ -1,5 +1,5 @@
 //
-//  TestTNCallResponseErrors.swift
+//  TestTNRequestResponseErrors.swift
 //  TermiNetworkTests
 //
 //  Created by Vasilis Panagiotopoulos on 05/03/2018.
@@ -10,13 +10,13 @@
 import XCTest
 import TermiNetwork
 
-class TestTNCallResponseErrors: XCTestCase {
+class TestTNRequestResponseErrors: XCTestCase {
     
     override func setUp() {
         super.setUp()
         // Put setup code here. This method is called before the invocation of each test method in the class.
         TNEnvironment.set(Environment.termiNetworkRemote)
-        TNCall.allowEmptyResponseBody = false
+        TNRequest.allowEmptyResponseBody = false
     }
     
     override func tearDown() {
@@ -26,7 +26,7 @@ class TestTNCallResponseErrors: XCTestCase {
     }
     
     func testResponseDataIsEmpty() {
-        TNCall.allowEmptyResponseBody = false
+        TNRequest.allowEmptyResponseBody = false
 
         let expectation = XCTestExpectation(description: "Test Empty Response Body")
         var failed = true
@@ -50,7 +50,7 @@ class TestTNCallResponseErrors: XCTestCase {
     }
     
     func testResponseDataIsNotEmpty() {
-        TNCall.allowEmptyResponseBody = true
+        TNRequest.allowEmptyResponseBody = true
         
         let expectation = XCTestExpectation(description: "Test Not Empty Response Body")
         var failed = true
@@ -203,7 +203,7 @@ class TestTNCallResponseErrors: XCTestCase {
         let expectation = XCTestExpectation(description: "Test Not Success")
         var failed = true
         
-        let request = TNCall(route: APIRouter.testStatusCode(code: 404))
+        let request = TNRequest(route: APIRouter.testStatusCode(code: 404))
         try! request.start(onSuccess: { data in
             expectation.fulfill()
         }) { error, data in

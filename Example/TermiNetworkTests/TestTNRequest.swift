@@ -1,5 +1,5 @@
 //
-//  TestTNCall.swift
+//  TestTNRequest.swift
 //  TermiNetworkTests
 //
 //  Created by Vasilis Panagiotopoulos on 05/03/2018.
@@ -9,7 +9,7 @@
 import XCTest
 import TermiNetwork
 
-class TestTNCall: XCTestCase {
+class TestTNRequest: XCTestCase {
     
     override func setUp() {
         super.setUp()
@@ -21,7 +21,7 @@ class TestTNCall: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
         super.tearDown()
 
-        TNCall.requestBodyType = .xWWWFormURLEncoded
+        TNRequest.requestBodyType = .xWWWFormURLEncoded
     }
     
     func testHeaders() {
@@ -93,7 +93,7 @@ class TestTNCall: XCTestCase {
         let expectation = XCTestExpectation(description: "Test JSON post params")
         var failed = true
         
-        TNCall.requestBodyType = .JSON
+        TNRequest.requestBodyType = .JSON
         
         try? TNRouter.makeCall(route: APIRouter.testPostParams(value1: true, value2: 3, value3: 5.13453124189, value4: "test", value5: nil), responseType: TestJSONParams.self, onSuccess: { object in
             failed = !(object.param1 == true && object.param2 == 3 && object.param3 == 5.13453124189 && object.param4 == "test" && object.param5 == nil)
@@ -111,8 +111,8 @@ class TestTNCall: XCTestCase {
         let expectation = XCTestExpectation(description: "Test beforeEachRequestCallback")
         self.sampleRequest()
 
-        TNCall.afterAllRequestsBlock = {
-            TNCall.beforeAllRequestsBlock = {
+        TNRequest.afterAllRequestsBlock = {
+            TNRequest.beforeAllRequestsBlock = {
                 expectation.fulfill()
             }
             
@@ -135,8 +135,8 @@ class TestTNCall: XCTestCase {
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2) {
             self.sampleRequest()
 
-            TNCall.afterAllRequestsBlock = {
-                TNCall.beforeAllRequestsBlock = {
+            TNRequest.afterAllRequestsBlock = {
+                TNRequest.beforeAllRequestsBlock = {
                     failed = true
                 }
                 
@@ -161,7 +161,7 @@ class TestTNCall: XCTestCase {
                 expectation.fulfill()
             })
 
-            TNCall.afterAllRequestsBlock = {
+            TNRequest.afterAllRequestsBlock = {
                 failed = true
             }
         }
@@ -175,7 +175,7 @@ class TestTNCall: XCTestCase {
     func testAfterAllRequests() {
         let expectation = XCTestExpectation(description: "Test beforeEachRequestCallback")
         
-        TNCall.afterAllRequestsBlock = {
+        TNRequest.afterAllRequestsBlock = {
             expectation.fulfill()
         }
         
@@ -192,7 +192,7 @@ class TestTNCall: XCTestCase {
         let expectation = XCTestExpectation(description: "Test beforeEachRequestCallback")
         var failed = true
         
-        TNCall.beforeEachRequestBlock = { _ in
+        TNRequest.beforeEachRequestBlock = { _ in
             expectation.fulfill()
             failed = false
         }
@@ -207,7 +207,7 @@ class TestTNCall: XCTestCase {
         let expectation = XCTestExpectation(description: "Test afterEachRequestCallback")
         var failed = true
         
-        TNCall.afterEachRequestBlock = { call, data, URLResponse, error in
+        TNRequest.afterEachRequestBlock = { call, data, URLResponse, error in
             failed = false
             expectation.fulfill()
         }
@@ -221,9 +221,9 @@ class TestTNCall: XCTestCase {
     
     func sampleRequest(skipBeforeAfterAllRequestsHooks: Bool = false, onSuccess: TNSuccessCallback<TestJSONParams>? = nil) {
         
-        TNCall.requestBodyType = .JSON
+        TNRequest.requestBodyType = .JSON
         
-        let call = TNCall(route: APIRouter.testPostParams(value1: true, value2: 3, value3: 5.13453124189, value4: "test", value5: nil))
+        let call = TNRequest(route: APIRouter.testPostParams(value1: true, value2: 3, value3: 5.13453124189, value4: "test", value5: nil))
         call.skipBeforeAfterAllRequestsHooks = skipBeforeAfterAllRequestsHooks
         
         try? call.start(onSuccess: onSuccess, onFailure: nil)

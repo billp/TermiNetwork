@@ -1,5 +1,5 @@
 //
-//  TNCall.swift
+//  TNRequest.swift
 //  TermiNetwork
 //
 //  Created by Vasilis Panagiotopoulos on 14/02/2018.
@@ -8,13 +8,14 @@
 
 import Foundation
 
+// Backward compatibility for TNCall (is being replaced with TNRequest)
+@available(*, deprecated, message: "TNCall is deprecated and will be removed from future releases. Use TNRequest instead")
+public typealias TNCall = TNRequest
+
 //MARK: - Custom types
 public typealias TNSuccessCallback<T> = (T)->()
 public typealias TNFailureCallback = (_ error: TNResponseError, _ data: Data?)->()
-public typealias TNBeforeAllRequestsCallback = ()->()
-public typealias TNAfterAllRequestsCallback = ()->()
-public typealias TNBeforeEachRequestCallback = (_ call: TNCall)->()
-public typealias TNAfterEachRequestCallback = (_ call: TNCall, _ data: Data?, _ response: URLResponse?, _ error: Error?)->()
+
 
 //MARK: - Enums
 public enum TNMethod: String {
@@ -34,7 +35,7 @@ public enum TNRequestBodyType: String {
     case JSON = "application/json"
 }
 
-open class TNCall: TNOperation {
+open class TNRequest: TNOperation {
     //MARK: - Static properties
     public static var fixedHeaders = [String: String]()
     public static var allowEmptyResponseBody = false
@@ -51,19 +52,16 @@ open class TNCall: TNOperation {
     private var pathType: SNPathType = .normal
     private var dataTask: URLSessionDataTask?
     private var currentQueue: TNQueue!
+    private var data: Data?
+    private var urlResponse: URLResponse?
+    private var error: TNResponseError?
     
     public var skipBeforeAfterAllRequestsHooks: Bool = false
     internal var cachedRequest: URLRequest!
     
-    // Hooks
-    public static var beforeAllRequestsBlock: TNBeforeAllRequestsCallback?
-    public static var afterAllRequestsBlock: TNAfterAllRequestsCallback?
-    public static var beforeEachRequestBlock: TNBeforeEachRequestCallback?
-    public static var afterEachRequestBlock: TNAfterEachRequestCallback?
-    
     //MARK: - Initializers
     /**
-     Initializes a TNCall request
+     Initializes a TNRequest request
      
      - parameters:
          - method:
@@ -84,7 +82,7 @@ open class TNCall: TNOperation {
     }
     
     /**
-     Initializes a TNCall request
+     Initializes a TNRequest request
      
      - parameters:
          - method:
@@ -98,7 +96,7 @@ open class TNCall: TNOperation {
     }
     
     /**
-     Initializes a TNCall request
+     Initializes a TNRequest request
      
      - parameters:
          - method:
@@ -111,7 +109,7 @@ open class TNCall: TNOperation {
     }
 
     /**
-     Initializes a TNCall request
+     Initializes a TNRequest request
      
      - parameters:
          - route: a TNRouteProtocol enum value
@@ -123,7 +121,7 @@ open class TNCall: TNOperation {
     }
     
     /**
-     Initializes a TNCall request
+     Initializes a TNRequest request
      
      - parameters:
         - route: a TNRouteProtocol enum value
@@ -137,7 +135,7 @@ open class TNCall: TNOperation {
     
     // Convenience method for passing a string instead of path
     /**
-     Initializes a TNCall request
+     Initializes a TNRequest request
      
      - parameters:
         - route: a TNRouteProtocol enum value
@@ -152,7 +150,7 @@ open class TNCall: TNOperation {
     
     // MARK: - Create request
     /**
-     Converts a TNCall instance to asRequest
+     Converts a TNRequest instance to asRequest
     */
     public func asRequest() throws -> URLRequest {
         guard let currentEnvironment = TNEnvironment.current else { throw TNRequestError.environmentNotSet }
@@ -190,10 +188,10 @@ open class TNCall: TNOperation {
         var request = URLRequest(url: url, cachePolicy: cachePolicy, timeoutInterval: currentEnvironment.timeoutInterval)
         
         // Add headers
-        if headers == nil && TNCall.fixedHeaders.keys.count > 0 {
+        if headers == nil && TNRequest.fixedHeaders.keys.count > 0 {
             headers = [:]
         }
-        headers?.merge(TNCall.fixedHeaders, uniquingKeysWith: { (_, new) in new })
+        headers?.merge(TNRequest.fixedHeaders, uniquingKeysWith: { (_, new) in new })
         
         if let headers = headers {
             for (key, value) in headers {
@@ -209,9 +207,9 @@ open class TNCall: TNOperation {
         
         // Set body params if method is not get
         if method != .get {
-            request.addValue(TNCall.requestBodyType.rawValue, forHTTPHeaderField: "Content-Type")
+            request.addValue(TNRequest.requestBodyType.rawValue, forHTTPHeaderField: "Content-Type")
             
-            if TNCall.requestBodyType == .xWWWFormURLEncoded {
+            if TNRequest.requestBodyType == .xWWWFormURLEncoded {
                 request.httpBody = queryString?.data(using: .utf8)
             } else {
                 do {
@@ -229,7 +227,7 @@ open class TNCall: TNOperation {
     
     // Cancelation
     /**
-     Cancels a TNCall started request
+     Cancels a TNRequest started request
      */
     open override func cancel() {
         super.cancel()
@@ -239,26 +237,30 @@ open class TNCall: TNOperation {
     // MARK: - Helper methods
     private func sessionDataTask(request: URLRequest, completionHandler: ((Data)->())?, onFailure: TNFailureCallback?) -> URLSessionDataTask {
         
+        // FIXME: Remove comments
         // Call hooks if needed
-        if TNCall.numberOfRequestsStarted == 0 && !skipBeforeAfterAllRequestsHooks {
+        /*if TNRequest.numberOfRequestsStarted == 0 && !skipBeforeAfterAllRequestsHooks {
             DispatchQueue.main.async {
-                TNCall.beforeAllRequestsBlock?()
+                TNRequest.beforeAllRequestsBlock?()
             }
-        }
-        TNCall.beforeEachRequestBlock?(self)
-        increaseStartedRequests()
+        }*/
+        //TNRequest.beforeEachRequestBlock?(self)
+        //increaseStartedRequests()
         
         let dataTask = URLSession.shared.dataTask(with: request) { data, urlResponse, error in
             var customError: TNResponseError?
             var statusCode: Int?
             
-            self.decreaseStartedRequests()
-            TNCall.afterEachRequestBlock?(self, data, urlResponse, error)
-            if TNCall.numberOfRequestsStarted == 0 && !self.skipBeforeAfterAllRequestsHooks {
+            self.data = data
+            
+            // FIXME: Remove comments
+            /*self.decreaseStartedRequests()
+            TNRequest.afterEachRequestBlock?(self, data, urlResponse, error)
+            if TNRequest.numberOfRequestsStarted == 0 && !self.skipBeforeAfterAllRequestsHooks {
                 DispatchQueue.main.async {
-                    TNCall.afterAllRequestsBlock?()
+                    TNRequest.afterAllRequestsBlock?()
                 }
-            }
+            }*/
             
             // Error handling
             if let error = error {
@@ -276,18 +278,17 @@ open class TNCall: TNOperation {
                 }
             }
             
-            if customError != nil {
+            if (data == nil || data!.isEmpty) && !TNRequest.allowEmptyResponseBody {
+                _ = TNLog(call: self, message: "Empty body received")
+                
+                customError = TNResponseError.responseDataIsEmpty
+            }
+            
+            if let customError = customError {
                 _ = TNLog(call: self, message: "Error: " + (error?.localizedDescription ?? "")! + ", urlResponse:" + (urlResponse?.description ?? "")!)
                 
                 DispatchQueue.main.sync {
-                    onFailure?(customError!, data)
-                }
-            }
-            else if (data == nil || data!.isEmpty) && !TNCall.allowEmptyResponseBody {
-                _ = TNLog(call: self, message: "Empty body received")
-                
-                DispatchQueue.main.sync {
-                    onFailure?(TNResponseError.responseDataIsEmpty, data)
+                    onFailure?(customError, data)
                 }
             } else {
                 completionHandler?(data!)
@@ -297,16 +298,18 @@ open class TNCall: TNOperation {
         return dataTask
     }
     
+    // FIXME: Remove comment
+    /*
     private func increaseStartedRequests() {
         if !skipBeforeAfterAllRequestsHooks {
-            TNCall.numberOfRequestsStarted += 1
+            TNRequest.numberOfRequestsStarted += 1
         }
     }
     private func decreaseStartedRequests() {
         if !skipBeforeAfterAllRequestsHooks {
-            TNCall.numberOfRequestsStarted -= 1
+            TNRequest.numberOfRequestsStarted -= 1
         }
-    }
+    }*/
     
     // MARK: - Operation
     open override func start() {
@@ -319,7 +322,7 @@ open class TNCall: TNOperation {
         _executing = false
         _finished = true
         
-        currentQueue.operationFinished(error: false)
+        currentQueue.operationFinished(request: self, data: data, response: urlResponse, error: error)
     }
     
     func handleDataTaskFailure() {
@@ -335,7 +338,7 @@ open class TNCall: TNOperation {
         _executing = false
         _finished = true
         
-        currentQueue.operationFinished(error: true)
+        currentQueue.operationFinished(request: self, data: data, response: urlResponse, error: error)
     }
     
     // Deserialize objects with Decodable
