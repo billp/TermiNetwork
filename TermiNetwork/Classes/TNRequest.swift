@@ -16,6 +16,12 @@ public typealias TNCall = TNRequest
 public typealias TNSuccessCallback<T> = (T)->()
 public typealias TNFailureCallback = (_ error: TNResponseError, _ data: Data?)->()
 
+// MARK: - DEPRECATED TYPES
+public typealias TNBeforeAllRequestsCallback = ()->()
+public typealias TNAfterAllRequestsCallback = ()->()
+public typealias TNBeforeEachRequestCallback = (_ call: TNRequest)->()
+public typealias TNAfterEachRequestCallback = (_ call: TNRequest, _ data: Data?, _ response: URLResponse?, _ error: Error?)->()
+
 
 //MARK: - Enums
 public enum TNMethod: String {
@@ -42,7 +48,7 @@ open class TNRequest: TNOperation {
     public static var requestBodyType: TNRequestBodyType = .xWWWFormURLEncoded
     static private var numberOfRequestsStarted: Int = 0
 
-    //MARK: - Instance properties
+    // MARK: - Instance properties
     internal var method: TNMethod!
     private var headers: [String: String]?
     public var cachePolicy: URLRequest.CachePolicy
@@ -54,7 +60,43 @@ open class TNRequest: TNOperation {
     private var currentQueue: TNQueue!
     private var data: Data?
     private var urlResponse: URLResponse?
-    private var error: TNResponseError?
+    private var responseError: TNResponseError?
+    
+    
+    // MARK: - Deprecations
+    @available(*, deprecated, message: "beforeAllRequestsBlock Hook is deprecated and will be removed from future releases. Use TNQueue hooks instead. All TNCall hooks are forewarded to TNQueue.shared.[HOOK]. See docs for more info.")
+    public static var beforeAllRequestsBlock: TNBeforeAllRequestsCallback? {
+        didSet {
+            TNQueue.shared.beforeAllRequestsCallback = {
+                beforeAllRequestsBlock?()
+            }
+        }
+    }
+    @available(*, deprecated, message: "afterAllRequestsBlock Hook is deprecated and will be removed from future releases. Use TNQueue hooks instead. All TNCall hooks are forewarded to TNQueue.shared.[HOOK]. See docs for more info.")
+    public static var afterAllRequestsBlock: TNAfterAllRequestsCallback? {
+        didSet {
+            TNQueue.shared.afterAllRequestsCallback = { _ in
+                afterAllRequestsBlock?()
+            }
+        }
+    }
+    @available(*, deprecated, message: "beforeEachRequestBlock Hook is deprecated and will be removed from future releases. Use TNQueue hooks instead. All TNCall hooks are forewarded to TNQueue.shared.[HOOK]. See docs for more info.")
+    public static var beforeEachRequestBlock: TNBeforeEachRequestCallback? {
+        didSet {
+            TNQueue.shared.beforeEachRequestCallback = { request in
+                beforeEachRequestBlock?(request)
+            }
+        }
+    }
+    @available(*, deprecated, message: "afterEachRequestBlock Hook is deprecated and will be removed from future releases. Use TNQueue hooks instead. All TNCall hooks are forewarded to TNQueue.shared.[HOOK]. See docs for more info.")
+    public static var afterEachRequestBlock: TNAfterEachRequestCallback? {
+        didSet {
+            TNQueue.shared.afterEachRequestCallback = { request, data, response, error in
+                afterEachRequestBlock?(request, data, response, error)
+            }
+        }
+    }
+
     
     public var skipBeforeAfterAllRequestsHooks: Bool = false
     internal var cachedRequest: URLRequest!
@@ -248,7 +290,6 @@ open class TNRequest: TNOperation {
         //increaseStartedRequests()
         
         let dataTask = URLSession.shared.dataTask(with: request) { data, urlResponse, error in
-            var customError: TNResponseError?
             var statusCode: Int?
             
             self.data = data
@@ -265,30 +306,31 @@ open class TNRequest: TNOperation {
             // Error handling
             if let error = error {
                 if (error as NSError).code == NSURLErrorCancelled {
-                    customError = TNResponseError.cancelled(error)
+                    self.responseError = TNResponseError.cancelled(error)
                 } else {
-                    customError = TNResponseError.networkError(error)
+                    self.responseError = TNResponseError.networkError(error)
                 }
             }
             else if let response = urlResponse as? HTTPURLResponse {
                 statusCode = response.statusCode as Int?
             
                 if statusCode != nil && statusCode! / 100 != 2 {
-                    customError = TNResponseError.notSuccess(statusCode!)
+                    self.responseError = TNResponseError.notSuccess(statusCode!)
                 }
             }
             
             if (data == nil || data!.isEmpty) && !TNRequest.allowEmptyResponseBody {
                 _ = TNLog(call: self, message: "Empty body received")
                 
-                customError = TNResponseError.responseDataIsEmpty
+                self.responseError = TNResponseError.responseDataIsEmpty
             }
             
-            if let customError = customError {
+            if let responseError = self.responseError {
                 _ = TNLog(call: self, message: "Error: " + (error?.localizedDescription ?? "")! + ", urlResponse:" + (urlResponse?.description ?? "")!)
                 
                 DispatchQueue.main.sync {
-                    onFailure?(customError, data)
+                    onFailure?(responseError, data)
+                    self.handleDataTaskFailure()
                 }
             } else {
                 completionHandler?(data!)
@@ -296,6 +338,9 @@ open class TNRequest: TNOperation {
         }
         
         return dataTask
+    }
+    
+    func callBeforeRequestHoooks() {
     }
     
     // FIXME: Remove comment
@@ -322,7 +367,7 @@ open class TNRequest: TNOperation {
         _executing = false
         _finished = true
         
-        currentQueue.operationFinished(request: self, data: data, response: urlResponse, error: error)
+        currentQueue.afterOperationFinished(request: self, data: data, response: urlResponse, error: responseError)
     }
     
     func handleDataTaskFailure() {
@@ -338,7 +383,7 @@ open class TNRequest: TNOperation {
         _executing = false
         _finished = true
         
-        currentQueue.operationFinished(request: self, data: data, response: urlResponse, error: error)
+        currentQueue.afterOperationFinished(request: self, data: data, response: urlResponse, error: responseError)
     }
     
     // Deserialize objects with Decodable
@@ -352,7 +397,8 @@ open class TNRequest: TNOperation {
      */
     public func start<T>(queue: TNQueue? = TNQueue.shared, onSuccess: TNSuccessCallback<T>?, onFailure: TNFailureCallback?) throws where T: Decodable {
         currentQueue = queue ?? TNQueue.shared
-        
+        currentQueue.beforeOperationStart(request: self)
+
         dataTask = sessionDataTask(request: try asRequest(), completionHandler: { data in
             let object: T!
             
@@ -391,6 +437,7 @@ open class TNRequest: TNOperation {
      */
     public func start<T>(queue: TNQueue? = TNQueue.shared, onSuccess: TNSuccessCallback<T>?, onFailure: TNFailureCallback?) throws where T: UIImage {
         currentQueue = queue
+        currentQueue.beforeOperationStart(request: self)
         
         dataTask = sessionDataTask(request: try asRequest(), completionHandler: { data in
             let image = T(data: data)
@@ -429,6 +476,7 @@ open class TNRequest: TNOperation {
      */
     public func start(queue: TNQueue? = TNQueue.shared, onSuccess: TNSuccessCallback<Data>?, onFailure: TNFailureCallback?) throws {
         currentQueue = queue
+        currentQueue.beforeOperationStart(request: self)
         
         dataTask = sessionDataTask(request: try asRequest(), completionHandler: { data in
             DispatchQueue.main.async {

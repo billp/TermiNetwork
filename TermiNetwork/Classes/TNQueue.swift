@@ -14,9 +14,8 @@ public enum TNQueueFailureMode {
 
 public typealias TNBeforeAllRequestsCallbackType = ()->()
 public typealias TNAfterAllRequestsCallbackType = (_ error: Bool)->()
-public typealias TNBeforeEachRequestCallbackType = (_ call: TNRequest)->()
+public typealias TNBeforeEachRequestCallbackType = (_ request: TNRequest)->()
 public typealias TNAfterEachRequestCallbackType = (_ request: TNRequest, _ data: Data?, _ response: URLResponse?, _ error: Error?)->()
-
 
 open class TNQueue: OperationQueue {
     // MARK: - Static variables
@@ -45,8 +44,14 @@ open class TNQueue: OperationQueue {
         self.failureMode = failureMode
     }
     
-    internal func operationFinished(request: TNRequest, data: Data?, response: URLResponse?, error: Error?) {
-        // Keep if there is an error if any request failed
+    internal func beforeOperationStart(request: TNRequest) {
+        if operationCount == 0 {
+            beforeAllRequestsCallback?()
+        }
+        beforeEachRequestCallback?(request)
+    }
+    
+    internal func afterOperationFinished(request: TNRequest, data: Data?, response: URLResponse?, error: Error?) {
         self.completedWithError = error != nil ? true : self.completedWithError
         
         if self.operationCount == 0 {

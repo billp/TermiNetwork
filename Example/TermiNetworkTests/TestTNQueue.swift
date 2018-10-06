@@ -27,7 +27,7 @@ class TestTNQueue: XCTestCase {
         let queue = TNQueue()
         let expectation = XCTestExpectation(description: "Test queue")
 
-        queue.completedCallback = { error in
+        queue.afterAllRequestsCallback = { error in
             expectation.fulfill()
         }
         
@@ -52,7 +52,7 @@ class TestTNQueue: XCTestCase {
         let urls = ["http://google.com", "http://google.com", "http://google.com", "http://google.com", "http://google.com", "http://google.com", "http://google.com"]
         var numberOfRequests = urls.count
 
-        queue.completedCallback = { error in
+        queue.afterAllRequestsCallback = { error in
             completedWithError = error
             expectation.fulfill()
         }
@@ -79,7 +79,7 @@ class TestTNQueue: XCTestCase {
         var numberOfRequests = urls.count
 
 
-        queue.completedCallback = { error in
+        queue.afterAllRequestsCallback = { error in
             completedWithError = error
             expectation.fulfill()
         }
@@ -105,7 +105,7 @@ class TestTNQueue: XCTestCase {
         var numberOfRequests = urls.count
         var completedWithError = false
         
-        queue.completedCallback = { error in
+        queue.afterAllRequestsCallback = { error in
             completedWithError = error
             expectation.fulfill()
         }
@@ -130,7 +130,7 @@ class TestTNQueue: XCTestCase {
         var numberOfRequests = urls.count
         var completedWithError = false
         
-        queue.completedCallback = { error in
+        queue.afterAllRequestsCallback = { error in
             completedWithError = error
             expectation.fulfill()
         }
