@@ -316,11 +316,11 @@ open class TNRequest: TNOperation {
             
                 if statusCode != nil && statusCode! / 100 != 2 {
                     self.responseError = TNResponseError.notSuccess(statusCode!)
+                } else if (data == nil || data!.isEmpty) && !TNRequest.allowEmptyResponseBody {
+                    _ = TNLog(call: self, message: "Empty body received")
+                    
+                    self.responseError = TNResponseError.responseDataIsEmpty
                 }
-            } else if (data == nil || data!.isEmpty) && !TNRequest.allowEmptyResponseBody {
-                _ = TNLog(call: self, message: "Empty body received")
-                
-                self.responseError = TNResponseError.responseDataIsEmpty
             }
             
             if let responseError = self.responseError {
