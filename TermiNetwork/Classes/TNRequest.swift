@@ -317,9 +317,7 @@ open class TNRequest: TNOperation {
                 if statusCode != nil && statusCode! / 100 != 2 {
                     self.responseError = TNResponseError.notSuccess(statusCode!)
                 }
-            }
-            
-            if (data == nil || data!.isEmpty) && !TNRequest.allowEmptyResponseBody {
+            } else if (data == nil || data!.isEmpty) && !TNRequest.allowEmptyResponseBody {
                 _ = TNLog(call: self, message: "Empty body received")
                 
                 self.responseError = TNResponseError.responseDataIsEmpty
@@ -328,7 +326,7 @@ open class TNRequest: TNOperation {
             if let responseError = self.responseError {
                 _ = TNLog(call: self, message: "Error: " + (error?.localizedDescription ?? "")! + ", urlResponse:" + (urlResponse?.description ?? "")!)
                 
-                DispatchQueue.main.sync {
+                DispatchQueue.main.async {
                     onFailure?(responseError, data)
                     self.handleDataTaskFailure()
                 }

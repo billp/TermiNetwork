@@ -151,7 +151,7 @@ class TestTNQueue: XCTestCase {
         let queue = TNQueue()
         let expectation = XCTestExpectation(description: "testQueueCancellation")
         
-        TNRequest.afterAllRequestsBlock = {
+        queue.afterAllRequestsCallback = { error in
             DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: {
                 expectation.fulfill()
             })
@@ -189,6 +189,7 @@ class TestTNQueue: XCTestCase {
             }) { error, data in
                 
                 if case .cancelled(_) = error {
+                    
                 } else {
                     numberOfRequests -= 1
                 }
@@ -208,10 +209,9 @@ class TestTNQueue: XCTestCase {
         var numberOfRequests = 8
         let queue = TNQueue(failureMode: .cancelAll)
         let expectation = XCTestExpectation(description: "testQueueFailureModeContinue")
-        
         queue.maxConcurrentOperationCount = 1
         
-        TNRequest.afterAllRequestsBlock = {
+        queue.afterAllRequestsCallback = { error in
             DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: {
                 expectation.fulfill()
             })

@@ -109,26 +109,24 @@ class TestTNRequest: XCTestCase {
     
     func testBeforeAllRequests() {
         let expectation = XCTestExpectation(description: "Test beforeEachRequestCallback")
-        self.sampleRequest()
-
-        TNRequest.afterAllRequestsBlock = {
-            TNRequest.beforeAllRequestsBlock = {
-                expectation.fulfill()
-            }
-            
-            self.sampleRequest()
-            self.sampleRequest()
-            self.sampleRequest()
+        let queue = TNQueue()
+        queue.beforeAllRequestsCallback = {
+            expectation.fulfill()
         }
         
-        
+        self.sampleRequest(queue: queue)
+        self.sampleRequest(queue: queue)
+        self.sampleRequest(queue: queue)
+
 
         wait(for: [expectation], timeout: 10)
 
-        XCTAssert(true)
+        XCTAssert(queue.operationCount == 3)
     }
     
-    func testBeforeAllRequestsSkipHooks() {
+    
+    // FIXME: To be removed
+    /*func testBeforeAllRequestsSkipHooks() {
         let expectation = XCTestExpectation(description: "Test beforeEachRequestCallback skip hooks")
         var failed = false
         
@@ -150,9 +148,10 @@ class TestTNRequest: XCTestCase {
         wait(for: [expectation], timeout: 10)
         
         XCTAssert(!failed)
-    }
+    }*/
     
-    func testAfterAllRequestsSkipHooks() {
+    // FIXME: To be removed
+   /* func testAfterAllRequestsSkipHooks() {
         let expectation = XCTestExpectation(description: "Test beforeEachRequestCallback skip hooks")
         var failed = false
         
@@ -161,7 +160,7 @@ class TestTNRequest: XCTestCase {
                 expectation.fulfill()
             })
 
-            TNRequest.afterAllRequestsBlock = {
+            TNQueue.shared.afterAllRequestsCallback = { error in
                 failed = true
             }
         }
@@ -170,12 +169,11 @@ class TestTNRequest: XCTestCase {
         wait(for: [expectation], timeout: 10)
         
         XCTAssert(!failed)
-    }
+    }*/
     
     func testAfterAllRequests() {
         let expectation = XCTestExpectation(description: "Test beforeEachRequestCallback")
-        
-        TNRequest.afterAllRequestsBlock = {
+        TNQueue.shared.afterAllRequestsCallback = { error in
             expectation.fulfill()
         }
         
@@ -192,7 +190,7 @@ class TestTNRequest: XCTestCase {
         let expectation = XCTestExpectation(description: "Test beforeEachRequestCallback")
         var failed = true
         
-        TNRequest.beforeEachRequestBlock = { _ in
+        TNQueue.shared.beforeEachRequestCallback = { _ in
             expectation.fulfill()
             failed = false
         }
@@ -206,8 +204,9 @@ class TestTNRequest: XCTestCase {
     func testAfterEachRequest() {
         let expectation = XCTestExpectation(description: "Test afterEachRequestCallback")
         var failed = true
+        TNQueue.shared.cancelAllOperations()
         
-        TNRequest.afterEachRequestBlock = { call, data, URLResponse, error in
+        TNQueue.shared.afterEachRequestCallback = { call, data, URLResponse, error in
             failed = false
             expectation.fulfill()
         }
@@ -219,13 +218,13 @@ class TestTNRequest: XCTestCase {
     }
     
     
-    func sampleRequest(skipBeforeAfterAllRequestsHooks: Bool = false, onSuccess: TNSuccessCallback<TestJSONParams>? = nil) {
+    func sampleRequest(skipBeforeAfterAllRequestsHooks: Bool = false, queue: TNQueue? = TNQueue.shared, onSuccess: TNSuccessCallback<TestJSONParams>? = nil) {
         
         TNRequest.requestBodyType = .JSON
         
         let call = TNRequest(route: APIRouter.testPostParams(value1: true, value2: 3, value3: 5.13453124189, value4: "test", value5: nil))
         call.skipBeforeAfterAllRequestsHooks = skipBeforeAfterAllRequestsHooks
         
-        try? call.start(onSuccess: onSuccess, onFailure: nil)
+        try? call.start(queue: queue, onSuccess: onSuccess, onFailure: nil)
     }
 }
