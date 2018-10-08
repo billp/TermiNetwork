@@ -35,6 +35,8 @@
 		595573E0216BA09F004F51B9 /* TNRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 595573DF216BA09F004F51B9 /* TNRouter.swift */; };
 		595573E1216BA09F004F51B9 /* TNRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 595573DF216BA09F004F51B9 /* TNRouter.swift */; };
 		59B7A77920A1E85C005FE146 /* UIImageView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59B7A77720A1E17A005FE146 /* UIImageView+Extensions.swift */; };
+		59F7B859216BD50900295218 /* TNRequest_Deprecated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59F7B858216BD50900295218 /* TNRequest_Deprecated.swift */; };
+		59F7B85A216BD51700295218 /* TNRequest_Deprecated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59F7B858216BD50900295218 /* TNRequest_Deprecated.swift */; };
 		6CA583938BDBDA21F5619DAEA1177D2F /* TNRouteProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C8DC2F714F5DC96A8993405627139D4 /* TNRouteProtocol.swift */; };
 		8002A6337BAC15CE7A571D51E273A588 /* TNRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC751BBF65F7719E64526102E964970F /* TNRequest.swift */; };
 		86C40BF47CF2B22A61F272CA3496A0B7 /* SVProgressAnimatedView.h in Headers */ = {isa = PBXBuildFile; fileRef = 9E71CFC73DB55784D0519F97BA41F995 /* SVProgressAnimatedView.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -83,6 +85,7 @@
 		595238C420BC083400E036EA /* TNQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TNQueue.swift; path = TermiNetwork/Classes/TNQueue.swift; sourceTree = "<group>"; };
 		595573DF216BA09F004F51B9 /* TNRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TNRouter.swift; path = TermiNetwork/Classes/TNRouter.swift; sourceTree = "<group>"; };
 		59B7A77720A1E17A005FE146 /* UIImageView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+Extensions.swift"; sourceTree = "<group>"; };
+		59F7B858216BD50900295218 /* TNRequest_Deprecated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TNRequest_Deprecated.swift; path = TermiNetwork/Classes/TNRequest_Deprecated.swift; sourceTree = "<group>"; };
 		67FA4ABF3DE9885D9F5B949B4EA717CA /* Pods_TermiNetwork_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TermiNetwork_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		689467ACD19D7F44FA1E4CF9E57C9AF3 /* TermiNetwork-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "TermiNetwork-umbrella.h"; sourceTree = "<group>"; };
 		6941A9A472630895CED61BF8945A0A86 /* SVProgressHUD-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "SVProgressHUD-dummy.m"; sourceTree = "<group>"; };
@@ -157,6 +160,7 @@
 				DC54F14DB9029A8AABF8A9FF7B5DB580 /* TNEnvironment.swift */,
 				594E0F8620B94DF6006378C3 /* TNOperation.swift */,
 				AC751BBF65F7719E64526102E964970F /* TNRequest.swift */,
+				59F7B858216BD50900295218 /* TNRequest_Deprecated.swift */,
 				6FB225AEBCD31AA5B9E07CFFD10C0C6E /* TNPath.swift */,
 				3C8DC2F714F5DC96A8993405627139D4 /* TNRouteProtocol.swift */,
 				375EC4D5BAA325127274889B6254FCDB /* TNErrors.swift */,
@@ -488,6 +492,7 @@
 				594D5942216507AD00B0C0EE /* Data+Extensions.swift in Sources */,
 				594D593D216505F500B0C0EE /* TNPath.swift in Sources */,
 				594E0F8720B94DF6006378C3 /* TNOperation.swift in Sources */,
+				59F7B859216BD50900295218 /* TNRequest_Deprecated.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -507,6 +512,7 @@
 				D4C5F35E6EE22343326C8DF8CA8D6E79 /* TNLog.swift in Sources */,
 				33B125D69C60ECF0218491842EFFF5A8 /* TNPath.swift in Sources */,
 				6CA583938BDBDA21F5619DAEA1177D2F /* TNRouteProtocol.swift in Sources */,
+				59F7B85A216BD51700295218 /* TNRequest_Deprecated.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

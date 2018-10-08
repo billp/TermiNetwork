@@ -45,23 +45,25 @@ open class TNRequest: TNOperation {
     //MARK: - Static properties
     public static var fixedHeaders = [String: String]()
     public static var allowEmptyResponseBody = false
-    public var requestBodyType: TNRequestBodyType = .xWWWFormURLEncoded
-    static private var numberOfRequestsStarted: Int = 0
 
-    // MARK: - Instance properties
+    // MARK: - Internal properties
     internal var method: TNMethod!
+    internal var currentQueue: TNQueue!
+    internal var dataTask: URLSessionDataTask?
+    
+    // MARK: - Private properties
     private var headers: [String: String]?
-    public var cachePolicy: URLRequest.CachePolicy
-    public var timeoutInterval: TimeInterval?
     private var path: String
     private var params: [String: Any?]?
     private var pathType: SNPathType = .normal
-    private var dataTask: URLSessionDataTask?
-    private var currentQueue: TNQueue!
     private var data: Data?
     private var urlResponse: URLResponse?
     private var responseError: TNResponseError?
     
+    // MARK: - Public properties
+    public var cachePolicy: URLRequest.CachePolicy
+    public var timeoutInterval: TimeInterval?
+    public var requestBodyType: TNRequestBodyType = .xWWWFormURLEncoded
     
     // MARK: - Deprecations
     @available(*, deprecated, message: "beforeAllRequestsBlock Hook is deprecated and will be removed from future releases. Use TNQueue hooks instead. All TNCall hooks are forewarded to TNQueue.shared.[HOOK]. See docs for more info.")
@@ -280,32 +282,13 @@ open class TNRequest: TNOperation {
     }
     
     // MARK: - Helper methods
-    private func sessionDataTask(request: URLRequest, completionHandler: ((Data)->())?, onFailure: TNFailureCallback?) -> URLSessionDataTask {
-        
-        // FIXME: Remove comments
-        // Call hooks if needed
-        /*if TNRequest.numberOfRequestsStarted == 0 && !skipBeforeAfterAllRequestsHooks {
-            DispatchQueue.main.async {
-                TNRequest.beforeAllRequestsBlock?()
-            }
-        }*/
-        //TNRequest.beforeEachRequestBlock?(self)
-        //increaseStartedRequests()
+    internal func sessionDataTask(request: URLRequest, completionHandler: ((Data)->())?, onFailure: TNFailureCallback?) -> URLSessionDataTask {
         
         let dataTask = URLSession.shared.dataTask(with: request) { data, urlResponse, error in
             var statusCode: Int?
             
             self.data = data
-            
-            // FIXME: Remove comments
-            /*self.decreaseStartedRequests()
-            TNRequest.afterEachRequestBlock?(self, data, urlResponse, error)
-            if TNRequest.numberOfRequestsStarted == 0 && !self.skipBeforeAfterAllRequestsHooks {
-                DispatchQueue.main.async {
-                    TNRequest.afterAllRequestsBlock?()
-                }
-            }*/
-            
+           
             // Error handling
             if let error = error {
                 if (error as NSError).code == NSURLErrorCancelled {
@@ -343,19 +326,6 @@ open class TNRequest: TNOperation {
     
     func callBeforeRequestHoooks() {
     }
-    
-    // FIXME: Remove comment
-    /*
-    private func increaseStartedRequests() {
-        if !skipBeforeAfterAllRequestsHooks {
-            TNRequest.numberOfRequestsStarted += 1
-        }
-    }
-    private func decreaseStartedRequests() {
-        if !skipBeforeAfterAllRequestsHooks {
-            TNRequest.numberOfRequestsStarted -= 1
-        }
-    }*/
     
     // MARK: - Operation
     open override func start() {
@@ -396,7 +366,7 @@ open class TNRequest: TNOperation {
         - onSuccess: specifies a success callback of type TNSuccessCallback<T> (optional)
         - onFailure: specifies a failure callback of type TNFailureCallback<T> (optional)
      */
-    public func start<T>(queue: TNQueue? = TNQueue.shared, onSuccess: TNSuccessCallback<T>?, onFailure: TNFailureCallback?) throws where T: Decodable {
+    public func start<T>(queue: TNQueue? = TNQueue.shared, responseType: T.Type, onSuccess: TNSuccessCallback<T>?, onFailure: TNFailureCallback?) throws where T: Decodable {
         currentQueue = queue ?? TNQueue.shared
         currentQueue.beforeOperationStart(request: self)
 
@@ -436,7 +406,7 @@ open class TNRequest: TNOperation {
          - onSuccess: specifies a success callback of type TNSuccessCallback<T> (optional)
          - onFailure: specifies a failure callback of type TNFailureCallback<T> (optional)
      */
-    public func start<T>(queue: TNQueue? = TNQueue.shared, onSuccess: TNSuccessCallback<T>?, onFailure: TNFailureCallback?) throws where T: UIImage {
+    public func start<T>(queue: TNQueue? = TNQueue.shared, responseType: T.Type, onSuccess: TNSuccessCallback<T>?, onFailure: TNFailureCallback?) throws where T: UIImage {
         currentQueue = queue
         currentQueue.beforeOperationStart(request: self)
         
@@ -475,7 +445,7 @@ open class TNRequest: TNOperation {
          - onSuccess: specifies a success callback of type TNSuccessCallback<T> (optional)
          - onFailure: specifies a failure callback of type TNFailureCallback<T> (optional)
      */
-    public func start(queue: TNQueue? = TNQueue.shared, onSuccess: TNSuccessCallback<Data>?, onFailure: TNFailureCallback?) throws {
+    public func start(queue: TNQueue? = TNQueue.shared, responseType: Data.Type, onSuccess: TNSuccessCallback<Data>?, onFailure: TNFailureCallback?) throws {
         currentQueue = queue
         currentQueue.beforeOperationStart(request: self)
         

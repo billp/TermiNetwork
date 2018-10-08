@@ -26,7 +26,7 @@ class TestTNRequestErrors: XCTestCase {
         TNEnvironment.current = nil
         
         do {
-            try TNRequest(method: .get, url: "http://www.google.com", params: nil).start(onSuccess: { data in
+            try TNRequest(method: .get, url: "http://www.google.com", params: nil).start(responseType: UIImage.self, onSuccess: { data in
                 XCTAssert(false)
             }) { error, data in
                 XCTAssert(false)

@@ -221,6 +221,6 @@ class TestTNRequest: XCTestCase {
         let call = TNRequest(route: APIRouter.testPostParams(value1: true, value2: 3, value3: 5.13453124189, value4: "test", value5: nil))
         call.requestBodyType = .JSON
         
-        try? call.start(queue: queue, onSuccess: onSuccess, onFailure: nil)
+        try? call.start(queue: queue, responseType: TestJSONParams.self, onSuccess: onSuccess, onFailure: nil)
     }
 }

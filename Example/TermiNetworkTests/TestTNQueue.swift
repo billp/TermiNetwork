@@ -32,7 +32,7 @@ class TestTNQueue: XCTestCase {
         }
         
         for _ in 1...numberOfRequests {
-            try? TNRequest(method: .get, url: "http://google.com", params: nil).start(queue: queue, onSuccess: { _ in
+            try? TNRequest(method: .get, url: "http://google.com", params: nil).start(queue: queue, responseType: Data.self, onSuccess: { _ in
                 numberOfRequests -= 1
             }) { error, data in
                 numberOfRequests -= 1
@@ -58,7 +58,7 @@ class TestTNQueue: XCTestCase {
         }
         
         for index in 0...numberOfRequests-1 {
-            try? TNRequest(method: .get, url: urls[index], params: nil).start(queue: queue, onSuccess: { _ in
+            try? TNRequest(method: .get, url: urls[index], params: nil).start(queue: queue, responseType: Data.self, onSuccess: { _ in
                 numberOfRequests -= 1
             }) { error, data in
                 numberOfRequests -= 1
@@ -85,7 +85,7 @@ class TestTNQueue: XCTestCase {
         }
         
         for index in 0...numberOfRequests-1 {
-            try? TNRequest(method: .get, url: urls[index], params: nil).start(queue: queue, onSuccess: { _ in
+            try? TNRequest(method: .get, url: urls[index], params: nil).start(queue: queue, responseType: Data.self, onSuccess: { _ in
                 numberOfRequests -= 1
             }) { _, _ in
                 numberOfRequests -= 1
@@ -111,7 +111,7 @@ class TestTNQueue: XCTestCase {
         }
         
         for index in 0...numberOfRequests-1 {
-            try? TNRequest(method: .get, url: urls[index], params: nil).start(queue: queue, onSuccess: { _ in
+            try? TNRequest(method: .get, url: urls[index], params: nil).start(queue: queue, responseType: Data.self, onSuccess: { _ in
                 numberOfRequests -= 1
             }) { error, data in
                 numberOfRequests -= 1
@@ -136,7 +136,7 @@ class TestTNQueue: XCTestCase {
         }
         
         for index in 0...numberOfRequests-1 {
-            try? TNRequest(method: .get, url: urls[index], params: nil).start(queue: queue, onSuccess: { _ in
+            try? TNRequest(method: .get, url: urls[index], params: nil).start(queue: queue, responseType: Data.self, onSuccess: { _ in
                 numberOfRequests -= 1
             }) { _, _ in }
         }
@@ -158,7 +158,7 @@ class TestTNQueue: XCTestCase {
         }
         
         for _ in 1...numberOfRequests {
-            try? TNRequest(method: .get, url: "http://google.com", params: nil).start(queue: queue, onSuccess: { _ in
+            try? TNRequest(method: .get, url: "http://google.com", params: nil).start(queue: queue, responseType: Data.self, onSuccess: { _ in
                 numberOfRequests -= 1
             }) { error, data in
                 numberOfRequests -= 1
@@ -184,7 +184,7 @@ class TestTNQueue: XCTestCase {
             
             let call = TNRequest(method: .get, url: url, params: nil)
             
-            try? call.start(queue: queue, onSuccess: { _ in
+            try? call.start(queue: queue, responseType: Data.self, onSuccess: { _ in
                 numberOfRequests -= 1
             }) { error, data in
                 
@@ -222,7 +222,7 @@ class TestTNQueue: XCTestCase {
             
             let call = TNRequest(method: .get, url: url, params: nil)
             
-            try? call.start(queue: queue, onSuccess: { _ in
+            try? call.start(queue: queue, responseType: Data.self, onSuccess: { _ in
                 numberOfRequests -= 1
             }) { error, data in
                 
