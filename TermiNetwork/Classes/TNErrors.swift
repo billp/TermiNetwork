@@ -34,7 +34,7 @@ extension TNError: LocalizedError {
         case .invalidParams:
             return NSLocalizedString("The parameters are not valid", comment: "TNResponseError")
         case .responseDataIsEmpty:
-            return NSLocalizedString("The response data is empty. Set TNCall.allowEmptyResponseBody to true to avoid this error", comment: "TNResponseError")
+            return NSLocalizedString("The response data is empty. Set TNRequest.allowEmptyResponseBody to true get rid of this error", comment: "TNResponseError")
         case .responseInvalidImageData:
             return NSLocalizedString("The response data is not a valid image", comment: "TNResponseError")
         case .cannotDeserialize(let error):

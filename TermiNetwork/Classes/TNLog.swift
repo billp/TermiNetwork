@@ -9,27 +9,32 @@
 import Foundation
 
 internal class TNLog {
-    init(call: TNRequest, message: String, responseData: Data? = nil) {
+     static func logRequest(request: TNRequest) {
         guard TNEnvironment.verbose else { return }
         
-        let url = call.cachedRequest?.url?.absoluteString ?? "n/a"
-        let headers = call.cachedRequest?.allHTTPHeaderFields
+        let url = request.cachedRequest?.url?.absoluteString ?? "n/a"
+        let headers = request.cachedRequest?.allHTTPHeaderFields
         
-        print("----------------------------------")
-        print(">>> TermiNetwork request BEGIN <<<")
-        print("----------------------------------")
-        print("URL             : " + url)
-        print("Method          : " + call.method.rawValue)
+        print("--------------------------------")
+        print("🌎 URL: " + url)
+        print("🎛️ Method: " + request.method.rawValue)
         if let headers = headers, headers.keys.count > 0 {
-            print("Request Headers : " + headers.description)
+            print("📃 Request Headers: " + headers.description)
         }
-        print("Message         : " + message)
-        if let data = responseData {
-            print("Response        : \n" + (data.toJSONString() ?? "[non-printable]")!)
+        if let customError = request.customError {
+            print("❌ Error: " + customError.description)
+        } else if let response = request.urlResponse as? HTTPURLResponse {
+            print("✅ Status: " + String(response.statusCode))
         }
-        print("--------------------------------")
-        print(">>> TermiNetwork request END <<<")
-        print("--------------------------------")
-        print()
+        
+        if let data = request.data {
+            if let responseJSON = data.toJSONString() {
+                print("📦 Response: \n" + responseJSON)
+            } else if let stringResponse = String(data: data, encoding: .utf8) {
+                print("📦 Response: " + (stringResponse.isEmpty ? "[empty-response]" : stringResponse))
+            } else {
+                print("📦 Response: [not-printable]")
+            }
+        }
     }
 }

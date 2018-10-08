@@ -50,15 +50,16 @@ open class TNRequest: TNOperation {
     internal var method: TNMethod!
     internal var currentQueue: TNQueue!
     internal var dataTask: URLSessionDataTask?
-    
+    internal var customError: TNError?
+    internal var data: Data?
+    internal var urlResponse: URLResponse?
+
     // MARK: - Private properties
     private var headers: [String: String]?
     private var path: String
     private var params: [String: Any?]?
     private var pathType: SNPathType = .normal
-    private var data: Data?
-    private var urlResponse: URLResponse?
-    private var customError: TNError?
+
     
     // MARK: - Public properties
     public var cachePolicy: URLRequest.CachePolicy
@@ -286,9 +287,9 @@ open class TNRequest: TNOperation {
         
         let dataTask = URLSession.shared.dataTask(with: request) { data, urlResponse, error in
             var statusCode: Int?
-            
             self.data = data
-           
+            self.urlResponse = urlResponse
+
             // Error handling
             if let error = error {
                 if (error as NSError).code == NSURLErrorCancelled {
@@ -303,16 +304,13 @@ open class TNRequest: TNOperation {
                 if statusCode != nil && statusCode! / 100 != 2 {
                     self.customError = TNError.notSuccess(statusCode!)
                 } else if (data == nil || data!.isEmpty) && !TNRequest.allowEmptyResponseBody {
-                    _ = TNLog(call: self, message: "Empty body received")
-                    
                     self.customError = TNError.responseDataIsEmpty
                 }
             }
-            
+
             if let customError = self.customError {
-                _ = TNLog(call: self, message: "Error: " + customError.description + ", urlResponse:" + (urlResponse?.description ?? "")!)
-                
                 DispatchQueue.main.async {
+                    TNLog.logRequest(request: self)
                     onFailure?(customError, data)
                     self.handleDataTaskFailure()
                 }
@@ -384,15 +382,15 @@ open class TNRequest: TNOperation {
             do {
                 object = try data.deserializeJSONData() as T
             } catch let error {
-                _ = TNLog(call: self, message: error.localizedDescription, responseData: data)
+                self.customError = .cannotDeserialize(error)
+                TNLog.logRequest(request: self)
                 onFailure?(.cannotDeserialize(error), data)
                 self.handleDataTaskFailure()
                 return
             }
             
-            _ = TNLog(call: self, message: "Successfully deserialized data (\(String(describing: T.self)))", responseData: data)
-
             DispatchQueue.main.sync {
+                TNLog.logRequest(request: self)
                 onSuccess?(object)
             }
             
@@ -430,7 +428,8 @@ open class TNRequest: TNOperation {
             let image = T(data: data)
             
             if image == nil {
-                _ = TNLog(call: self, message: "Unable to deserialize image (data not an image)")
+                self.customError = .responseInvalidImageData
+                TNLog.logRequest(request: self)
 
                 DispatchQueue.main.sync {
                     onFailure?(.responseInvalidImageData, data)
@@ -438,8 +437,7 @@ open class TNRequest: TNOperation {
                 self.handleDataTaskFailure()
             } else {
                 DispatchQueue.main.sync {
-                    _ = TNLog(call: self, message: "Successfully deserialized image")
-
+                    TNLog.logRequest(request: self)
                     onSuccess?(image!)
                 }
                 self.handleDataTaskCompleted()
@@ -475,6 +473,7 @@ open class TNRequest: TNOperation {
         
         dataTask = sessionDataTask(request: request, completionHandler: { data in
             DispatchQueue.main.async {
+                TNLog.logRequest(request: self)
                 onSuccess?(data)
             }
             self.handleDataTaskCompleted()
