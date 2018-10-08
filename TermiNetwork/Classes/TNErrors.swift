@@ -9,14 +9,10 @@
 import Foundation
 
 // Errors before execution of a request
-public enum TNRequestError: Error {
+public enum TNError: Error {
     case invalidURL
     case environmentNotSet
     case invalidParams
-}
-
-// Errors after execution of a request
-public enum TNResponseError: Error {
     case responseDataIsEmpty
     case responseInvalidImageData
     case cannotDeserialize(Error)
@@ -25,8 +21,11 @@ public enum TNResponseError: Error {
     case cancelled(Error)
 }
 
-extension TNRequestError: LocalizedError {
-    public var description: String? {
+@available(*, deprecated, message: "and will be removed from future releases. Use TNError instead.")
+typealias TNRequestError = TNError
+
+extension TNError: LocalizedError {
+    public var description: String {
         switch self {
         case .invalidURL:
             return NSLocalizedString("The URL is invalid", comment: "TNResponseError")
@@ -34,13 +33,6 @@ extension TNRequestError: LocalizedError {
             return NSLocalizedString("Environment not set, use TNEnvironment.set(YOUR_ENVIRONMENT)", comment: "TNResponseError")
         case .invalidParams:
             return NSLocalizedString("The parameters are not valid", comment: "TNResponseError")
-        }
-    }
-}
-
-extension TNResponseError: LocalizedError {
-    public var description: String? {
-        switch self {
         case .responseDataIsEmpty:
             return NSLocalizedString("The response data is empty. Set TNCall.allowEmptyResponseBody to true to avoid this error", comment: "TNResponseError")
         case .responseInvalidImageData:
@@ -55,7 +47,7 @@ extension TNResponseError: LocalizedError {
             }
             let fullDescription = "\(debugDescription)\(errorKeys)"
             return NSLocalizedString("Cannot deserialize object: \(fullDescription)", comment: "TNResponseError")        case .networkError(let error):
-            return NSLocalizedString("Network error: \(error)", comment: "TNResponseError")
+                return NSLocalizedString("Network error: \(error)", comment: "TNResponseError")
         case .notSuccess(let error):
             return NSLocalizedString("The request doesn't return 2xx status code: \(error)", comment: "TNResponseError")
         case .cancelled(let error):

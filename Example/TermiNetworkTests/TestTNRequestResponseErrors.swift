@@ -204,7 +204,7 @@ class TestTNRequestResponseErrors: XCTestCase {
         var failed = true
         
         let request = TNRequest(route: APIRouter.testStatusCode(code: 404))
-        try! request.start(responseType: Data.self, onSuccess: { data in
+        request.start(responseType: Data.self, onSuccess: { data in
             expectation.fulfill()
         }) { error, data in
             switch error {

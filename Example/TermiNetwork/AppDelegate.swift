@@ -33,7 +33,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         try? TNRouter.start(route: APIFoodRouter.filter(categoryTitle: "Seafood"), responseType: FoodCategory.self, onSuccess: { category in
             print(category)
         }) { (error, data) in
-            if case .notSuccess(let code) = error {
+            if case TNError.notSuccess(let code) = error {
                 print(code)
             }
         }

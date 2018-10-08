@@ -29,7 +29,7 @@ extension TNRequest {
                 object = try data.deserializeJSONData() as T
             } catch let error {
                 _ = TNLog(call: self, message: error.localizedDescription, responseData: data)
-                onFailure?(TNResponseError.cannotDeserialize(error), data)
+                onFailure?(.cannotDeserialize(error), data)
                 self.handleDataTaskFailure()
                 return
             }
@@ -70,7 +70,7 @@ extension TNRequest {
                 _ = TNLog(call: self, message: "Unable to deserialize image (data not an image)")
                 
                 DispatchQueue.main.sync {
-                    onFailure?(TNResponseError.responseInvalidImageData, data)
+                    onFailure?(.responseInvalidImageData, data)
                 }
                 self.handleDataTaskFailure()
             } else {

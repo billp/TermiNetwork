@@ -14,7 +14,7 @@ public typealias TNCall = TNRequest
 
 //MARK: - Custom types
 public typealias TNSuccessCallback<T> = (T)->()
-public typealias TNFailureCallback = (_ error: TNResponseError, _ data: Data?)->()
+public typealias TNFailureCallback = (_ error: TNError, _ data: Data?)->()
 
 // MARK: - DEPRECATED TYPES
 public typealias TNBeforeAllRequestsCallback = ()->()
@@ -58,7 +58,7 @@ open class TNRequest: TNOperation {
     private var pathType: SNPathType = .normal
     private var data: Data?
     private var urlResponse: URLResponse?
-    private var responseError: TNResponseError?
+    private var customError: TNError?
     
     // MARK: - Public properties
     public var cachePolicy: URLRequest.CachePolicy
@@ -200,7 +200,7 @@ open class TNRequest: TNOperation {
      Converts a TNRequest instance to asRequest
     */
     public func asRequest() throws -> URLRequest {
-        guard let currentEnvironment = TNEnvironment.current else { throw TNRequestError.environmentNotSet }
+        guard let currentEnvironment = TNEnvironment.current else { throw TNError.environmentNotSet }
         
         if cachedRequest != nil {
             return cachedRequest!
@@ -219,7 +219,7 @@ open class TNRequest: TNOperation {
             if let value = String(describing: param.value!).addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) {
                 return param.key + "=" + value
             } else {
-                throw TNRequestError.invalidParams
+                throw TNError.invalidParams
             }
         }.joined(separator: "&")
         
@@ -229,7 +229,7 @@ open class TNRequest: TNOperation {
         }
         
         guard let url = URL(string: urlString as String) else {
-            throw TNRequestError.invalidURL
+            throw TNError.invalidURL
         }
         
         var request = URLRequest(url: url, cachePolicy: cachePolicy, timeoutInterval: currentEnvironment.timeoutInterval)
@@ -262,7 +262,7 @@ open class TNRequest: TNOperation {
                 do {
                     request.httpBody = try JSONSerialization.data(withJSONObject: params ?? [], options: .prettyPrinted)
                 } catch {
-                    throw TNRequestError.invalidParams
+                    throw TNError.invalidParams
                 }
             }
         }
@@ -292,28 +292,28 @@ open class TNRequest: TNOperation {
             // Error handling
             if let error = error {
                 if (error as NSError).code == NSURLErrorCancelled {
-                    self.responseError = TNResponseError.cancelled(error)
+                    self.customError = TNError.cancelled(error)
                 } else {
-                    self.responseError = TNResponseError.networkError(error)
+                    self.customError = TNError.networkError(error)
                 }
             }
             else if let response = urlResponse as? HTTPURLResponse {
                 statusCode = response.statusCode as Int?
             
                 if statusCode != nil && statusCode! / 100 != 2 {
-                    self.responseError = TNResponseError.notSuccess(statusCode!)
+                    self.customError = TNError.notSuccess(statusCode!)
                 } else if (data == nil || data!.isEmpty) && !TNRequest.allowEmptyResponseBody {
                     _ = TNLog(call: self, message: "Empty body received")
                     
-                    self.responseError = TNResponseError.responseDataIsEmpty
+                    self.customError = TNError.responseDataIsEmpty
                 }
             }
             
-            if let responseError = self.responseError {
-                _ = TNLog(call: self, message: "Error: " + (error?.localizedDescription ?? "")! + ", urlResponse:" + (urlResponse?.description ?? "")!)
+            if let customError = self.customError {
+                _ = TNLog(call: self, message: "Error: " + customError.description + ", urlResponse:" + (urlResponse?.description ?? "")!)
                 
                 DispatchQueue.main.async {
-                    onFailure?(responseError, data)
+                    onFailure?(customError, data)
                     self.handleDataTaskFailure()
                 }
             } else {
@@ -338,7 +338,7 @@ open class TNRequest: TNOperation {
         _executing = false
         _finished = true
         
-        currentQueue.afterOperationFinished(request: self, data: data, response: urlResponse, error: responseError)
+        currentQueue.afterOperationFinished(request: self, data: data, response: urlResponse, error: customError)
     }
     
     func handleDataTaskFailure() {
@@ -354,7 +354,7 @@ open class TNRequest: TNOperation {
         _executing = false
         _finished = true
         
-        currentQueue.afterOperationFinished(request: self, data: data, response: urlResponse, error: responseError)
+        currentQueue.afterOperationFinished(request: self, data: data, response: urlResponse, error: customError)
     }
     
     // Deserialize objects with Decodable
@@ -366,18 +366,26 @@ open class TNRequest: TNOperation {
         - onSuccess: specifies a success callback of type TNSuccessCallback<T> (optional)
         - onFailure: specifies a failure callback of type TNFailureCallback<T> (optional)
      */
-    public func start<T>(queue: TNQueue? = TNQueue.shared, responseType: T.Type, onSuccess: TNSuccessCallback<T>?, onFailure: TNFailureCallback?) throws where T: Decodable {
+    public func start<T>(queue: TNQueue? = TNQueue.shared, responseType: T.Type, onSuccess: TNSuccessCallback<T>?, onFailure: TNFailureCallback?) where T: Decodable {
         currentQueue = queue ?? TNQueue.shared
         currentQueue.beforeOperationStart(request: self)
+        
+        let request: URLRequest!
+        do {
+            request = try asRequest()
+        } catch let error {
+            onFailure?(error as! TNError, nil)
+            return
+        }
 
-        dataTask = sessionDataTask(request: try asRequest(), completionHandler: { data in
+        dataTask = sessionDataTask(request: request, completionHandler: { data in
             let object: T!
             
             do {
                 object = try data.deserializeJSONData() as T
             } catch let error {
                 _ = TNLog(call: self, message: error.localizedDescription, responseData: data)
-                onFailure?(TNResponseError.cannotDeserialize(error), data)
+                onFailure?(.cannotDeserialize(error), data)
                 self.handleDataTaskFailure()
                 return
             }
@@ -406,18 +414,26 @@ open class TNRequest: TNOperation {
          - onSuccess: specifies a success callback of type TNSuccessCallback<T> (optional)
          - onFailure: specifies a failure callback of type TNFailureCallback<T> (optional)
      */
-    public func start<T>(queue: TNQueue? = TNQueue.shared, responseType: T.Type, onSuccess: TNSuccessCallback<T>?, onFailure: TNFailureCallback?) throws where T: UIImage {
+    public func start<T>(queue: TNQueue? = TNQueue.shared, responseType: T.Type, onSuccess: TNSuccessCallback<T>?, onFailure: TNFailureCallback?) where T: UIImage {
         currentQueue = queue
         currentQueue.beforeOperationStart(request: self)
         
-        dataTask = sessionDataTask(request: try asRequest(), completionHandler: { data in
+        let request: URLRequest!
+        do {
+            request = try asRequest()
+        } catch let error {
+            onFailure?(error as! TNError, nil)
+            return
+        }
+
+        dataTask = sessionDataTask(request: request, completionHandler: { data in
             let image = T(data: data)
             
             if image == nil {
                 _ = TNLog(call: self, message: "Unable to deserialize image (data not an image)")
 
                 DispatchQueue.main.sync {
-                    onFailure?(TNResponseError.responseInvalidImageData, data)
+                    onFailure?(.responseInvalidImageData, data)
                 }
                 self.handleDataTaskFailure()
             } else {
@@ -445,11 +461,19 @@ open class TNRequest: TNOperation {
          - onSuccess: specifies a success callback of type TNSuccessCallback<T> (optional)
          - onFailure: specifies a failure callback of type TNFailureCallback<T> (optional)
      */
-    public func start(queue: TNQueue? = TNQueue.shared, responseType: Data.Type, onSuccess: TNSuccessCallback<Data>?, onFailure: TNFailureCallback?) throws {
+    public func start(queue: TNQueue? = TNQueue.shared, responseType: Data.Type, onSuccess: TNSuccessCallback<Data>?, onFailure: TNFailureCallback?) {
         currentQueue = queue
         currentQueue.beforeOperationStart(request: self)
         
-        dataTask = sessionDataTask(request: try asRequest(), completionHandler: { data in
+        let request: URLRequest!
+        do {
+            request = try asRequest()
+        } catch let error {
+            onFailure?(error as! TNError, nil)
+            return
+        }
+        
+        dataTask = sessionDataTask(request: request, completionHandler: { data in
             DispatchQueue.main.async {
                 onSuccess?(data)
             }

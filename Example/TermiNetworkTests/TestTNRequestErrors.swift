@@ -25,16 +25,14 @@ class TestTNRequestErrors: XCTestCase {
     func testEnvironmentNotSet() {
         TNEnvironment.current = nil
         
-        do {
-            try TNRequest(method: .get, url: "http://www.google.com", params: nil).start(responseType: UIImage.self, onSuccess: { data in
-                XCTAssert(false)
-            }) { error, data in
+        TNRequest(method: .get, url: "http://www.google.com", params: nil).start(responseType: UIImage.self, onSuccess: { data in
+            XCTAssert(false)
+        }) { error, data in
+            if case TNError.environmentNotSet = error {
+                XCTAssert(true)
+            } else {
                 XCTAssert(false)
             }
-        } catch TNRequestError.environmentNotSet {
-            XCTAssert(true)
-        } catch {
-            XCTAssert(false)
         }
     }
     
@@ -42,7 +40,7 @@ class TestTNRequestErrors: XCTestCase {
         do {
             try _ = TNRequest(method: .get, url: "http://εεε.google.κωμ", params: nil).asRequest()
             XCTAssert(false)
-        } catch TNRequestError.invalidURL {
+        } catch TNError.invalidURL {
             XCTAssert(true)
         } catch {
             XCTAssert(false)
