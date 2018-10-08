@@ -97,8 +97,9 @@ open class TNRequest: TNOperation {
         }
     }
 
-    
+    @available(*, deprecated, message: "skipBeforeAfterAllRequestsHooks Hook is deprecated and will be removed from future releases.")
     public var skipBeforeAfterAllRequestsHooks: Bool = false
+    
     internal var cachedRequest: URLRequest!
     
     //MARK: - Initializers

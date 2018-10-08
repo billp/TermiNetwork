@@ -9,14 +9,13 @@ import UIKit
 
 extension UIImageView {
     private static var activeRequestsHashMap: [String: TNRequest] = [:]
-    
- 
+    private static var imageViewQueue: TNQueue = TNQueue()
+
     fileprivate static func downloadImage(url: String, onSuccess: @escaping TNSuccessCallback<UIImage>, onFailure: @escaping TNFailureCallback) throws -> TNRequest {
-        let call = TNRequest(method: .get, url: url, params: nil)
-        call.skipBeforeAfterAllRequestsHooks = true
-        try call.start(onSuccess: onSuccess, onFailure: onFailure)
+        let request = TNRequest(method: .get, url: url, params: nil)
+        try request.start(queue: imageViewQueue, onSuccess: onSuccess, onFailure: onFailure)
         
-        return call
+        return request
     }
 
     /**
