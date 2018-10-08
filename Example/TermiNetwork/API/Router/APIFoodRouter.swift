@@ -16,28 +16,24 @@ enum APIFoodRouter: TNRouteProtocol {
     case createCategory(title: String)
     
     // Set method, path, params, headers for each route
-    internal func construct() -> TNRouteReturnType {
+    func configure() -> TNRouteConfiguration {
         switch self {
         case .categories:
-            return (
+            return TNRouteConfiguration(
                 method: .get,
-                path: path("categories.php"), // Generates: http(s)://.../categories.php
-                params: nil,
-                headers: nil
+                path: path("categories.php") // Generates: http(s)://.../categories.php
             )
         case .filter(let categoryTitle):
-            return (
+            return TNRouteConfiguration(
                 method: .get,
                 path: path("search.php"), // Generates: http(s)://.../category/1236
-                params: ["filter": categoryTitle],
-                headers: nil
+                params: ["filter": categoryTitle]
             )
         case .createCategory(let title):
-            return (
+            return TNRouteConfiguration(
                 method: .post,
                 path: path("categories", "create"), // Generates: http(s)://.../categories/create
-                params: ["title": title],
-                headers: nil
+                params: ["title": title]
             )
         }
     }

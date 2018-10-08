@@ -8,9 +8,23 @@
 import Foundation
 
 // MARK: - Custom types
-public typealias TNRouteReturnType = (method: TNMethod, path: TNPath, params: [String: Any?]?, headers: [String: String]?)
+public struct TNRouteConfiguration {
+    var method: TNMethod
+    var path: TNPath
+    var params: [String: Any?]? = nil
+    var headers: [String: String]? = nil
+    var requestBodyType: TNRequestBodyType = .xWWWFormURLEncoded
+    
+    public init(method: TNMethod, path: TNPath, params: [String: Any?]? = nil, headers: [String: String]? = nil, requestBodyType: TNRequestBodyType = .xWWWFormURLEncoded) {
+        self.method = method
+        self.path = path
+        self.params = params
+        self.headers = headers
+        self.requestBodyType = requestBodyType
+    }
+}
 
 // MARK: - Protocols
 public protocol TNRouteProtocol {
-    func construct() -> TNRouteReturnType
+    func configure() -> TNRouteConfiguration
 }

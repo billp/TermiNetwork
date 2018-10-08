@@ -26,7 +26,7 @@ public enum TNResponseError: Error {
 }
 
 extension TNRequestError: LocalizedError {
-    public var errorDescription: String? {
+    public var description: String? {
         switch self {
         case .invalidURL:
             return NSLocalizedString("The URL is invalid", comment: "TNResponseError")
@@ -39,7 +39,7 @@ extension TNRequestError: LocalizedError {
 }
 
 extension TNResponseError: LocalizedError {
-    public var errorDescription: String? {
+    public var description: String? {
         switch self {
         case .responseDataIsEmpty:
             return NSLocalizedString("The response data is empty. Set TNCall.allowEmptyResponseBody to true to avoid this error", comment: "TNResponseError")

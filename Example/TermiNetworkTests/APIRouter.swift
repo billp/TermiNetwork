@@ -14,62 +14,62 @@ enum APIRouter: TNRouteProtocol {
     case testHeaders
     case testGetParams(value1: Bool, value2: Int, value3: Double, value4: String, value5: String?)
     case testPostParams(value1: Bool, value2: Int, value3: Double, value4: String, value5: String?)
+    case testPostParamsxWWWFormURLEncoded(value1: Bool, value2: Int, value3: Double, value4: String, value5: String?)
     case testInvalidParams(value1: String, value2: String)
     case testStatusCode(code: Int)
     case testEmptyBody
     case testImage(imageName: String)
     
     // Set method, path, params, headers for each route
-    internal func construct() -> TNRouteReturnType {
+    func configure() -> TNRouteConfiguration {
         switch self {
         case .testHeaders:
-            return (
+            return TNRouteConfiguration(
                 method: .get,
                 path: path("test_headers"),
-                params: nil,
                 headers: ["Authorization": "XKJajkBXAUIbakbxjkasbxjkas", "Custom-Header": "test!!!!"]
             )
         case let .testGetParams(value1, value2, value3, value4, value5):
-            return (
+            return TNRouteConfiguration(
                 method: .get,
                 path: path("test_params"),
-                params: ["key1": value1, "key2": value2, "key3": value3, "key4": value4, "key5": value5],
-                headers: nil
+                params: ["key1": value1, "key2": value2, "key3": value3, "key4": value4, "key5": value5]
             )
-        case let .testPostParams(value1, value2, value3, value4, value5):
-            return (
+        case let .testPostParamsxWWWFormURLEncoded(value1, value2, value3, value4, value5):
+            return TNRouteConfiguration(
                 method: .post,
                 path: path("test_params"),
                 params: ["key1": value1, "key2": value2, "key3": value3, "key4": value4, "key5": value5],
-                headers: nil
+                requestBodyType: .xWWWFormURLEncoded
+            )
+        case let .testPostParams(value1, value2, value3, value4, value5):
+            return TNRouteConfiguration(
+                method: .post,
+                path: path("test_params"),
+                params: ["key1": value1, "key2": value2, "key3": value3, "key4": value4, "key5": value5],
+                requestBodyType: .JSON
             )
         case let .testInvalidParams(value1, value2):
-            return (
+            return TNRouteConfiguration(
                 method: .get,
                 path: path("test_params"),
-                params: ["fff": value1, "aaa": value2],
-                headers: nil
+                params: ["fff": value1, "aaa": value2]
             )
         case .testStatusCode(let code):
-            return (
+            return TNRouteConfiguration(
                 method: .get,
                 path: path("test_status_code"),
-                params: ["status_code": code],
-                headers: nil
+                params: ["status_code": code]
             )
         case .testEmptyBody:
-            return (
+            return TNRouteConfiguration(
                 method: .get,
-                path: path("test_empty_response"),
-                params: nil,
-                headers: nil
+                path: path("test_empty_response")
             )
         case .testImage(let imageName):
-            return (
+            return TNRouteConfiguration(
                 method: .get,
-                path: path(imageName),
-                params: nil,
-                headers: nil
+                path: path(imageName)
             )
         }
     }

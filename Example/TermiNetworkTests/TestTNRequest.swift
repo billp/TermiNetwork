@@ -20,15 +20,13 @@ class TestTNRequest: XCTestCase {
     override func tearDown() {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
         super.tearDown()
-
-        TNRequest.requestBodyType = .xWWWFormURLEncoded
     }
     
     func testHeaders() {
         let expectation = XCTestExpectation(description: "Test headers")
         var failed = true
 
-        try? TNRouter.makeCall(route: APIRouter.testHeaders, responseType: TestHeaders.self, onSuccess: { object in
+        try? TNRouter.start(route: APIRouter.testHeaders, responseType: TestHeaders.self, onSuccess: { object in
             failed = !(object.authorization == "XKJajkBXAUIbakbxjkasbxjkas" && object.customHeader == "test!!!!")
             expectation.fulfill()
         }) { error, _ in
@@ -43,7 +41,7 @@ class TestTNRequest: XCTestCase {
         let expectation = XCTestExpectation(description: "Test get params")
         var failed = true
 
-        try? TNRouter.makeCall(route: APIRouter.testGetParams(value1: true, value2: 3, value3: 5.13453124189, value4: "test", value5: nil), responseType: TestParam.self, onSuccess: { object in
+        try? TNRouter.start(route: APIRouter.testGetParams(value1: true, value2: 3, value3: 5.13453124189, value4: "test", value5: nil), responseType: TestParam.self, onSuccess: { object in
             failed = !(object.param1 == "true" && object.param2 == "3" && object.param3 == "5.13453124189" && object.param4 == "test" && object.param5 == nil)
             failed = false
             expectation.fulfill()
@@ -60,7 +58,7 @@ class TestTNRequest: XCTestCase {
         let expectation = XCTestExpectation(description: "Test get params")
         var failed = true
         
-        try? TNRouter.makeCall(route: APIRouter.testGetParams(value1: true, value2: 3, value3: 5.13453124189, value4: "τεστ", value5: nil), responseType: TestParam.self, onSuccess: { object in
+        try? TNRouter.start(route: APIRouter.testGetParams(value1: true, value2: 3, value3: 5.13453124189, value4: "τεστ", value5: nil), responseType: TestParam.self, onSuccess: { object in
             failed = !(object.param1 == "true" && object.param2 == "3" && object.param3 == "5.13453124189" && object.param4 == "τεστ" && object.param5 == nil)
             failed = false
             expectation.fulfill()
@@ -77,7 +75,7 @@ class TestTNRequest: XCTestCase {
         let expectation = XCTestExpectation(description: "Test post params")
         var failed = true
         
-        try? TNRouter.makeCall(route: APIRouter.testPostParams(value1: true, value2: 3, value3: 5.13453124189, value4: "test", value5: nil), responseType: TestParam.self, onSuccess: { object in
+        try? TNRouter.start(route: APIRouter.testPostParamsxWWWFormURLEncoded(value1: true, value2: 3, value3: 5.13453124189, value4: "test", value5: nil), responseType: TestParam.self, onSuccess: { object in
             failed = !(object.param1 == "true" && object.param2 == "3" && object.param3 == "5.13453124189" && object.param4 == "test" && object.param5 == nil)
             expectation.fulfill()
         }) { error, _ in
@@ -93,9 +91,7 @@ class TestTNRequest: XCTestCase {
         let expectation = XCTestExpectation(description: "Test JSON post params")
         var failed = true
         
-        TNRequest.requestBodyType = .JSON
-        
-        try? TNRouter.makeCall(route: APIRouter.testPostParams(value1: true, value2: 3, value3: 5.13453124189, value4: "test", value5: nil), responseType: TestJSONParams.self, onSuccess: { object in
+        try? TNRouter.start(route: APIRouter.testPostParams(value1: true, value2: 3, value3: 5.13453124189, value4: "test", value5: nil), responseType: TestJSONParams.self, onSuccess: { object in
             failed = !(object.param1 == true && object.param2 == 3 && object.param3 == 5.13453124189 && object.param4 == "test" && object.param5 == nil)
             expectation.fulfill()
         }) { error, _ in
@@ -221,11 +217,9 @@ class TestTNRequest: XCTestCase {
     }
     
     
-    func sampleRequest(skipBeforeAfterAllRequestsHooks: Bool = false, queue: TNQueue? = TNQueue.shared, onSuccess: TNSuccessCallback<TestJSONParams>? = nil) {
-        
-        TNRequest.requestBodyType = .JSON
-        
+    func sampleRequest(queue: TNQueue? = TNQueue.shared, onSuccess: TNSuccessCallback<TestJSONParams>? = nil) {
         let call = TNRequest(route: APIRouter.testPostParams(value1: true, value2: 3, value3: 5.13453124189, value4: "test", value5: nil))
+        call.requestBodyType = .JSON
         
         try? call.start(queue: queue, onSuccess: onSuccess, onFailure: nil)
     }
