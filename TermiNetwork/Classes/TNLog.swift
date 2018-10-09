@@ -17,7 +17,7 @@ internal class TNLog {
         
         print("--------------------------------")
         print("🌎 URL: " + url)
-        print("🎛️ Method: " + request.method.rawValue)
+        print("🎛️ Method: " + request.method.rawValue.uppercased())
         if let headers = headers, headers.keys.count > 0 {
             print("📃 Request Headers: " + headers.description)
         }

@@ -8,6 +8,7 @@
 
 import UIKit
 import TermiNetwork
+import SwiftyJSON
 
 class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     @IBOutlet weak var tableView: UITableView!
@@ -19,6 +20,12 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         // Do any additional setup after loading the view, typically from a nib.
         
         self.tableView.isHidden = true
+        
+        TNRequest(method: .get, url: "https://google.com", params: nil).start(responseType: JSON.self, onSuccess: { json in
+            print(json)
+        }) { (error, data) in
+            print(error)
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {

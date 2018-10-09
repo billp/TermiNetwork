@@ -8,6 +8,7 @@
 
 import XCTest
 import TermiNetwork
+import SwiftyJSON
 
 class TestTNRequest: XCTestCase {
     
@@ -120,53 +121,6 @@ class TestTNRequest: XCTestCase {
         XCTAssert(queue.operationCount == 3)
     }
     
-    
-    // FIXME: To be removed
-    /*func testBeforeAllRequestsSkipHooks() {
-        let expectation = XCTestExpectation(description: "Test beforeEachRequestCallback skip hooks")
-        var failed = false
-        
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2) {
-            self.sampleRequest()
-
-            TNRequest.afterAllRequestsBlock = {
-                TNRequest.beforeAllRequestsBlock = {
-                    failed = true
-                }
-                
-                self.sampleRequest(skipBeforeAfterAllRequestsHooks: true, onSuccess: { _ in
-                    expectation.fulfill()
-                })
-            }
-        }
-        
-        
-        wait(for: [expectation], timeout: 10)
-        
-        XCTAssert(!failed)
-    }*/
-    
-    // FIXME: To be removed
-   /* func testAfterAllRequestsSkipHooks() {
-        let expectation = XCTestExpectation(description: "Test beforeEachRequestCallback skip hooks")
-        var failed = false
-        
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2) {
-            self.sampleRequest(skipBeforeAfterAllRequestsHooks: true, onSuccess: { _ in
-                expectation.fulfill()
-            })
-
-            TNQueue.shared.afterAllRequestsCallback = { error in
-                failed = true
-            }
-        }
-        
-        
-        wait(for: [expectation], timeout: 10)
-        
-        XCTAssert(!failed)
-    }*/
-    
     func testAfterAllRequests() {
         let expectation = XCTestExpectation(description: "Test testAfterAllRequests")
         let queue = TNQueue()
@@ -216,6 +170,23 @@ class TestTNRequest: XCTestCase {
         XCTAssert(!failed)
     }
     
+    func testSwiftyJSON() {
+        let expectation = XCTestExpectation(description: "Test afterEachRequestCallback")
+        var failed = true
+        TNQueue.shared.cancelAllOperations()
+        
+        let call = TNRequest(route: APIRouter.testPostParams(value1: true, value2: 3, value3: 5.13453124189, value4: "test", value5: nil))
+        call.requestBodyType = .JSON
+        
+        call.start(responseType: JSON.self, onSuccess: {
+            json in
+            failed = false
+            expectation.fulfill()
+        }, onFailure: nil)
+
+        wait(for: [expectation], timeout: 10)
+        XCTAssert(!failed)
+    }
     
     func sampleRequest(queue: TNQueue? = TNQueue.shared, onSuccess: TNSuccessCallback<TestJSONParams>? = nil) {
         let call = TNRequest(route: APIRouter.testPostParams(value1: true, value2: 3, value3: 5.13453124189, value4: "test", value5: nil))

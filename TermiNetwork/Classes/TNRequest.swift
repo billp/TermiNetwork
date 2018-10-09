@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SwiftyJSON
 
 // Backward compatibility for TNCall (is being replaced with TNRequest)
 @available(*, deprecated, message: "TNCall is deprecated and will be removed from future releases. Use TNRequest instead")
@@ -21,7 +22,6 @@ public typealias TNBeforeAllRequestsCallback = ()->()
 public typealias TNAfterAllRequestsCallback = ()->()
 public typealias TNBeforeEachRequestCallback = (_ call: TNRequest)->()
 public typealias TNAfterEachRequestCallback = (_ call: TNRequest, _ data: Data?, _ response: URLResponse?, _ error: Error?)->()
-
 
 //MARK: - Enums
 public enum TNMethod: String {
@@ -442,6 +442,48 @@ open class TNRequest: TNOperation {
                 }
                 self.handleDataTaskCompleted()
             }
+        }, onFailure: { error, data in
+            onFailure?(error, data)
+            self.handleDataTaskFailure()
+        })
+        
+        currentQueue.addOperation(self)
+    }
+    
+    // Swifty JSON
+    /**
+     Adds a request to a queue and starts it's execution. The response object in success callback is of type JSON (SwiftyJSON)
+     
+     - parameters:
+     - queue: A TNQueue instance. If no queue is specified it uses the default one. (optional)
+     - onSuccess: specifies a success callback of type TNSuccessCallback<T> (optional)
+     - onFailure: specifies a failure callback of type TNFailureCallback<T> (optional)
+     */
+    public func start(queue: TNQueue? = TNQueue.shared, responseType: JSON.Type, onSuccess: TNSuccessCallback<JSON>?, onFailure: TNFailureCallback?) {
+        currentQueue = queue
+        currentQueue.beforeOperationStart(request: self)
+        
+        let request: URLRequest!
+        do {
+            request = try asRequest()
+        } catch let error {
+            onFailure?(error as! TNError, nil)
+            return
+        }
+        
+        dataTask = sessionDataTask(request: request, completionHandler: { data in
+            DispatchQueue.main.async {
+                TNLog.logRequest(request: self)
+                do {
+                    let json = try JSON(data: data)
+                    TNLog.logRequest(request: self)
+                    onSuccess?(json)
+                } catch let error {
+                    let error = TNError.cannotConvertToJSON(error)
+                    onFailure?(error, nil)
+                }
+            }
+            self.handleDataTaskCompleted()
         }, onFailure: { error, data in
             onFailure?(error, data)
             self.handleDataTaskFailure()
