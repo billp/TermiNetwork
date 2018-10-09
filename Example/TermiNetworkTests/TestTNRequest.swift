@@ -133,7 +133,7 @@ class TestTNRequest: XCTestCase {
         sampleRequest(queue: queue)
         sampleRequest(queue: queue)
         
-        wait(for: [expectation], timeout: 10)
+        wait(for: [expectation], timeout: 60)
         
         XCTAssert(true)
     }

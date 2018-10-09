@@ -392,9 +392,10 @@ open class TNRequest: TNOperation {
             DispatchQueue.main.sync {
                 TNLog.logRequest(request: self)
                 onSuccess?(object)
+                self.handleDataTaskCompleted()
             }
             
-            self.handleDataTaskCompleted()
+            
         }, onFailure: { error, data in
             onFailure?(error, data)
             self.handleDataTaskFailure()
@@ -439,8 +440,8 @@ open class TNRequest: TNOperation {
                 DispatchQueue.main.sync {
                     TNLog.logRequest(request: self)
                     onSuccess?(image!)
+                    self.handleDataTaskCompleted()
                 }
-                self.handleDataTaskCompleted()
             }
         }, onFailure: { error, data in
             onFailure?(error, data)
@@ -478,12 +479,13 @@ open class TNRequest: TNOperation {
                     let json = try JSON(data: data)
                     TNLog.logRequest(request: self)
                     onSuccess?(json)
+                    self.handleDataTaskCompleted()
                 } catch let error {
                     let error = TNError.cannotConvertToJSON(error)
                     onFailure?(error, nil)
+                    self.handleDataTaskFailure()
                 }
             }
-            self.handleDataTaskCompleted()
         }, onFailure: { error, data in
             onFailure?(error, data)
             self.handleDataTaskFailure()
@@ -517,8 +519,8 @@ open class TNRequest: TNOperation {
             DispatchQueue.main.async {
                 TNLog.logRequest(request: self)
                 onSuccess?(data)
+                self.handleDataTaskCompleted()
             }
-            self.handleDataTaskCompleted()
         }, onFailure: { error, data in
             onFailure?(error, data)
             self.handleDataTaskFailure()
