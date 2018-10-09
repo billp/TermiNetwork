@@ -21,11 +21,14 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         self.tableView.isHidden = true
         
-        TNRequest(method: .get, url: "https://google.com", params: nil).start(responseType: JSON.self, onSuccess: { json in
+        TNRequest(method: .get,
+                  url: "https://jsonplaceholder.typicode.com/todos/1",
+                  params: ["params": true]).start(responseType: JSON.self, onSuccess: { json in
             print(json)
         }) { (error, data) in
             print(error)
         }
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {

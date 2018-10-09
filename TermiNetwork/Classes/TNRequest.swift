@@ -53,11 +53,11 @@ open class TNRequest: TNOperation {
     internal var customError: TNError?
     internal var data: Data?
     internal var urlResponse: URLResponse?
+    internal var params: [String: Any?]?
 
     // MARK: - Private properties
     private var headers: [String: String]?
     private var path: String
-    private var params: [String: Any?]?
     private var pathType: SNPathType = .normal
 
     
@@ -191,7 +191,7 @@ open class TNRequest: TNOperation {
         - params: A Dictionary that is send as request params. If method is .get it automatically appends them to url, otherwise it sets them as request body.
      */
     public convenience init(method: TNMethod, url: String, params: [String: Any?]?) {
-        self.init(method: method, headers: nil, cachePolicy: nil, timeoutInterval: nil, path: TNPath("-"), params: nil)
+        self.init(method: method, headers: nil, cachePolicy: nil, timeoutInterval: nil, path: TNPath("-"), params: params)
         self.pathType = .full
         self.path = url
     }

@@ -34,6 +34,9 @@ TNRequest(method: .get, url: "https://jsonplaceholder.typicode.com/todos/1", par
     print(error)
 }
 ```
+
+### Arguments
+
 **method**: one of the following supported HTTP methods
 
 ```
@@ -45,9 +48,9 @@ TNRequest(method: .get, url: "https://jsonplaceholder.typicode.com/todos/1", par
 JSON.self, UIImage.self, Codable.self, Data.self or String.self
 ```
 
-**success**: a callback returning an object with the data type specified by **responseType** argument if succeeds.
+**success**: a callback returning an object with the data type specified by **responseType** argument.
 
-**failure**: a callback returning an error and data on failure. There are two cases of this callback being called. The first is that the http status code is different than 2xx and the second is that it fails on data conversion, for e.g. it fails on deserialization.
+**failure**: a callback returning an error and data on failure. There are two cases of this callback being called: the first is that the http status code is different than 2xx and the second is that it fails on data conversion, e.g. it fails on deserialization.
 
 ## Error Handling
 

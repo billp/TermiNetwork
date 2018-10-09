@@ -52,8 +52,8 @@ extension TNError: LocalizedError {
                 return NSLocalizedString("Network error: \(error)", comment: "TNResponseError")
         case .cannotConvertToJSON(let error):
             return NSLocalizedString("Cannot create JSON object (SwiftyJSON): \(error)", comment: "TNResponseError")
-        case .notSuccess(let error):
-            return NSLocalizedString("The request doesn't return 2xx status code: \(error)", comment: "TNResponseError")
+        case .notSuccess(let code):
+            return NSLocalizedString("The request didn't return 2xx status code but \(code) instead", comment: "TNResponseError")
         case .cancelled(let error):
             return NSLocalizedString("The request has been cancelled: \(error)", comment: "TNResponseError")
         }
