@@ -58,7 +58,7 @@ JSON.self, Codable.self, UIImage.self, Data.self or String.self
 *onFailure*: a callback returning an error+data on failure. There are two cases of this callback being called: the first is that the http status code is different than 2xx and the second is that there is an error with data conversion, e.g. it fails on deserialization of the *responseType*.
 
 ### Advanced usage with configuration and custom queue
-The request bellow uses a custom queue *myQueue* with a failure mode of value *.continue* (default), which means that the queue continues its execution even if a request fails and a max concurrent operation count of 2. It also uses a TNRequestConfiguration object that specifies some additional request parameters.
+The request bellow uses a custom queue *myQueue* with a failure mode of value *.continue* (default), which means that the queue continues its execution even if a request fails, and also sets the max concurrent operation count of 2. Finally, it uses a TNRequestConfiguration object to provide some additional settings.
 
 ```swift
 let myQueue = TNQueue(failureMode: .continue)
