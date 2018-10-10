@@ -46,7 +46,11 @@ public struct TNRequestConfiguration {
     var timeoutInterval: TimeInterval = 60
     var requestBodyType: TNRequestBodyType? = nil
     
-    public init() { }
+    public init(cachePolicy: URLRequest.CachePolicy? = .useProtocolCachePolicy, timeoutInterval: TimeInterval? = 60, requestBodyType: TNRequestBodyType? = nil) {
+        self.cachePolicy = cachePolicy!
+        self.timeoutInterval = timeoutInterval!
+        self.requestBodyType = requestBodyType
+    }
 }
 
 open class TNRequest: TNOperation {

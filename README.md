@@ -27,30 +27,67 @@ end
 
 ## Usage
 
+### Simple usage
+
 ```java
-TNRequest(method: .get, url: "https://jsonplaceholder.typicode.com/todos/1", params: nil).start(responseType: JSON.self, onSuccess: { json in
+let params = ["title": "Go shopping."]
+let headers = ["x-auth": "abcdef1234"]
+
+TNRequest(method: .post, url: "https://myweb.com/todos", headers: headers, params: params).start(responseType: JSON.self, onSuccess: { json in
     print(json)
 }) { (error, data) in
     print(error)
 }
 ```
 
-### Arguments
+#### Arguments
 
-**method**: one of the following supported HTTP methods
+*method*: one of the following supported HTTP methods
 
 ```
 .get, .head, .post, .put, .delete, .connect, .options, .trace or .patch
 ```
 
-**responseType**: one of the following supported response types
+*responseType*: one of the following supported response types
 ```
-JSON.self, UIImage.self, Codable.self, Data.self or String.self
+JSON.self, Codable.self, UIImage.self, Data.self or String.self
 ```
 
-**success**: a callback returning an object with the data type specified by **responseType** argument.
+*success*: a callback returning an object with the data type specified by *responseType* argument.
 
-**failure**: a callback returning an error and data on failure. There are two cases of this callback being called: the first is that the http status code is different than 2xx and the second is that it fails on data conversion, e.g. it fails on deserialization.
+*failure*: a callback returning an error+data on failure. There are two cases of this callback being called: the first is that the http status code is different than 2xx and the second is that there is an error with data conversion, e.g. it fails on deserialization of the *responseType*.
+
+### Advanced usage with configuration and custom queue
+The request bellow uses a custom queue *myQueue* with a failure mode of value *.continue* (default), which means that the queue continues its execution even if a request fails and a max concurrent operation count of 2. It also uses a TNRequestConfiguration object that specifies some additional request parameters.
+
+```java
+let myQueue = TNQueue(failureMode: .continue)
+myQueue.maxConcurrentOperationCount = 2
+
+let configuration = TNRequestConfiguration(
+    cachePolicy: .useProtocolCachePolicy,
+    timeoutInterval: 30,
+    requestBodyType: .JSON
+)
+
+let params = ["title": "Go shopping."]
+let headers = ["x-auth": "abcdef1234"]
+
+TNRequest(method: .post,
+          url: "https://myweb.com/todos",
+          headers: headers,
+          params: params,
+          configuration: configuration).start(queue: myQueue, responseType: JSON.self, onSuccess: { json in
+    print(json)
+}) { (error, data) in
+    print(error)
+}
+```
+#### Additional arguments
+
+*configuration*: The configuration object to use.
+
+*queue*: It specifies the queue in which the request will be  added. If you omit this argument, the request is being added to a shared queue (TNQueue.shared).
 
 ## Error Handling
 
