@@ -85,12 +85,12 @@ TNRequest(method: .post,
 ```
 #### Additional arguments
 
-*configuration*: The configuration object to use. The available configuration proerties are:
+*configuration*: The configuration object to be used. The available configuration properties are:
 - *cachePolicy*: The NSURLRequest.CachePolicy used by NSURLRequest internally (see apple docs for available values). Default value: *.useProtocolCachePolicy*
 - *timeoutInterval*: The timeout interval used by NSURLRequest internally  (see apple docs for more info). Default value: 60
-- *requestBodyType*: It specifies how to send request params, available values:
-  - .xWWWFormURLEncoded (default): It sends the params as application/x-www-form-urlencoded mime type.
-  - .JSON: It converts the params to JSON format and them as application/json mime type.
+- *requestBodyType*: It specifies how the request params are being sent, available values:
+  - .xWWWFormURLEncoded (default): It sends the params as 'application/x-www-form-urlencoded' mime type.
+  - .JSON: It converts the params to JSON format and them as 'application/json' mime type.
 
 *queue*: It specifies the queue in which the request will be  added. If you omit this argument, the request is being added to a shared queue (TNQueue.shared).
 
