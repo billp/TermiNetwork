@@ -23,6 +23,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         TNRequest(method: .get,
                   url: "https://jsonplaceholder.typicode.com/todos/1",
+                  headers: nil,
                   params: ["params": true]).start(responseType: JSON.self, onSuccess: { json in
             print(json)
         }) { (error, data) in

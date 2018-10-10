@@ -170,7 +170,7 @@ extension TNRequest {
      - cachePolicy: Cache policy of type URLRequest.CachePolicy. See Apple's documentation for details (optional)
      - params: A Dictionary that is send as request params. If method is .get it automatically appends them to url, otherwise it sets them as request body.
      */
-    @available(*, deprecated, message: "and will be removed from future releases. Use TNRequest(route:) instead.")
+    @available(*, deprecated, message: "and will be removed from future releases. Use TNRequest(url:headers:params:configuration) instead.")
     public convenience init(method: TNMethod, url: String, params: [String: Any?]?) {
         self.init(method: method, headers: nil, cachePolicy: nil, timeoutInterval: nil, path: TNPath("-"), params: params)
         self.pathType = .full

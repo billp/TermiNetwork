@@ -12,7 +12,7 @@ extension UIImageView {
     private static var imageViewQueue: TNQueue = TNQueue()
 
     fileprivate static func downloadImage(url: String, onSuccess: @escaping TNSuccessCallback<UIImage>, onFailure: @escaping TNFailureCallback) throws -> TNRequest {
-        let request = TNRequest(method: .get, url: url, params: nil)
+        let request = TNRequest(method: .get, url: url, headers: nil, params: nil)
         request.start(queue: imageViewQueue, responseType: UIImage.self, onSuccess: onSuccess, onFailure: onFailure)
         
         return request

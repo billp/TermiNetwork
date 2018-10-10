@@ -11,7 +11,7 @@ import TermiNetwork
 
 struct APICustomHelpers {
     static func getImage(url: String, onSuccess: @escaping TNSuccessCallback<UIImage>, onFailure: @escaping TNFailureCallback) throws -> TNRequest {
-        let call = TNRequest(method: .get, url: url, params: nil)
+        let call = TNRequest(method: .get, url: url, headers: nil, params: nil)
         call.start(responseType: UIImage.self, onSuccess: onSuccess, onFailure: onFailure)
         
         return call

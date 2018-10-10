@@ -32,7 +32,10 @@ class TestTNQueue: XCTestCase {
         }
         
         for _ in 1...numberOfRequests {
-            TNRequest(method: .get, url: "http://google.com", params: nil).start(queue: queue, responseType: Data.self, onSuccess: { _ in
+            TNRequest(method: .get,
+                      url: "http://google.com",
+                      headers: nil,
+                      params: nil).start(queue: queue, responseType: Data.self, onSuccess: { _ in
                 numberOfRequests -= 1
             }) { error, data in
                 numberOfRequests -= 1
@@ -58,7 +61,7 @@ class TestTNQueue: XCTestCase {
         }
         
         for index in 0...numberOfRequests-1 {
-            TNRequest(method: .get, url: urls[index], params: nil).start(queue: queue, responseType: Data.self, onSuccess: { _ in
+            TNRequest(method: .get, url: urls[index], headers: nil, params: nil).start(queue: queue, responseType: Data.self, onSuccess: { _ in
                 numberOfRequests -= 1
             }) { error, data in
                 numberOfRequests -= 1
@@ -85,7 +88,10 @@ class TestTNQueue: XCTestCase {
         }
         
         for index in 0...numberOfRequests-1 {
-            TNRequest(method: .get, url: urls[index], params: nil).start(queue: queue, responseType: Data.self, onSuccess: { _ in
+            TNRequest(method: .get,
+                      url: urls[index],
+                      headers: nil,
+                      params: nil).start(queue: queue, responseType: Data.self, onSuccess: { _ in
                 numberOfRequests -= 1
             }) { _, _ in
                 numberOfRequests -= 1
@@ -111,7 +117,10 @@ class TestTNQueue: XCTestCase {
         }
         
         for index in 0...numberOfRequests-1 {
-            TNRequest(method: .get, url: urls[index], params: nil).start(queue: queue, responseType: Data.self, onSuccess: { _ in
+            TNRequest(method: .get,
+                      url: urls[index],
+                      headers: nil,
+                      params: nil).start(queue: queue, responseType: Data.self, onSuccess: { _ in
                 numberOfRequests -= 1
             }) { error, data in
                 numberOfRequests -= 1
@@ -136,7 +145,7 @@ class TestTNQueue: XCTestCase {
         }
         
         for index in 0...numberOfRequests-1 {
-            TNRequest(method: .get, url: urls[index], params: nil).start(queue: queue, responseType: Data.self, onSuccess: { _ in
+            TNRequest(method: .get, url: urls[index], headers: nil, params: nil).start(queue: queue, responseType: Data.self, onSuccess: { _ in
                 numberOfRequests -= 1
             }) { _, _ in }
         }
@@ -158,7 +167,7 @@ class TestTNQueue: XCTestCase {
         }
         
         for _ in 1...numberOfRequests {
-            TNRequest(method: .get, url: "http://google.com", params: nil).start(queue: queue, responseType: Data.self, onSuccess: { _ in
+            TNRequest(method: .get, url: "http://google.com", headers: nil, params: nil).start(queue: queue, responseType: Data.self, onSuccess: { _ in
                 numberOfRequests -= 1
             }) { error, data in
                 numberOfRequests -= 1
@@ -182,7 +191,7 @@ class TestTNQueue: XCTestCase {
         for index in 1...8 {
             let url = index == 5 ? "http://localhost.unkownhost" : "http://google.com"
             
-            let call = TNRequest(method: .get, url: url, params: nil)
+            let call = TNRequest(method: .get, url: url, headers: nil, params: nil)
             
             call.start(queue: queue, responseType: Data.self, onSuccess: { _ in
                 numberOfRequests -= 1
@@ -220,7 +229,7 @@ class TestTNQueue: XCTestCase {
         for index in 1...8 {
             let url = index == 1 ? "http://localhost.unkownhost" : "http://google.com"
             
-            let call = TNRequest(method: .get, url: url, params: nil)
+            let call = TNRequest(method: .get, url: url, headers: nil, params: nil)
             
             call.start(queue: queue, responseType: Data.self, onSuccess: { _ in
                 numberOfRequests -= 1
