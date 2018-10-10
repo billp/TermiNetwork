@@ -17,6 +17,7 @@ public enum TNError: Error {
     case responseInvalidImageData
     case cannotDeserialize(Error)
     case cannotConvertToJSON(Error)
+    case cannotConvertToString
     case networkError(Error)
     case notSuccess(Int)
     case cancelled(Error)
@@ -26,18 +27,18 @@ public enum TNError: Error {
 typealias TNRequestError = TNError
 
 extension TNError: LocalizedError {
-    public var description: String {
+    public var localizedDescription: String? {
         switch self {
         case .invalidURL:
-            return NSLocalizedString("The URL is invalid", comment: "TNResponseError")
+            return NSLocalizedString("The URL is invalid", comment: "TNError")
         case .environmentNotSet:
-            return NSLocalizedString("Environment not set, use TNEnvironment.set(YOUR_ENVIRONMENT)", comment: "TNResponseError")
+            return NSLocalizedString("Environment not set, use TNEnvironment.set(YOUR_ENVIRONMENT)", comment: "TNError")
         case .invalidParams:
-            return NSLocalizedString("The parameters are not valid", comment: "TNResponseError")
+            return NSLocalizedString("The parameters are not valid", comment: "TNError")
         case .responseDataIsEmpty:
-            return NSLocalizedString("The response data is empty. Set TNRequest.allowEmptyResponseBody to true get rid of this error", comment: "TNResponseError")
+            return NSLocalizedString("The response data is empty. Set TNRequest.allowEmptyResponseBody to true get rid of this error", comment: "TNError")
         case .responseInvalidImageData:
-            return NSLocalizedString("The response data is not a valid image", comment: "TNResponseError")
+            return NSLocalizedString("The response data is not a valid image", comment: "TNError")
         case .cannotDeserialize(let error):
             let debugDescription = (error as NSError).userInfo["NSDebugDescription"] as! String
             var errorKeys = ""
@@ -47,15 +48,18 @@ extension TNError: LocalizedError {
                 }).joined(separator: ", ")
             }
             let fullDescription = "\(debugDescription)\(errorKeys)"
-            return NSLocalizedString("Cannot deserialize object: \(fullDescription)", comment: "TNResponseError")
+            return NSLocalizedString("Cannot deserialize object: \(fullDescription)", comment: "TNError")
         case .networkError(let error):
-                return NSLocalizedString("Network error: \(error)", comment: "TNResponseError")
+                return NSLocalizedString("Network error: \(error)", comment: "TNError")
         case .cannotConvertToJSON(let error):
-            return NSLocalizedString("Cannot create JSON object (SwiftyJSON): \(error)", comment: "TNResponseError")
+            return NSLocalizedString("Cannot create JSON object (SwiftyJSON): \(error)", comment: "TNError")
+        case .cannotConvertToString:
+            return NSLocalizedString("Cannot convert to String", comment: "TNError")
         case .notSuccess(let code):
-            return NSLocalizedString("The request didn't return 2xx status code but \(code) instead", comment: "TNResponseError")
+            return NSLocalizedString("The request didn't return 2xx status code but \(code) instead", comment: "TNError")
         case .cancelled(let error):
-            return NSLocalizedString("The request has been cancelled: \(error)", comment: "TNResponseError")
+            return NSLocalizedString("The request has been cancelled: \(error)", comment: "TNError")
+
         }
     }
 }

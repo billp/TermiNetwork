@@ -21,15 +21,27 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         self.tableView.isHidden = true
         
-        TNRequest(method: .get,
-                  url: "https://jsonplaceholder.typicode.com/todos/1",
-                  headers: nil,
-                  params: ["params": true]).start(responseType: JSON.self, onSuccess: { json in
-            print(json)
-        }) { (error, data) in
-            print(error)
-        }
+        let myQueue = TNQueue(failureMode: .continue)
+        myQueue.maxConcurrentOperationCount = 2
         
+        let configuration = TNRequestConfiguration(
+            cachePolicy: .useProtocolCachePolicy,
+            timeoutInterval: 30,
+            requestBodyType: .JSON
+        )
+        
+        let params = ["title": "Go shopping."]
+        let headers = ["x-auth": "abcdef1234"]
+        
+        TNRequest(method: .post,
+                  url: "https://myweb.com/todos",
+                  headers: headers,
+                  params: params,
+                  configuration: configuration).start(queue: myQueue, responseType: JSON.self, onSuccess: { json in
+                    print(json)
+                  }, onFailure: { (error, data) in
+                    print(error)
+                  })
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -40,7 +52,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             self.tableView.reloadData()
             self.tableView.isHidden = false
         }, onFailure: { error, data in
-            debugPrint(error.localizedDescription)
+            debugPrint("Error: " + error.localizedDescription)
         })
     }
 

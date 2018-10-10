@@ -472,6 +472,49 @@ open class TNRequest: TNOperation {
         currentQueue.addOperation(self)
     }
     
+    // String
+    /**
+     Adds a request to a queue and starts it's execution. The response object in success callback is of type Data
+     
+     - parameters:
+     - queue: A TNQueue instance. If no queue is specified it uses the default one. (optional)
+     - onSuccess: specifies a success callback of type TNSuccessCallback<T> (optional)
+     - onFailure: specifies a failure callback of type TNFailureCallback<T> (optional)
+     */
+    public func start(queue: TNQueue? = TNQueue.shared, responseType: String.Type, onSuccess: TNSuccessCallback<String>?, onFailure: TNFailureCallback?) {
+        currentQueue = queue
+        currentQueue.beforeOperationStart(request: self)
+        
+        let request: URLRequest!
+        do {
+            request = try asRequest()
+        } catch let error {
+            onFailure?(error as! TNError, nil)
+            return
+        }
+        
+        dataTask = sessionDataTask(request: request, completionHandler: { data in
+            DispatchQueue.main.async {
+                TNLog.logRequest(request: self)
+                
+                if let string = String(data: data, encoding: .utf8) {
+                    onSuccess?(string)
+                    self.handleDataTaskCompleted()
+                } else {
+                    let error = TNError.cannotConvertToString
+                    onFailure?(error, data)
+                    self.handleDataTaskFailure()
+                }
+                
+            }
+        }, onFailure: { error, data in
+            onFailure?(error, data)
+            self.handleDataTaskFailure()
+        })
+        
+        currentQueue.addOperation(self)
+    }
+    
     // For any other object
     /**
      Adds a request to a queue and starts it's execution. The response object in success callback is of type Data

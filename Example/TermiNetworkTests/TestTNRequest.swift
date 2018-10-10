@@ -104,6 +104,7 @@ class TestTNRequest: XCTestCase {
         XCTAssert(!failed)
     }
     
+    
     func testBeforeAllRequests() {
         let expectation = XCTestExpectation(description: "Test beforeEachRequestCallback")
         let queue = TNQueue()
@@ -178,12 +179,27 @@ class TestTNRequest: XCTestCase {
         let call = TNRequest(route: APIRouter.testPostParams(value1: true, value2: 3, value3: 5.13453124189, value4: "test", value5: nil))
         call.requestBodyType = .JSON
         
-        call.start(responseType: JSON.self, onSuccess: {
-            json in
+        call.start(responseType: JSON.self, onSuccess: { json in
             failed = false
             expectation.fulfill()
         }, onFailure: nil)
 
+        wait(for: [expectation], timeout: 10)
+        XCTAssert(!failed)
+    }
+    
+    func testStringResponse() {
+        let expectation = XCTestExpectation(description: "Test afterEachRequestCallback")
+        var failed = true
+        TNQueue.shared.cancelAllOperations()
+        
+        let request = TNRequest(route: APIRouter.testPostParams(value1: true, value2: 3, value3: 5.13453124189, value4: "test", value5: nil))
+        request.requestBodyType = .JSON
+        request.start(responseType: String.self, onSuccess: { string in
+            failed = false
+            expectation.fulfill()
+        }, onFailure: nil)
+        
         wait(for: [expectation], timeout: 10)
         XCTAssert(!failed)
     }

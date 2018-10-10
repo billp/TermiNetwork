@@ -33,7 +33,7 @@ internal class TNLog {
         }
 
         if let customError = request.customError {
-            print("❌ Error: " + customError.description)
+            print("❌ Error: " + (customError.localizedDescription ?? ""))
         } else if let response = request.urlResponse as? HTTPURLResponse {
             print("✅ Status: " + String(response.statusCode))
         }
