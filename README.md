@@ -53,8 +53,6 @@ TNRequest(method: .post, url: "https://myweb.com/todos", headers: headers, param
 JSON.self, Codable.self, UIImage.self, Data.self or String.self
 ```
 
-*responseType* argument.
-
 *onSuccess*: a callback returning an object with the data type specified by
 
 *onFailure*: a callback returning an error+data on failure. There are two cases of this callback being called: the first is that the http status code is different than 2xx and the second is that there is an error with data conversion, e.g. it fails on deserialization of the *responseType*.
