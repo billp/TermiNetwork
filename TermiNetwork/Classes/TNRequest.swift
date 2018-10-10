@@ -41,6 +41,14 @@ public enum TNRequestBodyType: String {
     case JSON = "application/json"
 }
 
+public struct TNRequestConfiguration {
+    var cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy
+    var timeoutInterval: TimeInterval = 60
+    var requestBodyType: TNRequestBodyType? = nil
+    
+    public init() { }
+}
+
 open class TNRequest: TNOperation {
     //MARK: - Static properties
     public static var fixedHeaders = [String: String]()
@@ -54,18 +62,18 @@ open class TNRequest: TNOperation {
     internal var data: Data?
     internal var urlResponse: URLResponse?
     internal var params: [String: Any?]?
+    internal var path: String
+    internal var pathType: SNPathType = .normal
 
     // MARK: - Private properties
     private var headers: [String: String]?
-    private var path: String
-    private var pathType: SNPathType = .normal
-
+   
     
     // MARK: - Public properties
     public var cachePolicy: URLRequest.CachePolicy
     public var timeoutInterval: TimeInterval?
     public var requestBodyType: TNRequestBodyType = .xWWWFormURLEncoded
-    
+
     // MARK: - Deprecations
     @available(*, deprecated, message: "beforeAllRequestsBlock Hook is deprecated and will be removed from future releases. Use TNQueue hooks instead. All TNCall hooks are forewarded to TNQueue.shared.[HOOK]. See docs for more info.")
     public static var beforeAllRequestsBlock: TNBeforeAllRequestsCallback? {
@@ -118,6 +126,7 @@ open class TNRequest: TNOperation {
          - path: The path that is appended to your Environments current hostname and prefix. Use 'path(...)' for this, e.g. path("user", "5"), it generates http//website.com/user/5
          - params: A Dictionary that is send as request params. If method is .get it automatically appends them to url, otherwise it sets them as request body.
      */
+    @available(*, deprecated, message: "is deprecated and will be removed from future releases. use TNRequest(method:url:headers:params:configuration) instead.")
     public init(method: TNMethod, headers: [String: String]?, cachePolicy: URLRequest.CachePolicy?, timeoutInterval: TimeInterval?, path: TNPath, params: [String: Any?]?, requestBodyType: TNRequestBodyType? = nil) {
         self.method = method
         self.headers = headers
@@ -128,74 +137,34 @@ open class TNRequest: TNOperation {
         self.requestBodyType = requestBodyType ?? .xWWWFormURLEncoded
     }
     
-    /**
-     Initializes a TNRequest request
-     
-     - parameters:
-         - method:
-         The http method of request, e.g. .get, .post, .head, etc.
-         - headers: A Dictionary of header values, etc. ["Content-type": "text/html"] (optional)
-         - path: The path that is appended to your Environments current hostname and prefix. Use 'path(...)' for this, e.g. path("user", "5"), it generates http//website.com/user/5
-         - params: A Dictionary that is send as request params. If method is .get it automatically appends them to url, otherwise it sets them as request body.
-     */
-    public convenience init(method: TNMethod, headers: [String: String], path: TNPath, params: [String: Any?]?) {
-        self.init(method: method, headers: headers, cachePolicy: nil, timeoutInterval: nil, path: path, params: params)
+    public init(method: TNMethod, url: String, headers: [String: String]? = nil, params: [String: Any?]? = nil, configuration: TNRequestConfiguration? = TNRequestConfiguration()) {
+        self.method = method
+        self.headers = headers
+        self.params = params
+        self.pathType = .full
+        self.path = url
+        self.cachePolicy = configuration!.cachePolicy
+        self.timeoutInterval = configuration!.timeoutInterval
+        self.requestBodyType = configuration!.requestBodyType ?? .xWWWFormURLEncoded
     }
     
-    /**
-     Initializes a TNRequest request
-     
-     - parameters:
-         - method:
-         The http method of request, e.g. .get, .post, .head, etc.
-         - path: The path that is appended to your Environments current hostname and prefix. Use 'path(...)' for this, e.g. path("user", "5"), it generates http//website.com/user/5
-         - params: A Dictionary that is send as request params. If method is .get it automatically appends them to url, otherwise it sets them as request body.
-     */
-    public convenience init(method: TNMethod, path: TNPath, params: [String: Any?]?) {
-        self.init(method: method, headers: nil, cachePolicy: nil, timeoutInterval: nil, path: path, params: nil)
-    }
-
     /**
      Initializes a TNRequest request
      
      - parameters:
          - route: a TNRouteProtocol enum value
      */
-    public convenience init(route: TNRouteProtocol) {
+    public init(route: TNRouteProtocol, configuration: TNRequestConfiguration? = TNRequestConfiguration()) {
         let route = route.configure()
-        
-        self.init(method: route.method, headers: route.headers, cachePolicy: nil, timeoutInterval: nil, path: route.path, params: route.params, requestBodyType: route.requestBodyType)
+        self.method = route.method
+        self.headers = route.headers
+        self.params = route.params
+        self.path = route.path.components.joined(separator: "/")
+        self.cachePolicy = configuration!.cachePolicy
+        self.timeoutInterval = configuration!.timeoutInterval
+        self.requestBodyType = configuration!.requestBodyType ?? route.requestBodyType
     }
-    
-    /**
-     Initializes a TNRequest request
-     
-     - parameters:
-        - route: a TNRouteProtocol enum value
-        - cachePolicy: Cache policy of type URLRequest.CachePolicy. See Apple's documentation for details (optional)
-     */
-    public convenience init(route: TNRouteProtocol, cachePolicy: URLRequest.CachePolicy?, timeoutInterval: TimeInterval?) {
-        let route = route.configure()
-        
-        self.init(method: route.method, headers: route.headers, cachePolicy: cachePolicy, timeoutInterval: timeoutInterval, path: route.path, params: route.params)
-        self.requestBodyType = route.requestBodyType
-    }
-    
-    // Convenience method for passing a string instead of path
-    /**
-     Initializes a TNRequest request
-     
-     - parameters:
-        - route: a TNRouteProtocol enum value
-        - cachePolicy: Cache policy of type URLRequest.CachePolicy. See Apple's documentation for details (optional)
-        - params: A Dictionary that is send as request params. If method is .get it automatically appends them to url, otherwise it sets them as request body.
-     */
-    public convenience init(method: TNMethod, url: String, params: [String: Any?]?) {
-        self.init(method: method, headers: nil, cachePolicy: nil, timeoutInterval: nil, path: TNPath("-"), params: params)
-        self.pathType = .full
-        self.path = url
-    }
-    
+
     // MARK: - Create request
     /**
      Converts a TNRequest instance to asRequest

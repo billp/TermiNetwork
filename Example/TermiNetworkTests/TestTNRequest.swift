@@ -91,7 +91,7 @@ class TestTNRequest: XCTestCase {
     func testJSONRequestPostParams() {
         let expectation = XCTestExpectation(description: "Test JSON post params")
         var failed = true
-        
+                
         try? TNRouter.start(route: APIRouter.testPostParams(value1: true, value2: 3, value3: 5.13453124189, value4: "test", value5: nil), responseType: TestJSONParams.self, onSuccess: { object in
             failed = !(object.param1 == true && object.param2 == 3 && object.param3 == 5.13453124189 && object.param4 == "test" && object.param5 == nil)
             expectation.fulfill()
