@@ -23,8 +23,8 @@ open class TNEnvironment {
     var host: String
     var port: Int?
     var suffix: TNPath?
-    var timeoutInterval: TimeInterval = 60
-
+    var requestConfiguration: TNRequestConfiguration?
+    
     // MARK: - Static members
     public static var current: TNEnvironment!
     
@@ -35,23 +35,31 @@ open class TNEnvironment {
     public static var verbose = false
         
     // MARK: - Initializers
-    public init(scheme: TNURLScheme, host: String, suffix: TNPath?, port: Int?) {
+    public init(scheme: TNURLScheme, host: String, suffix: TNPath?, port: Int?, requestConfiguration: TNRequestConfiguration = TNRequestConfiguration()) {
         self.scheme = scheme
         self.host = host
         self.suffix = suffix
         self.port = port
+        self.requestConfiguration = requestConfiguration
     }
     
     public convenience init(scheme: TNURLScheme, host: String) {
         self.init(scheme: scheme, host: host, suffix: nil, port: nil)
     }
-    
+    public convenience init(scheme: TNURLScheme, host: String, requestConfiguration: TNRequestConfiguration) {
+        self.init(scheme: scheme, host: host, suffix: nil, port: nil, requestConfiguration: requestConfiguration)
+    }
     public convenience init(scheme: TNURLScheme, host: String, port: Int) {
         self.init(scheme: scheme, host: host, suffix: nil, port: port)
     }
-    
+    public convenience init(scheme: TNURLScheme, host: String, port: Int, requestConfiguration: TNRequestConfiguration) {
+        self.init(scheme: scheme, host: host, suffix: nil, port: port, requestConfiguration: requestConfiguration)
+    }
     public convenience init(scheme: TNURLScheme, host: String, suffix: TNPath) {
         self.init(scheme: scheme, host: host, suffix: suffix, port: nil)
+    }
+    public convenience init(scheme: TNURLScheme, host: String, suffix: TNPath, requestConfiguration: TNRequestConfiguration) {
+        self.init(scheme: scheme, host: host, suffix: suffix, port: nil, requestConfiguration: requestConfiguration)
     }
 }
 

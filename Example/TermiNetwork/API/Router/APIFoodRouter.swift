@@ -9,7 +9,7 @@
 import Foundation
 import TermiNetwork
 
-enum APIFoodRouter: TNRouteProtocol {
+enum APIFoodRouter: TNRouterProtocol {
     // Define your routes
     case categories
     case filter(categoryTitle: String)

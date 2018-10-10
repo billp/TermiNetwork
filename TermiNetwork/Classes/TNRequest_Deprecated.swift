@@ -129,7 +129,7 @@ extension TNRequest {
         let route = route.configure()
         
         self.init(method: route.method, headers: route.headers, cachePolicy: cachePolicy, timeoutInterval: timeoutInterval, path: route.path, params: route.params)
-        self.requestBodyType = route.requestBodyType
+        self.requestBodyType = route.requestConfiguration.requestBodyType ?? .xWWWFormURLEncoded
     }
     
     /**

@@ -48,18 +48,17 @@ extension TNError: LocalizedError {
                 }).joined(separator: ", ")
             }
             let fullDescription = "\(debugDescription)\(errorKeys)"
-            return NSLocalizedString("Cannot deserialize object: \(fullDescription)", comment: "TNError")
+            return NSLocalizedString("Cannot deserialize object: ", comment: "TNError") + fullDescription
         case .networkError(let error):
-                return NSLocalizedString("Network error: \(error)", comment: "TNError")
+                return NSLocalizedString("Network error: ", comment: "TNError") + error.localizedDescription
         case .cannotConvertToJSON(let error):
-            return NSLocalizedString("Cannot create JSON object (SwiftyJSON): \(error)", comment: "TNError")
+            return NSLocalizedString("Cannot create JSON object (SwiftyJSON): ", comment: "TNError") + error.localizedDescription
         case .cannotConvertToString:
             return NSLocalizedString("Cannot convert to String", comment: "TNError")
         case .notSuccess(let code):
-            return NSLocalizedString("The request didn't return 2xx status code but \(code) instead", comment: "TNError")
+            return String(format: NSLocalizedString("The request didn't return 2xx status code but %i instead", comment: "TNError"), code)
         case .cancelled(let error):
-            return NSLocalizedString("The request has been cancelled: \(error)", comment: "TNError")
-
+            return NSLocalizedString("The request has been cancelled: ", comment: "TNError") + error.localizedDescription
         }
     }
 }

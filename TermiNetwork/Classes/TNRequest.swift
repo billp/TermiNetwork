@@ -47,14 +47,32 @@ public enum TNRequestBodyType: String {
 }
 
 public struct TNRequestConfiguration {
-    var cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy
-    var timeoutInterval: TimeInterval = 60
-    var requestBodyType: TNRequestBodyType? = nil
+    public var cachePolicy: URLRequest.CachePolicy?
+    public var timeoutInterval: TimeInterval?
+    public var requestBodyType: TNRequestBodyType?
     
-    public init(cachePolicy: URLRequest.CachePolicy? = .useProtocolCachePolicy, timeoutInterval: TimeInterval? = 60, requestBodyType: TNRequestBodyType? = nil) {
-        self.cachePolicy = cachePolicy!
-        self.timeoutInterval = timeoutInterval!
-        self.requestBodyType = requestBodyType
+    public static let `default` = TNRequestConfiguration(cachePolicy: .useProtocolCachePolicy,
+                                                             timeoutInterval: 60,
+                                                             requestBodyType: .xWWWFormURLEncoded)
+    
+    public init() { }
+    
+    public init(cachePolicy: URLRequest.CachePolicy?,
+                timeoutInterval: TimeInterval?,
+                requestBodyType: TNRequestBodyType?) {
+        self.cachePolicy = cachePolicy ?? TNRequestConfiguration.default.cachePolicy
+        self.timeoutInterval = timeoutInterval ?? TNRequestConfiguration.default.timeoutInterval
+        self.requestBodyType = requestBodyType ?? TNRequestConfiguration.default.requestBodyType
+    }
+    
+    public init(cachePolicy: URLRequest.CachePolicy?) {
+        self.init(cachePolicy: cachePolicy, timeoutInterval: nil, requestBodyType: nil)
+    }
+    public init(timeoutInterval: TimeInterval?) {
+        self.init(cachePolicy: nil, timeoutInterval: timeoutInterval, requestBodyType: nil)
+    }
+    public init(requestBodyType: TNRequestBodyType?) {
+        self.init(cachePolicy: nil, timeoutInterval: nil, requestBodyType: requestBodyType)
     }
 }
 
@@ -76,11 +94,10 @@ open class TNRequest: TNOperation {
 
     // MARK: - Private properties
     private var headers: [String: String]?
-   
+    private var timeoutInterval: TimeInterval?
     
     // MARK: - Public properties
     public var cachePolicy: URLRequest.CachePolicy
-    public var timeoutInterval: TimeInterval?
     public var requestBodyType: TNRequestBodyType = .xWWWFormURLEncoded
 
     // MARK: - Deprecations
@@ -141,20 +158,78 @@ open class TNRequest: TNOperation {
         self.headers = headers
         self.path = path.components.joined(separator: "/")
         self.cachePolicy = cachePolicy ?? .useProtocolCachePolicy
-        self.timeoutInterval = timeoutInterval
+        self.timeoutInterval = timeoutInterval ?? 60
         self.params = params
         self.requestBodyType = requestBodyType ?? .xWWWFormURLEncoded
     }
     
-    public init(method: TNMethod, url: String, headers: [String: String]? = nil, params: [String: Any?]? = nil, configuration: TNRequestConfiguration? = TNRequestConfiguration()) {
+    /**
+     Initializes a TNRequest request
+     
+     - parameters:
+         - method: The http method of request, e.g. .get, .post, .head, etc.
+         - url: The URL of the request
+         - headers: A Dictionary of header values, etc. ["Content-type": "text/html"] (optional)
+         - params: A Dictionary as request params. If method is .get it automatically appends them to url, otherwise it sets them as request body.
+         - configuration: A TNRequestConfiguration object
+     */
+    public init(method: TNMethod, url: String, headers: [String: String]? = nil, params: [String: Any?]? = nil, configuration: TNRequestConfiguration? = nil) {
         self.method = method
         self.headers = headers
         self.params = params
         self.pathType = .full
         self.path = url
-        self.cachePolicy = configuration!.cachePolicy
-        self.timeoutInterval = configuration!.timeoutInterval
-        self.requestBodyType = configuration!.requestBodyType ?? .xWWWFormURLEncoded
+        self.cachePolicy = configuration?.cachePolicy ?? TNRequestConfiguration.default.cachePolicy!
+        self.timeoutInterval = configuration?.timeoutInterval ?? TNRequestConfiguration.default.timeoutInterval!
+        self.requestBodyType = configuration?.requestBodyType ?? TNRequestConfiguration.default.requestBodyType!
+    }
+    
+    /**
+     Initializes a TNRequest request
+     
+     - parameters:
+         - method: The http method of request, e.g. .get, .post, .head, etc.
+         - url: The URL of the request
+         */
+    convenience init(method: TNMethod, url: String) {
+        self.init(method: method, url: url, headers: nil, params: nil)
+    }
+    
+    /**
+     Initializes a TNRequest request
+     
+     - parameters:
+         - method: The http method of request, e.g. .get, .post, .head, etc.
+         - url: The URL of the request
+         - configuration: A TNRequestConfiguration object
+     */
+    convenience init(method: TNMethod, url: String, configuration: TNRequestConfiguration = TNRequestConfiguration()) {
+        self.init(method: method, url: url, headers: nil, params: nil, configuration: configuration)
+    }
+    
+    /**
+     Initializes a TNRequest request
+     
+     - parameters:
+         - method: The http method of request, e.g. .get, .post, .head, etc.
+         - url: The URL of the request
+         - headers: A Dictionary of header values, etc. ["Content-type": "text/html"] (optional)
+     */
+    convenience init(method: TNMethod, url: String, headers: [String: String]? = nil) {
+        self.init(method: method, url: url, headers: nil, params: nil)
+    }
+    
+    /**
+     Initializes a TNRequest request
+     
+     - parameters:
+         - method: The http method of request, e.g. .get, .post, .head, etc.
+         - url: The URL of the request
+         - headers: A Dictionary of header values, etc. ["Content-type": "text/html"] (optional)
+         - configuration: A TNRequestConfiguration object
+     */
+    convenience init(method: TNMethod, url: String, headers: [String: String]? = nil, configuration: TNRequestConfiguration = TNRequestConfiguration()) {
+        self.init(method: method, url: url, headers: nil, params: nil, configuration: configuration)
     }
     
     /**
@@ -163,15 +238,15 @@ open class TNRequest: TNOperation {
      - parameters:
          - route: a TNRouteProtocol enum value
      */
-    public init(route: TNRouteProtocol, configuration: TNRequestConfiguration? = TNRequestConfiguration()) {
+    public init(route: TNRouterProtocol, configuration: TNRequestConfiguration? = nil) {
         let route = route.configure()
         self.method = route.method
         self.headers = route.headers
         self.params = route.params
         self.path = route.path.components.joined(separator: "/")
-        self.cachePolicy = configuration!.cachePolicy
-        self.timeoutInterval = configuration!.timeoutInterval
-        self.requestBodyType = configuration!.requestBodyType ?? route.requestBodyType
+        self.cachePolicy = configuration?.cachePolicy ?? route.requestConfiguration.cachePolicy ?? TNRequestConfiguration.default.cachePolicy!
+        self.timeoutInterval = configuration?.timeoutInterval ?? route.requestConfiguration.timeoutInterval ?? TNRequestConfiguration.default.timeoutInterval!
+        self.requestBodyType = configuration?.requestBodyType ?? route.requestConfiguration.requestBodyType ?? TNRequestConfiguration.default.requestBodyType!
     }
 
     // MARK: - Create request
@@ -211,7 +286,7 @@ open class TNRequest: TNOperation {
             throw TNError.invalidURL
         }
         
-        var request = URLRequest(url: url, cachePolicy: cachePolicy, timeoutInterval: currentEnvironment.timeoutInterval)
+        var request = URLRequest(url: url, cachePolicy: cachePolicy)
         
         // Add headers
         if headers == nil && TNRequest.fixedHeaders.keys.count > 0 {
@@ -219,13 +294,14 @@ open class TNRequest: TNOperation {
         }
         headers?.merge(TNRequest.fixedHeaders, uniquingKeysWith: { (_, new) in new })
         
+        if let timeoutInterval = self.timeoutInterval {
+            request.timeoutInterval = timeoutInterval
+        }
+        
         if let headers = headers {
             for (key, value) in headers {
                 request.addValue(value, forHTTPHeaderField: key)
             }
-        }
-        if let timeoutInterval = timeoutInterval {
-            request.timeoutInterval = timeoutInterval
         }
         
         // Set http method

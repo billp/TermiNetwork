@@ -17,7 +17,7 @@ open class TNRouter {
      - onSuccess: specifies a success callback of type TNSuccessCallback<T> (optional)
      - onFailure: specifies a failure callback of type TNFailureCallback<T> (optional)
      */
-    public static func start<T, R: TNRouteProtocol>(queue: TNQueue? = TNQueue.shared, route: R, responseType: T.Type, onSuccess: @escaping TNSuccessCallback<T>, onFailure: @escaping TNFailureCallback) throws where T: Decodable {
+    public static func start<T, R: TNRouterProtocol>(queue: TNQueue? = TNQueue.shared, route: R, responseType: T.Type, onSuccess: @escaping TNSuccessCallback<T>, onFailure: @escaping TNFailureCallback) throws where T: Decodable {
         let call = TNRequest(route: route)
         
         call.start(queue: queue, responseType: responseType, onSuccess: onSuccess, onFailure: onFailure)
@@ -33,7 +33,7 @@ open class TNRouter {
      - onSuccess: specifies a success callback of type TNSuccessCallback<T> (optional)
      - onFailure: specifies a failure callback of type TNFailureCallback<T> (optional)
      */
-    public static func start<T, R: TNRouteProtocol>(queue: TNQueue? = TNQueue.shared, route: R, responseType: T.Type, onSuccess: @escaping TNSuccessCallback<T>, onFailure: @escaping TNFailureCallback) throws where T: UIImage {
+    public static func start<T, R: TNRouterProtocol>(queue: TNQueue? = TNQueue.shared, route: R, responseType: T.Type, onSuccess: @escaping TNSuccessCallback<T>, onFailure: @escaping TNFailureCallback) throws where T: UIImage {
         let call = TNRequest(route: route)
         call.start(queue: queue, responseType: responseType, onSuccess: onSuccess, onFailure: onFailure)
     }
@@ -48,7 +48,7 @@ open class TNRouter {
      - onSuccess: specifies a success callback of type TNSuccessCallback<T> (optional)
      - onFailure: specifies a failure callback of type TNFailureCallback<T> (optional)
      */
-    public static func start<R: TNRouteProtocol>(queue: TNQueue? = TNQueue.shared, route: R, onSuccess: @escaping TNSuccessCallback<Data>, onFailure: @escaping TNFailureCallback) throws {
+    public static func start<R: TNRouterProtocol>(queue: TNQueue? = TNQueue.shared, route: R, onSuccess: @escaping TNSuccessCallback<Data>, onFailure: @escaping TNFailureCallback) throws {
         let call = TNRequest(route: route)
         call.start(queue: queue, responseType: Data.self, onSuccess: onSuccess, onFailure: onFailure)
     }

@@ -13,18 +13,21 @@ public struct TNRouteConfiguration {
     var path: TNPath
     var params: [String: Any?]? = nil
     var headers: [String: String]? = nil
-    var requestBodyType: TNRequestBodyType = .xWWWFormURLEncoded
+    var requestConfiguration: TNRequestConfiguration = TNRequestConfiguration()
     
-    public init(method: TNMethod, path: TNPath, params: [String: Any?]? = nil, headers: [String: String]? = nil, requestBodyType: TNRequestBodyType = .xWWWFormURLEncoded) {
+    public init(method: TNMethod, path: TNPath, params: [String: Any?]? = nil, headers: [String: String]? = nil, requestConfiguration: TNRequestConfiguration = TNRequestConfiguration()) {
         self.method = method
         self.path = path
         self.params = params
         self.headers = headers
-        self.requestBodyType = requestBodyType
+        self.requestConfiguration = requestConfiguration
     }
 }
 
 // MARK: - Protocols
-public protocol TNRouteProtocol {
+@available(*, deprecated, message: "is deprecated and will be removed from future releases. Use TNRouterProtocol instead.")
+public typealias TNRouteProtocol = TNRouterProtocol
+
+public protocol TNRouterProtocol {
     func configure() -> TNRouteConfiguration
 }
