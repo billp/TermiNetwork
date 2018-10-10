@@ -36,8 +36,13 @@ public enum TNMethod: String {
     case patch
 }
 
+/**
+ The the body type of the request
+*/
 public enum TNRequestBodyType: String {
+    /// The request params are sent as application/x-www-form-urlencoded mime type
     case xWWWFormURLEncoded = "application/x-www-form-urlencoded"
+    /// The request params are sent as application/json mime type
     case JSON = "application/json"
 }
 

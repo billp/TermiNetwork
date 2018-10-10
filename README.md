@@ -29,7 +29,7 @@ end
 
 ### Simple usage
 
-```java
+```swift
 let params = ["title": "Go shopping."]
 let headers = ["x-auth": "abcdef1234"]
 
@@ -60,7 +60,7 @@ JSON.self, Codable.self, UIImage.self, Data.self or String.self
 ### Advanced usage with configuration and custom queue
 The request bellow uses a custom queue *myQueue* with a failure mode of value *.continue* (default), which means that the queue continues its execution even if a request fails and a max concurrent operation count of 2. It also uses a TNRequestConfiguration object that specifies some additional request parameters.
 
-```java
+```swift
 let myQueue = TNQueue(failureMode: .continue)
 myQueue.maxConcurrentOperationCount = 2
 
@@ -85,107 +85,54 @@ TNRequest(method: .post,
 ```
 #### Additional arguments
 
-*configuration*: The configuration object to use.
+*configuration*: The configuration object to use. The available configuration proerties are:
+- *cachePolicy*: The NSURLRequest.CachePolicy used by NSURLRequest internally (see apple docs for available cases). Defaults to *.useProtocolCachePolicy*
+- *timeoutInterval*: The timeout interval used by NSURLRequest internally  (see apple docs for more info). Defaults to 60
+- *requestBodyType*: It specifies how to send request params, available values:
+  - .xWWWFormURLEncoded (default): It sends the params as application/x-www-form-urlencoded mime type.
+  - .JSON: It converts the params to JSON format and them as application/json mime type.
 
 *queue*: It specifies the queue in which the request will be  added. If you omit this argument, the request is being added to a shared queue (TNQueue.shared).
 
 ## Error Handling
 
-There are two groups of errors that you can handle, the first group includes those that can be handled before request execution (e.g. invalid url, params), with try/catch, and the second group includes those that can be handled after request execution (e.g. empty response from server,  server error, etc...), passed in **onFailure** closure.
+Available error cases (TNError) passed in *onFailure* callback of a TNRequest:
+- *.environmentNotSet*: You forgot to set the Router environment.
+- *.invalidURL*: The url cannot be parsed, e.g. it contains invalid characters.
+- *.responseDataIsEmpty*: the server response body is empty. You can avoid this error by setting *TNRequest.allowEmptyResponseBody* to *true*.
+- *.responseInvalidImageData*: failed to convert response Data to UIImage.
+- *.cannotDeserialize(Error)*: e.g. your model structure doesn't match with the server's response. It carries the the error thrown by deserializer (DecodingError.dataCorrupted),
+- *.cannotConvertToJSON*: cannot convert the response Data to JSON object (SwiftyJSON).
+- *.networkError(Error)*: e.g. timeout error. It carries the error from URLSessionDataTask.
+- *.notSuccess(Int)*: The http status code is different to *2xx*. It carries the actual status code of the completed request.
+- *.cancelled(Error)*: The request is cancelled. It carries the error from URLSessionDataTask.
 
-### Errors before request execution
-
-Available error cases to catch:
-
-- **environmentNotSet**
-- **invalidURL**
-
-#### Example
-
-```swift
-static func getCategories(onSuccess: @escaping TNSuccessCallback<FoodCategories>, onFailure: @escaping TNFailureCallback) {
-    do {
-        try TNCall(route: APIFoodRouter.categories).start(onSuccess: onSuccess, onFailure: onFailure)
-    } catch TNRequestError.environmentNotSet {
-        debugPrint("environment not set")
-    } catch TNRequestError.invalidURL {
-        debugPrint("invalid url")
-    } catch {
-        debugPrint("any other error")
-    }
-}
-```
-### Errors after request execution
-
-Available error cases in **onFailure** closure:
-
-- **responseDataIsEmpty**: the server response body is empty. You can avoid this error by setting **TNCall.allowEmptyResponseBody** to **true**
-- **responseInvalidImageData**: in case of image deserialization
-- **cannotDeserialize(Error)**: e.g. your model structure doesn't match with the server's response. It returns the error thrown by deserializer (DecodingError.dataCorrupted)
-- **networkError(Error)**: e.g. time out error, contains the error from URLSessionDataTask, in case you need it
-- **notSuccess(Int)**: The server's response is not success, that is http status code is different to **2xx**. The status code is returned so you can do whatever you need with it
-- **cancelled(Error)**: When you cancel a request by calling the **.cancel()** method you will get this error, along with the error from URLSessionDataTask.
-
-In any case you can use the **error.localizedDescription** method to get a readable error message in onFailure callback.
+In any case you can use the **error.description** method to get a readable error message in onFailure callback.
 
 #### Example
 
 ```swift
-static func testFailureCall(onSuccess: @escaping TNSuccessCallback<Data>, onFailure: @escaping TNFailureCallback) {
-    try! TNCall(route: APIFoodRouter.test).start(onSuccess: onSuccess, onFailure: { error, data in
-        switch error {
+TNRequest(method: .get, url: "https://myweb.com/todos").start(responseType: JSON.self, onSuccess: { json in
+            print(json)
+        }) { (error, data) in
+            switch error {
             case .notSuccess(let statusCode):
                 debugPrint("Status code " + String(statusCode))
                 break
             case .networkError(let error):
-                debugPrint("Network error: " + error)
+                debugPrint("Network error: " + error.localizedDescription)
                 break
             case .cancelled(let error):
-                debugPrint("Request cancelled with error: " + error)
+                debugPrint("Request cancelled with error: " + error.localizedDescription)
                 break
             default:
                 debugPrint("Error: " + error.localizedDescription)
+            }
         }
-
-        //Fallthrough to the passed onFailure block
-        onFailure(error, data)
-    })
-}
 ```
-
-## Queues
-When you call the **.start(...)** method of **TNCall**, it's added to a default **TNQueue** (**TNQueue.shared**) under the hood. You can also initialize your own **TNQueue** and set your own params that meet your needs. Bellow you can see an example of how you can initialize your own queue.
-
-```swift
-let myQueue = TNQueue(failureMode: .continue) // You can set also .cancelAll
-myQueue.maxConcurrentOperationCount = 3 // Set the concurrent requests executing to 3
-
-try? TNCall(method: .get, url: "http://www.google.com", params: nil).start(queue: myQueue, onSuccess: { _ in
-	// Success
-}) { error, data in
-	// Failure
-}
-
-```
-Because **TNQueue** is a subclass of **OperationQueue**, you can use all the properties/methods of its parent, like for example **.cancelAllOperations()** which cancels all the requests in queue.
-
-
-## Fixed Headers
-You can set headers to be automatically included to every **TNCall** by setting your headers to the static var **fixedHeaders** (useful when you have to include authorization token in headers)
-
-```swift
-TNCall.fixedHeaders = ["Authorization": "[YOUR TOKEN]"]
-```
-
-## Cache Policy and Timeout Interval
-You can set a cache policy and timeout interval that is suitable to your needs by using the convenience initializer of TNCall
-```swift
-try? TNCall(route: APIFoodRouter.categories, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: 5).start(onSuccess: onSuccess, onFailure: onFailure)
-```
-> More info about cachePolicy you can find at Apple's documentation: https://developer.apple.com/documentation/foundation/nsurlrequest.cachepolicy
 
 ## UIImageView Extension
-You can use the **setRemoteImage** method of UIImageView to download an image from a remote server
+You can use the *setRemoteImage* method of UIImageView to download an image from a remote server
 
 Example:
 ```swift
