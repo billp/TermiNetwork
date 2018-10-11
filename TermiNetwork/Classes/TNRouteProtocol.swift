@@ -13,9 +13,9 @@ public struct TNRouteConfiguration {
     var path: TNPath
     var params: [String: Any?]? = nil
     var headers: [String: String]? = nil
-    var requestConfiguration: TNRequestConfiguration = TNRequestConfiguration()
+    var requestConfiguration: TNRequestConfiguration? = nil
     
-    public init(method: TNMethod, path: TNPath, params: [String: Any?]? = nil, headers: [String: String]? = nil, requestConfiguration: TNRequestConfiguration = TNRequestConfiguration()) {
+    public init(method: TNMethod, path: TNPath, params: [String: Any?]? = nil, headers: [String: String]? = nil, requestConfiguration: TNRequestConfiguration? = TNRequestConfiguration.default) {
         self.method = method
         self.path = path
         self.params = params

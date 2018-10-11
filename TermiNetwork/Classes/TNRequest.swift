@@ -190,17 +190,6 @@ open class TNRequest: TNOperation {
      - parameters:
          - method: The http method of request, e.g. .get, .post, .head, etc.
          - url: The URL of the request
-         */
-    convenience init(method: TNMethod, url: String) {
-        self.init(method: method, url: url, headers: nil, params: nil)
-    }
-    
-    /**
-     Initializes a TNRequest request
-     
-     - parameters:
-         - method: The http method of request, e.g. .get, .post, .head, etc.
-         - url: The URL of the request
          - configuration: A TNRequestConfiguration object
      */
     convenience init(method: TNMethod, url: String, configuration: TNRequestConfiguration = TNRequestConfiguration()) {
@@ -238,15 +227,15 @@ open class TNRequest: TNOperation {
      - parameters:
          - route: a TNRouteProtocol enum value
      */
-    public init(route: TNRouterProtocol, configuration: TNRequestConfiguration? = nil) {
+    public init(route: TNRouterProtocol) {
         let route = route.configure()
         self.method = route.method
         self.headers = route.headers
         self.params = route.params
         self.path = route.path.components.joined(separator: "/")
-        self.cachePolicy = configuration?.cachePolicy ?? route.requestConfiguration.cachePolicy ?? TNRequestConfiguration.default.cachePolicy!
-        self.timeoutInterval = configuration?.timeoutInterval ?? route.requestConfiguration.timeoutInterval ?? TNRequestConfiguration.default.timeoutInterval!
-        self.requestBodyType = configuration?.requestBodyType ?? route.requestConfiguration.requestBodyType ?? TNRequestConfiguration.default.requestBodyType!
+        self.cachePolicy = TNEnvironment.current?.requestConfiguration?.cachePolicy ?? route.requestConfiguration!.cachePolicy!
+        self.timeoutInterval = TNEnvironment.current?.requestConfiguration?.timeoutInterval ?? route.requestConfiguration!.timeoutInterval!
+        self.requestBodyType = TNEnvironment.current?.requestConfiguration?.requestBodyType ?? route.requestConfiguration!.requestBodyType!
     }
 
     // MARK: - Create request

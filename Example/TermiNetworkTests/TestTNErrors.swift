@@ -10,7 +10,7 @@
 import XCTest
 import TermiNetwork
 
-class TestTNRequestResponseErrors: XCTestCase {
+class TestTNErrors: XCTestCase {
     
     override func setUp() {
         super.setUp()
@@ -25,13 +25,50 @@ class TestTNRequestResponseErrors: XCTestCase {
         TNEnvironment.set(Environment.termiNetworkRemote)
     }
     
+    func testEnvironmentNotSet() {
+        TNEnvironment.current = nil
+        
+        TNRequest(method: .get,
+                  url: "http://www.google.com",
+                  headers: nil,
+                  params: nil).start(responseType: UIImage.self, onSuccess: { data in
+                    XCTAssert(false)
+                  }) { error, data in
+                    if case TNError.environmentNotSet = error {
+                        XCTAssert(true)
+                    } else {
+                        XCTAssert(false)
+                    }
+        }
+    }
+    
+    func testInvalidURL() {
+        do {
+            try _ = TNRequest(method: .get, url: "http://εεε.google.κωμ", headers: nil, params: nil).asRequest()
+            XCTAssert(false)
+        } catch TNError.invalidURL {
+            XCTAssert(true)
+        } catch {
+            XCTAssert(false)
+        }
+    }
+    
+    func testValidURL() {
+        do {
+            try _ = TNRequest(method: .get, url: "http://www.google.com", headers: nil, params: nil).asRequest()
+            XCTAssert(true)
+        } catch {
+            XCTAssert(false)
+        }
+    }
+    
     func testResponseDataIsEmpty() {
         TNRequest.allowEmptyResponseBody = false
 
         let expectation = XCTestExpectation(description: "Test Empty Response Body")
         var failed = true
        
-        try? TNRouter.start(route: APIRouter.testEmptyBody, onSuccess: { data in
+        TNRouter.start(APIRouter.testEmptyBody, onSuccess: { data in
             expectation.fulfill()
             failed = true
         }, onFailure: { error, data in
@@ -55,7 +92,7 @@ class TestTNRequestResponseErrors: XCTestCase {
         let expectation = XCTestExpectation(description: "Test Not Empty Response Body")
         var failed = true
         
-        try? TNRouter.start(route: APIRouter.testEmptyBody, onSuccess: { data in
+        TNRouter.start(APIRouter.testEmptyBody, onSuccess: { data in
             expectation.fulfill()
             failed = false
         }, onFailure: { error, data in
@@ -72,7 +109,7 @@ class TestTNRequestResponseErrors: XCTestCase {
         let expectation = XCTestExpectation(description: "Test Empty Response Body")
         var failed = true
         
-        try? TNRouter.start(route: APIRouter.testPostParams(value1: false, value2: 1, value3: 2, value4: "", value5: nil), responseType: UIImage.self, onSuccess: { image in
+        TNRouter.start(APIRouter.testPostParams(value1: false, value2: 1, value3: 2, value4: "", value5: nil), responseType: UIImage.self, onSuccess: { image in
             expectation.fulfill()
             failed = true
         }, onFailure: { error, data in
@@ -94,7 +131,7 @@ class TestTNRequestResponseErrors: XCTestCase {
         let expectation = XCTestExpectation(description: "Test Empty Response Body")
         var failed = true
         
-        try? TNRouter.start(route: APIRouter.testImage(imageName: "sample.jpeg"), responseType: UIImage.self, onSuccess: { image in
+        TNRouter.start(APIRouter.testImage(imageName: "sample.jpeg"), responseType: UIImage.self, onSuccess: { image in
             expectation.fulfill()
             failed = false
         }, onFailure: { error, data in
@@ -111,7 +148,7 @@ class TestTNRequestResponseErrors: XCTestCase {
         let expectation = XCTestExpectation(description: "Test Response Cannot Deserialize")
         var failed = true
         
-        try? TNRouter.start(route: APIRouter.testInvalidParams(value1: "a", value2: "b"), responseType: TestParam.self, onSuccess: { data in
+        TNRouter.start(APIRouter.testInvalidParams(value1: "a", value2: "b"), responseType: TestParam.self, onSuccess: { data in
             failed = true
             expectation.fulfill()
         }, onFailure: { error, data in
@@ -135,7 +172,7 @@ class TestTNRequestResponseErrors: XCTestCase {
         let expectation = XCTestExpectation(description: "Test Response Can Deserialize")
         var failed = true
         
-        try? TNRouter.start(route: APIRouter.testGetParams(value1: false, value2: 3, value3: 1.32, value4: "Test", value5: nil), responseType: TestParam.self, onSuccess: { data in
+        TNRouter.start(APIRouter.testGetParams(value1: false, value2: 3, value3: 1.32, value4: "Test", value5: nil), responseType: TestParam.self, onSuccess: { data in
             failed = false
             expectation.fulfill()
         }, onFailure: { error, data in
@@ -155,7 +192,7 @@ class TestTNRequestResponseErrors: XCTestCase {
         let expectation = XCTestExpectation(description: "Test Response Network Error")
         var failed = true
         
-        try? TNRouter.start(route: APIRouter.testInvalidParams(value1: "a", value2: "b"), onSuccess: { data in
+        TNRouter.start(APIRouter.testInvalidParams(value1: "a", value2: "b"), onSuccess: { data in
             failed = true
             expectation.fulfill()
         }, onFailure: { error, data in
@@ -179,7 +216,7 @@ class TestTNRequestResponseErrors: XCTestCase {
         let expectation = XCTestExpectation(description: "Test Not Success")
         var failed = true
         
-        try! TNRouter.start(route: APIRouter.testStatusCode(code: 404), onSuccess: { data in
+        TNRouter.start(APIRouter.testStatusCode(code: 404), onSuccess: { data in
             expectation.fulfill()
             failed = true
             

@@ -20,28 +20,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         // Do any additional setup after loading the view, typically from a nib.
         
         self.tableView.isHidden = true
-        
-        let myQueue = TNQueue(failureMode: .continue)
-        myQueue.maxConcurrentOperationCount = 2
-        
-        let configuration = TNRequestConfiguration(
-            cachePolicy: .useProtocolCachePolicy,
-            timeoutInterval: 30,
-            requestBodyType: .JSON
-        )
-        
-        let params = ["title": "Go shopping."]
-        let headers = ["x-auth": "abcdef1234"]
-        
-        TNRequest(method: .post,
-                  url: "https://myweb.com/todos",
-                  headers: headers,
-                  params: params,
-                  configuration: configuration).start(queue: myQueue, responseType: JSON.self, onSuccess: { json in
-                    print(json)
-                  }, onFailure: { (error, data) in
-                    print(error)
-                  })
     }
     
     override func viewWillAppear(_ animated: Bool) {

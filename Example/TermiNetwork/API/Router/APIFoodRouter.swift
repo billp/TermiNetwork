@@ -43,3 +43,31 @@ enum APIFoodRouter: TNRouterProtocol {
         TNRequest(route: self.categories).start(responseType: FoodCategories.self, onSuccess: onSuccess, onFailure: onFailure)
     }
 }
+
+enum TodosRouter: TNRouterProtocol {
+    // Define your routes
+    case list
+    case show(id: Int)
+    case add(title: String)
+    case remove(id: Int)
+    case setCompleted(id: Int, completed: Bool)
+    
+    // Set method, path, params, headers for each route
+    func configure() -> TNRouteConfiguration {
+        let headers = ["x-auth": "abcdef1234"]
+        let configuration = TNRequestConfiguration(requestBodyType: .JSON)
+        
+        switch self {
+        case .list:
+            return TNRouteConfiguration(method: .get, path: path("todos"), headers: headers, requestConfiguration: configuration) // GET /todos
+        case .show(let id):
+            return TNRouteConfiguration(method: .get, path: path("todo", String(id)), headers: headers, requestConfiguration: configuration) // GET /todos/[id]
+        case .add(let title):
+            return TNRouteConfiguration(method: .post, path: path("todos"), params: ["title": title], headers: headers, requestConfiguration: configuration) // POST /todos
+        case .remove(let id):
+            return TNRouteConfiguration(method: .delete, path: path("todo", String(id)), headers: headers, requestConfiguration: configuration) // DELETE /todo/[id]
+        case .setCompleted(let id, let completed):
+            return TNRouteConfiguration(method: .patch, path: path("todo", String(id)), params: ["completed": completed], headers: headers, requestConfiguration: configuration) // PATCH /todo/[id]
+        }
+    }
+}

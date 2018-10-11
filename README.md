@@ -95,7 +95,7 @@ TNRequest(method: .post,
 *queue*: It specifies the queue in which the request will be  added. If you omit this argument, the request is being added to a shared queue (TNQueue.shared).
 
 ## Router
-You can organize your requests by creating classes that conform  TNEnvironmentProtocol and TNRouterProtocol. See the examples bellow:
+You can organize your requests by creating an Environment (class) and a Router (enum) that conform TNEnvironmentProtocol and TNRouterProtocol respectively. To do so, create your environment class and at least one router file as shown bellow:
 
 #### Environment.swift
 
@@ -128,7 +128,51 @@ enum Environment: TNEnvironmentProtocol {
         }
     }
 }
+```
+You can optionally pass a requestConfiguration object to make all the request inherit the specified settings. (see 'Advanced usage with configuration and custom queue' above for how to create a configuration object.)
 
+#### TodosRouter.swift
+
+```swift
+enum TodosRouter: TNRouterProtocol {
+    // Define your routes
+    case list
+    case show(id: Int)
+    case add(title: String)
+    case remove(id: Int)
+    case setCompleted(id: Int, completed: Bool)
+
+    // Set method, path, params, headers for each route
+    func configure() -> TNRouteConfiguration {
+        let headers = ["x-auth": "abcdef1234"]
+        let configuration = TNRequestConfiguration(requestBodyType: .JSON)
+
+        switch self {
+        case .list:
+            return TNRouteConfiguration(method: .get, path: path("todos"), headers: headers, requestConfiguration: configuration) // GET /todos
+        case .show(let id):
+            return TNRouteConfiguration(method: .get, path: path("todo", String(id)), headers: headers, requestConfiguration: configuration) // GET /todos/[id]
+        case .add(let title):
+            return TNRouteConfiguration(method: .post, path: path("todos"), params: ["title": title], headers: headers, requestConfiguration: configuration) // POST /todos
+        case .remove(let id):
+            return TNRouteConfiguration(method: .delete, path: path("todo", String(id)), headers: headers, requestConfiguration: configuration) // DELETE /todo/[id]
+        case .setCompleted(let id, let completed):
+            return TNRouteConfiguration(method: .patch, path: path("todo", String(id)), params: ["completed": completed], headers: headers, requestConfiguration: configuration) // PATCH /todo/[id]
+        }
+    }
+}
+```
+You can optionally pass a requestConfiguration object to specify settings for each route. (see 'Advanced usage with configuration and custom queue' above for how to create a configuration object.)
+
+
+#### Finally use the TNRouter to start a request
+
+```swift
+TNRouter.start(TodosRouter.add(title: "Go shopping!"), responseType: Todo.self, onSuccess: { todo in
+    // do something with todo
+}) { (error, data) in
+    // show error
+}
 ```
 
 ## Error Handling

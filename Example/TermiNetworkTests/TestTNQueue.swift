@@ -99,7 +99,7 @@ class TestTNQueue: XCTestCase {
         }
         
         
-        wait(for: [expectation], timeout: 10)
+        wait(for: [expectation], timeout: 60)
         
         XCTAssert(queue.operationCount == 0 && !completedWithError)
     }
