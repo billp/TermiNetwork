@@ -122,8 +122,8 @@ enum Environment: TNEnvironmentProtocol {
                                  requestConfiguration: requestConfiguration)
         case .production:
             return TNEnvironment(scheme: .http,
-                                 host: "www.themealdb.com",
-                                 suffix: path("api", "json", "v1", "1"),
+                                 host: "myprodserver.com",
+                                 suffix: path("v1"),
                                  requestConfiguration: requestConfiguration)
         }
     }
@@ -172,6 +172,27 @@ TNRouter.start(TodosRouter.add(title: "Go shopping!"), responseType: Todo.self, 
     // do something with todo
 }) { (error, data) in
     // show error
+}
+```
+
+## TNQueue Hooks
+Hooks can be run before/after each request execution of a queue. The following hooks are executed in the shared default queue:
+
+```swift
+TNQueue.shared.beforeAllRequestsCallback = {
+    // e.g. show progress loader
+}
+
+TNQueue.shared.afterAllRequestsCallback = { completedWithError in
+    // e.g. hide progress loader
+}
+
+TNQueue.shared.beforeEachRequestCallback = { request in
+    // e.g. print log
+}
+
+TNQueue.shared.afterEachRequestBlock = { request, data, urlResponse, error in // request: Request, data: Data, urlResponse: URLResponse, error: Error
+    // e.g. print log
 }
 ```
 
@@ -224,28 +245,6 @@ imageView.setRemoteImage(url: "http://www.website.com/image.jpg", defaultImage: 
 	return newImage
 }) { image, error in
 	imageView.activityIndicator.stopAnimating()
-}
-```
-
-## Hooks
-Hooks are running before and/or after request execution and allow you to run a block of code automatically. Supported hooks are:
-
-```swift
-
-TNCall.beforeAllRequestsBlock = {
-    // e.g. show progress loader
-}
-
-TNCall.afterAllRequestsBlock = {
-    // e.g. hide progress loader
-}
-
-TNCall.beforeEachRequestBlock = { call in // call: TNCall
-    // e.g. print log
-}
-
-TNCall.afterEachRequestBlock = { call, data, urlResponse, error in // call: TNCall, data: Data, urlResponse: URLResponse, error: Error
-    // e.g. print log
 }
 ```
 
