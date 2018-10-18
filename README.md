@@ -40,25 +40,24 @@ TNRequest(method: .post, url: "https://myweb.com/todos", headers: headers, param
 }
 ```
 
-#### Arguments
+#### Parameters
 
-*method*: one of the following supported HTTP methods
+**method**: one of the following supported HTTP methods
 
 ```
 .get, .head, .post, .put, .delete, .connect, .options, .trace or .patch
 ```
 
-*responseType*: one of the following supported response types
+**responseType**: one of the following supported response types
 ```
 JSON.self, Codable.self, UIImage.self, Data.self or String.self
 ```
 
-*onSuccess*: a callback returning an object with the data type specified by
+**onSuccess**: a callback returning an object with the data type specified by
 
-*onFailure*: a callback returning an error+data on failure. There are two cases of this callback being called: the first is that the http status code is different than 2xx and the second is that there is an error with data conversion, e.g. it fails on deserialization of the *responseType*.
+**onFailure**: a callback returning an error+data on failure. There are two cases when this callback being called: the first is that the http status code is different than 2xx and the second is that there is an error with data conversion, e.g. it fails on deserialization of the *responseType*.
 
 ### Advanced usage with configuration and custom queue
-The request bellow uses a custom queue *myQueue* with a failure mode of value *.continue* (default), which means that the queue continues its execution even if a request fails, and also sets the max concurrent operation count of 2. Finally, it uses a TNRequestConfiguration object to provide some additional settings.
 
 ```swift
 let myQueue = TNQueue(failureMode: .continue)
@@ -83,19 +82,21 @@ TNRequest(method: .post,
     print(error)
 }
 ```
-#### Additional arguments
+The request above uses a custom queue *myQueue* with a failure mode of value *.continue* (default), which means that the queue continues its execution even if a request fails, and also sets the maximum concurrent operation count to 2. Finally, it uses a TNRequestConfiguration object to provide some additional settings.
 
-*configuration*: The configuration object to be used. The available configuration properties are:
-- *cachePolicy*: The NSURLRequest.CachePolicy used by NSURLRequest internally (see apple docs for available values). Default value: *.useProtocolCachePolicy*
-- *timeoutInterval*: The timeout interval used by NSURLRequest internally  (see apple docs for more info). Default value: 60
-- *requestBodyType*: It specifies how the request params are being sent, available values:
-  - .xWWWFormURLEncoded (default): It sends the params as 'application/x-www-form-urlencoded' mime type.
-  - .JSON: It converts the params to JSON format and them as 'application/json' mime type.
+#### Additional parameters
 
-*queue*: It specifies the queue in which the request will be  added. If you omit this argument, the request is being added to a shared queue (TNQueue.shared).
+**configuration (optional)**: The configuration object to use. The available configuration properties are:
+- *cachePolicy*: The NSURLRequest.CachePolicy used by NSURLRequest internally. Default value: *.useProtocolCachePolicy* (see apple docs for available values)
+- *timeoutInterval*: The timeout interval used by NSURLRequest internally. Default value: 60 (see apple docs for more info)
+- *requestBodyType*: It specifies the content type of request params. Available values:
+  - .xWWWFormURLEncoded (default): The params are being sent with 'application/x-www-form-urlencoded' content type.
+  - .JSON: The params are being sent with 'application/json' content type.
+
+**queue (optional):** It specifies the queue in which the request will be  added. If you omit this argument, the request is being added to a shared queue (TNQueue.shared).
 
 ## Router
-You can organize your requests by creating an Environment (class) and a Router (enum) that conform TNEnvironmentProtocol and TNRouterProtocol respectively. To do so, create your environment class and at least one router file as shown bellow:
+You can organize your requests by creating an Environment (class) and a Router (enum) that conform TNEnvironmentProtocol and TNRouterProtocol respectively. To do so, create your environment enum and at least one router class as shown bellow:
 
 #### Environment.swift
 
@@ -162,7 +163,7 @@ enum TodosRouter: TNRouterProtocol {
     }
 }
 ```
-You can optionally pass a requestConfiguration object to specify settings for each route. (see 'Advanced usage with configuration and custom queue' above for how to create a configuration object.)
+You can optionally pass a requestConfiguration object to specify settings for each route. (see 'Advanced usage with configuration and custom queue' above for instructions of how to create a configuration object.)
 
 
 #### Finally use the TNRouter to start a request
@@ -176,7 +177,7 @@ TNRouter.start(TodosRouter.add(title: "Go shopping!"), responseType: Todo.self, 
 ```
 
 ## TNQueue Hooks
-Hooks can be run before/after each request execution of a queue. The following hooks are executed in the shared default queue:
+Hooks can be run before/after each request execution in a queue. The following hooks are executed in the default queue:
 
 ```swift
 TNQueue.shared.beforeAllRequestsCallback = {
@@ -199,17 +200,17 @@ TNQueue.shared.afterEachRequestBlock = { request, data, urlResponse, error in //
 ## Error Handling
 
 Available error cases (TNError) passed in *onFailure* callback of a TNRequest:
-- *.environmentNotSet*: You forgot to set the Router environment.
+- *.environmentNotSet*: You didn't set the Environment.
 - *.invalidURL*: The url cannot be parsed, e.g. it contains invalid characters.
 - *.responseDataIsEmpty*: the server response body is empty. You can avoid this error by setting *TNRequest.allowEmptyResponseBody* to *true*.
 - *.responseInvalidImageData*: failed to convert response Data to UIImage.
-- *.cannotDeserialize(Error)*: e.g. your model structure doesn't match with the server's response. It carries the the error thrown by deserializer (DecodingError.dataCorrupted),
+- *.cannotDeserialize(Error)*: e.g. your model's structure and types doesn't match with the server's response. It carries the the error thrown by deserializer (DecodingError.dataCorrupted),
 - *.cannotConvertToJSON*: cannot convert the response Data to JSON object (SwiftyJSON).
 - *.networkError(Error)*: e.g. timeout error. It carries the error from URLSessionDataTask.
-- *.notSuccess(Int)*: The http status code is different to *2xx*. It carries the actual status code of the completed request.
+- *.notSuccess(Int)*: The http status code is different from *2xx*. It carries the actual status code of the completed request.
 - *.cancelled(Error)*: The request is cancelled. It carries the error from URLSessionDataTask.
 
-In any case you can use the **error.description** method to get a readable error message in onFailure callback.
+In any case you can use the **error.localizedDescription** method to get a readable error message in onFailure callback.
 
 #### Example
 
@@ -245,17 +246,6 @@ imageView.setRemoteImage(url: "http://www.website.com/image.jpg", defaultImage: 
 	return newImage
 }) { image, error in
 	imageView.activityIndicator.stopAnimating()
-}
-```
-
-If you don't want a request take part to beforeAllRequests/afterAllRequests hooks (e.g. a request that downloads thumbnails and adds it to an UIImageView), set the TNCall's ***skipBeforeAfterAllRequestsHooks*** property to ***true*** like this
-```swift
-static func getImage(url: String, onSuccess: @escaping TNSuccessCallback<UIImage>, onFailure: @escaping TNFailureCallback) throws -> TNCall {
-	let call = TNCall(method: .get, url: url, params: nil)
-        call.skipBeforeAfterAllRequestsHooks = true
-        try call.start(onSuccess: onSuccess, onFailure: onFailure)
-
-        return call
 }
 ```
 

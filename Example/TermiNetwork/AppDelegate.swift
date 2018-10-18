@@ -9,6 +9,7 @@
 import UIKit
 import TermiNetwork
 import SVProgressHUD
+import SwiftyJSON
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {

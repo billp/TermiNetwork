@@ -44,7 +44,7 @@ internal class TNLog {
             } else if let stringResponse = String(data: data, encoding: .utf8) {
                 print("📦 Response: " + (stringResponse.isEmpty ? "[empty-response]" : stringResponse))
             } else {
-                print("📦 Response: [not-printable]")
+                print("📦 Response: [non-printable]")
             }
         }
     }
