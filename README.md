@@ -5,16 +5,16 @@
 TermiNetwork is a networking library written in Swift 4.0 that supports multi-environment configuration, routing and automatic deserialization.
 
 # Features
-- [x] Specify the return type between JSON (SwiftyJSON), Codable, Data, String
+- [x] Receive responses with the wanted data type (supported: Codable, JSON, UIImage, Data, String)
+- [x] Automatic deserialization with Codable
+- [x] SwiftyJSON support
 - [x] Multi-environment configuration
 - [x] Routing
 - [x] Error handling
-- [x] Automatic deserialization
 
 ## Installation
 
-TermiNetwork is available through [CocoaPods](http://cocoapods.org). To install
-it simply add the following lines to your Podfile and run **pod install** in your terminal:
+TermiNetwork is available via [CocoaPods](http://cocoapods.org).  Simply add the following lines to your Podfile and run **pod install** from your terminal:
 
 ```ruby
 platform :ios, '9.0'
@@ -33,12 +33,13 @@ end
 let params = ["title": "Go shopping."]
 let headers = ["x-auth": "abcdef1234"]
 
-TNRequest(method: .post, url: "https://myweb.com/todos", headers: headers, params: params).start(responseType: JSON.self, onSuccess: { json in
+TNRequest(method: .post, url: "https://myweb.com/api/todos/5", headers: headers, params: params).start(responseType: TodoModel.self, onSuccess: { todo in
     print(json)
 }) { (error, data) in
     print(error)
 }
 ```
+The request above fetches the todo with id 5 and it deserializes the response data with the *TodoModel* which is a subclass of Codable (Decodable & Encodable). The **todo** variable passed in  onSuccess callback is an instance of *TodoModel*. If the deserialization fails for any reason the onFailure callback is being called with the appropriate error. See more information about errors in *Error Handling* section.
 
 #### Parameters
 
