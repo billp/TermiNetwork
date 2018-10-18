@@ -204,6 +204,28 @@ class TestTNRequest: XCTestCase {
         XCTAssert(!failed)
     }
     
+    func testConfiguration() {
+        var request = TNRequest(route: APIRouter.testInvalidParams(value1: "a", value2: "b"))
+        var urlRequest = try! request.asRequest()
+        XCTAssert(urlRequest.timeoutInterval == 60)
+        XCTAssert(request.cachePolicy == .useProtocolCachePolicy)
+        XCTAssert(request.requestBodyType == .xWWWFormURLEncoded)
+
+        TNEnvironment.set(Environment.termiNetworkLocal)
+        request = TNRequest(route: APIRouter.testConfiguration)
+        urlRequest = try! request.asRequest()
+        XCTAssert(urlRequest.timeoutInterval == 32)
+        XCTAssert(request.cachePolicy == .returnCacheDataElseLoad)
+        XCTAssert(request.requestBodyType == .JSON)
+
+        TNEnvironment.set(Environment.termiNetworkRemote)
+        request = TNRequest(route: APIRouter.testConfiguration)
+        urlRequest = try! request.asRequest()
+        XCTAssert(urlRequest.timeoutInterval == 12)
+        XCTAssert(request.cachePolicy == .reloadIgnoringLocalAndRemoteCacheData)
+        XCTAssert(request.requestBodyType == .JSON)
+    }
+    
     func sampleRequest(queue: TNQueue? = TNQueue.shared, onSuccess: TNSuccessCallback<TestJSONParams>? = nil) {
         let call = TNRequest(route: APIRouter.testPostParams(value1: true, value2: 3, value3: 5.13453124189, value4: "test", value5: nil))
         call.requestBodyType = .JSON

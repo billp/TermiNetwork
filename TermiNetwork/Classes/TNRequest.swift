@@ -136,9 +136,7 @@ open class TNRequest: TNOperation {
 
     @available(*, deprecated, message: "skipBeforeAfterAllRequestsHooks Hook is deprecated and will be removed from future releases.")
     public var skipBeforeAfterAllRequestsHooks: Bool = false
-    
-    internal var cachedRequest: URLRequest!
-    
+        
     //MARK: - Initializers
     /**
      Initializes a TNRequest request
@@ -245,10 +243,6 @@ open class TNRequest: TNOperation {
     public func asRequest() throws -> URLRequest {
         guard let currentEnvironment = TNEnvironment.current else { throw TNError.environmentNotSet }
         
-        if cachedRequest != nil {
-            return cachedRequest!
-        }
-        
         let urlString = NSMutableString()
         
         if pathType == .normal {
@@ -311,8 +305,6 @@ open class TNRequest: TNOperation {
             }
         }
         
-        cachedRequest = request
-
         return request
     }
     
@@ -407,7 +399,7 @@ open class TNRequest: TNOperation {
         - onSuccess: specifies a success callback of type TNSuccessCallback<T> (optional)
         - onFailure: specifies a failure callback of type TNFailureCallback<T> (optional)
      */
-    public func start<T>(queue: TNQueue? = TNQueue.shared, responseType: T.Type, onSuccess: TNSuccessCallback<T>?, onFailure: TNFailureCallback?) where T: Decodable {
+    public func start<T:Decodable>(queue: TNQueue? = TNQueue.shared, responseType: T.Type, onSuccess: TNSuccessCallback<T>?, onFailure: TNFailureCallback?)  {
         currentQueue = queue ?? TNQueue.shared
         currentQueue.beforeOperationStart(request: self)
         
@@ -456,7 +448,7 @@ open class TNRequest: TNOperation {
          - onSuccess: specifies a success callback of type TNSuccessCallback<T> (optional)
          - onFailure: specifies a failure callback of type TNFailureCallback<T> (optional)
      */
-    public func start<T>(queue: TNQueue? = TNQueue.shared, responseType: T.Type, onSuccess: TNSuccessCallback<T>?, onFailure: TNFailureCallback?) where T: UIImage {
+    public func start<T: UIImage>(queue: TNQueue? = TNQueue.shared, responseType: T.Type, onSuccess: TNSuccessCallback<T>?, onFailure: TNFailureCallback?) {
         currentQueue = queue
         currentQueue.beforeOperationStart(request: self)
         

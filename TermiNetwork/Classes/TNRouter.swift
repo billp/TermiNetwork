@@ -33,7 +33,7 @@ open class TNRouter {
      - onSuccess: specifies a success callback of type TNSuccessCallback<T> (optional)
      - onFailure: specifies a failure callback of type TNFailureCallback<T> (optional)
      */
-    public static func start<T, R: TNRouterProtocol>(queue: TNQueue? = TNQueue.shared, _ route: R, responseType: T.Type, onSuccess: @escaping TNSuccessCallback<T>, onFailure: @escaping TNFailureCallback) where T: UIImage {
+    public static func start<T: UIImage, R: TNRouterProtocol>(queue: TNQueue? = TNQueue.shared, _ route: R, responseType: T.Type, onSuccess: @escaping TNSuccessCallback<T>, onFailure: @escaping TNFailureCallback) {
         let call = TNRequest(route: route)
         call.start(queue: queue, responseType: responseType, onSuccess: onSuccess, onFailure: onFailure)
     }

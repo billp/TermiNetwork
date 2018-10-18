@@ -23,11 +23,11 @@ enum APIFoodRouter: TNRouterProtocol {
                 method: .get,
                 path: path("categories.php") // Generates: http(s)://.../categories.php
             )
-        case .filter(let categoryTitle):
+        case .filter(let term):
             return TNRouteConfiguration(
                 method: .get,
-                path: path("search.php"), // Generates: http(s)://.../category/1236
-                params: ["filter": categoryTitle]
+                path: path("search.php"), // Generates: http(s)://.../search.php?filter=[term]
+                params: ["filter": term]
             )
         case .createCategory(let title):
             return TNRouteConfiguration(
@@ -36,11 +36,6 @@ enum APIFoodRouter: TNRouterProtocol {
                 params: ["title": title]
             )
         }
-    }
-    
-    // Create static helper functions for each route
-    static func getCategories(onSuccess: @escaping TNSuccessCallback<FoodCategories>, onFailure: @escaping TNFailureCallback) {
-        TNRequest(route: self.categories).start(responseType: FoodCategories.self, onSuccess: onSuccess, onFailure: onFailure)
     }
 }
 

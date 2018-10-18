@@ -12,13 +12,13 @@ internal class TNLog {
      static func logRequest(request: TNRequest) {
         guard TNEnvironment.verbose else { return }
         
-        let url = request.cachedRequest?.url?.absoluteString ?? "n/a"
-        let headers = request.cachedRequest?.allHTTPHeaderFields
+        let url = (try! request.asRequest()).url?.absoluteString ?? "n/a"
+        let headers = (try! request.asRequest()).allHTTPHeaderFields
         
         print("--------------------------------")
         print("🌎 URL: " + url)
         print("🎛️ Method: " + request.method.rawValue.uppercased())
-        print("🔮 CURL Command: " + request.cachedRequest.curlString)
+        print("🔮 CURL Command: " + (try! request.asRequest()).curlString)
         if let headers = headers, headers.keys.count > 0 {
             print("📃 Request Headers: " + headers.description)
         }
