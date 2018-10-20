@@ -25,21 +25,48 @@ class TestTNErrors: XCTestCase {
         TNEnvironment.set(Environment.termiNetworkRemote)
     }
     
-    func testEnvironmentNotSet() {
+    func testEnvironmentNotSetFullUrl() {
         TNEnvironment.current = nil
-        
+        let expectation = XCTestExpectation(description: "Test testEnvironmentNotSetFullUrl")
+        var failed = true
+
         TNRequest(method: .get,
                   url: "http://www.google.com",
                   headers: nil,
-                  params: nil).start(responseType: UIImage.self, onSuccess: { data in
-                    XCTAssert(false)
+                  params: nil).start(responseType: Data.self, onSuccess: { data in
+                    failed = false
+                    expectation.fulfill()
                   }) { error, data in
                     if case TNError.environmentNotSet = error {
-                        XCTAssert(true)
+                        failed = true
                     } else {
-                        XCTAssert(false)
+                        failed = false
                     }
+                    expectation.fulfill()
         }
+        
+        wait(for: [expectation], timeout: 10)
+        
+        XCTAssert(!failed)
+    }
+    
+    func testEnvironmentNotSetWithRoute() {
+        TNEnvironment.current = nil
+        let expectation = XCTestExpectation(description: "Test Empty Response Body")
+        var failed = true
+
+        TNRouter.start(APIRouter.testPostParams(value1: true, value2: 1, value3: 2, value4: "Dsa", value5: "A"), onSuccess: { data in
+            expectation.fulfill()
+        }) { (error, data) in
+            if case TNError.environmentNotSet = error {
+                failed = false
+            }
+            expectation.fulfill()
+        }
+        
+        wait(for: [expectation], timeout: 10)
+        
+        XCTAssert(!failed)
     }
     
     func testInvalidURL() {

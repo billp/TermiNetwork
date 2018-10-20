@@ -241,11 +241,11 @@ open class TNRequest: TNOperation {
      Converts a TNRequest instance to asRequest
     */
     public func asRequest() throws -> URLRequest {
-        guard let currentEnvironment = TNEnvironment.current else { throw TNError.environmentNotSet }
         
         let urlString = NSMutableString()
         
         if pathType == .normal {
+            guard let currentEnvironment = TNEnvironment.current else { throw TNError.environmentNotSet }
             urlString.setString(currentEnvironment.description + "/" + path)
         }  else {
             urlString.setString(path)

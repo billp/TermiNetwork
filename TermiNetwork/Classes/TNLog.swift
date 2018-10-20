@@ -11,14 +11,15 @@ import Foundation
 internal class TNLog {
      static func logRequest(request: TNRequest) {
         guard TNEnvironment.verbose else { return }
+        guard let urlRequest = try? request.asRequest() else { return }
         
-        let url = (try! request.asRequest()).url?.absoluteString ?? "n/a"
-        let headers = (try! request.asRequest()).allHTTPHeaderFields
+        let url = urlRequest.url?.absoluteString ?? "n/a"
+        let headers = urlRequest.allHTTPHeaderFields
         
         print("--------------------------------")
         print("🌎 URL: " + url)
         print("🎛️ Method: " + request.method.rawValue.uppercased())
-        print("🔮 CURL Command: " + (try! request.asRequest()).curlString)
+        print("🔮 CURL Command: " + urlRequest.curlString)
         if let headers = headers, headers.keys.count > 0 {
             print("📃 Request Headers: " + headers.description)
         }
