@@ -193,7 +193,7 @@ TNQueue.shared.beforeEachRequestCallback = { request in
     // e.g. print log
 }
 
-TNQueue.shared.afterEachRequestBlock = { request, data, urlResponse, error in // request: Request, data: Data, urlResponse: URLResponse, error: Error
+TNQueue.shared.afterEachRequestCallback = { request, data, urlResponse, error in // request: Request, data: Data, urlResponse: URLResponse, error: Error
     // e.g. print log
 }
 ```
