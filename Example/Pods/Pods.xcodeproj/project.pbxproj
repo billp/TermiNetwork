@@ -21,6 +21,11 @@
 		4DBE2BF7276471AD4615FD13DA7DC459 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F7975657A81A9267028101A905ED7EB7 /* Foundation.framework */; };
 		4FFD481389BD4A2369900B35769C42F3 /* TNErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB76EC1E9A57D79C062B27DC0CB77EA5 /* TNErrors.swift */; };
 		57610382375BE1CAE07444D900DBF7A7 /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0E06D761AB62B1386CA90EDA02445D0 /* SwiftyJSON.swift */; };
+		592739C7216CC3AD0090D0A5 /* Request+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 592739C6216CC3AD0090D0A5 /* Request+Extensions.swift */; };
+		592739C9216CC3D80090D0A5 /* Dictionary+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 592739C8216CC3D80090D0A5 /* Dictionary+Extensions.swift */; };
+		592739CA216CC3FD0090D0A5 /* Dictionary+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 592739C8216CC3D80090D0A5 /* Dictionary+Extensions.swift */; };
+		592739CB216CC3FF0090D0A5 /* Request+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 592739C6216CC3AD0090D0A5 /* Request+Extensions.swift */; };
+		592739CC216CC4230090D0A5 /* Data+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D47E0EB6CB5D8FF65E0E4655EE0FE17E /* Data+Extensions.swift */; };
 		774D244127BBCF632C732D350F409E08 /* TermiNetwork-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = E5672032309383B4DD420B799EFDABD8 /* TermiNetwork-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		78451932F6EA17FBF34E02BC0E54BDB0 /* SVProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 5D0A2A43AF1D40F1E3C8D731541B44D6 /* SVProgressHUD.m */; };
 		85CECFC082AA7B7161236A48459EE3FA /* SVProgressHUD-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = C81741576646DC10BBFED0E010B90D64 /* SVProgressHUD-dummy.m */; };
@@ -89,6 +94,8 @@
 		408DE97DBC6A4470E3456A2BB36D3431 /* TermiNetwork-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "TermiNetwork-prefix.pch"; sourceTree = "<group>"; };
 		4C4FA81B6026BCC7932928D84C922B24 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.3.sdk/System/Library/Frameworks/QuartzCore.framework; sourceTree = DEVELOPER_DIR; };
 		536C25B7341AE0DF7E46D0FCB3288409 /* SVProgressHUD.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SVProgressHUD.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		592739C6216CC3AD0090D0A5 /* Request+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Request+Extensions.swift"; sourceTree = "<group>"; };
+		592739C8216CC3D80090D0A5 /* Dictionary+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Dictionary+Extensions.swift"; sourceTree = "<group>"; };
 		5BCE7B0A7AB5F197D28DEBBBF9B9A794 /* SVRadialGradientLayer.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SVRadialGradientLayer.h; path = SVProgressHUD/SVRadialGradientLayer.h; sourceTree = "<group>"; };
 		5D0A2A43AF1D40F1E3C8D731541B44D6 /* SVProgressHUD.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SVProgressHUD.m; path = SVProgressHUD/SVProgressHUD.m; sourceTree = "<group>"; };
 		5D221BAD0EC97A4CFD6106BE55C68E62 /* TNQueue.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = TNQueue.swift; path = TermiNetwork/Classes/TNQueue.swift; sourceTree = "<group>"; };
@@ -293,6 +300,8 @@
 			children = (
 				D47E0EB6CB5D8FF65E0E4655EE0FE17E /* Data+Extensions.swift */,
 				7E5AC5F66C6DDCA1449BBFC3A12C8009 /* UIImageView+Extensions.swift */,
+				592739C6216CC3AD0090D0A5 /* Request+Extensions.swift */,
+				592739C8216CC3D80090D0A5 /* Dictionary+Extensions.swift */,
 			);
 			name = Extensions;
 			path = TermiNetwork/Classes/Extensions;
@@ -502,6 +511,11 @@
 			attributes = {
 				LastSwiftUpdateCheck = 0930;
 				LastUpgradeCheck = 1000;
+				TargetAttributes = {
+					4AB5A4AB831E354E193F14F9B62FCE88 = {
+						LastSwiftMigration = 1000;
+					};
+				};
 			};
 			buildConfigurationList = 2D8E8EC45A3A1A1D94AE762CB5028504 /* Build configuration list for PBXProject "Pods" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -561,6 +575,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				A4DEDE57A57A107669DB25322189C5F5 /* Pods-TermiNetwork_Example-dummy.m in Sources */,
+				592739CC216CC4230090D0A5 /* Data+Extensions.swift in Sources */,
+				592739C7216CC3AD0090D0A5 /* Request+Extensions.swift in Sources */,
+				592739C9216CC3D80090D0A5 /* Dictionary+Extensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -571,6 +588,7 @@
 				8C3828005CBE1687A1F04ED7735C0763 /* Data+Extensions.swift in Sources */,
 				E6E732C23A761CA1C62A84D3F35B42F8 /* TermiNetwork-dummy.m in Sources */,
 				21DAAC30660ED2513D864DD333FB206C /* TNEnvironment.swift in Sources */,
+				592739CA216CC3FD0090D0A5 /* Dictionary+Extensions.swift in Sources */,
 				4FFD481389BD4A2369900B35769C42F3 /* TNErrors.swift in Sources */,
 				3ED13A51B48A38139C43BC19D6B16508 /* TNLog.swift in Sources */,
 				15227D41C0D2531A2EAA79BAB7244E30 /* TNOperation.swift in Sources */,
@@ -579,6 +597,7 @@
 				CDC0D8711653062FBDE52442AD98C4DD /* TNRequest.swift in Sources */,
 				1A78C58CDEDA9893C630A69D5860A844 /* TNRequest_Deprecated.swift in Sources */,
 				07B6114F862BAF63D558173F23F681EB /* TNRouteProtocol.swift in Sources */,
+				592739CB216CC3FF0090D0A5 /* Request+Extensions.swift in Sources */,
 				476C6D4D8C6B865EC7DCB5DB82294C18 /* TNRouter.swift in Sources */,
 				07F8592A776ABB60451F0E089B792E4B /* UIImageView+Extensions.swift in Sources */,
 			);
@@ -903,6 +922,7 @@
 			baseConfigurationReference = 861A72041E7258837294BC3893469F72 /* Pods-TermiNetwork_Example.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
@@ -926,6 +946,7 @@
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -938,6 +959,7 @@
 			baseConfigurationReference = 7547E4F2BA6E5C5F138F86AB065E67F6 /* Pods-TermiNetwork_Example.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
@@ -962,6 +984,7 @@
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";

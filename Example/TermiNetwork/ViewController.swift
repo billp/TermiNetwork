@@ -20,24 +20,18 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         // Do any additional setup after loading the view, typically from a nib.
         
         self.tableView.isHidden = true
-        
-        TNRequest(method: .get, url: "https://google.com", params: nil).start(responseType: JSON.self, onSuccess: { json in
-            print(json)
-        }) { (error, data) in
-            print(error)
-        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-                
-        APIFoodRouter.getCategories(onSuccess: { categories in
+        
+        TNRouter.start(APIFoodRouter.categories, responseType: FoodCategories.self, onSuccess: { categories in
             self.categories = categories.categories
             self.tableView.reloadData()
             self.tableView.isHidden = false
-        }, onFailure: { error, data in
-            debugPrint(error.localizedDescription)
-        })
+        }) { (error, data) in
+            debugPrint("Error: " + error.localizedDescription)
+        }
     }
 
     override func didReceiveMemoryWarning() {

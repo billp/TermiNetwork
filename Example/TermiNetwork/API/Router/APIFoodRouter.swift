@@ -9,7 +9,7 @@
 import Foundation
 import TermiNetwork
 
-enum APIFoodRouter: TNRouteProtocol {
+enum APIFoodRouter: TNRouterProtocol {
     // Define your routes
     case categories
     case filter(categoryTitle: String)
@@ -23,11 +23,11 @@ enum APIFoodRouter: TNRouteProtocol {
                 method: .get,
                 path: path("categories.php") // Generates: http(s)://.../categories.php
             )
-        case .filter(let categoryTitle):
+        case .filter(let term):
             return TNRouteConfiguration(
                 method: .get,
-                path: path("search.php"), // Generates: http(s)://.../category/1236
-                params: ["filter": categoryTitle]
+                path: path("search.php"), // Generates: http(s)://.../search.php?filter=[term]
+                params: ["filter": term]
             )
         case .createCategory(let title):
             return TNRouteConfiguration(
@@ -37,9 +37,32 @@ enum APIFoodRouter: TNRouteProtocol {
             )
         }
     }
+}
+
+enum TodosRouter: TNRouterProtocol {
+    // Define your routes
+    case list
+    case show(id: Int)
+    case add(title: String)
+    case remove(id: Int)
+    case setCompleted(id: Int, completed: Bool)
     
-    // Create static helper functions for each route
-    static func getCategories(onSuccess: @escaping TNSuccessCallback<FoodCategories>, onFailure: @escaping TNFailureCallback) {
-        TNRequest(route: self.categories).start(responseType: FoodCategories.self, onSuccess: onSuccess, onFailure: onFailure)
+    // Set method, path, params, headers for each route
+    func configure() -> TNRouteConfiguration {
+        let headers = ["x-auth": "abcdef1234"]
+        let configuration = TNRequestConfiguration(requestBodyType: .JSON)
+        
+        switch self {
+        case .list:
+            return TNRouteConfiguration(method: .get, path: path("todos"), headers: headers, requestConfiguration: configuration) // GET /todos
+        case .show(let id):
+            return TNRouteConfiguration(method: .get, path: path("todo", String(id)), headers: headers, requestConfiguration: configuration) // GET /todos/[id]
+        case .add(let title):
+            return TNRouteConfiguration(method: .post, path: path("todos"), params: ["title": title], headers: headers, requestConfiguration: configuration) // POST /todos
+        case .remove(let id):
+            return TNRouteConfiguration(method: .delete, path: path("todo", String(id)), headers: headers, requestConfiguration: configuration) // DELETE /todo/[id]
+        case .setCompleted(let id, let completed):
+            return TNRouteConfiguration(method: .patch, path: path("todo", String(id)), params: ["completed": completed], headers: headers, requestConfiguration: configuration) // PATCH /todo/[id]
+        }
     }
 }

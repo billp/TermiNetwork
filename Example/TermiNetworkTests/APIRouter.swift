@@ -9,7 +9,7 @@
 import Foundation
 import TermiNetwork
 
-enum APIRouter: TNRouteProtocol {
+enum APIRouter: TNRouterProtocol {
     // Define your routes
     case testHeaders
     case testGetParams(value1: Bool, value2: Int, value3: Double, value4: String, value5: String?)
@@ -18,6 +18,7 @@ enum APIRouter: TNRouteProtocol {
     case testInvalidParams(value1: String, value2: String)
     case testStatusCode(code: Int)
     case testEmptyBody
+    case testConfiguration
     case testImage(imageName: String)
     
     // Set method, path, params, headers for each route
@@ -40,14 +41,20 @@ enum APIRouter: TNRouteProtocol {
                 method: .post,
                 path: path("test_params"),
                 params: ["key1": value1, "key2": value2, "key3": value3, "key4": value4, "key5": value5],
-                requestBodyType: .xWWWFormURLEncoded
+                requestConfiguration: TNRequestConfiguration(requestBodyType: .xWWWFormURLEncoded)
+            )
+        case .testConfiguration:
+            return TNRouteConfiguration(
+                method: .post,
+                path: path("test_params"),
+                requestConfiguration: TNRequestConfiguration(cachePolicy: .reloadIgnoringLocalAndRemoteCacheData, timeoutInterval: 12, requestBodyType: .JSON)
             )
         case let .testPostParams(value1, value2, value3, value4, value5):
             return TNRouteConfiguration(
                 method: .post,
                 path: path("test_params"),
                 params: ["key1": value1, "key2": value2, "key3": value3, "key4": value4, "key5": value5],
-                requestBodyType: .JSON
+                requestConfiguration: TNRequestConfiguration(requestBodyType: .JSON)
             )
         case let .testInvalidParams(value1, value2):
             return TNRouteConfiguration(

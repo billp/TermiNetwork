@@ -27,7 +27,7 @@ class TestTNRequest: XCTestCase {
         let expectation = XCTestExpectation(description: "Test headers")
         var failed = true
 
-        try? TNRouter.start(route: APIRouter.testHeaders, responseType: TestHeaders.self, onSuccess: { object in
+        TNRouter.start(APIRouter.testHeaders, responseType: TestHeaders.self, onSuccess: { object in
             failed = !(object.authorization == "XKJajkBXAUIbakbxjkasbxjkas" && object.customHeader == "test!!!!")
             expectation.fulfill()
         }) { error, _ in
@@ -42,7 +42,7 @@ class TestTNRequest: XCTestCase {
         let expectation = XCTestExpectation(description: "Test get params")
         var failed = true
 
-        try? TNRouter.start(route: APIRouter.testGetParams(value1: true, value2: 3, value3: 5.13453124189, value4: "test", value5: nil), responseType: TestParam.self, onSuccess: { object in
+        TNRouter.start(APIRouter.testGetParams(value1: true, value2: 3, value3: 5.13453124189, value4: "test", value5: nil), responseType: TestParam.self, onSuccess: { object in
             failed = !(object.param1 == "true" && object.param2 == "3" && object.param3 == "5.13453124189" && object.param4 == "test" && object.param5 == nil)
             failed = false
             expectation.fulfill()
@@ -59,7 +59,7 @@ class TestTNRequest: XCTestCase {
         let expectation = XCTestExpectation(description: "Test get params")
         var failed = true
         
-        try? TNRouter.start(route: APIRouter.testGetParams(value1: true, value2: 3, value3: 5.13453124189, value4: "τεστ", value5: nil), responseType: TestParam.self, onSuccess: { object in
+        TNRouter.start(APIRouter.testGetParams(value1: true, value2: 3, value3: 5.13453124189, value4: "τεστ", value5: nil), responseType: TestParam.self, onSuccess: { object in
             failed = !(object.param1 == "true" && object.param2 == "3" && object.param3 == "5.13453124189" && object.param4 == "τεστ" && object.param5 == nil)
             failed = false
             expectation.fulfill()
@@ -76,7 +76,7 @@ class TestTNRequest: XCTestCase {
         let expectation = XCTestExpectation(description: "Test post params")
         var failed = true
         
-        try? TNRouter.start(route: APIRouter.testPostParamsxWWWFormURLEncoded(value1: true, value2: 3, value3: 5.13453124189, value4: "test", value5: nil), responseType: TestParam.self, onSuccess: { object in
+        TNRouter.start(APIRouter.testPostParamsxWWWFormURLEncoded(value1: true, value2: 3, value3: 5.13453124189, value4: "test", value5: nil), responseType: TestParam.self, onSuccess: { object in
             failed = !(object.param1 == "true" && object.param2 == "3" && object.param3 == "5.13453124189" && object.param4 == "test" && object.param5 == nil)
             expectation.fulfill()
         }) { error, _ in
@@ -91,8 +91,8 @@ class TestTNRequest: XCTestCase {
     func testJSONRequestPostParams() {
         let expectation = XCTestExpectation(description: "Test JSON post params")
         var failed = true
-        
-        try? TNRouter.start(route: APIRouter.testPostParams(value1: true, value2: 3, value3: 5.13453124189, value4: "test", value5: nil), responseType: TestJSONParams.self, onSuccess: { object in
+                
+        TNRouter.start(APIRouter.testPostParams(value1: true, value2: 3, value3: 5.13453124189, value4: "test", value5: nil), responseType: TestJSONParams.self, onSuccess: { object in
             failed = !(object.param1 == true && object.param2 == 3 && object.param3 == 5.13453124189 && object.param4 == "test" && object.param5 == nil)
             expectation.fulfill()
         }) { error, _ in
@@ -103,6 +103,7 @@ class TestTNRequest: XCTestCase {
         
         XCTAssert(!failed)
     }
+    
     
     func testBeforeAllRequests() {
         let expectation = XCTestExpectation(description: "Test beforeEachRequestCallback")
@@ -133,7 +134,7 @@ class TestTNRequest: XCTestCase {
         sampleRequest(queue: queue)
         sampleRequest(queue: queue)
         
-        wait(for: [expectation], timeout: 10)
+        wait(for: [expectation], timeout: 60)
         
         XCTAssert(true)
     }
@@ -178,14 +179,51 @@ class TestTNRequest: XCTestCase {
         let call = TNRequest(route: APIRouter.testPostParams(value1: true, value2: 3, value3: 5.13453124189, value4: "test", value5: nil))
         call.requestBodyType = .JSON
         
-        call.start(responseType: JSON.self, onSuccess: {
-            json in
+        call.start(responseType: JSON.self, onSuccess: { json in
             failed = false
             expectation.fulfill()
         }, onFailure: nil)
 
         wait(for: [expectation], timeout: 10)
         XCTAssert(!failed)
+    }
+    
+    func testStringResponse() {
+        let expectation = XCTestExpectation(description: "Test afterEachRequestCallback")
+        var failed = true
+        TNQueue.shared.cancelAllOperations()
+        
+        let request = TNRequest(route: APIRouter.testPostParams(value1: true, value2: 3, value3: 5.13453124189, value4: "test", value5: nil))
+        request.requestBodyType = .JSON
+        request.start(responseType: String.self, onSuccess: { string in
+            failed = false
+            expectation.fulfill()
+        }, onFailure: nil)
+        
+        wait(for: [expectation], timeout: 10)
+        XCTAssert(!failed)
+    }
+    
+    func testConfiguration() {
+        var request = TNRequest(route: APIRouter.testInvalidParams(value1: "a", value2: "b"))
+        var urlRequest = try! request.asRequest()
+        XCTAssert(urlRequest.timeoutInterval == 60)
+        XCTAssert(request.cachePolicy == .useProtocolCachePolicy)
+        XCTAssert(request.requestBodyType == .xWWWFormURLEncoded)
+
+        TNEnvironment.set(Environment.termiNetworkLocal)
+        request = TNRequest(route: APIRouter.testConfiguration)
+        urlRequest = try! request.asRequest()
+        XCTAssert(urlRequest.timeoutInterval == 32)
+        XCTAssert(request.cachePolicy == .returnCacheDataElseLoad)
+        XCTAssert(request.requestBodyType == .JSON)
+
+        TNEnvironment.set(Environment.termiNetworkRemote)
+        request = TNRequest(route: APIRouter.testConfiguration)
+        urlRequest = try! request.asRequest()
+        XCTAssert(urlRequest.timeoutInterval == 12)
+        XCTAssert(request.cachePolicy == .reloadIgnoringLocalAndRemoteCacheData)
+        XCTAssert(request.requestBodyType == .JSON)
     }
     
     func sampleRequest(queue: TNQueue? = TNQueue.shared, onSuccess: TNSuccessCallback<TestJSONParams>? = nil) {

@@ -2,350 +2,241 @@
 [![Build Status](https://travis-ci.org/billp/TermiNetwork.svg?branch=master)](https://travis-ci.org/billp/TermiNetwork)
 [![Pod](https://img.shields.io/cocoapods/v/TermiNetwork.svg?style=flat)](https://cocoapods.org/pods/terminetwork)
 
-TermiNetwork is a networking library written in Swift 4.0 that supports multi-environment configuration, routing and automatic deserialization (currently **Codable** and **UIImage** deserialization is supported).
+TermiNetwork is a networking library written in Swift 4.0 that supports multi-environment configuration, routing and automatic deserialization.
 
 # Features
-- [x] Multi-environment configuration (by conforming **TNEnvironmentProtocol**)
-- [x] Routing (by conforming **TNRouteProtocol**)
-- [x] Error handling support
-- [x] Automatic deserialization with **Codable** and **UIImage** (by passing the type in **TNSuccessCallback**)
+- [x] Receive responses with the wanted data type (supported: Codable, JSON, UIImage, Data, String)
+- [x] Automatic deserialization with Codable
+- [x] SwiftyJSON support
+- [x] Multi-environment configuration
+- [x] Routing
+- [x] Error handling
 
 ## Installation
 
-TermiNetwork is available through [CocoaPods](http://cocoapods.org). To install
-it, simply add the following lines to your Podfile:
+TermiNetwork is available via [CocoaPods](http://cocoapods.org).  Simply add the following lines to your Podfile and run **pod install** from your terminal:
 
 ```ruby
 platform :ios, '9.0'
 use_frameworks!
 
 target 'YourTarget' do
-    pod 'TermiNetwork', '~> 0.2.3'
+    pod 'TermiNetwork', '~> 0.3'
 end
 ```
 
 ## Usage
 
-1. Create a swift file called **Environments.swift** that conforms to **TNEnvironmentProtocol** and define your environments by creating an enum as shown bellow.
+### Simple usage
 
 ```swift
-import TermiNetwork
+let params = ["title": "Go shopping."]
+let headers = ["x-auth": "abcdef1234"]
 
+TNRequest(method: .post, url: "https://myweb.com/api/todos/5", headers: headers, params: params).start(responseType: TodoModel.self, onSuccess: { todo in
+    print(json)
+}) { (error, data) in
+    print(error)
+}
+```
+The request above fetches the todo with id 5 and it deserializes the response data with the *TodoModel* which is a subclass of Codable (Decodable & Encodable). The **todo** variable passed in  onSuccess callback is an instance of *TodoModel*. If the deserialization fails for any reason the onFailure callback is being called with the appropriate error. See more information about errors in *Error Handling* section.
+
+#### Parameters
+
+**method**: one of the following supported HTTP methods
+
+```
+.get, .head, .post, .put, .delete, .connect, .options, .trace or .patch
+```
+
+**responseType**: one of the following supported response types
+```
+JSON.self, Codable.self, UIImage.self, Data.self or String.self
+```
+
+**onSuccess**: a callback returning an object with the data type specified by
+
+**onFailure**: a callback returning an error+data on failure. There are two cases when this callback being called: the first is that the http status code is different than 2xx and the second is that there is an error with data conversion, e.g. it fails on deserialization of the *responseType*.
+
+### Advanced usage with configuration and custom queue
+
+```swift
+let myQueue = TNQueue(failureMode: .continue)
+myQueue.maxConcurrentOperationCount = 2
+
+let configuration = TNRequestConfiguration(
+    cachePolicy: .useProtocolCachePolicy,
+    timeoutInterval: 30,
+    requestBodyType: .JSON
+)
+
+let params = ["title": "Go shopping."]
+let headers = ["x-auth": "abcdef1234"]
+
+TNRequest(method: .post,
+          url: "https://myweb.com/todos",
+          headers: headers,
+          params: params,
+          configuration: configuration).start(queue: myQueue, responseType: JSON.self, onSuccess: { json in
+    print(json)
+}) { (error, data) in
+    print(error)
+}
+```
+The request above uses a custom queue *myQueue* with a failure mode of value *.continue* (default), which means that the queue continues its execution even if a request fails, and also sets the maximum concurrent operation count to 2. Finally, it uses a TNRequestConfiguration object to provide some additional settings.
+
+#### Additional parameters
+
+**configuration (optional)**: The configuration object to use. The available configuration properties are:
+- *cachePolicy*: The NSURLRequest.CachePolicy used by NSURLRequest internally. Default value: *.useProtocolCachePolicy* (see apple docs for available values)
+- *timeoutInterval*: The timeout interval used by NSURLRequest internally. Default value: 60 (see apple docs for more info)
+- *requestBodyType*: It specifies the content type of request params. Available values:
+  - .xWWWFormURLEncoded (default): The params are being sent with 'application/x-www-form-urlencoded' content type.
+  - .JSON: The params are being sent with 'application/json' content type.
+
+**queue (optional):** It specifies the queue in which the request will be  added. If you omit this argument, the request is being added to a shared queue (TNQueue.shared).
+
+## Router
+You can organize your requests by creating an Environment (class) and a Router (enum) that conform TNEnvironmentProtocol and TNRouterProtocol respectively. To do so, create your environment enum and at least one router class as shown bellow:
+
+#### Environment.swift
+
+```swift
 enum Environment: TNEnvironmentProtocol {
     case localhost
     case dev
     case production
 
     func configure() -> TNEnvironment {
+        let requestConfiguration = TNRequestConfiguration(cachePolicy: .useProtocolCachePolicy,
+                                                          timeoutInterval: 30,
+                                                          requestBodyType: .JSON)
         switch self {
-            case .localhost:
-                return TNEnvironment(scheme: .https, host: "localhost", port: 8080)
-            case .dev:
-                return TNEnvironment(scheme: .https, host: "mydevserver.com", suffix: path("v1"))
-            case .production:
-                return TNEnvironment(scheme: .http, host: "www.themealdb.com", suffix: path("api", "json", "v1", "1"))
+        case .localhost:
+            return TNEnvironment(scheme: .https,
+                                 host: "localhost",
+                                 port: 8080,
+                                 requestConfiguration: requestConfiguration)
+        case .dev:
+            return TNEnvironment(scheme: .https,
+                                 host: "mydevserver.com",
+                                 suffix: path("v1"),
+                                 requestConfiguration: requestConfiguration)
+        case .production:
+            return TNEnvironment(scheme: .http,
+                                 host: "myprodserver.com",
+                                 suffix: path("v1"),
+                                 requestConfiguration: requestConfiguration)
         }
     }
 }
 ```
+You can optionally pass a requestConfiguration object to make all the request inherit the specified settings. (see 'Advanced usage with configuration and custom queue' above for how to create a configuration object.)
 
-2. Set your active environment in **`application(_:didFinishLaunchingWithOptions)`** or everywhere else you want, in your application's initialization code.
-
-```
-TNEnvironment.set(Environment.production)
-```
-
-3. Create your models represented with **Codable**.
-
-Example models: **FoodCategories**, **FoodCategory**
+#### TodosRouter.swift
 
 ```swift
-struct FoodCategories: Codable {
-
-	let categories: [FoodCategory]
-
-    	enum CodingKeys: String, CodingKey {
-		case categories
-	}
-}
-
-struct FoodCategory : Codable {
-	let idCategory: String
-	let strCategory: String
-	let strCategoryDescription: String
-	let strCategoryThumb: String
-
-	enum CodingKeys: CodingKey {
-		case idCategory
-		case strCategory
-		case strCategoryDescription
-		case strCategoryThumb
-	}
-}
-```
-
-4. Create your router class that conforms to **TNRouteProtocol**. There is no limit for a number router classes that you can create :)
-
-```swift
-enum APIFoodRouter: TNRouteProtocol {
+enum TodosRouter: TNRouterProtocol {
     // Define your routes
-    case categories
-    case category(id: Int)
-    case createCategory(title: String)
-    
+    case list
+    case show(id: Int)
+    case add(title: String)
+    case remove(id: Int)
+    case setCompleted(id: Int, completed: Bool)
+
     // Set method, path, params, headers for each route
-    internal func construct() -> TNRouteReturnType {
+    func configure() -> TNRouteConfiguration {
+        let headers = ["x-auth": "abcdef1234"]
+        let configuration = TNRequestConfiguration(requestBodyType: .JSON)
+
         switch self {
-        case .categories:
-            return (
-                method: .get,
-                path: path("categories.php"), // Generates: http(s)://.../categories.php
-                params: nil,
-                headers: nil
-            )
-        case .category(let id):
-            return (
-                method: .get,
-                path: path("category", String(id)), // Generates: http(s)://.../category/1236
-                params: nil,
-                headers: nil
-            )
-        case .createCategory(let title):
-            return (
-                method: .post,
-                path: path("categories", "create"), // Generates: http(s)://.../categories/create
-                params: ["title": title],
-                headers: nil
-            )
-        }
-    }
-    
-    // Create static helper functions for each route
-    static func getCategories(onSuccess: @escaping TNSuccessCallback<FoodCategories>, onFailure: @escaping TNFailureCallback) {
-        do {
-            try TNCall(route: self.categories).start(onSuccess: onSuccess, onFailure: onFailure)
-        } catch TNRequestError.environmentNotSet {
-            debugPrint("environment not set")
-        } catch TNRequestError.invalidURL {
-            debugPrint("invalid url")
-        } catch {
-            debugPrint("any other error")
+        case .list:
+            return TNRouteConfiguration(method: .get, path: path("todos"), headers: headers, requestConfiguration: configuration) // GET /todos
+        case .show(let id):
+            return TNRouteConfiguration(method: .get, path: path("todo", String(id)), headers: headers, requestConfiguration: configuration) // GET /todos/[id]
+        case .add(let title):
+            return TNRouteConfiguration(method: .post, path: path("todos"), params: ["title": title], headers: headers, requestConfiguration: configuration) // POST /todos
+        case .remove(let id):
+            return TNRouteConfiguration(method: .delete, path: path("todo", String(id)), headers: headers, requestConfiguration: configuration) // DELETE /todo/[id]
+        case .setCompleted(let id, let completed):
+            return TNRouteConfiguration(method: .patch, path: path("todo", String(id)), params: ["completed": completed], headers: headers, requestConfiguration: configuration) // PATCH /todo/[id]
         }
     }
 }
 ```
-> In your helper methods section you need to define your model class along with **TNSuccessCallback** that determines the type of the response data which is being returned. Deserialization takes place automatically.
+You can optionally pass a requestConfiguration object to specify settings for each route. (see 'Advanced usage with configuration and custom queue' above for instructions of how to create a configuration object.)
 
-5. Finally use your helper functions anywhere in your project
-```swift
-APIFoodRouter.getCategories(onSuccess: { categories in
-    self.categories = categories.categories
-    self.tableView.reloadData()
-}, onFailure: { error, data in
-    debugPrint(error.localizedDescription)
-})
-```
 
-categories returned from **onSuccess** are of type **FoodCategories**
-
-> If you run the project after following all these steps you will get an error because **http://** is not allowed due to security. You need to add "NSAppTransportSecurity" (Dictionary) > "NSAllowsArbitraryLoads" (Boolean) > YES. But this is just for the demo, please don't do it to your own projects :)
-
-### Image Deserialization
-
-Image deserialization is as easy as deserializing with Codable, just pass **UIImage** in **TNSuccessCallback** and you will get the actual **UIImage** object ready to use. If the response is not an image, **TNFailureCallback** gets called with the appropriate error. Define your helper as shown bellow:
+#### Finally use the TNRouter to start a request
 
 ```swift
-struct APICustomHelpers {
-    static func getImage(url: String, onSuccess: @escaping TNSuccessCallback<UIImage>, onFailure: @escaping TNFailureCallback) {
-        try? TNCall(method: .get, url: url, params: nil).start(onSuccess: onSuccess, onFailure: onFailure)
-    }
+TNRouter.start(TodosRouter.add(title: "Go shopping!"), responseType: Todo.self, onSuccess: { todo in
+    // do something with todo
+}) { (error, data) in
+    // show error
 }
 ```
 
-And finally call the helper wherever you need:
+## TNQueue Hooks
+Hooks can be run before/after each request execution in a queue. The following hooks are executed in the default queue:
 
 ```swift
-APICustomHelpers.getImage(url: "https://picsum.photos/240/240", onSuccess: { image in
-    thumbImageView.image = image
-}) { error in
-    debugPrint(error)
+TNQueue.shared.beforeAllRequestsCallback = {
+    // e.g. show progress loader
 }
-```
 
-### Built-in Router Helpers 
-
-If you are finding yourself writing helpers that don't do anything complex and your Router class begins to grow for no reason, **TNRouteProtocol** comes with 3 helper methods that you can use directly from your Router class to ease your life. 
-
-1. For deserializing model
-
-```swift
-try APIFoodRouter.makeCall(route: APIFoodRouter.categories, responseType: FoodCategories.self, onSuccess: { categories in
-    self.categories = categories.categories
-    self.tableView.reloadData()
-    self.tableView.isHidden = false
-}) { error, data in
-    debugPrint(error.localizedDescription)
+TNQueue.shared.afterAllRequestsCallback = { completedWithError in
+    // e.g. hide progress loader
 }
-```
 
-2. For deserializing image
-
-```swift
-try APIFoodRouter.makeCall(route: APIFoodRouter.categoryImage(imageID: 12345), responseType: UIImage.self, onSuccess: { image in
-    //do something with image
-}) { error, data in
-    debugPrint(error.localizedDescription)
+TNQueue.shared.beforeEachRequestCallback = { request in
+    // e.g. print log
 }
-```
 
-3. For any other case
-```swift
-try APIFoodRouter.makeCall(route: APIFoodRouter.getPlainText, onSuccess: { data in
-    // Do something with data
-}) { error, data in
-    debugPrint(error.localizedDescription)
+TNQueue.shared.afterEachRequestBlock = { request, data, urlResponse, error in // request: Request, data: Data, urlResponse: URLResponse, error: Error
+    // e.g. print log
 }
-```
-
-### Use of **TNCall** Independently
-
-You can use the **TNCall** class to create a **URLRequest** and use it with another library such as Alamofire by providing method, custom headers, path and parameters, as shown bellow
-
-```swift
-let params = [
-    "sort_by": "first_name",
-    "mode": "ascending"
-]
-
-let headers = [
-    "Content-type": "application/json"
-]
-
-let request: URLRequest? = try? TNCall(method: .get, headers: headers, path: path("users", "list"), params: params).asRequest()
-```
-
-### Request Cancellation
-You can cancel a request which is executing by storing a reference of **TNCall** to a variable and then by calling the **.cancel()** method like this
-
-```swift
-//Keep a reference of TNCall
-let call = TNCall(method: .get, url: url, params: nil)
-try call.start(onSuccess: onSuccess, onFailure: onFailure)
-
-//Cancel anytime you want
-call.cancel()
-```
-
-### Supported Request Methods
-
-You can use any of the following request methods: **get, head, post, put, delete, connect, options, trace, patch**
-
-
-## Request Body Type
-
-By default params are sent with **application/x-www-form-urlencoded** as Content-Type in each request that posts data to server (via POST, PATCH, etc.). You can also send params encoded as **JSON** by setting the TNRequestBodyType as follows:
-
-```swift
-TNCall.requestBodyType = .JSON // The default value is .xWWWFormURLEncoded
 ```
 
 ## Error Handling
 
-There are two groups of errors that you can handle, the first group includes those that can be handled before request execution (e.g. invalid url, params), with try/catch, and the second group includes those that can be handled after request execution (e.g. empty response from server,  server error, etc...), passed in **onFailure** closure.
-
-### Errors before request execution
-
-Available error cases to catch:
-
-- **environmentNotSet**
-- **invalidURL**
-
-#### Example
-
-```swift
-static func getCategories(onSuccess: @escaping TNSuccessCallback<FoodCategories>, onFailure: @escaping TNFailureCallback) {
-    do {
-        try TNCall(route: APIFoodRouter.categories).start(onSuccess: onSuccess, onFailure: onFailure)
-    } catch TNRequestError.environmentNotSet {
-        debugPrint("environment not set")
-    } catch TNRequestError.invalidURL {
-        debugPrint("invalid url")
-    } catch {
-        debugPrint("any other error")
-    }
-}
-```
-### Errors after request execution
-
-Available error cases in **onFailure** closure:
-
-- **responseDataIsEmpty**: the server response body is empty. You can avoid this error by setting **TNCall.allowEmptyResponseBody** to **true** 
-- **responseInvalidImageData**: in case of image deserialization
-- **cannotDeserialize(Error)**: e.g. your model structure doesn't match with the server's response. It returns the error thrown by deserializer (DecodingError.dataCorrupted)
-- **networkError(Error)**: e.g. time out error, contains the error from URLSessionDataTask, in case you need it
-- **notSuccess(Int)**: The server's response is not success, that is http status code is different to **2xx**. The status code is returned so you can do whatever you need with it
-- **cancelled(Error)**: When you cancel a request by calling the **.cancel()** method you will get this error, along with the error from URLSessionDataTask.
+Available error cases (TNError) passed in *onFailure* callback of a TNRequest:
+- *.environmentNotSet*: You didn't set the Environment.
+- *.invalidURL*: The url cannot be parsed, e.g. it contains invalid characters.
+- *.responseDataIsEmpty*: the server response body is empty. You can avoid this error by setting *TNRequest.allowEmptyResponseBody* to *true*.
+- *.responseInvalidImageData*: failed to convert response Data to UIImage.
+- *.cannotDeserialize(Error)*: e.g. your model's structure and types doesn't match with the server's response. It carries the the error thrown by deserializer (DecodingError.dataCorrupted),
+- *.cannotConvertToJSON*: cannot convert the response Data to JSON object (SwiftyJSON).
+- *.networkError(Error)*: e.g. timeout error. It carries the error from URLSessionDataTask.
+- *.notSuccess(Int)*: The http status code is different from *2xx*. It carries the actual status code of the completed request.
+- *.cancelled(Error)*: The request is cancelled. It carries the error from URLSessionDataTask.
 
 In any case you can use the **error.localizedDescription** method to get a readable error message in onFailure callback.
 
 #### Example
 
 ```swift
-static func testFailureCall(onSuccess: @escaping TNSuccessCallback<Data>, onFailure: @escaping TNFailureCallback) {
-    try! TNCall(route: APIFoodRouter.test).start(onSuccess: onSuccess, onFailure: { error, data in
-        switch error {
+TNRequest(method: .get, url: "https://myweb.com/todos").start(responseType: JSON.self, onSuccess: { json in
+            print(json)
+        }) { (error, data) in
+            switch error {
             case .notSuccess(let statusCode):
                 debugPrint("Status code " + String(statusCode))
                 break
             case .networkError(let error):
-                debugPrint("Network error: " + error)
+                debugPrint("Network error: " + error.localizedDescription)
                 break
             case .cancelled(let error):
-                debugPrint("Request cancelled with error: " + error)
+                debugPrint("Request cancelled with error: " + error.localizedDescription)
                 break
-            default: 
+            default:
                 debugPrint("Error: " + error.localizedDescription)
+            }
         }
-
-        //Fallthrough to the passed onFailure block
-        onFailure(error, data)
-    })
-}
 ```
-
-## Queues
-When you call the **.start(...)** method of **TNCall**, it's added to a default **TNQueue** (**TNQueue.shared**) under the hood. You can also initialize your own **TNQueue** and set your own params that meet your needs. Bellow you can see an example of how you can initialize your own queue.
-
-```swift
-let myQueue = TNQueue(failureMode: .continue) // You can set also .cancelAll
-myQueue.maxConcurrentOperationCount = 3 // Set the concurrent requests executing to 3
-
-try? TNCall(method: .get, url: "http://www.google.com", params: nil).start(queue: myQueue, onSuccess: { _ in
-	// Success
-}) { error, data in
-	// Failure
-}
-
-```
-Because **TNQueue** is a subclass of **OperationQueue**, you can use all the properties/methods of its parent, like for example **.cancelAllOperations()** which cancels all the requests in queue.
-
-
-## Fixed Headers
-You can set headers to be automatically included to every **TNCall** by setting your headers to the static var **fixedHeaders** (useful when you have to include authorization token in headers)
-
-```swift
-TNCall.fixedHeaders = ["Authorization": "[YOUR TOKEN]"]
-```
-
-## Cache Policy and Timeout Interval
-You can set a cache policy and timeout interval that is suitable to your needs by using the convenience initializer of TNCall
-```swift
-try? TNCall(route: APIFoodRouter.categories, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: 5).start(onSuccess: onSuccess, onFailure: onFailure)
-```
-> More info about cachePolicy you can find at Apple's documentation: https://developer.apple.com/documentation/foundation/nsurlrequest.cachepolicy
 
 ## UIImageView Extension
-You can use the **setRemoteImage** method of UIImageView to download an image from a remote server
+You can use the *setRemoteImage* method of UIImageView to download an image from a remote server
 
 Example:
 ```swift
@@ -356,39 +247,6 @@ imageView.setRemoteImage(url: "http://www.website.com/image.jpg", defaultImage: 
 	return newImage
 }) { image, error in
 	imageView.activityIndicator.stopAnimating()
-}
-```
-
-## Hooks
-Hooks are running before and/or after request execution and allow you to run a block of code automatically. Supported hooks are:
-
-```swift
-
-TNCall.beforeAllRequestsBlock = {
-    // e.g. show progress loader
-}
-
-TNCall.afterAllRequestsBlock = {
-    // e.g. hide progress loader
-}
-
-TNCall.beforeEachRequestBlock = { call in // call: TNCall 
-    // e.g. print log
-}
-
-TNCall.afterEachRequestBlock = { call, data, urlResponse, error in // call: TNCall, data: Data, urlResponse: URLResponse, error: Error
-    // e.g. print log
-}
-```
-
-If you don't want a request take part to beforeAllRequests/afterAllRequests hooks (e.g. a request that downloads thumbnails and adds it to an UIImageView), set the TNCall's ***skipBeforeAfterAllRequestsHooks*** property to ***true*** like this
-```swift
-static func getImage(url: String, onSuccess: @escaping TNSuccessCallback<UIImage>, onFailure: @escaping TNFailureCallback) throws -> TNCall {
-	let call = TNCall(method: .get, url: url, params: nil)
-        call.skipBeforeAfterAllRequestsHooks = true
-        try call.start(onSuccess: onSuccess, onFailure: onFailure)
-        
-        return call
 }
 ```
 
@@ -417,4 +275,3 @@ Alex Athanasiadis, alexanderathan@gmail.com
 ## License
 
 TermiNetwork is available under the MIT license. See the LICENSE file for more info.
-

@@ -36,9 +36,44 @@ public enum TNMethod: String {
     case patch
 }
 
+/**
+ The the body type of the request
+*/
 public enum TNRequestBodyType: String {
+    /// The request params are sent as application/x-www-form-urlencoded mime type
     case xWWWFormURLEncoded = "application/x-www-form-urlencoded"
+    /// The request params are sent as application/json mime type
     case JSON = "application/json"
+}
+
+public struct TNRequestConfiguration {
+    public var cachePolicy: URLRequest.CachePolicy?
+    public var timeoutInterval: TimeInterval?
+    public var requestBodyType: TNRequestBodyType?
+    
+    public static let `default` = TNRequestConfiguration(cachePolicy: .useProtocolCachePolicy,
+                                                             timeoutInterval: 60,
+                                                             requestBodyType: .xWWWFormURLEncoded)
+    
+    public init() { }
+    
+    public init(cachePolicy: URLRequest.CachePolicy?,
+                timeoutInterval: TimeInterval?,
+                requestBodyType: TNRequestBodyType?) {
+        self.cachePolicy = cachePolicy ?? TNRequestConfiguration.default.cachePolicy
+        self.timeoutInterval = timeoutInterval ?? TNRequestConfiguration.default.timeoutInterval
+        self.requestBodyType = requestBodyType ?? TNRequestConfiguration.default.requestBodyType
+    }
+    
+    public init(cachePolicy: URLRequest.CachePolicy?) {
+        self.init(cachePolicy: cachePolicy, timeoutInterval: nil, requestBodyType: nil)
+    }
+    public init(timeoutInterval: TimeInterval?) {
+        self.init(cachePolicy: nil, timeoutInterval: timeoutInterval, requestBodyType: nil)
+    }
+    public init(requestBodyType: TNRequestBodyType?) {
+        self.init(cachePolicy: nil, timeoutInterval: nil, requestBodyType: requestBodyType)
+    }
 }
 
 open class TNRequest: TNOperation {
@@ -53,19 +88,18 @@ open class TNRequest: TNOperation {
     internal var customError: TNError?
     internal var data: Data?
     internal var urlResponse: URLResponse?
+    internal var params: [String: Any?]?
+    internal var path: String
+    internal var pathType: SNPathType = .normal
 
     // MARK: - Private properties
     private var headers: [String: String]?
-    private var path: String
-    private var params: [String: Any?]?
-    private var pathType: SNPathType = .normal
-
+    private var timeoutInterval: TimeInterval?
     
     // MARK: - Public properties
     public var cachePolicy: URLRequest.CachePolicy
-    public var timeoutInterval: TimeInterval?
     public var requestBodyType: TNRequestBodyType = .xWWWFormURLEncoded
-    
+
     // MARK: - Deprecations
     @available(*, deprecated, message: "beforeAllRequestsBlock Hook is deprecated and will be removed from future releases. Use TNQueue hooks instead. All TNCall hooks are forewarded to TNQueue.shared.[HOOK]. See docs for more info.")
     public static var beforeAllRequestsBlock: TNBeforeAllRequestsCallback? {
@@ -102,9 +136,7 @@ open class TNRequest: TNOperation {
 
     @available(*, deprecated, message: "skipBeforeAfterAllRequestsHooks Hook is deprecated and will be removed from future releases.")
     public var skipBeforeAfterAllRequestsHooks: Bool = false
-    
-    internal var cachedRequest: URLRequest!
-    
+        
     //MARK: - Initializers
     /**
      Initializes a TNRequest request
@@ -118,12 +150,13 @@ open class TNRequest: TNOperation {
          - path: The path that is appended to your Environments current hostname and prefix. Use 'path(...)' for this, e.g. path("user", "5"), it generates http//website.com/user/5
          - params: A Dictionary that is send as request params. If method is .get it automatically appends them to url, otherwise it sets them as request body.
      */
+    @available(*, deprecated, message: "is deprecated and will be removed from future releases. use TNRequest(method:url:headers:params:configuration) instead.")
     public init(method: TNMethod, headers: [String: String]?, cachePolicy: URLRequest.CachePolicy?, timeoutInterval: TimeInterval?, path: TNPath, params: [String: Any?]?, requestBodyType: TNRequestBodyType? = nil) {
         self.method = method
         self.headers = headers
         self.path = path.components.joined(separator: "/")
         self.cachePolicy = cachePolicy ?? .useProtocolCachePolicy
-        self.timeoutInterval = timeoutInterval
+        self.timeoutInterval = timeoutInterval ?? 60
         self.params = params
         self.requestBodyType = requestBodyType ?? .xWWWFormURLEncoded
     }
@@ -132,80 +165,83 @@ open class TNRequest: TNOperation {
      Initializes a TNRequest request
      
      - parameters:
-         - method:
-         The http method of request, e.g. .get, .post, .head, etc.
+         - method: The http method of request, e.g. .get, .post, .head, etc.
+         - url: The URL of the request
          - headers: A Dictionary of header values, etc. ["Content-type": "text/html"] (optional)
-         - path: The path that is appended to your Environments current hostname and prefix. Use 'path(...)' for this, e.g. path("user", "5"), it generates http//website.com/user/5
-         - params: A Dictionary that is send as request params. If method is .get it automatically appends them to url, otherwise it sets them as request body.
+         - params: A Dictionary as request params. If method is .get it automatically appends them to url, otherwise it sets them as request body.
+         - configuration: A TNRequestConfiguration object
      */
-    public convenience init(method: TNMethod, headers: [String: String], path: TNPath, params: [String: Any?]?) {
-        self.init(method: method, headers: headers, cachePolicy: nil, timeoutInterval: nil, path: path, params: params)
+    public init(method: TNMethod, url: String, headers: [String: String]? = nil, params: [String: Any?]? = nil, configuration: TNRequestConfiguration? = nil) {
+        self.method = method
+        self.headers = headers
+        self.params = params
+        self.pathType = .full
+        self.path = url
+        self.cachePolicy = configuration?.cachePolicy ?? TNRequestConfiguration.default.cachePolicy!
+        self.timeoutInterval = configuration?.timeoutInterval ?? TNRequestConfiguration.default.timeoutInterval!
+        self.requestBodyType = configuration?.requestBodyType ?? TNRequestConfiguration.default.requestBodyType!
     }
     
     /**
      Initializes a TNRequest request
      
      - parameters:
-         - method:
-         The http method of request, e.g. .get, .post, .head, etc.
-         - path: The path that is appended to your Environments current hostname and prefix. Use 'path(...)' for this, e.g. path("user", "5"), it generates http//website.com/user/5
-         - params: A Dictionary that is send as request params. If method is .get it automatically appends them to url, otherwise it sets them as request body.
+         - method: The http method of request, e.g. .get, .post, .head, etc.
+         - url: The URL of the request
+         - configuration: A TNRequestConfiguration object
      */
-    public convenience init(method: TNMethod, path: TNPath, params: [String: Any?]?) {
-        self.init(method: method, headers: nil, cachePolicy: nil, timeoutInterval: nil, path: path, params: nil)
+    convenience init(method: TNMethod, url: String, configuration: TNRequestConfiguration = TNRequestConfiguration()) {
+        self.init(method: method, url: url, headers: nil, params: nil, configuration: configuration)
     }
-
+    
+    /**
+     Initializes a TNRequest request
+     
+     - parameters:
+         - method: The http method of request, e.g. .get, .post, .head, etc.
+         - url: The URL of the request
+         - headers: A Dictionary of header values, etc. ["Content-type": "text/html"] (optional)
+     */
+    convenience init(method: TNMethod, url: String, headers: [String: String]? = nil) {
+        self.init(method: method, url: url, headers: nil, params: nil)
+    }
+    
+    /**
+     Initializes a TNRequest request
+     
+     - parameters:
+         - method: The http method of request, e.g. .get, .post, .head, etc.
+         - url: The URL of the request
+         - headers: A Dictionary of header values, etc. ["Content-type": "text/html"] (optional)
+         - configuration: A TNRequestConfiguration object
+     */
+    convenience init(method: TNMethod, url: String, headers: [String: String]? = nil, configuration: TNRequestConfiguration = TNRequestConfiguration()) {
+        self.init(method: method, url: url, headers: nil, params: nil, configuration: configuration)
+    }
+    
     /**
      Initializes a TNRequest request
      
      - parameters:
          - route: a TNRouteProtocol enum value
      */
-    public convenience init(route: TNRouteProtocol) {
+    public init(route: TNRouterProtocol) {
         let route = route.configure()
-        
-        self.init(method: route.method, headers: route.headers, cachePolicy: nil, timeoutInterval: nil, path: route.path, params: route.params, requestBodyType: route.requestBodyType)
+        self.method = route.method
+        self.headers = route.headers
+        self.params = route.params
+        self.path = route.path.components.joined(separator: "/")
+        self.cachePolicy = TNEnvironment.current?.requestConfiguration?.cachePolicy ?? route.requestConfiguration!.cachePolicy!
+        self.timeoutInterval = TNEnvironment.current?.requestConfiguration?.timeoutInterval ?? route.requestConfiguration!.timeoutInterval!
+        self.requestBodyType = TNEnvironment.current?.requestConfiguration?.requestBodyType ?? route.requestConfiguration!.requestBodyType!
     }
-    
-    /**
-     Initializes a TNRequest request
-     
-     - parameters:
-        - route: a TNRouteProtocol enum value
-        - cachePolicy: Cache policy of type URLRequest.CachePolicy. See Apple's documentation for details (optional)
-     */
-    public convenience init(route: TNRouteProtocol, cachePolicy: URLRequest.CachePolicy?, timeoutInterval: TimeInterval?) {
-        let route = route.configure()
-        
-        self.init(method: route.method, headers: route.headers, cachePolicy: cachePolicy, timeoutInterval: timeoutInterval, path: route.path, params: route.params)
-        self.requestBodyType = route.requestBodyType
-    }
-    
-    // Convenience method for passing a string instead of path
-    /**
-     Initializes a TNRequest request
-     
-     - parameters:
-        - route: a TNRouteProtocol enum value
-        - cachePolicy: Cache policy of type URLRequest.CachePolicy. See Apple's documentation for details (optional)
-        - params: A Dictionary that is send as request params. If method is .get it automatically appends them to url, otherwise it sets them as request body.
-     */
-    public convenience init(method: TNMethod, url: String, params: [String: Any?]?) {
-        self.init(method: method, headers: nil, cachePolicy: nil, timeoutInterval: nil, path: TNPath("-"), params: nil)
-        self.pathType = .full
-        self.path = url
-    }
-    
+
     // MARK: - Create request
     /**
      Converts a TNRequest instance to asRequest
     */
     public func asRequest() throws -> URLRequest {
         guard let currentEnvironment = TNEnvironment.current else { throw TNError.environmentNotSet }
-        
-        if cachedRequest != nil {
-            return cachedRequest!
-        }
         
         let urlString = NSMutableString()
         
@@ -233,7 +269,7 @@ open class TNRequest: TNOperation {
             throw TNError.invalidURL
         }
         
-        var request = URLRequest(url: url, cachePolicy: cachePolicy, timeoutInterval: currentEnvironment.timeoutInterval)
+        var request = URLRequest(url: url, cachePolicy: cachePolicy)
         
         // Add headers
         if headers == nil && TNRequest.fixedHeaders.keys.count > 0 {
@@ -241,13 +277,14 @@ open class TNRequest: TNOperation {
         }
         headers?.merge(TNRequest.fixedHeaders, uniquingKeysWith: { (_, new) in new })
         
+        if let timeoutInterval = self.timeoutInterval {
+            request.timeoutInterval = timeoutInterval
+        }
+        
         if let headers = headers {
             for (key, value) in headers {
                 request.addValue(value, forHTTPHeaderField: key)
             }
-        }
-        if let timeoutInterval = timeoutInterval {
-            request.timeoutInterval = timeoutInterval
         }
         
         // Set http method
@@ -268,8 +305,6 @@ open class TNRequest: TNOperation {
             }
         }
         
-        cachedRequest = request
-
         return request
     }
     
@@ -364,7 +399,7 @@ open class TNRequest: TNOperation {
         - onSuccess: specifies a success callback of type TNSuccessCallback<T> (optional)
         - onFailure: specifies a failure callback of type TNFailureCallback<T> (optional)
      */
-    public func start<T>(queue: TNQueue? = TNQueue.shared, responseType: T.Type, onSuccess: TNSuccessCallback<T>?, onFailure: TNFailureCallback?) where T: Decodable {
+    public func start<T:Decodable>(queue: TNQueue? = TNQueue.shared, responseType: T.Type, onSuccess: TNSuccessCallback<T>?, onFailure: TNFailureCallback?)  {
         currentQueue = queue ?? TNQueue.shared
         currentQueue.beforeOperationStart(request: self)
         
@@ -392,9 +427,10 @@ open class TNRequest: TNOperation {
             DispatchQueue.main.sync {
                 TNLog.logRequest(request: self)
                 onSuccess?(object)
+                self.handleDataTaskCompleted()
             }
             
-            self.handleDataTaskCompleted()
+            
         }, onFailure: { error, data in
             onFailure?(error, data)
             self.handleDataTaskFailure()
@@ -412,7 +448,7 @@ open class TNRequest: TNOperation {
          - onSuccess: specifies a success callback of type TNSuccessCallback<T> (optional)
          - onFailure: specifies a failure callback of type TNFailureCallback<T> (optional)
      */
-    public func start<T>(queue: TNQueue? = TNQueue.shared, responseType: T.Type, onSuccess: TNSuccessCallback<T>?, onFailure: TNFailureCallback?) where T: UIImage {
+    public func start<T: UIImage>(queue: TNQueue? = TNQueue.shared, responseType: T.Type, onSuccess: TNSuccessCallback<T>?, onFailure: TNFailureCallback?) {
         currentQueue = queue
         currentQueue.beforeOperationStart(request: self)
         
@@ -439,8 +475,8 @@ open class TNRequest: TNOperation {
                 DispatchQueue.main.sync {
                     TNLog.logRequest(request: self)
                     onSuccess?(image!)
+                    self.handleDataTaskCompleted()
                 }
-                self.handleDataTaskCompleted()
             }
         }, onFailure: { error, data in
             onFailure?(error, data)
@@ -478,12 +514,56 @@ open class TNRequest: TNOperation {
                     let json = try JSON(data: data)
                     TNLog.logRequest(request: self)
                     onSuccess?(json)
+                    self.handleDataTaskCompleted()
                 } catch let error {
                     let error = TNError.cannotConvertToJSON(error)
                     onFailure?(error, nil)
+                    self.handleDataTaskFailure()
                 }
             }
-            self.handleDataTaskCompleted()
+        }, onFailure: { error, data in
+            onFailure?(error, data)
+            self.handleDataTaskFailure()
+        })
+        
+        currentQueue.addOperation(self)
+    }
+    
+    // String
+    /**
+     Adds a request to a queue and starts it's execution. The response object in success callback is of type Data
+     
+     - parameters:
+     - queue: A TNQueue instance. If no queue is specified it uses the default one. (optional)
+     - onSuccess: specifies a success callback of type TNSuccessCallback<T> (optional)
+     - onFailure: specifies a failure callback of type TNFailureCallback<T> (optional)
+     */
+    public func start(queue: TNQueue? = TNQueue.shared, responseType: String.Type, onSuccess: TNSuccessCallback<String>?, onFailure: TNFailureCallback?) {
+        currentQueue = queue
+        currentQueue.beforeOperationStart(request: self)
+        
+        let request: URLRequest!
+        do {
+            request = try asRequest()
+        } catch let error {
+            onFailure?(error as! TNError, nil)
+            return
+        }
+        
+        dataTask = sessionDataTask(request: request, completionHandler: { data in
+            DispatchQueue.main.async {
+                TNLog.logRequest(request: self)
+                
+                if let string = String(data: data, encoding: .utf8) {
+                    onSuccess?(string)
+                    self.handleDataTaskCompleted()
+                } else {
+                    let error = TNError.cannotConvertToString
+                    onFailure?(error, data)
+                    self.handleDataTaskFailure()
+                }
+                
+            }
         }, onFailure: { error, data in
             onFailure?(error, data)
             self.handleDataTaskFailure()
@@ -517,8 +597,8 @@ open class TNRequest: TNOperation {
             DispatchQueue.main.async {
                 TNLog.logRequest(request: self)
                 onSuccess?(data)
+                self.handleDataTaskCompleted()
             }
-            self.handleDataTaskCompleted()
         }, onFailure: { error, data in
             onFailure?(error, data)
             self.handleDataTaskFailure()

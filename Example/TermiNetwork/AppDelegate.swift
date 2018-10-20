@@ -9,6 +9,7 @@
 import UIKit
 import TermiNetwork
 import SVProgressHUD
+import SwiftyJSON
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -29,15 +30,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         TNQueue.shared.afterAllRequestsCallback = { _ in
             SVProgressHUD.dismiss()
         }
-        
-        try? TNRouter.start(route: APIFoodRouter.filter(categoryTitle: "Seafood"), responseType: FoodCategory.self, onSuccess: { category in
-            print(category)
-        }) { (error, data) in
-            if case TNError.notSuccess(let code) = error {
-                print(code)
-            }
-        }
-        
+    
         return true
     }
 
