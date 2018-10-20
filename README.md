@@ -34,7 +34,7 @@ let params = ["title": "Go shopping."]
 let headers = ["x-auth": "abcdef1234"]
 
 TNRequest(method: .post, url: "https://myweb.com/api/todos/5", headers: headers, params: params).start(responseType: TodoModel.self, onSuccess: { todo in
-    print(json)
+    print(todo)
 }) { (error, data) in
     print(error)
 }
