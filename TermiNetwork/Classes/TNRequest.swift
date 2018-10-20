@@ -408,6 +408,7 @@ open class TNRequest: TNOperation {
             request = try asRequest()
         } catch let error {
             onFailure?(error as! TNError, nil)
+            self.handleDataTaskFailure()
             return
         }
 
@@ -457,6 +458,7 @@ open class TNRequest: TNOperation {
             request = try asRequest()
         } catch let error {
             onFailure?(error as! TNError, nil)
+            self.handleDataTaskFailure()
             return
         }
 
@@ -504,6 +506,7 @@ open class TNRequest: TNOperation {
             request = try asRequest()
         } catch let error {
             onFailure?(error as! TNError, nil)
+            self.handleDataTaskFailure()
             return
         }
         
@@ -547,6 +550,7 @@ open class TNRequest: TNOperation {
             request = try asRequest()
         } catch let error {
             onFailure?(error as! TNError, nil)
+            self.handleDataTaskFailure()
             return
         }
         
@@ -590,6 +594,7 @@ open class TNRequest: TNOperation {
             request = try asRequest()
         } catch let error {
             onFailure?(error as! TNError, nil)
+            self.handleDataTaskCompleted()
             return
         }
         
