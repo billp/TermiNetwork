@@ -94,10 +94,10 @@ The request above uses a custom queue *myQueue* with a failure mode of value *.c
   - .xWWWFormURLEncoded (default): The params are being sent with 'application/x-www-form-urlencoded' content type.
   - .JSON: The params are being sent with 'application/json' content type.
 
-**queue (optional):** It specifies the queue in which the request will be  added. If you omit this argument, the request is being added to a shared queue (TNQueue.shared).
+**queue (optional):** Specify the queue in which the request will be  added. If you omit this argument, the request will be added to a shared queue (TNQueue.shared).
 
 ## Router
-You can organize your requests by creating an Environment (class) and a Router (enum) that conform TNEnvironmentProtocol and TNRouterProtocol respectively. To do so, create your environment enum and at least one router class as shown bellow:
+You can organize your requests by creating an Environment (class) and a Router (enum) that conform TNEnvironmentProtocol and TNRouterProtocol respectively. To do so, create an environment enum and at least one router class as shown bellow:
 
 #### Environment.swift
 
@@ -131,7 +131,7 @@ enum Environment: TNEnvironmentProtocol {
     }
 }
 ```
-You can optionally pass a requestConfiguration object to make all the request inherit the specified settings. (see 'Advanced usage with configuration and custom queue' above for how to create a configuration object.)
+You can optionally pass a requestConfiguration object to make all requests inherit the specified settings. (see 'Advanced usage with configuration and custom queue' above for how to create a configuration object.)
 
 #### TodosRouter.swift
 
@@ -178,22 +178,22 @@ TNRouter.start(TodosRouter.add(title: "Go shopping!"), responseType: Todo.self, 
 ```
 
 ## TNQueue Hooks
-Hooks can be run before/after each request execution in a queue. The following hooks are executed in the default queue:
+Hooks run before and/or after a request execution in a queue. The following hooks are executed in the default queue:
 
 ```swift
 TNQueue.shared.beforeAllRequestsCallback = {
     // e.g. show progress loader
 }
 
-TNQueue.shared.afterAllRequestsCallback = { completedWithError in
+TNQueue.shared.afterAllRequestsCallback = { completedWithError in // Bool
     // e.g. hide progress loader
 }
 
-TNQueue.shared.beforeEachRequestCallback = { request in
+TNQueue.shared.beforeEachRequestCallback = { request in // TNRequest
     // e.g. print log
 }
 
-TNQueue.shared.afterEachRequestCallback = { request, data, urlResponse, error in // request: Request, data: Data, urlResponse: URLResponse, error: Error
+TNQueue.shared.afterEachRequestCallback = { request, data, urlResponse, error in // request: TNRequest, data: Data, urlResponse: URLResponse, error: Error
     // e.g. print log
 }
 ```
