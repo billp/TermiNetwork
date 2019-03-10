@@ -1,4 +1,6 @@
-# TermiNetwork
+
+![alt text](https://raw.githubusercontent.com/billp/TermiNetwork/master/TermiNetwork.png "Logo Title Text 1")
+
 [![Build Status](https://travis-ci.org/billp/TermiNetwork.svg?branch=master)](https://travis-ci.org/billp/TermiNetwork)
 [![Pod](https://img.shields.io/cocoapods/v/TermiNetwork.svg?style=flat)](https://cocoapods.org/pods/terminetwork)
 
