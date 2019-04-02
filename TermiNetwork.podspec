@@ -8,8 +8,8 @@
 
 Pod::Spec.new do |s|
   s.name             = 'TermiNetwork'
-  s.version          = '0.3.1'
-  s.summary          = 'A Networking Library written in Swift 4.0'
+  s.version          = '0.3.2'
+  s.summary          = 'A Networking Library written in Swift 5.0'
 
 # This description is used to generate tags and improve search results.
 #   * Think: What does it do? Why did you write it? What is the focus?
@@ -38,5 +38,5 @@ TermiNetwork is a networking library written with Swift 4.0 that supports multi-
 
   # s.public_header_files = 'Pod/Classes/**/*.h'
   # s.frameworks = 'UIKit', 'MapKit'
-  s.dependency 'SwiftyJSON', '~> 4.0'
+  s.dependency 'SwiftyJSON', '~> 4.2'
 end
