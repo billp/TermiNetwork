@@ -4,7 +4,7 @@
 [![Build Status](https://travis-ci.org/billp/TermiNetwork.svg?branch=master)](https://travis-ci.org/billp/TermiNetwork)
 [![Pod](https://img.shields.io/cocoapods/v/TermiNetwork.svg?style=flat)](https://cocoapods.org/pods/terminetwork)
 
-TermiNetwork is a networking library written in Swift 4.0 that supports multi-environment configuration, routing and automatic deserialization.
+TermiNetwork is a networking library written in Swift 5.0 that supports multi-environment configuration, routing and automatic deserialization.
 
 # Features
 - [x] Receive responses with the wanted data type (supported: Codable, JSON, UIImage, Data, String)
