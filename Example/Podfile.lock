@@ -1,7 +1,7 @@
 PODS:
   - SVProgressHUD (2.2.5)
   - SwiftyJSON (4.2.0)
-  - TermiNetwork (0.3):
+  - TermiNetwork (0.3.1):
     - SwiftyJSON (~> 4.0)
 
 DEPENDENCIES:
@@ -21,8 +21,8 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
   SwiftyJSON: c4bcba26dd9ec7a027fc8eade48e2c911f229e96
-  TermiNetwork: 9c332399812789628ac6838362a8dc315dc666ad
+  TermiNetwork: ab58864af196bb20e03c6c734825acddf074a702
 
 PODFILE CHECKSUM: f7178b88751a7ad0816d1c0c0b19523d1edcfbba
 
-COCOAPODS: 1.5.3
+COCOAPODS: 1.6.0
