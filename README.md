@@ -1,12 +1,12 @@
 
-![alt text](https://raw.githubusercontent.com/billp/TermiNetwork/master/TermiNetwork.png "Logo Title Text 1")
+![alt text](https://raw.githubusercontent.com/billp/TermiNetwork/master/TermiNetwork.png "Logo")
 
 [![Build Status](https://travis-ci.org/billp/TermiNetwork.svg?branch=master)](https://travis-ci.org/billp/TermiNetwork)
 [![Pod](https://img.shields.io/cocoapods/v/TermiNetwork.svg?style=flat)](https://cocoapods.org/pods/terminetwork)
 
 [![Tweet](https://img.shields.io/twitter/url/https/github.com/billp/TermiNetwork.svg?style=social)](https://twitter.com/home?status=https%3A%2F%2Fgithub.com%2Fbillp%2FTermiNetwork%20TermiNetwork%20is%20a%20networking%20abstraction%20layer%20written%20on%20top%20of%20Swift%27s%20URLRequest%20that%20supports%20multi-environment%20configuration%2C%20routing%20and%20automatic%20deserialization.)
 
-TermiNetwork is a networking abstraction layer written on top of Swift's URLRequest that supports multi-environment configuration, routing and automatic deserialization.
+TermiNetwork is a networking abstraction layer written on top of Swift's URLRequest that supports multi-environment configuration, routing and automatic model deserialization with Codable.
 
 # Features
 - [x] Receive responses with the wanted data type (supported: Codable, JSON, UIImage, Data, String)
