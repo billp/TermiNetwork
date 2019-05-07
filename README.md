@@ -42,7 +42,7 @@ struct Todo: Codable {
 }
 ```
 
-You can call the **TNRequest(...).start()** to add a new Todo with the title "Go shopping." like this:
+You can call the **TNRequest(...).start(...)** to add a new Todo with the title "Go shopping." like this:
 
 ```swift
 let params = ["title": "Go shopping."]
