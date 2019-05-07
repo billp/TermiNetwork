@@ -1,10 +1,10 @@
+[![Tweet](https://img.shields.io/twitter/url/https/github.com/billp/TermiNetwork.svg?style=social)](https://twitter.com/home?status=https%3A%2F%2Fgithub.com%2Fbillp%2FTermiNetwork%20TermiNetwork%20is%20a%20networking%20abstraction%20layer%20written%20on%20top%20of%20Swift%27s%20URLRequest%20that%20supports%20multi-environment%20configuration%2C%20routing%20and%20automatic%20deserialization.)
+
 
 ![alt text](https://raw.githubusercontent.com/billp/TermiNetwork/master/TermiNetwork.png "Logo")
 
 [![Build Status](https://travis-ci.org/billp/TermiNetwork.svg?branch=master)](https://travis-ci.org/billp/TermiNetwork)
 [![Pod](https://img.shields.io/cocoapods/v/TermiNetwork.svg?style=flat)](https://cocoapods.org/pods/terminetwork)
-
-[![Tweet](https://img.shields.io/twitter/url/https/github.com/billp/TermiNetwork.svg?style=social)](https://twitter.com/home?status=https%3A%2F%2Fgithub.com%2Fbillp%2FTermiNetwork%20TermiNetwork%20is%20a%20networking%20abstraction%20layer%20written%20on%20top%20of%20Swift%27s%20URLRequest%20that%20supports%20multi-environment%20configuration%2C%20routing%20and%20automatic%20deserialization.)
 
 TermiNetwork is a networking abstraction layer written on top of Swift's URLRequest that supports multi-environment configuration, routing and automatic model deserialization with Codable.
 
@@ -33,17 +33,40 @@ end
 
 ### Simple usage
 
+Imagine that you have the following Codable model
+
+```swift
+struct Todo: Codable {
+   let id: Int
+   let title: String
+}
+```
+
+You can call the **TNRequest(...).start()** to add a new Todo with the title "Go shopping." like this:
+
 ```swift
 let params = ["title": "Go shopping."]
 let headers = ["x-auth": "abcdef1234"]
 
-TNRequest(method: .post, url: "https://myweb.com/api/todos/5", headers: headers, params: params).start(responseType: TodoModel.self, onSuccess: { todo in
+TNRequest(method: .post, url: "https://myweb.com/api/todos", headers: headers, params: params).start(responseType: Todo.self, onSuccess: { todo in
     print(todo)
 }) { (error, data) in
     print(error)
 }
 ```
-The request above fetches the todo with id 5 and it deserializes the response data with the *TodoModel* which is a subclass of Codable (Decodable & Encodable). The **todo** variable passed in  onSuccess callback is an instance of *TodoModel*. If the deserialization fails for any reason the onFailure callback is being called with the appropriate error. See more information about errors in *Error Handling* section.
+
+If the request completes successfully (2xx), a new instance of Todo is being created and passed in onSuccess callback. If the deserialization fails for any reason, the onFailure callback is being called with the appropriate error. See more information about errors in *Error Handling* section.
+
+
+The JSON response of the service is the following:
+
+```swift
+{
+   "id": 5,
+   "title": "Go shopping."
+}
+```
+
 
 #### Parameters
 
