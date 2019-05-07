@@ -281,6 +281,10 @@ imageView.setRemoteImage(url: "http://www.website.com/image.jpg", defaultImage: 
 
 You can turn on verbose mode to see what's going on in terminal for each request by setting the **TNEnvironment.verbose** to **true**
 
+## Tests
+
+To run the tests open the Sample project, select Product -> Test or simply press ⌘U on keyboard. 
+
 ## TODO
 - [x] Write test cases
 - [x] Add support for request cancelation
