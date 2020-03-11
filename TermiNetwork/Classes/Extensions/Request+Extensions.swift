@@ -5,6 +5,7 @@
 //  Created by Vasilis Panagiotopoulos on 09/10/2018.
 //
 // Taken from: https://gist.github.com/shaps80/ba6a1e2d477af0383e8f19b87f53661d
+import Foundation
 
 extension URLRequest {
     

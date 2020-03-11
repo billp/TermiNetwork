@@ -5,7 +5,8 @@
 //  Created by Vasilis Panagiotopoulos on 03/10/2018.
 //
 import Foundation
-
+import UIKit
+    
 open class TNRouter {
     /**
      Wrapper method that starts a TNRequest requess. The response object in success callback is of type Decodable.

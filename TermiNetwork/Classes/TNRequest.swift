@@ -8,6 +8,7 @@
 
 import Foundation
 import SwiftyJSON
+import UIKit
 
 // Backward compatibility for TNCall (is being replaced with TNRequest)
 @available(*, deprecated, message: "TNCall is deprecated and will be removed from future releases. Use TNRequest instead")
