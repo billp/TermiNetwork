@@ -1,5 +1,4 @@
 // swift-tools-version:5.0
-// The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
 
@@ -8,11 +7,16 @@ let package = Package(
     products: [
         .library(
             name: "TermiNetwork",
-            targets: ["TermiNetwork"]),
+            targets: ["TermiNetwork"])
     ],
+		dependencies: [
+				.package(url: "https://github.com/SwiftyJSON/SwiftyJSON.git", from: "5.0.0"),
+		],
     targets: [
         .target(
             name: "TermiNetwork",
-						path: "TermiNetwork/Classes"),
-    ]
+						path: "TermiNetwork",
+						dependencies: ["SwiftyJSON"])
+    ],
+		swiftLanguageVersions: [.v5]
 )
