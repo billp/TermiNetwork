@@ -13,6 +13,6 @@ let package = Package(
     targets: [
         .target(
             name: "TermiNetwork",
-						path: "TermiNetwork"),
+						path: "TermiNetwork/Classes"),
     ]
 )
