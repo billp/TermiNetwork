@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'TermiNetwork'
-  s.version          = '0.3.2'
+  s.version          = '0.3.3'
   s.summary          = 'A Networking Library written in Swift 5.0'
 
 # This description is used to generate tags and improve search results.
@@ -31,7 +31,7 @@ TermiNetwork is a networking library written with Swift 4.0 that supports multi-
   s.ios.deployment_target = '8.0'
 
   s.source_files = 'TermiNetwork/Classes/**/*'
-  
+
   # s.resource_bundles = {
   #   'TermiNetwork' => ['TermiNetwork/Assets/*.png']
   # }
