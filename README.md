@@ -1,39 +1,85 @@
-[![Tweet](https://img.shields.io/twitter/url/https/github.com/billp/TermiNetwork.svg?style=social)](https://twitter.com/home?status=https%3A%2F%2Fgithub.com%2Fbillp%2FTermiNetwork%20TermiNetwork%20is%20a%20networking%20abstraction%20layer%20written%20on%20top%20of%20Swift%27s%20URLRequest%20that%20supports%20multi-environment%20configuration%2C%20routing%20and%20automatic%20deserialization.)
 
 
-![alt text](https://raw.githubusercontent.com/billp/TermiNetwork/master/TermiNetwork.png "Logo")
+<p></p>
+<p align="center">
+  <img src="https://raw.githubusercontent.com/billp/TermiNetwork/master/TermiNetworkLogo.svg" alt="" data-canonical-src="" width="80%" />
+</p>
 
-[![Build Status](https://travis-ci.org/billp/TermiNetwork.svg?branch=master)](https://travis-ci.org/billp/TermiNetwork)
-[![Pod](https://img.shields.io/cocoapods/v/TermiNetwork.svg?style=flat)](https://cocoapods.org/pods/terminetwork)
+<p align="center"><b>A zero-dependency networking solution for building modern and secure iOS applications.</b>
+  <br /><br />
+    <img src="https://travis-ci.org/billp/TermiNetwork.svg?branch=1.0.0-new-structure" />
+  <img src="https://img.shields.io/cocoapods/v/TermiNetwork.svg?style=flat" />
+  <img src="https://img.shields.io/badge/Language-Swift 5.3-blue" />
+  <img src="https://img.shields.io/github/license/billp/TermiNetwork" />
+  <img src="https://img.shields.io/cocoapods/p/TermiNetwork" />
+  <img src="https://img.shields.io/cocoapods/metrics/doc-percent/TermiNetwork" />
+</p>
 
-TermiNetwork is a networking abstraction layer written on top of Swift's URLRequest that supports multi-environment configuration, routing and automatic model deserialization with Codable.
+## Features
+<p align="center">
+Multi-environment setup 🔸 Model deserialization with <b>Codables</b> 🔸 Choose the response type you want: <b>Codable</b>, <b>UIImage</b>, <b>Data</b> or <b>String</b> 🔸 <b>UIKit</b>/<b>SwiftUI</b> helpers for downloading remote images 🔸 Routers 🔸 Transformers (convert rest models to domain models) 🔸 Error handling 🔸 Mock responses 🔸 Certificate pinning  🔸 Flexible configuration  🔸 Middlewares  🔸 File/Data Upload/Download 🔸 Pretty printed debug information
+</p>
 
-# Features
-- [x] Receive responses with the wanted data type (supported: Codable, JSON, UIImage, Data, String)
-- [x] Automatic deserialization with Codable
-- [x] SwiftyJSON support
-- [x] Multi-environment configuration
-- [x] Routing
-- [x] Error handling
+#### Table of contents
+- [Installation](#installation)
+- [Demo Application](#demo_app)
+- [Usage](#usage)
+  - [Simple usage of <b>Request</b>](#simple_usage)
+  - [Advanced usage of <b>Request</b> with <b>Configuration</b> and custom <b>Queue</b>](#advanced_usage)
+  - [Complete project setup with <b>Environments</b> and <b>Routers</b> (Recommended)](#complete_setup)
+	  - [Environment setup](#setup_environments)
+	  - [Router setup](#setup_routers)
+	  - [Make a request](#construct_request)
+- [Queue Hooks](#queue_hooks)
+- [Error Handling](#error_handling)
+- [Transformers](#transformers)
+- [Mock responses](#mock_responses)
+- [Interceptors](#interceptors)
+- [Image Helpers](#image_helpers)
+	- [SwiftUI Image Helper](#swift_ui_image_helper)
+	- [UIImageView, NSImageView, WKInterfaceImage Extensions](#image_extensions)
+- [Middlewares](#middlewares)
+- [Debug Logging](#debug_logging)
+
+<a name="installation"></a>
 
 ## Installation
+You can install **TermiNetwork** with one of the following ways...
+### CocoaPods
 
-TermiNetwork is available via [CocoaPods](http://cocoapods.org).  Simply add the following lines to your Podfile and run **pod install** from your terminal:
-
+Add the following line to your **Podfile** and run **pod install** in your terminal:
 ```ruby
-platform :ios, '9.0'
-use_frameworks!
-
-target 'YourTarget' do
-    pod 'TermiNetwork', '~> 0.3'
-end
+pod 'TermiNetwork', '~> 1.0.0'
 ```
+
+### Carthage
+
+Add the following line to your **Carthage** and run **carthage update** in your terminal:
+```ruby
+github "billp/TermiNetwork" ~> 1.0.0
+```
+
+### Swift Package Manager
+
+Go to **File** > **Swift Packages** > **Add Package Dependency** and add the following URL :
+```
+https://github.com/billp/TermiNetwork
+```
+
+<a name="demo_app"></a>
+
+## Demo Application
+To see all the features of TermiNetwork in action, download the source code and run the **TermiNetworkExamples** scheme.
+
+<a name="usage"></a>
 
 ## Usage
 
-### Simple usage
+<a name="simple_usage"></a>
 
-Imagine that you have the following Codable model
+### Simple usage (Request)
+
+Let's say you have the following Codable model:
 
 ```swift
 struct Todo: Codable {
@@ -42,56 +88,54 @@ struct Todo: Codable {
 }
 ```
 
-You can call the **TNRequest(...).start(...)** to add a new Todo with the title "Go shopping." like this:
+The following example creates a request that adds a new Todo:
 
 ```swift
 let params = ["title": "Go shopping."]
 let headers = ["x-auth": "abcdef1234"]
 
-TNRequest(method: .post, url: "https://myweb.com/api/todos", headers: headers, params: params).start(responseType: Todo.self, onSuccess: { todo in
+Request(method: .post,
+        url: "https://myweb.com/api/todos",
+        headers: headers,
+        params: params).start(responseType: Todo.self,
+                              onSuccess: { todo in
     print(todo)
 }) { (error, data) in
     print(error)
 }
 ```
 
-If the request completes successfully (2xx), a new instance of Todo is being created and passed in onSuccess callback. If the deserialization fails for any reason, the onFailure callback is being called with the appropriate error. See more information about errors in *Error Handling* section.
+#### Parameters Explanation
 
-
-The JSON response of the service is the following:
-
-```swift
-{
-   "id": 5,
-   "title": "Go shopping."
-}
-```
-
-
-#### Parameters
-
-**method**: one of the following supported HTTP methods
-
+##### method
+One of the following supported HTTP methods:
 ```
 .get, .head, .post, .put, .delete, .connect, .options, .trace or .patch
 ```
 
-**responseType**: one of the following supported response types
+##### responseType
+One of the following supported response types
 ```
-JSON.self, Codable.self, UIImage.self, Data.self or String.self
+JSON.self, Codable.self (subclasses), UIImage.self, Data.self or String.self
 ```
 
-**onSuccess**: a callback returning an object with the data type specified by
+##### onSuccess
+A callback that returns an object of the given type. (specified in responseType parameter)
 
-**onFailure**: a callback returning an error+data on failure. There are two cases when this callback being called: the first is that the http status code is different than 2xx and the second is that there is an error with data conversion, e.g. it fails on deserialization of the *responseType*.
+##### onFailure
+A callback that returns a **Error** and the response **Data** (if any).
 
-### Advanced usage with configuration and custom queue
+<a name="advanced_usage"></a>
+
+### Advanced usage of Request with Configuration and custom Queue
+
+The following example uses a custom **Queue** with **maxConcurrentOperationCount** and a configuration object. To see the full list of available configuration properties, take a look at <a href="https://billp.github.io/TermiNetwork/Classes/Configuration.html#/Public%20properties" target="_blank">Configuration properties</a> in documentation.
 
 ```swift
-let myQueue = TNQueue(failureMode: .continue)
+let myQueue = Queue(failureMode: .continue)
 myQueue.maxConcurrentOperationCount = 2
 
-let configuration = TNRequestConfiguration(
+let configuration = Configuration(
     cachePolicy: .useProtocolCachePolicy,
     timeoutInterval: 30,
     requestBodyType: .JSON
@@ -100,70 +144,73 @@ let configuration = TNRequestConfiguration(
 let params = ["title": "Go shopping."]
 let headers = ["x-auth": "abcdef1234"]
 
-TNRequest(method: .post,
-          url: "https://myweb.com/todos",
-          headers: headers,
-          params: params,
-          configuration: configuration).start(queue: myQueue, responseType: JSON.self, onSuccess: { json in
-    print(json)
+Request(method: .post,
+        url: "https://myweb.com/todos",
+        headers: headers,
+        params: params,
+        configuration: configuration).start(queue: myQueue,
+                                            responseType: String.self,
+                                            onSuccess: { response in
+    print(response)
 }) { (error, data) in
     print(error)
 }
 ```
-The request above uses a custom queue *myQueue* with a failure mode of value *.continue* (default), which means that the queue continues its execution even if a request fails, and also sets the maximum concurrent operation count to 2. Finally, it uses a TNRequestConfiguration object to provide some additional settings.
+The request above uses a custom queue **myQueue** with a failure mode of **.continue** (default), which means that the queue continues its execution if a request fails.
 
-#### Additional parameters
+<a name="complete_setup"></a>
 
-**configuration (optional)**: The configuration object to use. The available configuration properties are:
-- *cachePolicy*: The NSURLRequest.CachePolicy used by NSURLRequest internally. Default value: *.useProtocolCachePolicy* (see apple docs for available values)
-- *timeoutInterval*: The timeout interval used by NSURLRequest internally. Default value: 60 (see apple docs for more info)
-- *requestBodyType*: It specifies the content type of request params. Available values:
-  - .xWWWFormURLEncoded (default): The params are being sent with 'application/x-www-form-urlencoded' content type.
-  - .JSON: The params are being sent with 'application/json' content type.
+## Complete setup with <b>Environments</b> and <b>Routers</b>
+The complete and recommended setup of TermiNetwork consists of defining **Environments** and **Routers**.  
 
-**queue (optional):** Specify the queue in which the request will be  added. If you omit this argument, the request will be added to a shared queue (TNQueue.shared).
+<a name="setup_environments"></a>
 
-## Router
-You can organize your requests by creating an Environment (class) and a Router (enum) that conform TNEnvironmentProtocol and TNRouterProtocol respectively. To do so, create an environment enum and at least one router class as shown bellow:
+#### Environment setup
+Create a swift **enum** that implements the **EnvironmentProtocol** and define your environments.
 
-#### Environment.swift
-
+##### Example
 ```swift
-enum Environment: TNEnvironmentProtocol {
+enum MyAppEnvironments: EnvironmentProtocol {
     case localhost
     case dev
     case production
 
-    func configure() -> TNEnvironment {
-        let requestConfiguration = TNRequestConfiguration(cachePolicy: .useProtocolCachePolicy,
-                                                          timeoutInterval: 30,
-                                                          requestBodyType: .JSON)
+    func configure() -> Environment {
+        let configuration = Configuration(cachePolicy: .useProtocolCachePolicy,
+                                          timeoutInterval: 30,
+                                          requestBodyType: .JSON)
         switch self {
         case .localhost:
-            return TNEnvironment(scheme: .https,
-                                 host: "localhost",
-                                 port: 8080,
-                                 requestConfiguration: requestConfiguration)
+            return Environment(scheme: .https,
+                               host: "localhost",
+                               port: 8080,
+                               configuration: configuration)
         case .dev:
-            return TNEnvironment(scheme: .https,
-                                 host: "mydevserver.com",
-                                 suffix: path("v1"),
-                                 requestConfiguration: requestConfiguration)
+            return Environment(scheme: .https,
+                               host: "mydevserver.com",
+                               suffix: .path(["v1"]),
+                               configuration: configuration)
         case .production:
-            return TNEnvironment(scheme: .http,
-                                 host: "myprodserver.com",
-                                 suffix: path("v1"),
-                                 requestConfiguration: requestConfiguration)
+            return Environment(scheme: .http,
+                               host: "myprodserver.com",
+                               suffix: .path(["v1"]),
+                               configuration: configuration)
         }
     }
 }
 ```
-You can optionally pass a requestConfiguration object to make all requests inherit the specified settings. (see 'Advanced usage with configuration and custom queue' above for how to create a configuration object.)
+*Optionally you can  pass a **configuration** object to make all Routers and Requests to inherit the given configuration settings.*
 
-#### TodosRouter.swift
+<a name="setup_routers"></a>
 
+#### Router setup
+Create a swift **enum** that implements the **RouteProtocol** and define your environments.
+
+The following example creates a TodosRoute with all the required API routes (cases).
+
+##### Example
 ```swift
-enum TodosRouter: TNRouterProtocol {
+enum TodosRoute: RouteProtocol {
     // Define your routes
     case list
     case show(id: Int)
@@ -172,132 +219,324 @@ enum TodosRouter: TNRouterProtocol {
     case setCompleted(id: Int, completed: Bool)
 
     // Set method, path, params, headers for each route
-    func configure() -> TNRouteConfiguration {
-        let headers = ["x-auth": "abcdef1234"]
-        let configuration = TNRequestConfiguration(requestBodyType: .JSON)
+    func configure() -> RouteConfiguration {
+        let configuration = Configuration(requestBodyType: .JSON,
+                                          headers: ["x-auth": "abcdef1234"])
 
         switch self {
         case .list:
-            return TNRouteConfiguration(method: .get, path: path("todos"), headers: headers, requestConfiguration: configuration) // GET /todos
+            return RouteConfiguration(method: .get,
+                                      path: .path(["todos"]), // GET /todos
+                                      configuration: configuration)
         case .show(let id):
-            return TNRouteConfiguration(method: .get, path: path("todo", String(id)), headers: headers, requestConfiguration: configuration) // GET /todos/[id]
+            return RouteConfiguration(method: .get,
+                                      path: .path(["todo", String(id)]), // GET /todos/[id]
+                                      configuration: configuration)
         case .add(let title):
-            return TNRouteConfiguration(method: .post, path: path("todos"), params: ["title": title], headers: headers, requestConfiguration: configuration) // POST /todos
+            return RouteConfiguration(method: .post,
+                                      path: .path(["todos"]), // POST /todos
+                                      params: ["title": title],
+                                      configuration: configuration)
         case .remove(let id):
-            return TNRouteConfiguration(method: .delete, path: path("todo", String(id)), headers: headers, requestConfiguration: configuration) // DELETE /todo/[id]
+            return RouteConfiguration(method: .delete,
+                                      path: .path(["todo", String(id)]), // DELETE /todo/[id]
+                                      configuration: configuration)
         case .setCompleted(let id, let completed):
-            return TNRouteConfiguration(method: .patch, path: path("todo", String(id)), params: ["completed": completed], headers: headers, requestConfiguration: configuration) // PATCH /todo/[id]
+            return RouteConfiguration(method: .patch,
+                                      path: .path(["todo", String(id)]), // PATCH /todo/[id]
+                                      params: ["completed": completed],
+                                      configuration: configuration)
         }
     }
 }
+
 ```
-You can optionally pass a requestConfiguration object to specify settings for each route. (see 'Advanced usage with configuration and custom queue' above for instructions of how to create a configuration object.)
+You can optionally pass a **configuration** object to each case if you want provide different  configuration for each route.
 
+<a name="construct_request"></a>
 
-#### Finally use the TNRouter to start a request
-
+#### Make a request
+To create the request you have to initialize a **Router** instance and specialize it with your defined Router, in our case **TodosRoute**:
 ```swift
-TNRouter.start(TodosRouter.add(title: "Go shopping!"), responseType: Todo.self, onSuccess: { todo in
+Router<TodosRoute>().request(for: .add(title: "Go shopping!"))
+    .start(responseType: Todo.self,
+           onSuccess: { todo in
     // do something with todo
 }) { (error, data) in
     // show error
 }
 ```
 
-## TNQueue Hooks
-Hooks run before and/or after a request execution in a queue. The following hooks are executed in the default queue:
+<a name="queue_hooks"></a>
+
+## Queue Hooks
+Hooks are closures that  run before and/or after a request execution in a queue. The following hooks are available:
 
 ```swift
-TNQueue.shared.beforeAllRequestsCallback = {
+Queue.shared.beforeAllRequestsCallback = {
     // e.g. show progress loader
 }
 
-TNQueue.shared.afterAllRequestsCallback = { completedWithError in // Bool
+Queue.shared.afterAllRequestsCallback = { completedWithError in
     // e.g. hide progress loader
 }
 
-TNQueue.shared.beforeEachRequestCallback = { request in // TNRequest
-    // e.g. print log
+Queue.shared.beforeEachRequestCallback = { request in
+    // do something with request
 }
 
-TNQueue.shared.afterEachRequestCallback = { request, data, urlResponse, error in // request: TNRequest, data: Data, urlResponse: URLResponse, error: Error
-    // e.g. print log
+Queue.shared.afterEachRequestCallback = { request, data, urlResponse, error
+    // do something with request, data, urlResponse, error
 }
 ```
 
+ For more information take a look at <a href="https://billp.github.io/TermiNetwork/Classes/Queue.html" target="_blank">Queue</a> in documentation.
+
+<a name="error_handling"></a>
+
 ## Error Handling
 
-Available error cases (TNError) passed in *onFailure* callback of a TNRequest:
-- *.environmentNotSet*: You didn't set the Environment.
-- *.invalidURL*: The url cannot be parsed, e.g. it contains invalid characters.
-- *.responseDataIsEmpty*: the server response body is empty. You can avoid this error by setting *TNRequest.allowEmptyResponseBody* to *true*.
-- *.responseInvalidImageData*: failed to convert response Data to UIImage.
-- *.cannotDeserialize(Error)*: e.g. your model's structure and types doesn't match with the server's response. It carries the the error thrown by deserializer (DecodingError.dataCorrupted),
-- *.cannotConvertToJSON*: cannot convert the response Data to JSON object (SwiftyJSON).
-- *.networkError(Error)*: e.g. timeout error. It carries the error from URLSessionDataTask.
-- *.notSuccess(Int)*: The http status code is different from *2xx*. It carries the actual status code of the completed request.
-- *.cancelled(Error)*: The request is cancelled. It carries the error from URLSessionDataTask.
+TermiNetwork provides its own error types (TNError) for all the possible error cases. These errors are typically returned in onFailure callbacks of **start** methods.
 
-In any case you can use the **error.localizedDescription** method to get a readable error message in onFailure callback.
+To see all the available errors, please visit the <a href="https://billp.github.io/TermiNetwork/Enums/TNError.html" target="_blank">TNError</a> in documentation.
+
 
 #### Example
 
 ```swift
-TNRequest(method: .get, url: "https://myweb.com/todos").start(responseType: JSON.self, onSuccess: { json in
-            print(json)
-        }) { (error, data) in
-            switch error {
-            case .notSuccess(let statusCode):
-                debugPrint("Status code " + String(statusCode))
-                break
-            case .networkError(let error):
-                debugPrint("Network error: " + error.localizedDescription)
-                break
-            case .cancelled(let error):
-                debugPrint("Request cancelled with error: " + error.localizedDescription)
-                break
-            default:
-                debugPrint("Error: " + error.localizedDescription)
-            }
-        }
+Router<TodosRoute>().request(for: .add(title: "Go shopping!"))
+                    .start(responseType: Todo.self,
+   onSuccess: { todo in
+       // do something with todo
+   },
+   onFailure: { (error, data) in
+       switch error {
+       case .notSuccess(let statusCode):
+            debugPrint("Status code " + String(statusCode))
+            break
+       case .networkError(let error):
+            debugPrint("Network error: " + error.localizedDescription)
+            break
+       case .cancelled(let error):
+            debugPrint("Request cancelled with error: " + error.localizedDescription)
+            break
+       default:
+            debugPrint("Error: " + error.localizedDescription)
+    }
+})
 ```
+<a name="transformers"></a>
+## Transformers
 
-## UIImageView Extension
-You can use the *setRemoteImage* method of UIImageView to download an image from a remote server
+Transformers enables you to convert your Rest models to Domain models by defining your custom **transform** functions. To do so, you have to create a class that inherits the **Transformer** class and specializing it by providing the FromType and ToType generics.
 
-Example:
+The following example transforms an array of **RSCity** (rest) to an array of **City** (domain) by overriding the transform function.
+
+#### Example
+
 ```swift
-imageView.setRemoteImage(url: "http://www.website.com/image.jpg", defaultImage: UIImage(named: "DefaultImage"), beforeStart: {
-	imageView.activityIndicator.startAnimating()
-}, preprocessImage: { image in // This block will run in background
-	let newImage = image.resize(100, 100)
-	return newImage
-}) { image, error in
-	imageView.activityIndicator.stopAnimating()
+final class CitiesTransformer: Transformer<[RSCity], [City]> {
+    override func transform(_ object: [RSCity]) throws -> [City] {
+        object.map { rsCity in
+            City(id: UUID(),
+                 cityID: rsCity.id,
+                 name: rsCity.name,
+                 description: rsCity.description,
+                 countryName: rsCity.countryName,
+                 thumb: rsCity.thumb,
+                 image: rsCity.image)
+        }
+    }
 }
 ```
 
-## Logging
+Finally, pass the **CitiesTransformer** in the Request's start method:
+#### Example
+```swift
+Router<CityRoute>()
+    .request(for: .cities)
+    .start(transformer: CitiesTransformer.self,
+           onSuccess: { cities in
+    // Cities are of type [City] (domain)
+    self.cities = cities
+}, onFailure: { (error, data) in
+   // Handle error
+})
+```
 
-You can turn on verbose mode to see what's going on in terminal for each request by setting the **TNEnvironment.verbose** to **true**
+<a name="mock_responses"></a>
+## Mock responses
+**Mock responses** is a powerful feature of TermiNetwork that enables you to provide a local resource file as Request's response. This is useful, for example, when the API service is not yet available and you need to implement the app's functionality without losing any time. (Prerequisite for this is to have an API contract)
+
+#### Steps to enable mock responses
+
+1. Create a Bundle resource and put your files there. (File > New -> File... > Settings Bundle)
+2. Specify the Bundle path in Configuration
+	#### Example
+	```swift
+	let configuration = Configuration()
+	if let path = Bundle.main.path(forResource: "MockData", ofType: "bundle") {
+	    configuration.mockDataBundle = Bundle(path: path)
+	}
+	```
+3. Enable Mock responses in Configuration
+	#### Example
+ 	```swift
+	configuration.mockDataEnabled = true
+	```
+4. Define the mockFilePath path in your Routes
+	 #### Example
+ 	```swift
+	enum CityRoute: RouteProtocol {
+    case cities
+
+    func configure() -> RouteConfiguration {
+        switch self {
+        case .cities:
+            return RouteConfiguration(method: .get,
+                                        path: .path(["cities"]),
+                                        mockFilePath: .path(["Cities", "cities.json"]))
+	        }
+	    }
+	}
+	```
+	The example above loads the **Cities/cities.json** from **MockData.bundle** and returns its data as Request's response.
+
+For a complete example, open the demo application and take a look at **City Explorer - Offline Mode**.
+
+<a name="interceptors"></a>
+## Interceptors
+Interceptors offers you a way to change or augment the usual processing cycle of a Request.  For instance, you can refresh an expired access token (unauthorized status code 401) and then retry the original request. To do so, you just have to implement the **InterceptorProtocol**.
+
+The following Interceptor implementation tries to refresh the access token with a retry limit (5).
+
+#### Example
+```swift
+final class UnauthorizedInterceptor: InterceptorProtocol {
+    let retryDelay: TimeInterval = 0.1
+	let retryLimit = 5
+
+    func requestFinished(responseData data: Data?,
+                         error: TNError?,
+                         request: Request,
+                         proceed: @escaping (InterceptionAction) -> Void) {
+        switch error {
+        case .notSuccess(let statusCode):
+            if statusCode == 401, request.retryCount < retryLimit {
+                // Login and get a new token.
+                Request(method: .post,
+                        url: "https://www.myserviceapi.com/login",
+                        params: ["username": "johndoe",
+                                 "password": "p@44w0rd"])
+                    .start(responseType: LoginResponse.self) { response in
+                        let authorizationValue = String(format: "Bearer %@", response.token)
+
+                        // Update the global header in configuration which is inherited by all requests.
+                        Environment.current.configuration?.headers["Authorization"] = authorizationValue
+
+                        // Update current request's header.
+                        request.headers["Authorization"] = authorizationValue
+
+                        // Finally retry the original request.
+                        proceed(.retry(delay: retryDelay))
+                    }
+            } else {
+	            // Continue if the retry limit is reached
+	            proceed(.continue)
+            }
+        default:
+            proceed(.continue)
+        }
+    }
+}
+
+```
+
+Finally, you have to pass the **UnauthorizedInterceptor** to the interceptors property in Configuration:
+
+#### Example
+```swift
+let configuration = Configuration()
+configuration.interceptors = [UnauthorizedInterceptor.self]
+```
+
+<a name="image_helpers"></a>
+
+## SwiftUI/UIKit Image Helpers
+TermiNetwork provides two different helpers for setting remote images.
+<a name="swift_ui_image_helper"></a>
+### SwiftUI Image Helper
+#### Example
+1.  **Example with URL**
+
+	```swift
+	var body: some View {
+	    TermiNetwork.Image(withURL: "https://example.com/path/to/image.png",
+		               defaultImage: UIImage(named: "DefaultThumbImage"))
+	}
+	```
+2.  **Example with Request**
+
+	```swift
+	var body: some View {
+	    TermiNetwork.Image(withRequest: Router<CityRoute>().request(for: .image(city: city)),
+	                       defaultImage: UIImage(named: "DefaultThumbImage"))
+	}
+	```
+
+<a name="image_extensions"></a>
+### UIImageView, NSImageView, WKInterfaceImage Extensions
+
+1. **Example with URL**
+
+	```swift
+	let imageView = UIImageView() // or NSImageView (macOS), or WKInterfaceImage (watchOS)
+	imageView.tn_setRemoteImage(url: sampleImageURL,
+	                            defaultImage: UIImage(named: "DefaultThumbImage"),
+	                            preprocessImage: { image in
+	    // Optionally pre-process image and return the new image.
+	    return image
+	}, onFinish: { image, error in
+	    // Optionally handle response
+	})
+	```
+2. **Example with Request**
+
+	```swift
+	let imageView = UIImageView() // or NSImageView (macOS), or WKInterfaceImage (watchOS)
+	imageView.tn_setRemoteImage(request: Router<CityRoute>().request(for: .thumb(withID: "3125")),
+	                            defaultImage: UIImage(named: "DefaultThumbImage"),
+	                            preprocessImage: { image in
+	    // Optionally pre-process image and return the new image.
+	    return image
+	}, onFinish: { image, error in
+	    // Optionally handle response
+	})
+	```
+
+<a name="middlewares"></a>
+
+## Middlewares
+Middlewares enables you to modify headers, params and response before they reach the success/failure callbacks. You can create your own middlewares by implementing the **RequestMiddlewareProtocol** and passing it to a **Configuration** object.
+
+Take a look at *./Examples/Communication/Middlewares/CryptoMiddleware.swift*  for an example that adds an additional encryption layer to the application.
+
+<a name="debug_logging"></a>
+
+## Debug Logging
+
+You can enable the debug logging by setting the **verbose** property to **true** in your **Configuration**.
+```swift
+let configuration = Configuration()
+configuration.verbose = true
+```
+... and you will see a beautiful pretty-printed debug output in debug window
+
+<img width="750px" src="https://user-images.githubusercontent.com/1566052/102597522-75be5200-4123-11eb-9e6e-5740e42a20a5.png">
 
 ## Tests
 
-To run the tests open the Sample project, select Product -> Test or simply press ⌘U on keyboard. 
-
-## TODO
-- [x] Write test cases
-- [x] Add support for request cancelation
-- [x] Error handling
-- [ ] Add support for downloading/uploading files
-
-## Contribution
-
-Feel free to contribute to the project by creating a pull request and/or by reporting any issue(s) you find
-
-## Author
-
-Bill Panagiotopoulos, billp.dev@gmail.com
+To run the tests open the Xcode Project > TermiNetwork scheme, select Product -> Test or simply press ⌘U on keyboard.
 
 ## Contributors
 

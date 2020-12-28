@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>TermiNetwork  Reference</title>
+    <link rel="stylesheet" type="text/css" href="css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="css/highlight.css" />
+    <meta charset="utf-8">
+    <script src="js/jquery.min.js" defer></script>
+    <script src="js/jazzy.js" defer></script>
+    
+    <script src="js/lunr.min.js" defer></script>
+    <script src="js/typeahead.jquery.js" defer></script>
+    <script src="js/jazzy.search.js" defer></script>
+  </head>
+  <body>
+
+
+    <a title="TermiNetwork  Reference"></a>
+
+    <header class="header">
+      <p class="header-col header-col--primary">
+        <a class="header-link" href="index.html">
+          TermiNetwork 1.0.0 Docs
+        </a>
+         (92% documented)
+      </p>
+    
+      <p class="header-col--secondary">
+        <form role="search" action="search.json">
+          <input type="text" placeholder="Search documentation" data-typeahead>
+        </form>
+      </p>
+    
+    
+    </header>
+
+    <p class="breadcrumbs">
+      <a class="breadcrumb" href="index.html">TermiNetwork Reference</a>
+      <img class="carat" src="img/carat.png" />
+      TermiNetwork  Reference
+    </p>
+
+    <div class="content-wrapper">
+      <nav class="navigation">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes/Cache.html">Cache</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes/Configuration.html">Configuration</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes/Environment.html">Environment</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes/Operation.html">Operation</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes/Queue.html">Queue</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes/Request.html">Request</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes/RouteConfiguration.html">RouteConfiguration</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes/Router.html">Router</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes/Transformer.html">Transformer</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="Enums.html">Enumerations</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Enums/InterceptionAction.html">InterceptionAction</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Enums/Method.html">Method</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Enums/MultipartFormDataPartType.html">MultipartFormDataPartType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Enums/Path.html">Path</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Enums/QueueFailureMode.html">QueueFailureMode</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Enums/RequestBodyType.html">RequestBodyType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Enums/TNError.html">TNError</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Enums/URLScheme.html">URLScheme</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="Extensions.html">Extensions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Extensions/Data.html">Data</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Extensions/Decodable.html">Decodable</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Protocols/EnvironmentProtocol.html">EnvironmentProtocol</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Protocols/InterceptorProtocol.html">InterceptorProtocol</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Protocols/RequestMiddlewareProtocol.html">RequestMiddlewareProtocol</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Protocols/RouteProtocol.html">RouteProtocol</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="Structs.html">Structures</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/Image.html">Image</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="Typealiases.html">Type Aliases</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Typealiases.html#/s:12TermiNetwork28AfterAllRequestsCallbackTypea">AfterAllRequestsCallbackType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Typealiases.html#/s:12TermiNetwork28AfterEachRequestCallbackTypea">AfterEachRequestCallbackType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Typealiases.html#/s:12TermiNetwork29BeforeEachRequestCallbackTypea">BeforeEachRequestCallbackType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Typealiases.html#/s:12TermiNetwork28BeforeQueueStartCallbackTypea">BeforeQueueStartCallbackType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Typealiases.html#/s:12TermiNetwork23DownloadSuccessCallbacka">DownloadSuccessCallback</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Typealiases.html#/s:12TermiNetwork15FailureCallbacka">FailureCallback</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Typealiases.html#/s:12TermiNetwork25ImageOnFinishCallbackTypea">ImageOnFinishCallbackType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Typealiases.html#/s:12TermiNetwork19ImagePreprocessTypea">ImagePreprocessType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Typealiases.html#/ImageType">ImageType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Typealiases.html#/s:12TermiNetwork9ImageTypea">ImageType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Typealiases.html#/s:12TermiNetwork13MockDelayTypea">MockDelayType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Typealiases.html#/s:12TermiNetwork20ProgressCallbackTypea">ProgressCallbackType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Typealiases.html#/s:12TermiNetwork15SuccessCallbacka">SuccessCallback</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+
+        <section class="section">
+          <div class="section-content top-matter">
+            
+            <p></p>
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/billp/TermiNetwork/master/TermiNetworkLogo.svg" alt="" data-canonical-src="" width="80%" />
+</p>
+
+<p align="center"><b>A zero-dependency networking solution for building modern and secure iOS applications.</b>
+  <br /><br />
+    <img src="https://travis-ci.org/billp/TermiNetwork.svg?branch=1.0.0-new-structure" />
+  <img src="https://img.shields.io/cocoapods/v/TermiNetwork.svg?style=flat" />
+  <img src="https://img.shields.io/badge/Language-Swift 5.3-blue" />
+  <img src="https://img.shields.io/github/license/billp/TermiNetwork" />
+  <img src="https://img.shields.io/cocoapods/p/TermiNetwork" />
+  <img src="https://img.shields.io/cocoapods/metrics/doc-percent/TermiNetwork" />
+</p>
+<h2 id='features' class='heading'>Features</h2>
+
+<p align="center">
+Multi-environment setup 🔸 Model deserialization with <b>Codables</b> 🔸 Choose the response type you want: <b>Codable</b>, <b>UIImage</b>, <b>Data</b> or <b>String</b> 🔸 <b>UIKit</b>/<b>SwiftUI</b> helpers for downloading remote images 🔸 Routers 🔸 Transformers (convert rest models to domain models) 🔸 Error handling 🔸 Mock responses 🔸 Certificate pinning  🔸 Flexible configuration  🔸 Middlewares  🔸 File/Data Upload/Download 🔸 Pretty printed debug information
+</p>
+<h4 id='table-of-contents' class='heading'>Table of contents</h4>
+
+<ul>
+<li><a href="#installation">Installation</a></li>
+<li><a href="#demo_app">Demo Application</a></li>
+<li><a href="#usage">Usage</a>
+
+<ul>
+<li><a href="#simple_usage">Simple usage of <b>Request</b></a></li>
+<li><a href="#advanced_usage">Advanced usage of <b>Request</b> with <b>Configuration</b> and custom <b>Queue</b></a></li>
+<li><a href="#complete_setup">Complete project setup with <b>Environments</b> and <b>Routers</b> (Recommended)</a>
+
+<ul>
+<li><a href="#setup_environments">Environment setup</a></li>
+<li><a href="#setup_routers">Router setup</a></li>
+<li><a href="#construct_request">Make a request</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#queue_hooks">Queue Hooks</a></li>
+<li><a href="#error_handling">Error Handling</a></li>
+<li><a href="#transformers">Transformers</a></li>
+<li><a href="#mock_responses">Mock responses</a></li>
+<li><a href="#interceptors">Interceptors</a></li>
+<li><a href="#image_helpers">Image Helpers</a>
+
+<ul>
+<li><a href="#swift_ui_image_helper">SwiftUI Image Helper</a></li>
+<li><a href="#image_extensions">UIImageView, NSImageView, WKInterfaceImage Extensions</a></li>
+</ul></li>
+<li><a href="#middlewares">Middlewares</a></li>
+<li><a href="#debug_logging">Debug Logging</a></li>
+</ul>
+
+<p><a name="installation"></a></p>
+<h2 id='installation' class='heading'>Installation</h2>
+
+<p>You can install <strong>TermiNetwork</strong> with one of the following ways&hellip;</p>
+<h3 id='cocoapods' class='heading'>CocoaPods</h3>
+
+<p>Add the following line to your <strong>Podfile</strong> and run <strong>pod install</strong> in your terminal:</p>
+<pre class="highlight ruby"><code><span class="n">pod</span> <span class="s1">'TermiNetwork'</span><span class="p">,</span> <span class="s1">'~&gt; 1.0.0'</span>
+</code></pre>
+<h3 id='carthage' class='heading'>Carthage</h3>
+
+<p>Add the following line to your <strong>Carthage</strong> and run <strong>carthage update</strong> in your terminal:</p>
+<pre class="highlight ruby"><code><span class="n">github</span> <span class="s2">"billp/TermiNetwork"</span> <span class="o">~&gt;</span> <span class="mf">1.0</span><span class="o">.</span><span class="mi">0</span>
+</code></pre>
+<h3 id='swift-package-manager' class='heading'>Swift Package Manager</h3>
+
+<p>Go to <strong>File</strong> &gt; <strong>Swift Packages</strong> &gt; <strong>Add Package Dependency</strong> and add the following URL :</p>
+<pre class="highlight plaintext"><code>https://github.com/billp/TermiNetwork
+</code></pre>
+
+<p><a name="demo_app"></a></p>
+<h2 id='demo-application' class='heading'>Demo Application</h2>
+
+<p>To see all the features of TermiNetwork in action, download the source code and run the <strong>TermiNetworkExamples</strong> scheme.</p>
+
+<p><a name="usage"></a></p>
+<h2 id='usage' class='heading'>Usage</h2>
+
+<p><a name="simple_usage"></a></p>
+<h3 id='simple-usage-request' class='heading'>Simple usage (Request)</h3>
+
+<p>Let&rsquo;s say you have the following Codable model:</p>
+<pre class="highlight swift"><code><span class="kd">struct</span> <span class="kt">Todo</span><span class="p">:</span> <span class="kt">Codable</span> <span class="p">{</span>
+   <span class="k">let</span> <span class="nv">id</span><span class="p">:</span> <span class="kt">Int</span>
+   <span class="k">let</span> <span class="nv">title</span><span class="p">:</span> <span class="kt">String</span>
+<span class="p">}</span>
+</code></pre>
+
+<p>The following example creates a request that adds a new Todo:</p>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">params</span> <span class="o">=</span> <span class="p">[</span><span class="s">"title"</span><span class="p">:</span> <span class="s">"Go shopping."</span><span class="p">]</span>
+<span class="k">let</span> <span class="nv">headers</span> <span class="o">=</span> <span class="p">[</span><span class="s">"x-auth"</span><span class="p">:</span> <span class="s">"abcdef1234"</span><span class="p">]</span>
+
+<span class="kt">Request</span><span class="p">(</span><span class="nv">method</span><span class="p">:</span> <span class="o">.</span><span class="n">post</span><span class="p">,</span>
+        <span class="nv">url</span><span class="p">:</span> <span class="s">"https://myweb.com/api/todos"</span><span class="p">,</span>
+        <span class="nv">headers</span><span class="p">:</span> <span class="n">headers</span><span class="p">,</span>
+        <span class="nv">params</span><span class="p">:</span> <span class="n">params</span><span class="p">)</span><span class="o">.</span><span class="nf">start</span><span class="p">(</span><span class="nv">responseType</span><span class="p">:</span> <span class="kt">Todo</span><span class="o">.</span><span class="k">self</span><span class="p">,</span>
+                              <span class="nv">onSuccess</span><span class="p">:</span> <span class="p">{</span> <span class="n">todo</span> <span class="k">in</span>
+    <span class="nf">print</span><span class="p">(</span><span class="n">todo</span><span class="p">)</span>
+<span class="p">})</span> <span class="p">{</span> <span class="p">(</span><span class="n">error</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span> <span class="k">in</span>
+    <span class="nf">print</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre>
+<h4 id='parameters-explanation' class='heading'>Parameters Explanation</h4>
+<h5 id='method' class='heading'>method</h5>
+
+<p>One of the following supported HTTP methods:</p>
+<pre class="highlight plaintext"><code>.get, .head, .post, .put, .delete, .connect, .options, .trace or .patch
+</code></pre>
+<h5 id='responsetype' class='heading'>responseType</h5>
+
+<p>One of the following supported response types</p>
+<pre class="highlight plaintext"><code>JSON.self, Codable.self (subclasses), UIImage.self, Data.self or String.self
+</code></pre>
+<h5 id='onsuccess' class='heading'>onSuccess</h5>
+
+<p>A callback that returns an object of the given type. (specified in responseType parameter)</p>
+<h5 id='onfailure' class='heading'>onFailure</h5>
+
+<p>A callback that returns a <strong>Error</strong> and the response <strong>Data</strong> (if any).</p>
+
+<p><a name="advanced_usage"></a></p>
+<h3 id='advanced-usage-of-request-with-configuration-and-custom-queue' class='heading'>Advanced usage of Request with Configuration and custom Queue</h3>
+
+<p>The following example uses a custom <strong>Queue</strong> with <strong>maxConcurrentOperationCount</strong> and a configuration object. To see the full list of available configuration properties, take a look at <a href="https://billp.github.io/TermiNetwork/Classes/Configuration.html#/Public%20properties" target="_blank">Configuration properties</a> in documentation.</p>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">myQueue</span> <span class="o">=</span> <span class="kt">Queue</span><span class="p">(</span><span class="nv">failureMode</span><span class="p">:</span> <span class="o">.</span><span class="k">continue</span><span class="p">)</span>
+<span class="n">myQueue</span><span class="o">.</span><span class="n">maxConcurrentOperationCount</span> <span class="o">=</span> <span class="mi">2</span>
+
+<span class="k">let</span> <span class="nv">configuration</span> <span class="o">=</span> <span class="kt">Configuration</span><span class="p">(</span>
+    <span class="nv">cachePolicy</span><span class="p">:</span> <span class="o">.</span><span class="n">useProtocolCachePolicy</span><span class="p">,</span>
+    <span class="nv">timeoutInterval</span><span class="p">:</span> <span class="mi">30</span><span class="p">,</span>
+    <span class="nv">requestBodyType</span><span class="p">:</span> <span class="o">.</span><span class="kt">JSON</span>
+<span class="p">)</span>
+
+<span class="k">let</span> <span class="nv">params</span> <span class="o">=</span> <span class="p">[</span><span class="s">"title"</span><span class="p">:</span> <span class="s">"Go shopping."</span><span class="p">]</span>
+<span class="k">let</span> <span class="nv">headers</span> <span class="o">=</span> <span class="p">[</span><span class="s">"x-auth"</span><span class="p">:</span> <span class="s">"abcdef1234"</span><span class="p">]</span>
+
+<span class="kt">Request</span><span class="p">(</span><span class="nv">method</span><span class="p">:</span> <span class="o">.</span><span class="n">post</span><span class="p">,</span>
+        <span class="nv">url</span><span class="p">:</span> <span class="s">"https://myweb.com/todos"</span><span class="p">,</span>
+        <span class="nv">headers</span><span class="p">:</span> <span class="n">headers</span><span class="p">,</span>
+        <span class="nv">params</span><span class="p">:</span> <span class="n">params</span><span class="p">,</span>
+        <span class="nv">configuration</span><span class="p">:</span> <span class="n">configuration</span><span class="p">)</span><span class="o">.</span><span class="nf">start</span><span class="p">(</span><span class="nv">queue</span><span class="p">:</span> <span class="n">myQueue</span><span class="p">,</span>
+                                            <span class="nv">responseType</span><span class="p">:</span> <span class="kt">String</span><span class="o">.</span><span class="k">self</span><span class="p">,</span>
+                                            <span class="nv">onSuccess</span><span class="p">:</span> <span class="p">{</span> <span class="n">response</span> <span class="k">in</span>
+    <span class="nf">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+<span class="p">})</span> <span class="p">{</span> <span class="p">(</span><span class="n">error</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span> <span class="k">in</span>
+    <span class="nf">print</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre>
+
+<p>The request above uses a custom queue <strong>myQueue</strong> with a failure mode of <strong>.continue</strong> (default), which means that the queue continues its execution if a request fails.</p>
+
+<p><a name="complete_setup"></a></p>
+<h2 id='complete-setup-with-b-environments-b-and-b-routers-b' class='heading'>Complete setup with <b>Environments</b> and <b>Routers</b></h2>
+
+<p>The complete and recommended setup of TermiNetwork consists of defining <strong>Environments</strong> and <strong>Routers</strong>.  </p>
+
+<p><a name="setup_environments"></a></p>
+<h4 id='environment-setup' class='heading'>Environment setup</h4>
+
+<p>Create a swift <strong>enum</strong> that implements the <strong>EnvironmentProtocol</strong> and define your environments.</p>
+<h5 id='example' class='heading'>Example</h5>
+<pre class="highlight swift"><code><span class="kd">enum</span> <span class="kt">MyAppEnvironments</span><span class="p">:</span> <span class="kt">EnvironmentProtocol</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="n">localhost</span>
+    <span class="k">case</span> <span class="n">dev</span>
+    <span class="k">case</span> <span class="n">production</span>
+
+    <span class="kd">func</span> <span class="nf">configure</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Environment</span> <span class="p">{</span>
+        <span class="k">let</span> <span class="nv">configuration</span> <span class="o">=</span> <span class="kt">Configuration</span><span class="p">(</span><span class="nv">cachePolicy</span><span class="p">:</span> <span class="o">.</span><span class="n">useProtocolCachePolicy</span><span class="p">,</span>
+                                          <span class="nv">timeoutInterval</span><span class="p">:</span> <span class="mi">30</span><span class="p">,</span>
+                                          <span class="nv">requestBodyType</span><span class="p">:</span> <span class="o">.</span><span class="kt">JSON</span><span class="p">)</span>
+        <span class="k">switch</span> <span class="k">self</span> <span class="p">{</span>
+        <span class="k">case</span> <span class="o">.</span><span class="nv">localhost</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kt">Environment</span><span class="p">(</span><span class="nv">scheme</span><span class="p">:</span> <span class="o">.</span><span class="n">https</span><span class="p">,</span>
+                               <span class="nv">host</span><span class="p">:</span> <span class="s">"localhost"</span><span class="p">,</span>
+                               <span class="nv">port</span><span class="p">:</span> <span class="mi">8080</span><span class="p">,</span>
+                               <span class="nv">configuration</span><span class="p">:</span> <span class="n">configuration</span><span class="p">)</span>
+        <span class="k">case</span> <span class="o">.</span><span class="nv">dev</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kt">Environment</span><span class="p">(</span><span class="nv">scheme</span><span class="p">:</span> <span class="o">.</span><span class="n">https</span><span class="p">,</span>
+                               <span class="nv">host</span><span class="p">:</span> <span class="s">"mydevserver.com"</span><span class="p">,</span>
+                               <span class="nv">suffix</span><span class="p">:</span> <span class="o">.</span><span class="nf">path</span><span class="p">([</span><span class="s">"v1"</span><span class="p">]),</span>
+                               <span class="nv">configuration</span><span class="p">:</span> <span class="n">configuration</span><span class="p">)</span>
+        <span class="k">case</span> <span class="o">.</span><span class="nv">production</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kt">Environment</span><span class="p">(</span><span class="nv">scheme</span><span class="p">:</span> <span class="o">.</span><span class="n">http</span><span class="p">,</span>
+                               <span class="nv">host</span><span class="p">:</span> <span class="s">"myprodserver.com"</span><span class="p">,</span>
+                               <span class="nv">suffix</span><span class="p">:</span> <span class="o">.</span><span class="nf">path</span><span class="p">([</span><span class="s">"v1"</span><span class="p">]),</span>
+                               <span class="nv">configuration</span><span class="p">:</span> <span class="n">configuration</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+
+<p><em>Optionally you can  pass a **configuration</em>* object to make all Routers and Requests to inherit the given configuration settings.*</p>
+
+<p><a name="setup_routers"></a></p>
+<h4 id='router-setup' class='heading'>Router setup</h4>
+
+<p>Create a swift <strong>enum</strong> that implements the <strong>RouteProtocol</strong> and define your environments.</p>
+
+<p>The following example creates a TodosRoute with all the required API routes (cases).</p>
+<h5 id='example' class='heading'>Example</h5>
+<pre class="highlight swift"><code><span class="kd">enum</span> <span class="kt">TodosRoute</span><span class="p">:</span> <span class="kt">RouteProtocol</span> <span class="p">{</span>
+    <span class="c1">// Define your routes</span>
+    <span class="k">case</span> <span class="n">list</span>
+    <span class="k">case</span> <span class="nf">show</span><span class="p">(</span><span class="nv">id</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span>
+    <span class="k">case</span> <span class="nf">add</span><span class="p">(</span><span class="nv">title</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span>
+    <span class="k">case</span> <span class="nf">remove</span><span class="p">(</span><span class="nv">id</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span>
+    <span class="k">case</span> <span class="nf">setCompleted</span><span class="p">(</span><span class="nv">id</span><span class="p">:</span> <span class="kt">Int</span><span class="p">,</span> <span class="nv">completed</span><span class="p">:</span> <span class="kt">Bool</span><span class="p">)</span>
+
+    <span class="c1">// Set method, path, params, headers for each route</span>
+    <span class="kd">func</span> <span class="nf">configure</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">RouteConfiguration</span> <span class="p">{</span>
+        <span class="k">let</span> <span class="nv">configuration</span> <span class="o">=</span> <span class="kt">Configuration</span><span class="p">(</span><span class="nv">requestBodyType</span><span class="p">:</span> <span class="o">.</span><span class="kt">JSON</span><span class="p">,</span>
+                                          <span class="nv">headers</span><span class="p">:</span> <span class="p">[</span><span class="s">"x-auth"</span><span class="p">:</span> <span class="s">"abcdef1234"</span><span class="p">])</span>
+
+        <span class="k">switch</span> <span class="k">self</span> <span class="p">{</span>
+        <span class="k">case</span> <span class="o">.</span><span class="nv">list</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kt">RouteConfiguration</span><span class="p">(</span><span class="nv">method</span><span class="p">:</span> <span class="o">.</span><span class="k">get</span><span class="p">,</span>
+                                      <span class="nv">path</span><span class="p">:</span> <span class="o">.</span><span class="nf">path</span><span class="p">([</span><span class="s">"todos"</span><span class="p">]),</span> <span class="c1">// GET /todos</span>
+                                      <span class="nv">configuration</span><span class="p">:</span> <span class="n">configuration</span><span class="p">)</span>
+        <span class="k">case</span> <span class="o">.</span><span class="nf">show</span><span class="p">(</span><span class="k">let</span> <span class="nv">id</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kt">RouteConfiguration</span><span class="p">(</span><span class="nv">method</span><span class="p">:</span> <span class="o">.</span><span class="k">get</span><span class="p">,</span>
+                                      <span class="nv">path</span><span class="p">:</span> <span class="o">.</span><span class="nf">path</span><span class="p">([</span><span class="s">"todo"</span><span class="p">,</span> <span class="kt">String</span><span class="p">(</span><span class="n">id</span><span class="p">)]),</span> <span class="c1">// GET /todos/[id]</span>
+                                      <span class="nv">configuration</span><span class="p">:</span> <span class="n">configuration</span><span class="p">)</span>
+        <span class="k">case</span> <span class="o">.</span><span class="nf">add</span><span class="p">(</span><span class="k">let</span> <span class="nv">title</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kt">RouteConfiguration</span><span class="p">(</span><span class="nv">method</span><span class="p">:</span> <span class="o">.</span><span class="n">post</span><span class="p">,</span>
+                                      <span class="nv">path</span><span class="p">:</span> <span class="o">.</span><span class="nf">path</span><span class="p">([</span><span class="s">"todos"</span><span class="p">]),</span> <span class="c1">// POST /todos</span>
+                                      <span class="nv">params</span><span class="p">:</span> <span class="p">[</span><span class="s">"title"</span><span class="p">:</span> <span class="n">title</span><span class="p">],</span>
+                                      <span class="nv">configuration</span><span class="p">:</span> <span class="n">configuration</span><span class="p">)</span>
+        <span class="k">case</span> <span class="o">.</span><span class="nf">remove</span><span class="p">(</span><span class="k">let</span> <span class="nv">id</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kt">RouteConfiguration</span><span class="p">(</span><span class="nv">method</span><span class="p">:</span> <span class="o">.</span><span class="n">delete</span><span class="p">,</span>
+                                      <span class="nv">path</span><span class="p">:</span> <span class="o">.</span><span class="nf">path</span><span class="p">([</span><span class="s">"todo"</span><span class="p">,</span> <span class="kt">String</span><span class="p">(</span><span class="n">id</span><span class="p">)]),</span> <span class="c1">// DELETE /todo/[id]</span>
+                                      <span class="nv">configuration</span><span class="p">:</span> <span class="n">configuration</span><span class="p">)</span>
+        <span class="k">case</span> <span class="o">.</span><span class="nf">setCompleted</span><span class="p">(</span><span class="k">let</span> <span class="nv">id</span><span class="p">,</span> <span class="k">let</span> <span class="nv">completed</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kt">RouteConfiguration</span><span class="p">(</span><span class="nv">method</span><span class="p">:</span> <span class="o">.</span><span class="n">patch</span><span class="p">,</span>
+                                      <span class="nv">path</span><span class="p">:</span> <span class="o">.</span><span class="nf">path</span><span class="p">([</span><span class="s">"todo"</span><span class="p">,</span> <span class="kt">String</span><span class="p">(</span><span class="n">id</span><span class="p">)]),</span> <span class="c1">// PATCH /todo/[id]</span>
+                                      <span class="nv">params</span><span class="p">:</span> <span class="p">[</span><span class="s">"completed"</span><span class="p">:</span> <span class="n">completed</span><span class="p">],</span>
+                                      <span class="nv">configuration</span><span class="p">:</span> <span class="n">configuration</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+</code></pre>
+
+<p>You can optionally pass a <strong>configuration</strong> object to each case if you want provide different  configuration for each route.</p>
+
+<p><a name="construct_request"></a></p>
+<h4 id='make-a-request' class='heading'>Make a request</h4>
+
+<p>To create the request you have to initialize a <strong>Router</strong> instance and specialize it with your defined Router, in our case <strong>TodosRoute</strong>:</p>
+<pre class="highlight swift"><code><span class="kt">Router</span><span class="o">&lt;</span><span class="kt">TodosRoute</span><span class="o">&gt;</span><span class="p">()</span><span class="o">.</span><span class="nf">request</span><span class="p">(</span><span class="nv">for</span><span class="p">:</span> <span class="o">.</span><span class="nf">add</span><span class="p">(</span><span class="nv">title</span><span class="p">:</span> <span class="s">"Go shopping!"</span><span class="p">))</span>
+    <span class="o">.</span><span class="nf">start</span><span class="p">(</span><span class="nv">responseType</span><span class="p">:</span> <span class="kt">Todo</span><span class="o">.</span><span class="k">self</span><span class="p">,</span>
+           <span class="nv">onSuccess</span><span class="p">:</span> <span class="p">{</span> <span class="n">todo</span> <span class="k">in</span>
+    <span class="c1">// do something with todo</span>
+<span class="p">})</span> <span class="p">{</span> <span class="p">(</span><span class="n">error</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span> <span class="k">in</span>
+    <span class="c1">// show error</span>
+<span class="p">}</span>
+</code></pre>
+
+<p><a name="queue_hooks"></a></p>
+<h2 id='queue-hooks' class='heading'>Queue Hooks</h2>
+
+<p>Hooks are closures that  run before and/or after a request execution in a queue. The following hooks are available:</p>
+<pre class="highlight swift"><code><span class="kt">Queue</span><span class="o">.</span><span class="n">shared</span><span class="o">.</span><span class="n">beforeAllRequestsCallback</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="c1">// e.g. show progress loader</span>
+<span class="p">}</span>
+
+<span class="kt">Queue</span><span class="o">.</span><span class="n">shared</span><span class="o">.</span><span class="n">afterAllRequestsCallback</span> <span class="o">=</span> <span class="p">{</span> <span class="n">completedWithError</span> <span class="k">in</span>
+    <span class="c1">// e.g. hide progress loader</span>
+<span class="p">}</span>
+
+<span class="kt">Queue</span><span class="o">.</span><span class="n">shared</span><span class="o">.</span><span class="n">beforeEachRequestCallback</span> <span class="o">=</span> <span class="p">{</span> <span class="n">request</span> <span class="k">in</span>
+    <span class="c1">// do something with request</span>
+<span class="p">}</span>
+
+<span class="kt">Queue</span><span class="o">.</span><span class="n">shared</span><span class="o">.</span><span class="n">afterEachRequestCallback</span> <span class="o">=</span> <span class="p">{</span> <span class="n">request</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">urlResponse</span><span class="p">,</span> <span class="n">error</span>
+    <span class="c1">// do something with request, data, urlResponse, error</span>
+<span class="p">}</span>
+</code></pre>
+
+<p>For more information take a look at <a href="https://billp.github.io/TermiNetwork/Classes/Queue.html" target="_blank">Queue</a> in documentation.</p>
+
+<p><a name="error_handling"></a></p>
+<h2 id='error-handling' class='heading'>Error Handling</h2>
+
+<p>TermiNetwork provides its own error types (TNError) for all the possible error cases. These errors are typically returned in onFailure callbacks of <strong>start</strong> methods.</p>
+
+<p>To see all the available errors, please visit the <a href="https://billp.github.io/TermiNetwork/Enums/TNError.html" target="_blank">TNError</a> in documentation.</p>
+<h4 id='example' class='heading'>Example</h4>
+<pre class="highlight swift"><code><span class="kt">Router</span><span class="o">&lt;</span><span class="kt">TodosRoute</span><span class="o">&gt;</span><span class="p">()</span><span class="o">.</span><span class="nf">request</span><span class="p">(</span><span class="nv">for</span><span class="p">:</span> <span class="o">.</span><span class="nf">add</span><span class="p">(</span><span class="nv">title</span><span class="p">:</span> <span class="s">"Go shopping!"</span><span class="p">))</span>
+                    <span class="o">.</span><span class="nf">start</span><span class="p">(</span><span class="nv">responseType</span><span class="p">:</span> <span class="kt">Todo</span><span class="o">.</span><span class="k">self</span><span class="p">,</span>
+   <span class="nv">onSuccess</span><span class="p">:</span> <span class="p">{</span> <span class="n">todo</span> <span class="k">in</span>
+       <span class="c1">// do something with todo</span>
+   <span class="p">},</span>
+   <span class="nv">onFailure</span><span class="p">:</span> <span class="p">{</span> <span class="p">(</span><span class="n">error</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span> <span class="k">in</span>
+       <span class="k">switch</span> <span class="n">error</span> <span class="p">{</span>
+       <span class="k">case</span> <span class="o">.</span><span class="nf">notSuccess</span><span class="p">(</span><span class="k">let</span> <span class="nv">statusCode</span><span class="p">):</span>
+            <span class="nf">debugPrint</span><span class="p">(</span><span class="s">"Status code "</span> <span class="o">+</span> <span class="kt">String</span><span class="p">(</span><span class="n">statusCode</span><span class="p">))</span>
+            <span class="k">break</span>
+       <span class="k">case</span> <span class="o">.</span><span class="nf">networkError</span><span class="p">(</span><span class="k">let</span> <span class="nv">error</span><span class="p">):</span>
+            <span class="nf">debugPrint</span><span class="p">(</span><span class="s">"Network error: "</span> <span class="o">+</span> <span class="n">error</span><span class="o">.</span><span class="n">localizedDescription</span><span class="p">)</span>
+            <span class="k">break</span>
+       <span class="k">case</span> <span class="o">.</span><span class="nf">cancelled</span><span class="p">(</span><span class="k">let</span> <span class="nv">error</span><span class="p">):</span>
+            <span class="nf">debugPrint</span><span class="p">(</span><span class="s">"Request cancelled with error: "</span> <span class="o">+</span> <span class="n">error</span><span class="o">.</span><span class="n">localizedDescription</span><span class="p">)</span>
+            <span class="k">break</span>
+       <span class="k">default</span><span class="p">:</span>
+            <span class="nf">debugPrint</span><span class="p">(</span><span class="s">"Error: "</span> <span class="o">+</span> <span class="n">error</span><span class="o">.</span><span class="n">localizedDescription</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">})</span>
+</code></pre>
+
+<p><a name="transformers"></a></p>
+<h2 id='transformers' class='heading'>Transformers</h2>
+
+<p>Transformers enables you to convert your Rest models to Domain models by defining your custom <strong>transform</strong> functions. To do so, you have to create a class that inherits the <strong>Transformer</strong> class and specializing it by providing the FromType and ToType generics.</p>
+
+<p>The following example transforms an array of <strong>RSCity</strong> (rest) to an array of <strong>City</strong> (domain) by overriding the transform function.</p>
+<h4 id='example' class='heading'>Example</h4>
+<pre class="highlight swift"><code><span class="kd">final</span> <span class="kd">class</span> <span class="kt">CitiesTransformer</span><span class="p">:</span> <span class="kt">Transformer</span><span class="o">&lt;</span><span class="p">[</span><span class="kt">RSCity</span><span class="p">],</span> <span class="p">[</span><span class="kt">City</span><span class="p">]</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="k">override</span> <span class="kd">func</span> <span class="nf">transform</span><span class="p">(</span><span class="n">_</span> <span class="nv">object</span><span class="p">:</span> <span class="p">[</span><span class="kt">RSCity</span><span class="p">])</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="kt">City</span><span class="p">]</span> <span class="p">{</span>
+        <span class="n">object</span><span class="o">.</span><span class="n">map</span> <span class="p">{</span> <span class="n">rsCity</span> <span class="k">in</span>
+            <span class="kt">City</span><span class="p">(</span><span class="nv">id</span><span class="p">:</span> <span class="kt">UUID</span><span class="p">(),</span>
+                 <span class="nv">cityID</span><span class="p">:</span> <span class="n">rsCity</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+                 <span class="nv">name</span><span class="p">:</span> <span class="n">rsCity</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                 <span class="nv">description</span><span class="p">:</span> <span class="n">rsCity</span><span class="o">.</span><span class="n">description</span><span class="p">,</span>
+                 <span class="nv">countryName</span><span class="p">:</span> <span class="n">rsCity</span><span class="o">.</span><span class="n">countryName</span><span class="p">,</span>
+                 <span class="nv">thumb</span><span class="p">:</span> <span class="n">rsCity</span><span class="o">.</span><span class="n">thumb</span><span class="p">,</span>
+                 <span class="nv">image</span><span class="p">:</span> <span class="n">rsCity</span><span class="o">.</span><span class="n">image</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+
+<p>Finally, pass the <strong>CitiesTransformer</strong> in the Request&rsquo;s start method:</p>
+<h4 id='example' class='heading'>Example</h4>
+<pre class="highlight swift"><code><span class="kt">Router</span><span class="o">&lt;</span><span class="kt">CityRoute</span><span class="o">&gt;</span><span class="p">()</span>
+    <span class="o">.</span><span class="nf">request</span><span class="p">(</span><span class="nv">for</span><span class="p">:</span> <span class="o">.</span><span class="n">cities</span><span class="p">)</span>
+    <span class="o">.</span><span class="nf">start</span><span class="p">(</span><span class="nv">transformer</span><span class="p">:</span> <span class="kt">CitiesTransformer</span><span class="o">.</span><span class="k">self</span><span class="p">,</span>
+           <span class="nv">onSuccess</span><span class="p">:</span> <span class="p">{</span> <span class="n">cities</span> <span class="k">in</span>
+    <span class="c1">// Cities are of type [City] (domain)</span>
+    <span class="k">self</span><span class="o">.</span><span class="n">cities</span> <span class="o">=</span> <span class="n">cities</span>
+<span class="p">},</span> <span class="nv">onFailure</span><span class="p">:</span> <span class="p">{</span> <span class="p">(</span><span class="n">error</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span> <span class="k">in</span>
+   <span class="c1">// Handle error</span>
+<span class="p">})</span>
+</code></pre>
+
+<p><a name="mock_responses"></a></p>
+<h2 id='mock-responses' class='heading'>Mock responses</h2>
+
+<p><strong>Mock responses</strong> is a powerful feature of TermiNetwork that enables you to provide a local resource file as Request&rsquo;s response. This is useful, for example, when the API service is not yet available and you need to implement the app&rsquo;s functionality without losing any time. (Prerequisite for this is to have an API contract)</p>
+<h4 id='steps-to-enable-mock-responses' class='heading'>Steps to enable mock responses</h4>
+
+<ol>
+<li>Create a Bundle resource and put your files there. (File &gt; New -&gt; File&hellip; &gt; Settings Bundle)</li>
+<li>Specify the Bundle path in Configuration
+#### Example
+<code>swift
+let configuration = Configuration()
+if let path = Bundle.main.path(forResource: &quot;MockData&quot;, ofType: &quot;bundle&quot;) {
+    configuration.mockDataBundle = Bundle(path: path)
+}
+</code></li>
+<li>Enable Mock responses in Configuration
+#### Example
+<code>swift
+configuration.mockDataEnabled = true
+</code></li>
+<li><p>Define the mockFilePath path in your Routes
+ #### Example</p>
+<pre class="highlight swift"><code><span class="kd">enum</span> <span class="kt">CityRoute</span><span class="p">:</span> <span class="kt">RouteProtocol</span> <span class="p">{</span>
+<span class="k">case</span> <span class="n">cities</span>
+
+<span class="kd">func</span> <span class="nf">configure</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">RouteConfiguration</span> <span class="p">{</span>
+    <span class="k">switch</span> <span class="k">self</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="o">.</span><span class="nv">cities</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kt">RouteConfiguration</span><span class="p">(</span><span class="nv">method</span><span class="p">:</span> <span class="o">.</span><span class="k">get</span><span class="p">,</span>
+                                    <span class="nv">path</span><span class="p">:</span> <span class="o">.</span><span class="nf">path</span><span class="p">([</span><span class="s">"cities"</span><span class="p">]),</span>
+                                    <span class="nv">mockFilePath</span><span class="p">:</span> <span class="o">.</span><span class="nf">path</span><span class="p">([</span><span class="s">"Cities"</span><span class="p">,</span> <span class="s">"cities.json"</span><span class="p">]))</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+
+<p>The example above loads the <strong>Cities/cities.json</strong> from <strong>MockData.bundle</strong> and returns its data as Request&rsquo;s response.</p></li>
+</ol>
+
+<p>For a complete example, open the demo application and take a look at <strong>City Explorer - Offline Mode</strong>.</p>
+
+<p><a name="interceptors"></a></p>
+<h2 id='interceptors' class='heading'>Interceptors</h2>
+
+<p>Interceptors offers you a way to change or augment the usual processing cycle of a Request.  For instance, you can refresh an expired access token (unauthorized status code 401) and then retry the original request. To do so, you just have to implement the <strong>InterceptorProtocol</strong>.</p>
+
+<p>The following Interceptor implementation tries to refresh the access token with a retry limit (5).</p>
+<h4 id='example' class='heading'>Example</h4>
+<pre class="highlight swift"><code><span class="kd">final</span> <span class="kd">class</span> <span class="kt">UnauthorizedInterceptor</span><span class="p">:</span> <span class="kt">InterceptorProtocol</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="nv">retryDelay</span><span class="p">:</span> <span class="kt">TimeInterval</span> <span class="o">=</span> <span class="mf">0.1</span>
+    <span class="k">let</span> <span class="nv">retryLimit</span> <span class="o">=</span> <span class="mi">5</span>
+
+    <span class="kd">func</span> <span class="nf">requestFinished</span><span class="p">(</span><span class="n">responseData</span> <span class="nv">data</span><span class="p">:</span> <span class="kt">Data</span><span class="p">?,</span>
+                         <span class="nv">error</span><span class="p">:</span> <span class="kt">TNError</span><span class="p">?,</span>
+                         <span class="nv">request</span><span class="p">:</span> <span class="kt">Request</span><span class="p">,</span>
+                         <span class="nv">proceed</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt">InterceptionAction</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">switch</span> <span class="n">error</span> <span class="p">{</span>
+        <span class="k">case</span> <span class="o">.</span><span class="nf">notSuccess</span><span class="p">(</span><span class="k">let</span> <span class="nv">statusCode</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">statusCode</span> <span class="o">==</span> <span class="mi">401</span><span class="p">,</span> <span class="n">request</span><span class="o">.</span><span class="n">retryCount</span> <span class="o">&lt;</span> <span class="n">retryLimit</span> <span class="p">{</span>
+                <span class="c1">// Login and get a new token.</span>
+                <span class="kt">Request</span><span class="p">(</span><span class="nv">method</span><span class="p">:</span> <span class="o">.</span><span class="n">post</span><span class="p">,</span>
+                        <span class="nv">url</span><span class="p">:</span> <span class="s">"https://www.myserviceapi.com/login"</span><span class="p">,</span>
+                        <span class="nv">params</span><span class="p">:</span> <span class="p">[</span><span class="s">"username"</span><span class="p">:</span> <span class="s">"johndoe"</span><span class="p">,</span>
+                                 <span class="s">"password"</span><span class="p">:</span> <span class="s">"p@44w0rd"</span><span class="p">])</span>
+                    <span class="o">.</span><span class="nf">start</span><span class="p">(</span><span class="nv">responseType</span><span class="p">:</span> <span class="kt">LoginResponse</span><span class="o">.</span><span class="k">self</span><span class="p">)</span> <span class="p">{</span> <span class="n">response</span> <span class="k">in</span>
+                        <span class="k">let</span> <span class="nv">authorizationValue</span> <span class="o">=</span> <span class="kt">String</span><span class="p">(</span><span class="nv">format</span><span class="p">:</span> <span class="s">"Bearer %@"</span><span class="p">,</span> <span class="n">response</span><span class="o">.</span><span class="n">token</span><span class="p">)</span>
+
+                        <span class="c1">// Update the global header in configuration which is inherited by all requests.</span>
+                        <span class="kt">Environment</span><span class="o">.</span><span class="n">current</span><span class="o">.</span><span class="n">configuration</span><span class="p">?</span><span class="o">.</span><span class="n">headers</span><span class="p">[</span><span class="s">"Authorization"</span><span class="p">]</span> <span class="o">=</span> <span class="n">authorizationValue</span>
+
+                        <span class="c1">// Update current request's header.</span>
+                        <span class="n">request</span><span class="o">.</span><span class="n">headers</span><span class="p">[</span><span class="s">"Authorization"</span><span class="p">]</span> <span class="o">=</span> <span class="n">authorizationValue</span>
+
+                        <span class="c1">// Finally retry the original request.</span>
+                        <span class="nf">proceed</span><span class="p">(</span><span class="o">.</span><span class="nf">retry</span><span class="p">(</span><span class="nv">delay</span><span class="p">:</span> <span class="n">retryDelay</span><span class="p">))</span>
+                    <span class="p">}</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                <span class="c1">// Continue if the retry limit is reached</span>
+                <span class="nf">proceed</span><span class="p">(</span><span class="o">.</span><span class="k">continue</span><span class="p">)</span>
+            <span class="p">}</span>
+        <span class="k">default</span><span class="p">:</span>
+            <span class="nf">proceed</span><span class="p">(</span><span class="o">.</span><span class="k">continue</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+</code></pre>
+
+<p>Finally, you have to pass the <strong>UnauthorizedInterceptor</strong> to the interceptors property in Configuration:</p>
+<h4 id='example' class='heading'>Example</h4>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">configuration</span> <span class="o">=</span> <span class="kt">Configuration</span><span class="p">()</span>
+<span class="n">configuration</span><span class="o">.</span><span class="n">interceptors</span> <span class="o">=</span> <span class="p">[</span><span class="kt">UnauthorizedInterceptor</span><span class="o">.</span><span class="k">self</span><span class="p">]</span>
+</code></pre>
+
+<p><a name="image_helpers"></a></p>
+<h2 id='swiftui-uikit-image-helpers' class='heading'>SwiftUI/UIKit Image Helpers</h2>
+
+<p>TermiNetwork provides two different helpers for setting remote images.
+<a name="swift_ui_image_helper"></a></p>
+<h3 id='swiftui-image-helper' class='heading'>SwiftUI Image Helper</h3>
+<h4 id='example' class='heading'>Example</h4>
+
+<ol>
+<li><p><strong>Example with URL</strong></p>
+<pre class="highlight swift"><code><span class="k">var</span> <span class="nv">body</span><span class="p">:</span> <span class="n">some</span> <span class="kt">View</span> <span class="p">{</span>
+    <span class="kt">TermiNetwork</span><span class="o">.</span><span class="kt">Image</span><span class="p">(</span><span class="nv">withURL</span><span class="p">:</span> <span class="s">"https://example.com/path/to/image.png"</span><span class="p">,</span>
+                   <span class="n">defaultImage</span><span class="p">:</span> <span class="kt">UIImage</span><span class="p">(</span><span class="nv">named</span><span class="p">:</span> <span class="s">"DefaultThumbImage"</span><span class="p">))</span>
+<span class="p">}</span>
+</code></pre></li>
+<li><p><strong>Example with Request</strong></p>
+<pre class="highlight swift"><code><span class="k">var</span> <span class="nv">body</span><span class="p">:</span> <span class="n">some</span> <span class="kt">View</span> <span class="p">{</span>
+    <span class="kt">TermiNetwork</span><span class="o">.</span><span class="kt">Image</span><span class="p">(</span><span class="nv">withRequest</span><span class="p">:</span> <span class="kt">Router</span><span class="o">&lt;</span><span class="kt">CityRoute</span><span class="o">&gt;</span><span class="p">()</span><span class="o">.</span><span class="nf">request</span><span class="p">(</span><span class="nv">for</span><span class="p">:</span> <span class="o">.</span><span class="nf">image</span><span class="p">(</span><span class="nv">city</span><span class="p">:</span> <span class="n">city</span><span class="p">)),</span>
+                       <span class="n">defaultImage</span><span class="p">:</span> <span class="kt">UIImage</span><span class="p">(</span><span class="nv">named</span><span class="p">:</span> <span class="s">"DefaultThumbImage"</span><span class="p">))</span>
+<span class="p">}</span>
+</code></pre></li>
+</ol>
+
+<p><a name="image_extensions"></a></p>
+<h3 id='uiimageview-nsimageview-wkinterfaceimage-extensions' class='heading'>UIImageView, NSImageView, WKInterfaceImage Extensions</h3>
+
+<ol>
+<li><p><strong>Example with URL</strong></p>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">imageView</span> <span class="o">=</span> <span class="kt">UIImageView</span><span class="p">()</span> <span class="c1">// or NSImageView (macOS), or WKInterfaceImage (watchOS)</span>
+<span class="n">imageView</span><span class="o">.</span><span class="nf">tn_setRemoteImage</span><span class="p">(</span><span class="nv">url</span><span class="p">:</span> <span class="n">sampleImageURL</span><span class="p">,</span>
+                            <span class="n">defaultImage</span><span class="p">:</span> <span class="kt">UIImage</span><span class="p">(</span><span class="nv">named</span><span class="p">:</span> <span class="s">"DefaultThumbImage"</span><span class="p">),</span>
+                            <span class="nv">preprocessImage</span><span class="p">:</span> <span class="p">{</span> <span class="n">image</span> <span class="k">in</span>
+    <span class="c1">// Optionally pre-process image and return the new image.</span>
+    <span class="k">return</span> <span class="n">image</span>
+<span class="p">},</span> <span class="nv">onFinish</span><span class="p">:</span> <span class="p">{</span> <span class="n">image</span><span class="p">,</span> <span class="n">error</span> <span class="k">in</span>
+    <span class="c1">// Optionally handle response</span>
+<span class="p">})</span>
+</code></pre></li>
+<li><p><strong>Example with Request</strong></p>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">imageView</span> <span class="o">=</span> <span class="kt">UIImageView</span><span class="p">()</span> <span class="c1">// or NSImageView (macOS), or WKInterfaceImage (watchOS)</span>
+<span class="n">imageView</span><span class="o">.</span><span class="nf">tn_setRemoteImage</span><span class="p">(</span><span class="nv">request</span><span class="p">:</span> <span class="kt">Router</span><span class="o">&lt;</span><span class="kt">CityRoute</span><span class="o">&gt;</span><span class="p">()</span><span class="o">.</span><span class="nf">request</span><span class="p">(</span><span class="nv">for</span><span class="p">:</span> <span class="o">.</span><span class="nf">thumb</span><span class="p">(</span><span class="nv">withID</span><span class="p">:</span> <span class="s">"3125"</span><span class="p">)),</span>
+                            <span class="n">defaultImage</span><span class="p">:</span> <span class="kt">UIImage</span><span class="p">(</span><span class="nv">named</span><span class="p">:</span> <span class="s">"DefaultThumbImage"</span><span class="p">),</span>
+                            <span class="nv">preprocessImage</span><span class="p">:</span> <span class="p">{</span> <span class="n">image</span> <span class="k">in</span>
+    <span class="c1">// Optionally pre-process image and return the new image.</span>
+    <span class="k">return</span> <span class="n">image</span>
+<span class="p">},</span> <span class="nv">onFinish</span><span class="p">:</span> <span class="p">{</span> <span class="n">image</span><span class="p">,</span> <span class="n">error</span> <span class="k">in</span>
+    <span class="c1">// Optionally handle response</span>
+<span class="p">})</span>
+</code></pre></li>
+</ol>
+
+<p><a name="middlewares"></a></p>
+<h2 id='middlewares' class='heading'>Middlewares</h2>
+
+<p>Middlewares enables you to modify headers, params and response before they reach the success/failure callbacks. You can create your own middlewares by implementing the <strong>RequestMiddlewareProtocol</strong> and passing it to a <strong>Configuration</strong> object.</p>
+
+<p>Take a look at <em>./Examples/Communication/Middlewares/CryptoMiddleware.swift</em>  for an example that adds an additional encryption layer to the application.</p>
+
+<p><a name="debug_logging"></a></p>
+<h2 id='debug-logging' class='heading'>Debug Logging</h2>
+
+<p>You can enable the debug logging by setting the <strong>verbose</strong> property to <strong>true</strong> in your <strong>Configuration</strong>.</p>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">configuration</span> <span class="o">=</span> <span class="kt">Configuration</span><span class="p">()</span>
+<span class="n">configuration</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="kc">true</span>
+</code></pre>
+
+<p>&hellip; and you will see a beautiful pretty-printed debug output in debug window</p>
+
+<p><img width="750px" src="https://user-images.githubusercontent.com/1566052/102597522-75be5200-4123-11eb-9e6e-5740e42a20a5.png"></p>
+<h2 id='tests' class='heading'>Tests</h2>
+
+<p>To run the tests open the Xcode Project &gt; TermiNetwork scheme, select Product -&gt; Test or simply press ⌘U on keyboard.</p>
+<h2 id='contributors' class='heading'>Contributors</h2>
+
+<p>Alex Athanasiadis, <a href="mailto:alexanderathan@gmail.com">alexanderathan@gmail.com</a></p>
+<h2 id='license' class='heading'>License</h2>
+
+<p>TermiNetwork is available under the MIT license. See the LICENSE file for more info.</p>
+
+          </div>
+        </section>
+
+
+      </article>
+    </div>
+    <section class="footer">
+      <p>&copy; 2020 <a class="link" href="https://github.com/billp/TermiNetwork.git" target="_blank" rel="external">Bill Panagiotopoulos</a>. All rights reserved. (Last updated: 2020-12-28)</p>
+      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.6</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+    </section>
+  </body>
+</div>
+</html>

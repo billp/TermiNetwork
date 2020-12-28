@@ -1,0 +1,89 @@
+{
+  "warnings": [
+    {
+      "file": "/Users/billpanagiotopoulos/Projects/TermiNetwork/Source/Extensions/Request+NSCopying.swift",
+      "line": 23,
+      "symbol": "Request.copy(with:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/billpanagiotopoulos/Projects/TermiNetwork/Source/Request.swift",
+      "line": 32,
+      "symbol": "Method.get",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/billpanagiotopoulos/Projects/TermiNetwork/Source/Request.swift",
+      "line": 33,
+      "symbol": "Method.head",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/billpanagiotopoulos/Projects/TermiNetwork/Source/Request.swift",
+      "line": 34,
+      "symbol": "Method.post",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/billpanagiotopoulos/Projects/TermiNetwork/Source/Request.swift",
+      "line": 35,
+      "symbol": "Method.put",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/billpanagiotopoulos/Projects/TermiNetwork/Source/Request.swift",
+      "line": 36,
+      "symbol": "Method.delete",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/billpanagiotopoulos/Projects/TermiNetwork/Source/Request.swift",
+      "line": 37,
+      "symbol": "Method.connect",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/billpanagiotopoulos/Projects/TermiNetwork/Source/Request.swift",
+      "line": 38,
+      "symbol": "Method.options",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/billpanagiotopoulos/Projects/TermiNetwork/Source/Request.swift",
+      "line": 39,
+      "symbol": "Method.trace",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/billpanagiotopoulos/Projects/TermiNetwork/Source/Request.swift",
+      "line": 40,
+      "symbol": "Method.patch",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/billpanagiotopoulos/Projects/TermiNetwork/Source/SwiftUI/Image.swift",
+      "line": 162,
+      "symbol": "Image",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/billpanagiotopoulos/Projects/TermiNetwork/Source/SwiftUI/Image.swift",
+      "line": 163,
+      "symbol": "Image.imageLoader",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    }
+  ],
+  "source_directory": "/Users/billpanagiotopoulos/Projects/TermiNetwork"
+}

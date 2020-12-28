@@ -1,42 +1,19 @@
-#
-# Be sure to run `pod lib lint TermiNetwork.podspec' to ensure this is a
-# valid spec before submitting.
-#
-# Any lines starting with a # are optional, but their use is encouraged
-# To learn more about a Podspec see http://guides.cocoapods.org/syntax/podspec.html
-#
-
 Pod::Spec.new do |s|
   s.name             = 'TermiNetwork'
-  s.version          = '0.3.3'
-  s.summary          = 'A Networking Library written in Swift 5.0'
-
-# This description is used to generate tags and improve search results.
-#   * Think: What does it do? Why did you write it? What is the focus?
-#   * Try to keep it short, snappy and to the point.
-#   * Write the description between the DESC delimiters below.
-#   * Finally, don't worry about the indent, CocoaPods strips it!
-
-  s.description      = <<-DESC
-TermiNetwork is a networking library written with Swift 4.0 that supports multi-environment configuration, routing and automatic deserialization (currently Codable and UIImage deserialization is supported).
-                       DESC
-
+  s.version          = '1.0.0'
+  s.summary          = 'A zero-dependency networking solution for building modern and secure iOS, watchOS, macOS and tvOS applications.'
   s.homepage         = 'https://github.com/billp/TermiNetwork.git'
-  # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
-  s.license          = { :type => 'MIT', :file => 'LICENSE' }
-  s.author           = { 'Bill Panagiotopoulos' => 'billp.dev@gmail.com' }
-  s.source           = { :git => 'https://github.com/billp/TermiNetwork.git', :tag => s.version.to_s }
-  # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
+  s.license          = 'MIT'
+  s.authors          = { 'Bill Panagiotopoulos' => 'billp.dev@gmail.com' }
+  s.source           = { :git => 'https://github.com/billp/TermiNetwork.git', :tag => s.version }
+  s.documentation_url = 'https://billp.github.io/TermiNetwork'
 
-  s.ios.deployment_target = '8.0'
+  s.ios.deployment_target = '13.0'
+  s.osx.deployment_target = '10.15'
+  s.watchos.deployment_target = '6.0'
+  s.tvos.deployment_target = '13.0'
 
-  s.source_files = 'TermiNetwork/Classes/**/*'
+  s.source_files = 'Source/**/*.swift'
 
-  # s.resource_bundles = {
-  #   'TermiNetwork' => ['TermiNetwork/Assets/*.png']
-  # }
-
-  # s.public_header_files = 'Pod/Classes/**/*.h'
-  # s.frameworks = 'UIKit', 'MapKit'
-  s.dependency 'SwiftyJSON', '~> 4.2'
+  s.swift_versions = ['5.3']
 end
