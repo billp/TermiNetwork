@@ -12,7 +12,7 @@
   <img src="https://img.shields.io/badge/Language-Swift 5.3-blue" />
   <img src="https://img.shields.io/github/license/billp/TermiNetwork" />
   <img src="https://img.shields.io/cocoapods/p/TermiNetwork" />
-  <img src="https://img.shields.io/cocoapods/metrics/doc-percent/TermiNetwork" />
+  <img src="https://billp.github.io/TermiNetwork/badge.svg" />
 </p>
 
 ## Features
