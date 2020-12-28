@@ -1,0 +1,8 @@
+author: Vasilis Panagiotopoulos
+author_url: https://github.com/billp/TermiNetwork
+github_url: https://github.com/billp/TermiNetwork
+root_url: https://billp.github.io/TermiNetwork/
+module: TermiNetwork
+output: docs
+theme: fullwidth
+xcodebuild_arguments: [-scheme, 'TermiNetwork']
