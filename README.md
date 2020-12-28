@@ -1,4 +1,5 @@
 
+
 <p></p>
 <p align="center">
   <img src="https://raw.githubusercontent.com/billp/TermiNetwork/master/TermiNetworkLogo.svg" alt="" data-canonical-src="" width="80%" />
@@ -165,7 +166,7 @@ The complete and recommended setup of TermiNetwork consists of defining **Enviro
 <a name="setup_environments"></a>
 
 #### Environment setup
-Create a swift **enum** that implements the **EnvironmentProtocol** and define your environments. 
+Create a swift **enum** that implements the **EnvironmentProtocol** and define your environments.
 
 ##### Example
 ```swift
@@ -203,7 +204,7 @@ enum MyAppEnvironments: EnvironmentProtocol {
 <a name="setup_routers"></a>
 
 #### Router setup
-Create a swift **enum** that implements the **RouteProtocol** and define your environments. 
+Create a swift **enum** that implements the **RouteProtocol** and define your environments.
 
 The following example creates a TodosRoute with all the required API routes (cases).
 
@@ -295,7 +296,7 @@ Queue.shared.afterEachRequestCallback = { request, data, urlResponse, error
 
 ## Error Handling
 
-TermiNetwork provides its own error types (TNError) for all the possible error cases. These errors are typically returned in onFailure callbacks of **start** methods. 
+TermiNetwork provides its own error types (TNError) for all the possible error cases. These errors are typically returned in onFailure callbacks of **start** methods.
 
 To see all the available errors, please visit the <a href="https://billp.github.io/TermiNetwork/Enums/TNError.html" target="_blank">TNError</a> in documentation.
 
@@ -365,7 +366,7 @@ Router<CityRoute>()
 
 <a name="mock_responses"></a>
 ## Mock responses
-**Mock responses** is a powerful feature of TermiNetwork that enables you to provide a local resource file as Request's response. This is useful, for example, when the API service is not yet available and you need to implement the app's functionality without losing any time. (Prerequisite for this is to have an API contract) 
+**Mock responses** is a powerful feature of TermiNetwork that enables you to provide a local resource file as Request's response. This is useful, for example, when the API service is not yet available and you need to implement the app's functionality without losing any time. (Prerequisite for this is to have an API contract)
 
 #### Steps to enable mock responses
 
@@ -467,47 +468,51 @@ TermiNetwork provides two different helpers for setting remote images.
 ### SwiftUI Image Helper
 #### Example
 1.  **Example with URL**
-```swift
-var body: some View {
-    TermiNetwork.Image(withURL: "https://example.com/path/to/image.png",
-	               defaultImage: UIImage(named: "DefaultThumbImage"))
-}
-```
+
+	```swift
+	var body: some View {
+	    TermiNetwork.Image(withURL: "https://example.com/path/to/image.png",
+		               defaultImage: UIImage(named: "DefaultThumbImage"))
+	}
+	```
 2.  **Example with Request**
-```swift
-var body: some View {
-    TermiNetwork.Image(withRequest: Router<CityRoute>().request(for: .image(city: city)),
-                       defaultImage: UIImage(named: "DefaultThumbImage"))
-}
-```
+
+	```swift
+	var body: some View {
+	    TermiNetwork.Image(withRequest: Router<CityRoute>().request(for: .image(city: city)),
+	                       defaultImage: UIImage(named: "DefaultThumbImage"))
+	}
+	```
 
 <a name="image_extensions"></a>
 ### UIImageView, NSImageView, WKInterfaceImage Extensions
 
 1. **Example with URL**
-```swift
-let imageView = UIImageView() // or NSImageView (macOS), or WKInterfaceImage (watchOS)
-imageView.tn_setRemoteImage(url: sampleImageURL,
-                            defaultImage: UIImage(named: "DefaultThumbImage"),
-                            preprocessImage: { image in
-    // Optionally pre-process image and return the new image.
-    return image
-}, onFinish: { image, error in
-    // Optionally handle response
-})
-```
+
+	```swift
+	let imageView = UIImageView() // or NSImageView (macOS), or WKInterfaceImage (watchOS)
+	imageView.tn_setRemoteImage(url: sampleImageURL,
+	                            defaultImage: UIImage(named: "DefaultThumbImage"),
+	                            preprocessImage: { image in
+	    // Optionally pre-process image and return the new image.
+	    return image
+	}, onFinish: { image, error in
+	    // Optionally handle response
+	})
+	```
 2. **Example with Request**
-```swift
-let imageView = UIImageView() // or NSImageView (macOS), or WKInterfaceImage (watchOS)
-imageView.tn_setRemoteImage(request: Router<CityRoute>().request(for: .thumb(withID: "3125")),
-                            defaultImage: UIImage(named: "DefaultThumbImage"),
-                            preprocessImage: { image in
-    // Optionally pre-process image and return the new image.
-    return image
-}, onFinish: { image, error in
-    // Optionally handle response
-})
-```
+
+	```swift
+	let imageView = UIImageView() // or NSImageView (macOS), or WKInterfaceImage (watchOS)
+	imageView.tn_setRemoteImage(request: Router<CityRoute>().request(for: .thumb(withID: "3125")),
+	                            defaultImage: UIImage(named: "DefaultThumbImage"),
+	                            preprocessImage: { image in
+	    // Optionally pre-process image and return the new image.
+	    return image
+	}, onFinish: { image, error in
+	    // Optionally handle response
+	})
+	```
 
 <a name="middlewares"></a>
 
