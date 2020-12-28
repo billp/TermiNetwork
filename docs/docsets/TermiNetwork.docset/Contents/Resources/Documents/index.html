@@ -20,7 +20,7 @@
     <header class="header">
       <p class="header-col header-col--primary">
         <a class="header-link" href="index.html">
-          TermiNetwork 1.0.1 Docs
+          TermiNetwork 1.0.2 Docs
         </a>
          (92% documented)
       </p>
@@ -221,7 +221,7 @@
 <h2 id='features' class='heading'>Features</h2>
 
 <p align="center">
-Multi-environment setup 🔸 Model deserialization with <b>Codables</b> 🔸 Choose the response type you want: <b>Codable</b>, <b>UIImage</b>, <b>Data</b> or <b>String</b> 🔸 <b>UIKit</b>/<b>SwiftUI</b> helpers for downloading remote images 🔸 Routers 🔸 Transformers (convert rest models to domain models) 🔸 Error handling 🔸 Mock responses 🔸 Certificate pinning  🔸 Flexible configuration  🔸 Middlewares  🔸 File/Data Upload/Download 🔸 Pretty printed debug information
+Multi-environment setup 🔸 Model deserialization with <b>Codables</b> 🔸 Choose the response type you want: <b>Codable</b>, <b>UIImage</b>, <b>Data</b> or <b>String</b> 🔸 <b>UIKit</b>/<b>SwiftUI</b> helpers for downloading remote images 🔸 Routers 🔸 Transformers (convert rest models to domain models) 🔸 Error handling 🔸 Mock responses 🔸 Certificate pinning  🔸 Flexible configuration  🔸 Middleware  🔸 File/Data Upload/Download 🔸 Pretty printed debug information
 </p>
 <h4 id='table-of-contents' class='heading'>Table of contents</h4>
 
@@ -252,7 +252,7 @@ Multi-environment setup 🔸 Model deserialization with <b>Codables</b> 🔸 Cho
 <li><a href="#swift_ui_image_helper">SwiftUI Image Helper</a></li>
 <li><a href="#image_extensions">UIImageView, NSImageView, WKInterfaceImage Extensions</a></li>
 </ul></li>
-<li><a href="#middlewares">Middlewares</a></li>
+<li><a href="#middleware">Middleware</a></li>
 <li><a href="#debug_logging">Debug Logging</a></li>
 </ul>
 
@@ -696,12 +696,12 @@ configuration.mockDataEnabled = true
 </code></pre></li>
 </ol>
 
-<p><a name="middlewares"></a></p>
-<h2 id='middlewares' class='heading'>Middlewares</h2>
+<p><a name="middleware"></a></p>
+<h2 id='middleware' class='heading'>Middleware</h2>
 
-<p>Middlewares enables you to modify headers, params and response before they reach the success/failure callbacks. You can create your own middlewares by implementing the <strong>RequestMiddlewareProtocol</strong> and passing it to a <strong>Configuration</strong> object.</p>
+<p>Middleware enables you to modify headers, params and response before they reach the success/failure callbacks. You can create your own middleware by implementing the <strong>RequestMiddlewareProtocol</strong> and passing it to a <strong>Configuration</strong> object.</p>
 
-<p>Take a look at <em>./Examples/Communication/Middlewares/CryptoMiddleware.swift</em>  for an example that adds an additional encryption layer to the application.</p>
+<p>Take a look at <em>./Examples/Communication/Middleware/CryptoMiddleware.swift</em>  for an example that adds an additional encryption layer to the application.</p>
 
 <p><a name="debug_logging"></a></p>
 <h2 id='debug-logging' class='heading'>Debug Logging</h2>

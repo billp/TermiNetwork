@@ -31,7 +31,7 @@ class TestRequest: XCTestCase {
 
     lazy var routerWithMiddleware: Router<APIRoute> = {
         let configuration = Configuration()
-        configuration.requestMiddlewares = [CryptoMiddleware.self]
+        configuration.requestMiddleware = [CryptoMiddleware.self]
         configuration.verbose = true
         configuration.requestBodyType = .JSON
 

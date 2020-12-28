@@ -62,8 +62,8 @@ public final class Configuration {
     public var keyDecodingStrategy: JSONDecoder.KeyDecodingStrategy?
     /// Error handlers that will be used as a fallback after request failure.
     public var interceptors: [InterceptorProtocol.Type]?
-    /// Request middlewares
-    public var requestMiddlewares: [RequestMiddlewareProtocol.Type]?
+    /// Request middleware
+    public var requestMiddleware: [RequestMiddlewareProtocol.Type]?
 
     // MARK: Internal properties
 
@@ -89,8 +89,8 @@ public final class Configuration {
     ///     - keyDecodingStrategy: // Specifies a key decoding strategy. Take a look,
     ///         at: https://developer.apple.com/documentation/foundation/jsondecoder/keydecodingstrategy
     ///     - errorHandlers: Error handlers that will be used as a fallback after request failure.
-    ///     - requestMiddlewares: Request middlewares. For example see
-    ///         Examples/Communication/Middlewares/CryptoMiddleware.swift
+    ///     - requestMiddleware: Request middleware. For example see
+    ///         Examples/Communication/Middleware/CryptoMiddleware.swift
     public init(cachePolicy: URLRequest.CachePolicy? = nil,
                 timeoutInterval: TimeInterval? = nil,
                 requestBodyType: RequestBodyType? = nil,
@@ -102,7 +102,7 @@ public final class Configuration {
                 mockDelay: MockDelayType? = nil,
                 keyDecodingStrategy: JSONDecoder.KeyDecodingStrategy? = nil,
                 interceptors: [InterceptorProtocol.Type]? = nil,
-                requestMiddlewares: [RequestMiddlewareProtocol.Type]? = nil) {
+                requestMiddleware: [RequestMiddlewareProtocol.Type]? = nil) {
 
         self.cachePolicy = cachePolicy
         self.timeoutInterval = timeoutInterval
@@ -114,7 +114,7 @@ public final class Configuration {
         self.mockDelay = mockDelay
         self.keyDecodingStrategy = keyDecodingStrategy
         self.interceptors = interceptors
-        self.requestMiddlewares = requestMiddlewares
+        self.requestMiddleware = requestMiddleware
 
         if let certPaths = certificatePaths {
             setCertificateData(with: certPaths)
@@ -151,7 +151,7 @@ extension Configuration: NSCopying {
         configuration.mockDataEnabled = mockDataEnabled
         configuration.keyDecodingStrategy = keyDecodingStrategy
         configuration.interceptors = interceptors
-        configuration.requestMiddlewares = requestMiddlewares
+        configuration.requestMiddleware = requestMiddleware
         return configuration
     }
 }
@@ -210,8 +210,8 @@ extension Configuration {
         if let mockDelay = right.mockDelay {
             leftClone.mockDelay = mockDelay
         }
-        if let requestMiddlewares = right.requestMiddlewares {
-            leftClone.requestMiddlewares = requestMiddlewares
+        if let requestMiddleware = right.requestMiddleware {
+            leftClone.requestMiddleware = requestMiddleware
         }
         if let keyDecodingStrategy = right.keyDecodingStrategy {
             leftClone.keyDecodingStrategy = keyDecodingStrategy

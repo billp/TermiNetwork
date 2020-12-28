@@ -67,9 +67,9 @@ internal class Log {
                 print("🔒 Pinning Enabled")
             }
 
-            if let middlewares = request.configuration.requestMiddlewares, middlewares.count > 0 {
-                print(String(format: "🧪 Middlewares: %@",
-                             middlewares.map { String(describing: $0) }
+            if let middleware = request.configuration.requestMiddleware, middleware.count > 0 {
+                print(String(format: "🧪 Middleware: %@",
+                             middleware.map { String(describing: $0) }
                                         .joined(separator: ", ")))
             }
 

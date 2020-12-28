@@ -45,7 +45,7 @@ class TestConfiguration: XCTestCase {
         conf.headers = ["test": "123", "test2": "abcdefg"]
         conf.keyDecodingStrategy = .convertFromSnakeCase
         conf.interceptors = [GlobalInterceptor.self]
-        conf.requestMiddlewares = []
+        conf.requestMiddleware = []
 
         return conf
     }()
@@ -60,7 +60,7 @@ class TestConfiguration: XCTestCase {
         conf.headers = ["test": "test", "afb": "fff"]
         conf.keyDecodingStrategy = .useDefaultKeys
         conf.interceptors = []
-        conf.requestMiddlewares = [CryptoMiddleware.self]
+        conf.requestMiddleware = [CryptoMiddleware.self]
 
         return conf
     }()
@@ -113,10 +113,10 @@ class TestConfiguration: XCTestCase {
                     Set(arrayLiteral: TestConfiguration
                             .envConfiguration
                             .interceptors.map { String(describing: $0) }))
-        XCTAssert(Set(arrayLiteral: reqConf.requestMiddlewares.map { String(describing: $0) }) ==
+        XCTAssert(Set(arrayLiteral: reqConf.requestMiddleware.map { String(describing: $0) }) ==
                     Set(arrayLiteral: TestConfiguration
                             .envConfiguration
-                            .requestMiddlewares.map { String(describing: $0) }))
+                            .requestMiddleware.map { String(describing: $0) }))
     }
 
     func testEnvConfigurationWithEnvironmentObject() {
@@ -142,10 +142,10 @@ class TestConfiguration: XCTestCase {
                     Set(arrayLiteral: TestConfiguration
                             .envConfiguration
                             .interceptors.map { String(describing: $0) }))
-        XCTAssert(Set(arrayLiteral: reqConf.requestMiddlewares.map { String(describing: $0) }) ==
+        XCTAssert(Set(arrayLiteral: reqConf.requestMiddleware.map { String(describing: $0) }) ==
                     Set(arrayLiteral: TestConfiguration
                             .envConfiguration
-                            .requestMiddlewares.map { String(describing: $0) }))
+                            .requestMiddleware.map { String(describing: $0) }))
     }
 
     func testRouteConfiguration() {
@@ -173,7 +173,7 @@ class TestConfiguration: XCTestCase {
         }
         XCTAssert(Set(arrayLiteral: reqConf.interceptors.map { String(describing: $0) }) ==
                     Set(arrayLiteral: routeConf.interceptors.map { String(describing: $0) }))
-        XCTAssert(Set(arrayLiteral: reqConf.requestMiddlewares.map { String(describing: $0) }) ==
-                    Set(arrayLiteral: routeConf.requestMiddlewares.map { String(describing: $0) }))
+        XCTAssert(Set(arrayLiteral: reqConf.requestMiddleware.map { String(describing: $0) }) ==
+                    Set(arrayLiteral: routeConf.requestMiddleware.map { String(describing: $0) }))
     }
 }

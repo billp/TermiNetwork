@@ -20,56 +20,56 @@
 import Foundation
 
 extension Request {
-    func shouldHandleMiddlewares() -> Bool {
-        guard let middlewares = configuration.requestMiddlewares else {
+    func shouldHandleMiddleware() -> Bool {
+        guard let middleware = configuration.requestMiddleware else {
             return false
         }
-        return middlewares.count > 0
+        return middleware.count > 0
     }
 
     func handleMiddlewareParamsIfNeeded(params: [String: Any?]?) throws -> [String: Any?]? {
-        guard shouldHandleMiddlewares() else {
+        guard shouldHandleMiddleware() else {
             return params
         }
 
         var newParams = params
-        try configuration.requestMiddlewares?.forEach { middleware in
+        try configuration.requestMiddleware?.forEach { middleware in
             newParams = try middleware.init().processParams(with: newParams)
         }
         return newParams
     }
 
     func handleMiddlewareProcessResponseIfNeeded(responseData: Data?) throws -> Data? {
-        guard shouldHandleMiddlewares() else {
+        guard shouldHandleMiddleware() else {
             return responseData
         }
 
         var newResponseData = responseData
-        try configuration.requestMiddlewares?.forEach { middleware in
+        try configuration.requestMiddleware?.forEach { middleware in
             newResponseData = try middleware.init().processResponse(with: newResponseData)
         }
         return newResponseData
     }
 
     func handleMiddlewareHeadersBeforeSendIfNeeded(headers: [String: String]?) throws -> [String: String]? {
-        guard shouldHandleMiddlewares() else {
+        guard shouldHandleMiddleware() else {
             return headers
         }
 
         var newHeaders = headers
-        try configuration.requestMiddlewares?.forEach { middleware in
+        try configuration.requestMiddleware?.forEach { middleware in
             newHeaders = try middleware.init().processHeadersBeforeSend(with: newHeaders)
         }
         return newHeaders
     }
 
     func handleMiddlewareHeadersAfterReceiveIfNeeded(headers: [String: String]?) throws -> [String: String]? {
-        guard shouldHandleMiddlewares() else {
+        guard shouldHandleMiddleware() else {
             return headers
         }
 
         var newHeaders = headers
-        try configuration.requestMiddlewares?.forEach { middleware in
+        try configuration.requestMiddleware?.forEach { middleware in
             newHeaders = try middleware.init().processHeadersAfterReceive(with: newHeaders)
         }
         return newHeaders

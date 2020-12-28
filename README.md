@@ -17,7 +17,7 @@
 
 ## Features
 <p align="center">
-Multi-environment setup 🔸 Model deserialization with <b>Codables</b> 🔸 Choose the response type you want: <b>Codable</b>, <b>UIImage</b>, <b>Data</b> or <b>String</b> 🔸 <b>UIKit</b>/<b>SwiftUI</b> helpers for downloading remote images 🔸 Routers 🔸 Transformers (convert rest models to domain models) 🔸 Error handling 🔸 Mock responses 🔸 Certificate pinning  🔸 Flexible configuration  🔸 Middlewares  🔸 File/Data Upload/Download 🔸 Pretty printed debug information
+Multi-environment setup 🔸 Model deserialization with <b>Codables</b> 🔸 Choose the response type you want: <b>Codable</b>, <b>UIImage</b>, <b>Data</b> or <b>String</b> 🔸 <b>UIKit</b>/<b>SwiftUI</b> helpers for downloading remote images 🔸 Routers 🔸 Transformers (convert rest models to domain models) 🔸 Error handling 🔸 Mock responses 🔸 Certificate pinning  🔸 Flexible configuration  🔸 Middleware  🔸 File/Data Upload/Download 🔸 Pretty printed debug information
 </p>
 
 #### Table of contents
@@ -38,7 +38,7 @@ Multi-environment setup 🔸 Model deserialization with <b>Codables</b> 🔸 Cho
 - [Image Helpers](#image_helpers)
 	- [SwiftUI Image Helper](#swift_ui_image_helper)
 	- [UIImageView, NSImageView, WKInterfaceImage Extensions](#image_extensions)
-- [Middlewares](#middlewares)
+- [Middleware](#middleware)
 - [Debug Logging](#debug_logging)
 
 <a name="installation"></a>
@@ -514,12 +514,12 @@ TermiNetwork provides two different helpers for setting remote images.
 	})
 	```
 
-<a name="middlewares"></a>
+<a name="middleware"></a>
 
-## Middlewares
-Middlewares enables you to modify headers, params and response before they reach the success/failure callbacks. You can create your own middlewares by implementing the **RequestMiddlewareProtocol** and passing it to a **Configuration** object.
+## Middleware
+Middleware enables you to modify headers, params and response before they reach the success/failure callbacks. You can create your own middleware by implementing the **RequestMiddlewareProtocol** and passing it to a **Configuration** object.
 
-Take a look at *./Examples/Communication/Middlewares/CryptoMiddleware.swift*  for an example that adds an additional encryption layer to the application.
+Take a look at *./Examples/Communication/Middleware/CryptoMiddleware.swift*  for an example that adds an additional encryption layer to the application.
 
 <a name="debug_logging"></a>
 

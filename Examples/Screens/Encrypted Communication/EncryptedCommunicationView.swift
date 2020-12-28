@@ -30,7 +30,7 @@ struct EncryptedCommunicationView: View {
     var configuration: Configuration {
         let configuration = Configuration()
         configuration.requestBodyType = .JSON
-        configuration.requestMiddlewares = [CryptoMiddleware.self]
+        configuration.requestMiddleware = [CryptoMiddleware.self]
         return configuration
     }
 

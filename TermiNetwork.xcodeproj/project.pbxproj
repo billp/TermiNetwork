@@ -289,12 +289,12 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		F30A2985258783970046C8E6 /* Middlewares */ = {
+		F30A2985258783970046C8E6 /* Middleware */ = {
 			isa = PBXGroup;
 			children = (
 				F30A2986258783B40046C8E6 /* CryptoMiddleware.swift */,
 			);
-			path = Middlewares;
+			path = Middleware;
 			sourceTree = "<group>";
 		};
 		F31126B0257A563F00775D7E /* Domain */ = {
@@ -537,7 +537,7 @@
 				F387B0EB257952FB00A8C0C7 /* Transformers */,
 				F32195B625783EBB000941F1 /* Interceptors */,
 				F3F48286245EBE6800656449 /* Data Operations */,
-				F397EC97244F60E10082E12D /* Middlewares */,
+				F397EC97244F60E10082E12D /* Middleware */,
 				F32C3D14243E49D0004497BC /* Supporting Files */,
 				F3850CB7243DAD2300F7CC13 /* Resources */,
 				F3850C7E243D103700F7CC13 /* Models */,
@@ -622,12 +622,12 @@
 			name = Communication;
 			sourceTree = "<group>";
 		};
-		F397EC97244F60E10082E12D /* Middlewares */ = {
+		F397EC97244F60E10082E12D /* Middleware */ = {
 			isa = PBXGroup;
 			children = (
 				F397EC9D244F65730082E12D /* CryptoMiddleware.swift */,
 			);
-			name = Middlewares;
+			name = Middleware;
 			sourceTree = "<group>";
 		};
 		F3A0BC06257692D7005139D5 /* Communication */ = {
@@ -635,7 +635,7 @@
 			children = (
 				F31F88C5257CCF4800D9A802 /* Interceptors */,
 				F3A0BC22257694E2005139D5 /* Models */,
-				F30A2985258783970046C8E6 /* Middlewares */,
+				F30A2985258783970046C8E6 /* Middleware */,
 				F31F8890257A807300D9A802 /* Transformers */,
 				F3A0BC21257694DC005139D5 /* Routers */,
 				F3A0BC07257692E6005139D5 /* DemoEnvironment.swift */,
