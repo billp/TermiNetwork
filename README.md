@@ -17,7 +17,7 @@
 
 ## Features
 <p align="center">
-Multi-environment setup 🔸 Model deserialization with <b>Codables</b> 🔸 Choose the response type you want: <b>Codable</b>, <b>UIImage</b>, <b>Data</b> or <b>String</b> 🔸 <b>UIKit</b>/<b>SwiftUI</b> helpers for downloading remote images 🔸 Routers 🔸 Transformers (convert rest models to domain models) 🔸 Error handling 🔸 Mock responses 🔸 Certificate pinning  🔸 Flexible configuration  🔸 Middleware  🔸 File/Data Upload/Download 🔸 Pretty printed debug information
+Multi-environment setup 🔸 Model deserialization with <b>Codables</b> 🔸 Choose the response type you want: <b>Codable</b>, <b>UIImage</b>, <b>Data</b> or <b>String</b> 🔸 <b>UIKit</b>/<b>SwiftUI</b> helpers for downloading remote images 🔸 Routers 🔸 Transformers (convert rest models to domain models) 🔸 Error handling 🔸 Interceptors 🔸 Mock responses 🔸 Certificate pinning  🔸 Flexible configuration  🔸 Middleware  🔸 File/Data Upload/Download 🔸 Pretty printed debug information
 </p>
 
 #### Table of contents
@@ -49,14 +49,14 @@ You can install **TermiNetwork** with one of the following ways...
 
 Add the following line to your **Podfile** and run **pod install** in your terminal:
 ```ruby
-pod 'TermiNetwork', '~> 1.0.0'
+pod 'TermiNetwork', '~> 1.0.3'
 ```
 
 ### Carthage
 
 Add the following line to your **Carthage** and run **carthage update** in your terminal:
 ```ruby
-github "billp/TermiNetwork" ~> 1.0.0
+github "billp/TermiNetwork" ~> 1.0.3
 ```
 
 ### Swift Package Manager
