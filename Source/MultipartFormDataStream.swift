@@ -246,9 +246,9 @@ internal class MultipartFormDataStream: NSObject, StreamDelegate {
             let progress = Float(bytesSent) / Float(totalBytes)
 
             Log.logProgress(request: request,
-                              bytesProcessed: self.bytesSent,
-                              totalBytes: self.totalBytes,
-                              progress: progress)
+                            bytesProcessed: self.bytesSent,
+                            totalBytes: self.totalBytes,
+                            progress: progress)
             self.uploadProgressCallback?(self.bytesSent, self.totalBytes, progress)
 
             if bytesLeft == 0 {

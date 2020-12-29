@@ -5,7 +5,7 @@
   <img src="https://raw.githubusercontent.com/billp/TermiNetwork/master/TermiNetworkLogo.svg" alt="" data-canonical-src="" width="80%" />
 </p>
 
-<p align="center"><b>A zero-dependency networking solution for building modern and secure iOS applications.</b>
+<p align="center"><b> A zero-dependency networking solution for building modern and secure iOS, watchOS, macOS and tvOS applications.</b>
   <br /><br />
     <img src="https://travis-ci.org/billp/TermiNetwork.svg?branch=1.0.0-new-structure" />
   <img src="https://img.shields.io/cocoapods/v/TermiNetwork.svg?style=flat" />
@@ -171,35 +171,30 @@ Create a swift **enum** that implements the **EnvironmentProtocol** and define y
 ##### Example
 ```swift
 enum MyAppEnvironments: EnvironmentProtocol {
-    case localhost
-    case dev
-    case production
+    case development
+    case qa
 
     func configure() -> Environment {
-        let configuration = Configuration(cachePolicy: .useProtocolCachePolicy,
-                                          timeoutInterval: 30,
-                                          requestBodyType: .JSON)
         switch self {
-        case .localhost:
+        case .development:
             return Environment(scheme: .https,
                                host: "localhost",
-                               port: 8080,
-                               configuration: configuration)
-        case .dev:
-            return Environment(scheme: .https,
-                               host: "mydevserver.com",
                                suffix: .path(["v1"]),
-                               configuration: configuration)
-        case .production:
+                               port: 3000)
+        case .qa:
             return Environment(scheme: .http,
-                               host: "myprodserver.com",
-                               suffix: .path(["v1"]),
-                               configuration: configuration)
+                               host: "myqaserver.com",
+                               suffix: .path(["v1"]))
         }
     }
 }
 ```
 *Optionally you can  pass a **configuration** object to make all Routers and Requests to inherit the given configuration settings.*
+
+To set your global environment use Environment.set method
+```swift
+Environment.set(MyAppEnvironments.development)
+```
 
 <a name="setup_routers"></a>
 

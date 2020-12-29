@@ -94,9 +94,9 @@ internal final class Session<ResultType>: NSObject, URLSessionDataDelegate, URLS
         let progress = Float(totalBytesWritten)/Float(totalBytesExpectedToWrite)
 
         Log.logProgress(request: request,
-                          bytesProcessed: totalBytesWritten,
-                          totalBytes: totalBytesExpectedToWrite,
-                          progress: progress)
+                        bytesProcessed: totalBytesWritten,
+                        totalBytes: totalBytesExpectedToWrite,
+                        progress: progress)
 
         progressCallback?(Int(totalBytesWritten),
                           Int(totalBytesExpectedToWrite),
