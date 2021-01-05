@@ -24,220 +24,160 @@ import UIKit
 #endif
 
 extension Request {
-    /// Adds a request to a queue and starts a download process for Decodable types.
+    // MARK: Empty
+
+    /// Executed when the request is failed.
     ///
     /// - parameters:
-    ///    - queue: A Queue instance. If no queue is specified it uses the default one.
-    ///    - responseType:The type of the model that will be deserialized and will be passed to the success block.
-    ///    - onSuccess: specifies a success callback of type SuccessCallback<T>.
-    ///    - onFailure: specifies a failure callback of type FailureCallback<T>.
+    ///    - responseHandler: The completion handler with the error.
     /// - returns: The Request object.
     @discardableResult
-    public func start<T: Decodable>(queue: Queue? = Queue.shared,
-                                    responseType: T.Type,
-                                    onSuccess: SuccessCallback<T>?,
-                                    onFailure: FailureCallback? = nil) -> Request {
-        currentQueue = queue ?? Queue.shared
-
-        dataTask = SessionTaskFactory.makeDataTask(with: self,
-                                                   completionHandler: { data, urlResponse in
-            let object: T!
-
-            do {
-                object = try data.deserializeJSONData(withKeyDecodingStrategy:
-                                                        self.configuration.keyDecodingStrategy) as T
-            } catch let error {
-                let tnError = TNError.cannotDeserialize(String(describing: T.self), error)
-
-                self.handleDataTaskCompleted(with: data,
-                                             urlResponse: urlResponse,
-                                             error: tnError,
-                                             onFailureCallback: { onFailure?(tnError, data) })
-                return
-            }
-
-            self.handleDataTaskCompleted(with: data,
-                                         urlResponse: urlResponse,
-                                         onSuccessCallback: { onSuccess?(object) })
-        }, onFailure: { error, data in
-            self.handleDataTaskCompleted(with: data,
-                                         error: error,
-                                         onFailureCallback: { onFailure?(error, data) })
-        })
-
-        currentQueue.addOperation(self)
+    public func failure(responseHandler: @escaping FailureCallbackWithoutType) -> Request {
+        self.failureCompletionHandler = self.makeResponseFailureHandler(responseHandler: responseHandler)
+        executeDataRequestIfNeeded()
         return self
     }
 
-    /// Adds a request to a queue and starts its execution for Transformer types.
+    // MARK: Decodable
+
+    /// Executed when the request is succeeded and the response has successfully deserialized.
     ///
     /// - parameters:
-    ///    - queue: A Queue instance. If no queue is specified it uses the default one.
-    ///    - transformer: The transformer object that handles the transformation.
-    ///    - onSuccess: specifies a success callback of type SuccessCallback<T>.
-    ///    - onFailure: specifies a failure callback of type FailureCallback<T>.
+    ///    - responseType: The type of the model that will be deserialized and will be passed to the success block.
+    ///    - responseHandler: The completion handler with the deserialized object
     /// - returns: The Request object.
     @discardableResult
-    public func start<FromType: Decodable, ToType>(queue: Queue? = Queue.shared,
-                                                   transformer: Transformer<FromType, ToType>.Type,
-                                                   onSuccess: SuccessCallback<ToType>?,
-                                                   onFailure: FailureCallback? = nil) -> Request {
-        currentQueue = queue ?? Queue.shared
-
-        dataTask = SessionTaskFactory.makeDataTask(with: self,
-                                                     completionHandler: { data, urlResponse in
-            let object: FromType!
-
-            do {
-                object = try data.deserializeJSONData(withKeyDecodingStrategy:
-                                                        self.configuration.keyDecodingStrategy) as FromType
-            } catch let error {
-                let tnError = TNError.cannotDeserialize(String(describing: FromType.self), error)
-                self.handleDataTaskCompleted(with: data,
-                                             urlResponse: urlResponse,
-                                             error: tnError,
-                                             onFailureCallback: { onFailure?(tnError, data) })
-                return
-            }
-
-            // Transformation
-            do {
-                let object = try object.transform(with: transformer.init())
-
-                self.handleDataTaskCompleted(with: data,
-                                             urlResponse: urlResponse,
-                                             onSuccessCallback: { onSuccess?(object) })
-
-            } catch let error {
-                guard let tnError = error as? TNError else {
-                    return
-                }
-                self.handleDataTaskCompleted(with: data,
-                                             error: tnError,
-                                             onFailureCallback: { onFailure?(tnError, data) })
-            }
-        }, onFailure: { tnError, data in
-            self.handleDataTaskCompleted(with: data,
-                                         error: tnError,
-                                         onFailureCallback: { onFailure?(tnError, data) })
-        })
-
-        currentQueue.addOperation(self)
+    public func success<T: Decodable>(responseType: T.Type,
+                                      responseHandler: @escaping SuccessCallback<T>) -> Request {
+        self.successCompletionHandler = self.makeDecodableResponseSuccessHandler(decodableType: T.self,
+                                                                                 responseHandler: responseHandler)
+        executeDataRequestIfNeeded()
         return self
     }
 
-    /// Adds a request to a queue and starts its execution for UIImage|NSImage responses.
+    /// Executed when the request is failed. The response is being deserialized if possible, nil otherwise.
     ///
     /// - parameters:
-    ///     - queue: A Queue instance. If no queue is specified it uses the default one.
-    ///     - responseType: The response type is UIImage.self or NSImage.self.
-    ///     - onSuccess: specifies a success callback of type SuccessCallback<T>.
-    ///     - onFailure: specifies a failure callback of type FailureCallback<T>.
+    ///    - responseType: The type of the model that will be deserialized and will be passed to the success block.
+    ///    - responseHandler: The completion handler that provides the deserialized object and the error.
     /// - returns: The Request object.
     @discardableResult
-    public func start<T: ImageType>(queue: Queue? = Queue.shared,
-                                    responseType: T.Type,
-                                    onSuccess: SuccessCallback<T>?,
-                                    onFailure: FailureCallback? = nil) -> Request {
-        currentQueue = queue
-
-        dataTask = SessionTaskFactory.makeDataTask(with: self,
-                                                   completionHandler: { data, urlResponse in
-            let image = T(data: data)
-
-            if image == nil {
-                let tnError = TNError.responseInvalidImageData
-                self.handleDataTaskCompleted(with: data,
-                                             urlResponse: urlResponse,
-                                             error: tnError,
-                                             onFailureCallback: { onFailure?(tnError, data) })
-
-            } else {
-                self.handleDataTaskCompleted(with: data,
-                                             urlResponse: urlResponse,
-                                             onSuccessCallback: { onSuccess?(image ?? T()) })
-            }
-        }, onFailure: { tnError, data in
-            self.handleDataTaskCompleted(with: data,
-                                         error: tnError,
-                                         onFailureCallback: { onFailure?(tnError, data) })
-        })
-
-        currentQueue.addOperation(self)
+    public func failure<T: Decodable>(responseType: T.Type,
+                                      responseHandler: @escaping FailureCallbackWithType<T>) -> Request {
+        self.failureCompletionHandler = self.makeDecodableResponseFailureHandler(decodableType: T.self,
+                                                                                 responseHandler: responseHandler)
+        executeDataRequestIfNeeded()
         return self
     }
 
-    /// Adds a request to a queue and starts its execution for String responses.
+    // MARK: Transformer
+
+    /// Executed when the request is succeeded and the response has successfully transformed.
     ///
     /// - parameters:
-    ///    - queue: A Queue instance. If no queue is specified it uses the default one.
-    ///    - responseType: The response type is String.self.
-    ///    - onSuccess: specifies a success callback of type SuccessCallback<T>
-    ///    - onFailure: specifies a failure callback of type FailureCallback<T>
+    ///    - transformer: The transformer type that handles the transformation.
+    ///    - responseHandler: The completion handler with the deserialized object as ToType.
+    /// - returns: The Request object.
     @discardableResult
-    public func start(queue: Queue? = Queue.shared,
-                      responseType: String.Type,
-                      onSuccess: SuccessCallback<String>?,
-                      onFailure: FailureCallback? = nil) -> Request {
-        currentQueue = queue
-
-        dataTask = SessionTaskFactory.makeDataTask(with: self,
-                                                     completionHandler: { data, urlResponse in
-            DispatchQueue.main.async {
-                if let string = String(data: data, encoding: .utf8) {
-
-                    self.handleDataTaskCompleted(with: data,
-                                                 urlResponse: urlResponse,
-                                                 onSuccessCallback: { onSuccess?(string) })
-                } else {
-                    let tnError: TNError = .cannotConvertToString
-                    self.handleDataTaskCompleted(with: data,
-                                                 urlResponse: urlResponse,
-                                                 error: tnError,
-                                                 onFailureCallback: { onFailure?(tnError, data) })
-                }
-
-            }
-        }, onFailure: { error, data in
-            self.handleDataTaskCompleted(with: data,
-                                         error: error,
-                                         onFailureCallback: { onFailure?(error, data) })
-
-        })
-
-        currentQueue.addOperation(self)
+    public func success<FromType: Decodable, ToType>(transformer: Transformer<FromType, ToType>.Type,
+                                                     responseHandler: @escaping SuccessCallback<ToType>)
+                                            -> Request {
+        self.successCompletionHandler = self.makeTransformedResponseSuccessHandler(transformer: transformer,
+                                                                                   responseHandler: responseHandler)
+        executeDataRequestIfNeeded()
         return self
     }
 
-    /// Adds a request to a queue and starts its execution for Data responses.
+    /// Executed when the request is failed. The response is being transformed to ToType if
+    /// possible, nil otherwise.
     ///
     /// - parameters:
-    ///     - queue: A Queue instance. If no queue is specified it uses the default one.
-    ///     - responseType: The response type is Data.self.
-    ///     - onSuccess: specifies a success callback of type SuccessCallback<T>
-    ///     - onFailure: specifies a failure callback of type FailureCallback<T>
+    ///    - transformer: The transformer type that handles the transformation.
+    ///    - responseHandler: The completion handler with the deserialized object as ToType.
+    /// - returns: The Request object.
     @discardableResult
-    public func start(queue: Queue? = Queue.shared,
-                      responseType: Data.Type,
-                      onSuccess: SuccessCallback<Data>?,
-                      onFailure: FailureCallback? = nil) -> Request {
-        currentQueue = queue
+    public func failure<FromType: Decodable, ToType>(transformer: Transformer<FromType, ToType>.Type,
+                                                     responseHandler: @escaping FailureCallbackWithType<ToType>)
+                                            -> Request {
+        self.failureCompletionHandler = self.makeTransformedResponseFailureHandler(transformer: transformer,
+                                                                                   responseHandler: responseHandler)
+        executeDataRequestIfNeeded()
+        return self
+    }
 
-        dataTask = SessionTaskFactory.makeDataTask(with: self,
-                                                   completionHandler: { data, urlResponse in
-            DispatchQueue.main.async {
-                self.handleDataTaskCompleted(with: data,
-                                             urlResponse: urlResponse,
-                                             onSuccessCallback: { onSuccess?(data) })
-            }
-        }, onFailure: { error, data in
-            self.handleDataTaskCompleted(with: data,
-                                         error: error,
-                                         onFailureCallback: { onFailure?(error, data) })
+    // MARK: Image
 
-        })
+    /// Executed when the request is succeeded and the response is a valid Image.
+    ///
+    /// - parameters:
+    ///    - responseType: One of UIImage or NSImage or types.
+    ///    - responseHandler: The completion handler with the Image object.
+    /// - returns: The Request object.
+    @discardableResult
+    public func success(responseType: ImageType.Type,
+                        responseHandler: @escaping SuccessCallback<ImageType>) -> Request {
+        self.successCompletionHandler = self.makeImageResponseSuccessHandler(responseHandler: responseHandler)
+        executeDataRequestIfNeeded()
+        return self
+    }
 
-        currentQueue.addOperation(self)
+    // MARK: String
+
+    /// Executed when the request is succeeded and the response is a valid String.
+    ///
+    /// - parameters:
+    ///    - responseType: A type of String.
+    ///    - responseHandler: The completion handler with the String object.
+    /// - returns: The Request object.
+    @discardableResult
+    public func success(responseType: String.Type,
+                        responseHandler: @escaping SuccessCallback<String>) -> Request {
+        self.successCompletionHandler = self.makeStringResponseSuccessHandler(responseHandler: responseHandler)
+        executeDataRequestIfNeeded()
+        return self
+    }
+
+    /// Executed when the request is failed. The response is being converted to String value if possible.
+    ///
+    /// - parameters:
+    ///    - responseType: A type of String.
+    ///    - responseHandler: The completion handler with the String object if possible, nil otherwise.
+    /// - returns: The Request object.
+    @discardableResult
+    public func failure(responseType: String.Type,
+                        responseHandler: @escaping FailureCallbackWithType<String>) -> Request {
+        self.failureCompletionHandler = self.makeStringResponseFailureHandler(responseHandler: responseHandler)
+        executeDataRequestIfNeeded()
+        return self
+    }
+
+    // MARK: Data
+
+    /// Executed when the request is succeeded and the response is Data type.
+    ///
+    /// - parameters:
+    ///    - responseType: A type of Data.
+    ///    - responseHandler: The completion handler with the Data object.
+    /// - returns: The Request object.
+    @discardableResult
+    public func success(responseType: Data.Type,
+                        responseHandler: @escaping SuccessCallback<Data>) -> Request {
+        self.successCompletionHandler = self.makeDataResponseSuccessHandler(responseHandler: responseHandler)
+        executeDataRequestIfNeeded()
+        return self
+    }
+
+    /// Executed when the request is failed. The response is being converted to Data value if possible.
+    ///
+    /// - parameters:
+    ///    - responseType: A type of String.
+    ///    - responseHandler: The completion handler with the Data object if possible, nil otherwise.
+    /// - returns: The Request object.
+    @discardableResult
+    public func failure(responseType: Data.Type,
+                        responseHandler: @escaping FailureCallbackWithType<Data>) -> Request {
+        self.failureCompletionHandler = self.makeDataResponseFailureHandler(responseHandler: responseHandler)
+        executeDataRequestIfNeeded()
         return self
     }
 }

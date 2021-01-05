@@ -43,19 +43,21 @@ class TestTNErrors: XCTestCase {
         var failed = true
 
         Request(method: .get,
-                  url: "http://www.google.com",
-                  headers: nil,
-                  params: nil).start(responseType: Data.self, onSuccess: { _ in
+                url: "http://www.google.com",
+                headers: nil,
+                params: nil)
+            .success(responseType: Data.self) { _ in
+                failed = false
+                expectation.fulfill()
+            }
+            .failure { error in
+                if case TNError.environmenotSet = error {
+                    failed = true
+                } else {
                     failed = false
-                    expectation.fulfill()
-                  }, onFailure: { error, _ in
-                    if case TNError.environmenotSet = error {
-                        failed = true
-                    } else {
-                        failed = false
-                    }
-                    expectation.fulfill()
-        })
+                }
+                expectation.fulfill()
+            }
 
         wait(for: [expectation], timeout: 60)
 
@@ -72,15 +74,16 @@ class TestTNErrors: XCTestCase {
                                             value3: 2,
                                             value4: "Dsa",
                                             value5: "A"))
-                    .start(responseType: Data.self,
-                           onSuccess: { _ in
-                                expectation.fulfill()
-                    }, onFailure: { error, _ in
-                        if case TNError.environmenotSet = error {
-                            failed = false
-                        }
-                        expectation.fulfill()
-                    })
+
+            .success(responseType: Data.self) { _ in
+                expectation.fulfill()
+            }
+            .failure { error in
+                if case TNError.environmenotSet = error {
+                    failed = false
+                }
+                expectation.fulfill()
+            }
 
         wait(for: [expectation], timeout: 60)
 
@@ -111,14 +114,15 @@ class TestTNErrors: XCTestCase {
         let expectation = XCTestExpectation(description: "testResponseDataIsNotEmpty")
         var failed = true
 
-        router.request(for: .testEmptyBody).start(responseType: Data.self,
-                                                    onSuccess: { _ in
-                                                        expectation.fulfill()
-                                                        failed = false
-                                                    }, onFailure: { _, _ in
-                                                        expectation.fulfill()
-                                                        failed = true
-                                                    }).start()
+        router.request(for: .testEmptyBody)
+            .success(responseType: Data.self) { _ in
+                expectation.fulfill()
+                failed = false
+            }
+            .failure { _ in
+                expectation.fulfill()
+                failed = true
+            }
 
         wait(for: [expectation], timeout: 60)
 
@@ -133,19 +137,20 @@ class TestTNErrors: XCTestCase {
                                             value2: 1,
                                             value3: 2,
                                             value4: "",
-                                            value5: nil)).start(responseType: UIImage.self,
-                                                                onSuccess: { _ in
-            failed = true
-            expectation.fulfill()
-        }, onFailure: { error, _ in
-            switch error {
-            case .responseInvalidImageData:
-                failed = false
-            default:
+                                            value5: nil))
+            .success(responseType: UIImage.self) { _ in
                 failed = true
+                expectation.fulfill()
             }
-            expectation.fulfill()
-        })
+            .failure { error in
+                switch error {
+                case .responseInvalidImageData:
+                    failed = false
+                default:
+                    failed = true
+                }
+                expectation.fulfill()
+            }
 
         wait(for: [expectation], timeout: 60)
 
@@ -156,14 +161,15 @@ class TestTNErrors: XCTestCase {
         let expectation = XCTestExpectation(description: "testResponseValidImageData")
         var failed = true
 
-        router.request(for: .testImage(imageName: "sample.jpeg")).start(responseType: UIImage.self,
-                                                                        onSuccess: { _ in
-            expectation.fulfill()
-            failed = false
-        }, onFailure: { _, _ in
-            expectation.fulfill()
-            failed = true
-        })
+        router.request(for: .testImage(imageName: "sample.jpeg"))
+            .success(responseType: UIImage.self) { _ in
+                expectation.fulfill()
+                failed = false
+            }
+            .failure { _ in
+                expectation.fulfill()
+                failed = true
+            }
 
         wait(for: [expectation], timeout: 60)
 
@@ -174,21 +180,22 @@ class TestTNErrors: XCTestCase {
         let expectation = XCTestExpectation(description: "testResponseCannotDeserialize")
         var failed = true
 
-        router.request(for: .testInvalidParams(value1: "a", value2: "b")).start(responseType: TestParams.self,
-                                                                                onSuccess: { _ in
-            failed = true
-            expectation.fulfill()
-        }, onFailure: { error, _ in
-            switch error {
-            case .cannotDeserialize:
-                failed = false
-            default:
-                debugPrint("failed with: " + error.localizedDescription)
+        router.request(for: .testInvalidParams(value1: "a", value2: "b"))
+            .success(responseType: TestParams.self) { _ in
                 failed = true
+                expectation.fulfill()
             }
+            .failure { error in
+                switch error {
+                case .cannotDeserialize:
+                    failed = false
+                default:
+                    debugPrint("failed with: " + error.localizedDescription)
+                    failed = true
+                }
 
-            expectation.fulfill()
-        })
+                expectation.fulfill()
+            }
 
         wait(for: [expectation], timeout: 60)
 
@@ -203,67 +210,70 @@ class TestTNErrors: XCTestCase {
                                            value2: 3,
                                            value3: 1.32,
                                            value4: "Test",
-                                           value5: nil)).start(responseType: TestParams.self, onSuccess: { _ in
-            failed = false
-            expectation.fulfill()
-        }, onFailure: { error, _ in
-            debugPrint("failed with: " + error.localizedDescription)
-            failed = true
-            expectation.fulfill()
-        })
+                                           value5: nil))
+            .success(responseType: TestParams.self) { _ in
+                failed = false
+                expectation.fulfill()
+            }
+            .failure { _ in
+                failed = true
+                expectation.fulfill()
+            }
 
         wait(for: [expectation], timeout: 60)
 
         XCTAssert(!failed)
     }
 
-    func tesetworkError() {
+    func testNetworkError() {
         Environment.set(Env.invalidHost)
 
         let expectation = XCTestExpectation(description: "tesetworkError")
         var failed = true
 
-        router.request(for: .testInvalidParams(value1: "a", value2: "b")).start(responseType: Data.self,
-                                                                                onSuccess: { _ in
-            failed = true
-            expectation.fulfill()
-        }, onFailure: { error, _ in
-            switch error {
-            case .networkError:
-                failed = false
-            default:
-                debugPrint("failed with: " + error.localizedDescription)
-                failed = true
-            }
+        let req = router.request(for: .testInvalidParams(value1: "a", value2: "b"))
+        req.configuration.interceptors = []
 
-            expectation.fulfill()
-        })
+        req.success(responseType: Data.self) { _ in
+                failed = true
+                expectation.fulfill()
+            }
+            .failure { error in
+                switch error {
+                case .networkError:
+                    failed = false
+                default:
+                    debugPrint("failed with: " + error.localizedDescription)
+                    failed = true
+                }
+
+                expectation.fulfill()
+            }
 
         wait(for: [expectation], timeout: 60)
 
         XCTAssert(!failed)
     }
 
-    func tesotSuccess() {
+    func testSuccess() {
         let expectation = XCTestExpectation(description: "tesotSuccess")
         var failed = true
 
         router.request(for: .testStatusCode(code: 404))
-            .start(responseType: String.self,
-                        onSuccess: { _ in
-                                    expectation.fulfill()
-                                    failed = true
-
-                        }, onFailure: { error, _ in
-                                    switch error {
-                                    case .notSuccess(let code):
-                                        failed = code != 404
-                                    default:
-                                        failed = true
-                        }
+            .success(responseType: String.self) { _ in
+                expectation.fulfill()
+                failed = true
+            }
+            .failure { error in
+                switch error {
+                case .notSuccess(let code):
+                    failed = code != 404
+                default:
+                    failed = true
+            }
 
             expectation.fulfill()
-        })
+        }
 
         wait(for: [expectation], timeout: 60)
 
@@ -275,9 +285,10 @@ class TestTNErrors: XCTestCase {
         var failed = true
 
         let request = Request(route: APIRoute.testStatusCode(code: 404))
-        request.start(responseType: Data.self, onSuccess: { _ in
+        request.success(responseType: Data.self) { _ in
             expectation.fulfill()
-        }, onFailure: { error, _ in
+        }
+        .failure { error in
             switch error {
             case .cancelled:
                 failed = false
@@ -285,10 +296,107 @@ class TestTNErrors: XCTestCase {
                 failed = true
             }
             expectation.fulfill()
-        })
+        }
 
         request.cancel()
 
+        wait(for: [expectation], timeout: 60)
+
+        XCTAssert(!failed)
+    }
+
+    func testErrorCannotDeserialize() {
+        let expectation = XCTestExpectation(description: "testErrorCannotDeserialize")
+        var failed = true
+
+        let request = Request(route: APIRoute.testStatusCode(code: 404))
+        request.success(responseType: TestParams.self) { _ in
+            expectation.fulfill()
+        }
+        .failure(responseType: EncryptedModel.self) { _, error in
+            switch error {
+            case .cannotDeserialize:
+                failed = false
+            default:
+                failed = true
+            }
+            expectation.fulfill()
+        }
+
+        wait(for: [expectation], timeout: 60)
+
+        XCTAssert(!failed)
+    }
+
+    func testCannotDeserializeOnSuccess() {
+        let expectation = XCTestExpectation(description: "testErrorCannotDeserialize")
+        var failed = true
+
+        let request = Request(route: APIRoute.testGetParams(value1: false,
+                                                            value2: 3,
+                                                            value3: 1.32,
+                                                            value4: "Test",
+                                                            value5: nil))
+        request.success(responseType: EncryptedModel.self) { _ in
+            expectation.fulfill()
+        }
+        .failure(responseType: EncryptedModel.self) { _, error in
+            switch error {
+            case .cannotDeserialize(let className, _):
+                failed = !(className == "EncryptedModel")
+            default:
+                failed = true
+            }
+            expectation.fulfill()
+        }
+
+        wait(for: [expectation], timeout: 60)
+
+        XCTAssert(!failed)
+    }
+
+    func testCanDeserializeOnFailure() {
+        let expectation = XCTestExpectation(description: "testErrorCannotDeserialize")
+        var failed = true
+
+        let request = Request(route: APIRoute.testStatusCode(code: 401))
+        request.configuration.keyDecodingStrategy = .convertFromSnakeCase
+        request.success(responseType: EncryptedModel.self) { _ in
+            expectation.fulfill()
+        }
+        .failure(responseType: StatusCode.self) { obj, error in
+            switch error {
+            case .notSuccess(let statusCode):
+                failed = !(statusCode == 401 && obj?.statusCode == "401")
+            default:
+                failed = true
+            }
+            expectation.fulfill()
+        }
+
+        wait(for: [expectation], timeout: 60)
+
+        XCTAssert(!failed)
+    }
+
+    func testCanTransformOnFailure() {
+        let expectation = XCTestExpectation(description: "testErrorCannotDeserialize")
+        var failed = true
+
+        let request = Request(route: APIRoute.testStatusCode(code: 401))
+        request.configuration.keyDecodingStrategy = .convertFromSnakeCase
+        request.success(responseType: EncryptedModel.self) { _ in
+            expectation.fulfill()
+        }
+        .failure(transformer: StatusCodeTransformer.self) { obj, error in
+            switch error {
+            case .notSuccess(let statusCode):
+                failed = !(statusCode == 401 && obj?.value == "401")
+            default:
+                failed = true
+            }
+            expectation.fulfill()
+        }
         wait(for: [expectation], timeout: 60)
 
         XCTAssert(!failed)

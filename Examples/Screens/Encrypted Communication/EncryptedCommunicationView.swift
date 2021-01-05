@@ -63,14 +63,17 @@ struct EncryptedCommunicationView: View {
     }
 
     // MARK: Communication
+
     func startRequest() {
         responseString = "fetching..."
 
-        Router<MiscRoute>(configuration: configuration).request(for: .testEncryptParams(param: text))
-            .start(transformer: EncryptedModelTransformer.self, onSuccess: { model in
-            responseString = model.text
-        }, onFailure: { (error, _) in
-            responseString = error.localizedDescription ?? ""
-        })
+        Router<MiscRoute>(configuration: configuration)
+            .request(for: .testEncryptParams(param: text))
+            .success(transformer: EncryptedModelTransformer.self) { model in
+                responseString = model.text
+            }
+            .failure { error in
+                responseString = error.localizedDescription ?? ""
+            }
     }
 }

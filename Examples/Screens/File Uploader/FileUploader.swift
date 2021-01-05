@@ -156,21 +156,21 @@ struct FileUploader: View {
         // Start the request
 
         request = Router<MiscRoute>().request(for: .upload(fileUrl: imageUrl))
-                    .startUpload(transformer: FileUploadTransformer.self,
-                                 progressUpdate: { (bytesUploaded, bytesTotal, progress) in
-                                                self.progress = progress * 100
-                                                self.bytesUploaded = bytesUploaded
-                                                self.bytesTotal = bytesTotal
-                                 },
-                                 onSuccess: { response in
-                                    self.uploadStarted = false
-                                    self.uploadFinished = true
-                                    self.uploadedFileChecksum = response.checksum
-                                 },
-                                 onFailure: { error, _ in
-                                    self.error = error.localizedDescription ?? ""
-                                    resetUpload()
-                                 })
+            .upload(transformer: FileUploadTransformer.self,
+                    progressUpdate: { (bytesUploaded, bytesTotal, progress) in
+                        self.progress = progress * 100
+                        self.bytesUploaded = bytesUploaded
+                        self.bytesTotal = bytesTotal
+                    },
+                    responseHandler: { response in
+                        self.uploadStarted = false
+                        self.uploadFinished = true
+                        self.uploadedFileChecksum = response.checksum
+                    })
+            .failure { error in
+                self.error = error.localizedDescription ?? ""
+                resetUpload()
+            }
     }
 
     func removeFileIfNeeded(at path: String) {

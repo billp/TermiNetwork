@@ -116,15 +116,6 @@ public final class Queue: OperationQueue {
         }
 
         if let request = operation as? Request {
-            guard !request.shouldMockResponse() else {
-                // Update startedAt time and log request
-                request.startedAt = Date()
-                Log.logRequest(request: request,
-                               data: nil,
-                               state: .started,
-                               error: nil)
-                return
-            }
             guard request.dataTask != nil else {
                 return
             }

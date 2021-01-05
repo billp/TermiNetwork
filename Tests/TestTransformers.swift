@@ -37,18 +37,18 @@ class TestTransformers: XCTestCase {
                                            value2: 3,
                                            value3: 5.13453124189,
                                            value4: "test",
-                                           value5: nil)).start(transformer: TestTransformer.self,
-                                                               onSuccess: { object in
-            testModel = object
-            failed = false
-            expectation.fulfill()
-        }, onFailure: { _, _ in
-            expectation.fulfill()
-        })
+                                           value5: nil))
+            .success(transformer: TestTransformer.self) { object in
+                testModel = object
+                failed = false
+                expectation.fulfill()
+            }
+            .failure { _ in
+                expectation.fulfill()
+            }
 
         wait(for: [expectation], timeout: 60)
 
         XCTAssert(!failed && testModel?.value == "true")
     }
-
 }

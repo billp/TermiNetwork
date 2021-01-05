@@ -33,13 +33,13 @@ public typealias ImageType = UIImage
 /// - parameters:
 ///     - image: The downloaded image.
 /// - returns: The new transformed image.
-public typealias ImagePreprocessType = (ImageType) -> (ImageType)
+public typealias ImagePreprocessType = (_ image: ImageType) -> (ImageType)
 /// Callback type for image downloaded event.
 /// - parameters:
 ///     - image: The downloaded image.
 ///     - error: A TNError object if it fails to download.
 /// - returns: The new transformed image.
-public typealias ImageOnFinishCallbackType = (ImageType?, TNError?) -> Void
+public typealias ImageOnFinishCallbackType = (_ image: ImageType?, _ error: TNError?) -> Void
 
 @available(iOS 13.0, *)
 /// :nodoc:
@@ -96,17 +96,19 @@ final public class ImageLoader: ObservableObject {
         }
 
         self.image = defaultImage ?? ImageType()
-
-        request.start(responseType: ImageType.self, onSuccess: { image in
-            self.handlePreprocessImage(image: image) { preprocessedImage in
-                // Resize image only if preprocess image function is not present
-                if preprocessedImage == nil {
-                    self.handleResizeImage(image: image)
+        request
+            .success(responseType: ImageType.self) { image in
+                self.handlePreprocessImage(image: image) { preprocessedImage in
+                    // Resize image only if preprocess image function is not present
+                    if preprocessedImage == nil {
+                        self.handleResizeImage(image: image)
+                    }
                 }
             }
-        }, onFailure: { (error, _) in
-            self.onFinishImageClosure?(nil, error)
-        })
+            .failure { error in
+                self.onFinishImageClosure?(nil, error)
+            }
+
     }
 
     // MARK: Helpers
@@ -157,9 +159,10 @@ final public class ImageLoader: ObservableObject {
     }
 }
 
-@available(iOS 13.0, *)
 /// Image is a SwiftUI component for downloading images.
+@available(iOS 13.0, *)
 public struct Image: View {
+    /// :no-doc
     @ObservedObject public var imageLoader: ImageLoader
     @State var image = ImageType()
 

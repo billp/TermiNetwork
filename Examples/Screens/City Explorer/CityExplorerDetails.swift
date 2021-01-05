@@ -53,17 +53,18 @@ struct CityExplorerDetails: View {
     func loadCity() {
         activeRequest = Router<CityRoute>()
             .request(for: .city(id: city.cityID))
-            .start(transformer: CityTransformer.self, onSuccess: { city in
+            .success(transformer: CityTransformer.self) { city in
                 self.city = city
                 self.cityFetched = true
-            }, onFailure: { (error, _) in
+            }
+            .failure { error in
                 switch error {
                 case .cancelled:
                     break
                 default:
                     self.errorMessage = error.localizedDescription
                 }
-            })
+            }
     }
 }
 

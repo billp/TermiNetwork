@@ -79,6 +79,8 @@ extension Request {
         if let data = data, error == nil, retryCount > 0 {
             // ...and the interceptor is the last in chain.
             if interceptors?.isEmpty == true {
+                // DEPRECATED: Will be removed from future relases.
+                dataTaskSuccessCompletionHandler?(data, urlResponse)
                 // Call the success completion handler directly.
                 successCompletionHandler?(data, urlResponse)
             } else {
@@ -148,44 +150,44 @@ extension Request {
     ///     - finishCallback: A callback that continues the execution after the Interceptors handling.
     func retryDataRequest(request: Request,
                           finishCallback: @escaping InterceptorFinishedCallbackType) {
-        request.start(
-            queue: request.currentQueue,
-            responseType: Data.self,
-            onSuccess: { data in
+        request
+            .queue(request.queue)
+            .success(responseType: Data.self) { data in
             self.urlResponse = request.urlResponse
             self.processNextInterceptorIfNeeded(data: data,
                                                 error: nil,
                                                 finishCallback: finishCallback)
-        }, onFailure: { error, data in
+        }
+        .failure(responseType: Data.self) { data, error in
             self.urlResponse = request.urlResponse
             self.processNextInterceptorIfNeeded(data: data,
                                                 error: error,
                                                 finishCallback: finishCallback)
-        })
+        }
     }
 
-    /// Retry request of .upload type.
+    /// Retry request for .upload type.
     /// - parameters:
     ///     - request: The new copied request.
     ///     - finishCallback: A callback that continues the execution after the Interceptors handling.
     func retryUploadRequest(request: Request,
                             finishCallback: @escaping InterceptorFinishedCallbackType) {
-        request.startUpload(
-            queue: request.currentQueue,
-            responseType: Data.self,
-            progressUpdate: self.progressCallback,
-            onSuccess: { data in
+
+        request
+            .queue(request.queue)
+            .upload(responseType: Data.self,
+                       progressUpdate: self.progressCallback) { data in
                 self.urlResponse = request.urlResponse
                 self.processNextInterceptorIfNeeded(data: data,
                                                     error: nil,
                                                     finishCallback: finishCallback)
-
-            }, onFailure: { error, data in
+            }
+            .failure(responseType: Data.self) { data, error in
                 self.urlResponse = request.urlResponse
                 self.processNextInterceptorIfNeeded(data: data,
                                                     error: error,
                                                     finishCallback: finishCallback)
-            })
+            }
     }
 
     /// Retry request of .download type.
@@ -195,20 +197,20 @@ extension Request {
     func retryDownloadRequest(request: Request,
                               filePath: String,
                               finishCallback: @escaping InterceptorFinishedCallbackType) {
-        request.startDownload(
-            queue: request.currentQueue,
-            filePath: filePath,
-            progressUpdate: self.progressCallback,
-            onSuccess: {
+        request
+            .queue(request.queue)
+            .download(filePath: filePath,
+                         progressUpdate: self.progressCallback) {
                 self.urlResponse = request.urlResponse
                 self.processNextInterceptorIfNeeded(data: Data(),
                     error: nil,
                     finishCallback: finishCallback)
-            }, onFailure: { error, data in
+            }
+            .failure(responseType: Data.self) { data, error in
                 self.urlResponse = request.urlResponse
                 self.processNextInterceptorIfNeeded(data: data,
                                                     error: error,
                                                     finishCallback: finishCallback)
-            })
+            }
     }
 }

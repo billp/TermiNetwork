@@ -44,13 +44,16 @@ class TestQueue: XCTestCase {
 
         for _ in 1...numberOfRequests {
             Request(method: .get,
-                      url: "http://google.com",
-                      headers: nil,
-                      params: nil).start(queue: queue, responseType: Data.self, onSuccess: { _ in
-                numberOfRequests -= 1
-            }, onFailure: { _, _ in
-                numberOfRequests -= 1
-            })
+                    url: "http://google.com",
+                    headers: nil,
+                    params: nil)
+                .queue(queue)
+                .success(responseType: Data.self) { _ in
+                    numberOfRequests -= 1
+                }
+                .failure { _ in
+                    numberOfRequests -= 1
+                }
         }
 
         wait(for: [expectation], timeout: 60)
@@ -78,13 +81,16 @@ class TestQueue: XCTestCase {
 
         for index in 0...numberOfRequests-1 {
             Request(method: .get,
-                      url: urls[index],
-                      headers: nil,
-                      params: nil).start(queue: queue, responseType: Data.self, onSuccess: { _ in
+                    url: urls[index],
+                    headers: nil,
+                    params: nil)
+            .queue(queue)
+            .success(responseType: Data.self) { _ in
                 numberOfRequests -= 1
-            }, onFailure: { _, _ in
+            }
+            .failure { _ in
                 numberOfRequests -= 1
-            })
+            }
         }
 
         wait(for: [expectation], timeout: 60)
@@ -112,13 +118,16 @@ class TestQueue: XCTestCase {
 
         for index in 0...numberOfRequests-1 {
             Request(method: .get,
-                      url: urls[index],
-                      headers: nil,
-                      params: nil).start(queue: queue, responseType: Data.self, onSuccess: { _ in
+                    url: urls[index],
+                    headers: nil,
+                    params: nil)
+            .queue(queue)
+            .success(responseType: Data.self) { _ in
                 numberOfRequests -= 1
-            }, onFailure: { _, _ in
+            }
+            .failure { _ in
                 numberOfRequests -= 1
-            })
+            }
         }
 
         wait(for: [expectation], timeout: 60)
@@ -147,13 +156,16 @@ class TestQueue: XCTestCase {
 
         for index in 0...numberOfRequests-1 {
             Request(method: .get,
-                      url: urls[index],
-                      headers: nil,
-                      params: nil).start(queue: queue, responseType: Data.self, onSuccess: { _ in
+                    url: urls[index],
+                    headers: nil,
+                    params: nil)
+            .queue(queue)
+            .success(responseType: Data.self) { _ in
                 numberOfRequests -= 1
-            }, onFailure: { _, _ in
+            }
+            .failure { _ in
                 numberOfRequests -= 1
-            })
+            }
         }
 
         wait(for: [expectation], timeout: 60)
@@ -171,25 +183,40 @@ class TestQueue: XCTestCase {
                     "http://google.com",
                     "http://google.com",
                     "http://google.com"]
+
+        let totalRequests = urls.count
         var numberOfRequests = urls.count
         var completedWithError = false
+        var startedRequests = 0
 
         queue.afterAllRequestsCallback = { error in
             completedWithError = error
             expectation.fulfill()
         }
 
+        queue.beforeEachRequestCallback = { req in
+            startedRequests += 1
+        }
+
         for index in 0...numberOfRequests-1 {
             Request(method: .get,
-                      url: urls[index],
-                      headers: nil,
-                      params: nil).start(queue: queue, responseType: Data.self, onSuccess: { _ in
+                    url: urls[index],
+                    headers: nil,
+                    params: nil)
+            .queue(queue)
+            .success(responseType: Data.self) { _ in
                 numberOfRequests -= 1
-            }, onFailure: { _, _ in })
+            }
+            .failure { _ in
+                numberOfRequests -= 1
+            }
         }
 
         wait(for: [expectation], timeout: 60)
-        XCTAssert(queue.operationCount == 0 && completedWithError)
+
+        let notStartedRequests = totalRequests - startedRequests
+
+        XCTAssert(numberOfRequests == notStartedRequests && completedWithError)
     }
 
     func testQueueCancellation() {
@@ -205,13 +232,16 @@ class TestQueue: XCTestCase {
 
         for _ in 1...numberOfRequests {
             Request(method: .get,
-                      url: "http://google.com",
-                      headers: nil,
-                      params: nil).start(queue: queue, responseType: Data.self, onSuccess: { _ in
+                    url: "http://google.com",
+                    headers: nil,
+                    params: nil)
+            .queue(queue)
+            .success(responseType: Data.self) { _ in
                 numberOfRequests -= 1
-            }, onFailure: { _, _ in
+            }
+            .failure { _ in
                 numberOfRequests -= 1
-            })
+            }
         }
 
         queue.cancelAllOperations()
@@ -233,20 +263,19 @@ class TestQueue: XCTestCase {
 
             let call = Request(method: .get, url: url, headers: nil, params: nil)
 
-            call.start(queue: queue, responseType: Data.self, onSuccess: { _ in
-                numberOfRequests -= 1
-            }, onFailure: { error, _ in
-
-                if case .cancelled(_) = error {
-
-                } else {
+            call.queue(queue)
+                .success(responseType: Data.self) { _ in
                     numberOfRequests -= 1
                 }
-
-                DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: {
-                    expectation.fulfill()
-                })
-            })
+                .failure { error in
+                    if case .cancelled(_) = error {
+                    } else {
+                        numberOfRequests -= 1
+                    }
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: {
+                        expectation.fulfill()
+                    })
+                }
         }
 
         wait(for: [expectation], timeout: 40)
@@ -271,11 +300,10 @@ class TestQueue: XCTestCase {
 
             let call = Request(method: .get, url: url, headers: nil, params: nil)
 
-            call.start(queue: queue, responseType: Data.self, onSuccess: { _ in
-                numberOfRequests -= 1
-            }, onFailure: { _, _ in
-
-            })
+            call.queue(queue)
+                .success(responseType: Data.self) { _ in
+                    numberOfRequests -= 1
+                }
         }
 
         wait(for: [expectation], timeout: 60)

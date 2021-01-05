@@ -57,13 +57,14 @@ class TestRequest: XCTestCase {
         var failed = true
 
         router.request(for: .testHeaders)
-                     .start(responseType: TestHeaders.self,
-                            onSuccess: { object in
-            failed = !(object.authorization == "XKJajkBXAUIbakbxjkasbxjkas" && object.customHeader == "test!!!!")
-            expectation.fulfill()
-        }, onFailure: { _, _ in
-            expectation.fulfill()
-        })
+            .success(responseType: TestHeaders.self) { object in
+                failed = !(object.authorization == "XKJajkBXAUIbakbxjkasbxjkas" && object.customHeader == "test!!!!")
+                expectation.fulfill()
+            }
+            .failure { _ in
+                expectation.fulfill()
+            }
+
         wait(for: [expectation], timeout: 60)
 
         XCTAssert(!failed)
@@ -74,15 +75,16 @@ class TestRequest: XCTestCase {
         var failed = true
 
         router.request(for: .testOverrideHeaders)
-                    .start(responseType: TestHeaders.self,
-                     onSuccess: { object in
-            failed = !(object.authorization == "0" &&
-                        object.customHeader == "0" &&
-                         object.userAgent == "ios")
-            expectation.fulfill()
-        }, onFailure: { (_, _) in
-            expectation.fulfill()
-        })
+            .success(responseType: TestHeaders.self) { object in
+                failed = !(object.authorization == "0" &&
+                            object.customHeader == "0" &&
+                             object.userAgent == "ios")
+                expectation.fulfill()
+            }
+            .failure { _ in
+                expectation.fulfill()
+            }
+
         wait(for: [expectation], timeout: 60)
 
         XCTAssert(!failed)
@@ -96,17 +98,19 @@ class TestRequest: XCTestCase {
                                            value2: 3,
                                            value3: 5.13453124189,
                                            value4: "test",
-                                           value5: nil)).start(responseType: TestParams.self, onSuccess: { object in
-            failed = !(object.param1 == "true" &&
-                object.param2 == "3" &&
-                object.param3 == "5.13453124189" &&
-                object.param4 == "test" &&
-                object.param5 == nil)
-            failed = false
-            expectation.fulfill()
-        }, onFailure: { _, _ in
-            expectation.fulfill()
-        })
+                                           value5: nil))
+            .success(responseType: TestParams.self) { object in
+                failed = !(object.param1 == "true" &&
+                    object.param2 == "3" &&
+                    object.param3 == "5.13453124189" &&
+                    object.param4 == "test" &&
+                    object.param5 == nil)
+                failed = false
+                expectation.fulfill()
+            }
+            .failure { _ in
+                expectation.fulfill()
+            }
 
         wait(for: [expectation], timeout: 60)
 
@@ -122,18 +126,18 @@ class TestRequest: XCTestCase {
                                            value3: 5.13453124189,
                                            value4: "τεστ",
                                            value5: nil))
-            .start(responseType: TestParams.self,
-                   onSuccess: { object in
-            failed = !(object.param1 == "true" &&
-                object.param2 == "3" &&
-                object.param3 == "5.13453124189" &&
-                object.param4 == "τεστ" &&
-                object.param5 == nil)
-            failed = false
-            expectation.fulfill()
-        }, onFailure: { _, _ in
-            expectation.fulfill()
-        })
+            .success(responseType: TestParams.self) { object in
+                failed = !(object.param1 == "true" &&
+                    object.param2 == "3" &&
+                    object.param3 == "5.13453124189" &&
+                    object.param4 == "τεστ" &&
+                    object.param5 == nil)
+                failed = false
+                expectation.fulfill()
+            }
+            .failure { _ in
+                expectation.fulfill()
+            }
 
         wait(for: [expectation], timeout: 60)
 
@@ -149,17 +153,17 @@ class TestRequest: XCTestCase {
                                                               value3: 5.13453124189,
                                                               value4: "test",
                                                               value5: nil))
-            .start(responseType: TestParams.self,
-                   onSuccess: { object in
-            failed = !(object.param1 == "true" &&
-                object.param2 == "3" &&
-                object.param3 == "5.13453124189" &&
-                object.param4 == "test" &&
-                object.param5 == nil)
-            expectation.fulfill()
-        }, onFailure: { _, _ in
-            expectation.fulfill()
-        })
+            .success(responseType: TestParams.self) { object in
+                failed = !(object.param1 == "true" &&
+                    object.param2 == "3" &&
+                    object.param3 == "5.13453124189" &&
+                    object.param4 == "test" &&
+                    object.param5 == nil)
+                expectation.fulfill()
+            }
+            .failure { _ in
+                expectation.fulfill()
+            }
 
         wait(for: [expectation], timeout: 60)
 
@@ -174,17 +178,18 @@ class TestRequest: XCTestCase {
                                             value2: 3,
                                             value3: 5.13453124189,
                                             value4: "test",
-                                            value5: nil)).start(responseType: TestJSONParams.self,
-                                                                onSuccess: { object in
-            failed = !(object.param1 == true &&
-                object.param2 == 3 &&
-                object.param3 == 5.13453124189 &&
-                object.param4 == "test" &&
-                    object.param5 == nil)
-            expectation.fulfill()
-        }, onFailure: { _, _ in
-            expectation.fulfill()
-        })
+                                            value5: nil))
+            .success(responseType: TestJSONParams.self) { object in
+                failed = !(object.param1 == true &&
+                    object.param2 == 3 &&
+                    object.param3 == 5.13453124189 &&
+                    object.param4 == "test" &&
+                        object.param5 == nil)
+                expectation.fulfill()
+            }
+            .failure { _ in
+                expectation.fulfill()
+            }
 
         wait(for: [expectation], timeout: 60)
 
@@ -269,10 +274,11 @@ class TestRequest: XCTestCase {
                                                                value4: "test",
                                                                value5: nil))
         request.configuration.requestBodyType = .JSON
-        request.start(responseType: String.self, onSuccess: { _ in
+        request.configuration.verbose = true
+        request.success(responseType: String.self) { _ in
             failed = false
             expectation.fulfill()
-        }, onFailure: nil)
+        }
 
         wait(for: [expectation], timeout: 60)
         XCTAssert(!failed)
@@ -312,14 +318,15 @@ class TestRequest: XCTestCase {
                                            value2: 2,
                                            value3: 3,
                                            value4: "1",
-                                           value5: nil)).start(responseType: Data.self,
-        onSuccess: { _ in
-            failed = false
-            expectation1.fulfill()
-        }, onFailure: { (_, _) in
-            failed = true
-            expectation1.fulfill()
-        })
+                                           value5: nil))
+            .success(responseType: Data.self) { _ in
+                failed = false
+                expectation1.fulfill()
+            }
+            .failure { _ in
+                failed = true
+                expectation1.fulfill()
+            }
 
         wait(for: [expectation1], timeout: 60)
 
@@ -332,19 +339,18 @@ class TestRequest: XCTestCase {
                                             value3: 3,
                                             value4: "1",
                                             value5: nil))
-            .start(responseType: String.self,
-                      onSuccess: { _ in
-            expectation2.fulfill()
-        }, onFailure: { (error, _) in
-            if case .notSuccess(404) = error {
-                failed = false
+            .success(responseType: String.self) { _ in
+                expectation2.fulfill()
             }
-            expectation2.fulfill()
-
-            XCTAssert(!failed)
-        })
+            .failure { error in
+                if case .notSuccess(404) = error {
+                    failed = false
+                }
+                expectation2.fulfill()
+            }
 
         wait(for: [expectation2], timeout: 60)
+        XCTAssert(!failed)
     }
 
     func testMiddleware() {
@@ -353,14 +359,14 @@ class TestRequest: XCTestCase {
         let expectation = XCTestExpectation(description: "testMiddleware")
 
         routerWithMiddleware.request(for: .testEncryptParams(value: "Hola!!!"))
-            .start(responseType: EncryptedModel.self,
-                   onSuccess: { model in
-                        failed = model.value != "Hola!!!"
-                        expectation.fulfill()
-                   }, onFailure: { (_, _) in
-                        failed = true
-                        expectation.fulfill()
-                   })
+            .success(responseType: EncryptedModel.self) { model in
+                failed = model.value != "Hola!!!"
+                expectation.fulfill()
+            }
+            .failure { _ in
+                failed = true
+                expectation.fulfill()
+            }
             .responseHeaders { (headers, _) in
                 failed = !(headers?["X-Test-Header"] == "test123!")
                 expectation.fulfill()
@@ -373,15 +379,15 @@ class TestRequest: XCTestCase {
     fileprivate func sampleRequest(queue: Queue? = Queue.shared,
                                    onSuccess: SuccessCallback<TestJSONParams>? = nil) {
         let call = Request(route: APIRoute.testPostParams(value1: true,
-                                                            value2: 3,
-                                                            value3: 5.13453124189,
-                                                            value4: "test",
-                                                            value5: nil))
+                                                          value2: 3,
+                                                          value3: 5.13453124189,
+                                                          value4: "test",
+                                                          value5: nil))
         call.configuration.requestBodyType = .JSON
-
-        call.start(queue: queue,
-                   responseType: TestJSONParams.self,
-                   onSuccess: onSuccess, onFailure: nil)
+        call.queue(queue ?? Queue.shared)
+            .success(responseType: TestJSONParams.self) { object in
+                onSuccess?(object)
+            }
     }
 
     func testResponseHeaders() {

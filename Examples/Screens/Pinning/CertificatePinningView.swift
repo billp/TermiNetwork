@@ -63,10 +63,11 @@ struct CertificatePinningView: View {
 
         Router<CityRoute>()
             .request(for: .pinning(configuration: configuration))
-            .start(responseType: Data.self, onSuccess: { response in
+            .success(responseType: Data.self) { response in
                 responseString = response.toJSONString() ?? ""
-        }, onFailure: { error, _ in
-            responseString = error.localizedDescription ?? ""
-        })
+            }
+            .failure { error in
+                responseString = error.localizedDescription ?? ""
+            }
     }
 }
