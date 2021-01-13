@@ -49,24 +49,27 @@ class TestUploadOperations: XCTestCase {
         guard let filePath = Bundle(for: TestUploadOperations.self).path(forResource: "photo",
                                                                          ofType: "jpg"),
         let uploadData = try? Data(contentsOf: URL(fileURLWithPath: filePath)) else {
-            assert(false)
+            XCTAssert(false)
+            return
         }
 
         let checksum = TestHelpers.sha256(url: URL(fileURLWithPath: filePath))
 
         router.request(for: .dataUpload(data: uploadData, param: "bhbbrbrbrhbh"))
-            .startUpload(responseType: FileResponse.self,
-                         progressUpdate: { bytesSent, totalBytes, progress in
-                completed = bytesSent == totalBytes && progress == 1
-            }, onSuccess: { response in
-                failed = !(response.success &&
-                            response.checksum == checksum &&
-                            response.param == "bhbbrbrbrhbh")
-                expectation.fulfill()
-            }, onFailure: { (error, _) in
+            .upload(responseType: FileResponse.self,
+                    progressUpdate: { bytesSent, totalBytes, progress in
+                        completed = bytesSent == totalBytes && progress == 1
+                    },
+                    responseHandler: { response in
+                        failed = !(response.success &&
+                                    response.checksum == checksum &&
+                                    response.param == "bhbbrbrbrhbh")
+                        expectation.fulfill()
+                    })
+            .failure { error in
                 print(String(describing: error.localizedDescription))
                 expectation.fulfill()
-        })
+            }
 
         wait(for: [expectation], timeout: 30)
 
@@ -87,16 +90,18 @@ class TestUploadOperations: XCTestCase {
         let checksum = TestHelpers.sha256(url: URL(fileURLWithPath: filePath))
 
         router.request(for: .dataUpload(data: uploadData, param: "bhbbrbrbrhbh"))
-            .startUpload(transformer: TestUploadTransformer.self,
-                         progressUpdate: { bytesSent, totalBytes, progress in
-                completed = bytesSent == totalBytes && progress == 1
-            }, onSuccess: { response in
-                failed = !(response.value == checksum && response.param == "bhbbrbrbrhbh")
-                expectation.fulfill()
-            }, onFailure: { (error, _) in
+            .upload(transformer: TestUploadTransformer.self,
+                    progressUpdate: { bytesSent, totalBytes, progress in
+                        completed = bytesSent == totalBytes && progress == 1
+                    },
+                    responseHandler: { response in
+                        failed = !(response.value == checksum && response.param == "bhbbrbrbrhbh")
+                        expectation.fulfill()
+                    })
+            .failure { error in
                 print(String(describing: error.localizedDescription))
                 expectation.fulfill()
-        })
+            }
 
         wait(for: [expectation], timeout: 30)
 
@@ -121,22 +126,25 @@ class TestUploadOperations: XCTestCase {
 
         for _ in 0..<iterations {
             router.request(for: .fileUpload(url: url, param: "bhbbrbrbrhbh"))
-                .startUpload(queue: queue, responseType: FileResponse.self,
-                             progressUpdate: { bytesSent, totalBytes, progress in
-                    if bytesSent == totalBytes && progress == 1 {
-                        progressSuccessCount += 1
-                    }
-                }, onSuccess: { response in
-                    if response.success && response.checksum == checksum {
-                        successCount  += 1
-                    }
-                    if progressSuccessCount == iterations {
-                        expectation.fulfill()
-                    }
-                }, onFailure: { (error, _) in
+                .queue(queue)
+                .upload(responseType: FileResponse.self,
+                        progressUpdate: { bytesSent, totalBytes, progress in
+                            if bytesSent == totalBytes && progress == 1 {
+                                progressSuccessCount += 1
+                            }
+                        },
+                        responseHandler: { response in
+                            if response.success && response.checksum == checksum {
+                                successCount  += 1
+                            }
+                            if progressSuccessCount == iterations {
+                                expectation.fulfill()
+                            }
+                        })
+                .failure { error in
                     print(String(describing: error.localizedDescription))
                     expectation.fulfill()
-            })
+                }
         }
 
         wait(for: [expectation], timeout: 500)
@@ -156,31 +164,36 @@ class TestUploadOperations: XCTestCase {
 
         let urls = (0..<iterations).map { TestHelpers.createDummyFile(String($0)) }
         let checksums = urls.map { TestHelpers.sha256(url: $0!) }
+        router.configuration?.timeoutInterval = 600
 
         for key in 0..<iterations {
             router.request(for: .fileUpload(url: urls[key]!, param: "bhbbrbrbrhbh"))
-                .startUpload(queue: queue, responseType: FileResponse.self,
-                             progressUpdate: { bytesSent, totalBytes, progress in
-                    if bytesSent == totalBytes && progress == 1 {
-                        progressSuccessCount += 1
-                    }
-                }, onSuccess: { response in
-                    if response.success && response.checksum == checksums[key] {
-                        successCount  += 1
-                    }
-                    if progressSuccessCount == iterations {
-                        try? FileManager.default.removeItem(at: urls[key]!)
-                        expectation.fulfill()
-                    }
-                }, onFailure: { (error, _) in
+                .queue(queue)
+                .upload(responseType: FileResponse.self,
+                        progressUpdate: { bytesSent, totalBytes, progress in
+                            if bytesSent == totalBytes && progress == 1 {
+                                progressSuccessCount += 1
+                            }
+                        },
+                        responseHandler: { response in
+                            if response.success && response.checksum == checksums[key] {
+                                successCount  += 1
+                            } else {
+                                XCTAssert(false, "Files not match!")
+                            }
+                            try? FileManager.default.removeItem(at: urls[key]!)
+                            if progressSuccessCount == iterations {
+                                expectation.fulfill()
+                            }
+                        })
+                .failure { error in
                     print(String(describing: error.localizedDescription))
                     try? FileManager.default.removeItem(at: urls[key]!)
                     expectation.fulfill()
-            })
+                }
+            }
 
-        }
-
-        wait(for: [expectation], timeout: 3 * 60)
+        wait(for: [expectation], timeout: 500)
 
         XCTAssert(successCount == iterations && progressSuccessCount == iterations)
     }
@@ -192,15 +205,16 @@ class TestUploadOperations: XCTestCase {
 
         router.request(for: .fileUpload(url: URL(string: "http://www.google.com")!,
                                         param: "tsttt"))
-            .startUpload(responseType: FileResponse.self,
-                            progressUpdate: nil,
-                         onSuccess: { _ in
-                            expectation.fulfill()
-            }, onFailure: { (error, _) in
+            .upload(responseType: FileResponse.self,
+                    progressUpdate: nil,
+                    responseHandler: { _ in
+                        expectation.fulfill()
+                    })
+            .failure { error in
                 print(error.localizedDescription! as Any)
                 failed = true
                 expectation.fulfill()
-        })
+            }
 
         wait(for: [expectation], timeout: 60)
 

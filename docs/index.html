@@ -22,7 +22,7 @@
         <a class="header-link" href="index.html">
           TermiNetwork 1.0.5 Docs
         </a>
-         (92% documented)
+         (100% documented)
       </p>
     
       <p class="header-col--secondary">
@@ -174,6 +174,12 @@
                 <a class="nav-group-task-link" href="Typealiases.html#/s:12TermiNetwork15FailureCallbacka">FailureCallback</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Typealiases.html#/s:12TermiNetwork23FailureCallbackWithTypea">FailureCallbackWithType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Typealiases.html#/s:12TermiNetwork26FailureCallbackWithoutTypea">FailureCallbackWithoutType</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Typealiases.html#/s:12TermiNetwork25ImageOnFinishCallbackTypea">ImageOnFinishCallbackType</a>
               </li>
               <li class="nav-group-task">
@@ -194,6 +200,9 @@
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Typealiases.html#/s:12TermiNetwork15SuccessCallbacka">SuccessCallback</a>
               </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Typealiases.html#/s:12TermiNetwork26SuccessCallbackWithoutTypea">SuccessCallbackWithoutType</a>
+              </li>
             </ul>
           </li>
         </ul>
@@ -211,8 +220,9 @@
 
 <p align="center"><b> A zero-dependency networking solution for building modern and secure iOS, watchOS, macOS and tvOS applications.</b>
   <br /><br />
-    <img src="https://travis-ci.org/billp/TermiNetwork.svg?branch=1.0.0-new-structure" />
+  <img src="https://travis-ci.org/billp/TermiNetwork.svg" />
   <img src="https://img.shields.io/cocoapods/v/TermiNetwork.svg?style=flat" />
+  <img src="https://img.shields.io/badge/Carthage-compatible-green" />
   <img src="https://img.shields.io/badge/Language-Swift 5.3-blue" />
   <img src="https://img.shields.io/github/license/billp/TermiNetwork" />
   <img src="https://img.shields.io/cocoapods/p/TermiNetwork" />
@@ -223,6 +233,14 @@
 <p align="center">
 Multi-environment setup 🔸 Model deserialization with <b>Codables</b> 🔸 Choose the response type you want: <b>Codable</b>, <b>UIImage</b>, <b>Data</b> or <b>String</b> 🔸 <b>UIKit</b>/<b>SwiftUI</b> helpers for downloading remote images 🔸 Routers 🔸 Transformers (convert rest models to domain models) 🔸 Error handling 🔸 Interceptors 🔸 Mock responses 🔸 Certificate pinning  🔸 Flexible configuration  🔸 Middleware  🔸 File/Data Upload/Download 🔸 Pretty printed debug information
 </p>
+
+<p><br /></p>
+
+<p align="center">
+<img alt="" data-canonical-src="" width="80%" src="https://user-images.githubusercontent.com/1566052/104446854-b33bc100-55a3-11eb-8a7b-9fcb51fc9a51.png" /><br /><br />
+<i>This is a low resolution diagram of <b>TermiNetwork</b> that shows how its componets are connected to each other.</I></p>
+
+<p><br /></p>
 <h4 id='table-of-contents' class='heading'>Table of contents</h4>
 
 <ul>
@@ -263,12 +281,12 @@ Multi-environment setup 🔸 Model deserialization with <b>Codables</b> 🔸 Cho
 <h3 id='cocoapods' class='heading'>CocoaPods</h3>
 
 <p>Add the following line to your <strong>Podfile</strong> and run <strong>pod install</strong> in your terminal:</p>
-<pre class="highlight ruby"><code><span class="n">pod</span> <span class="s1">'TermiNetwork'</span><span class="p">,</span> <span class="s1">'~&gt; 1.0.5'</span>
+<pre class="highlight ruby"><code><span class="n">pod</span> <span class="s1">'TermiNetwork'</span><span class="p">,</span> <span class="s1">'~&gt; 2.0.0'</span>
 </code></pre>
 <h3 id='carthage' class='heading'>Carthage</h3>
 
 <p>Add the following line to your <strong>Carthage</strong> and run <strong>carthage update</strong> in your terminal:</p>
-<pre class="highlight ruby"><code><span class="n">github</span> <span class="s2">"billp/TermiNetwork"</span> <span class="o">~&gt;</span> <span class="mf">1.0</span><span class="o">.</span><span class="mi">5</span>
+<pre class="highlight ruby"><code><span class="n">github</span> <span class="s2">"billp/TermiNetwork"</span> <span class="o">~&gt;</span> <span class="mf">2.0</span><span class="o">.</span><span class="mi">0</span>
 </code></pre>
 <h3 id='swift-package-manager' class='heading'>Swift Package Manager</h3>
 
@@ -299,14 +317,15 @@ Multi-environment setup 🔸 Model deserialization with <b>Codables</b> 🔸 Cho
 <span class="k">let</span> <span class="nv">headers</span> <span class="o">=</span> <span class="p">[</span><span class="s">"x-auth"</span><span class="p">:</span> <span class="s">"abcdef1234"</span><span class="p">]</span>
 
 <span class="kt">Request</span><span class="p">(</span><span class="nv">method</span><span class="p">:</span> <span class="o">.</span><span class="n">post</span><span class="p">,</span>
-        <span class="nv">url</span><span class="p">:</span> <span class="s">"https://myweb.com/api/todos"</span><span class="p">,</span>
-        <span class="nv">headers</span><span class="p">:</span> <span class="n">headers</span><span class="p">,</span>
-        <span class="nv">params</span><span class="p">:</span> <span class="n">params</span><span class="p">)</span><span class="o">.</span><span class="nf">start</span><span class="p">(</span><span class="nv">responseType</span><span class="p">:</span> <span class="kt">Todo</span><span class="o">.</span><span class="k">self</span><span class="p">,</span>
-                              <span class="nv">onSuccess</span><span class="p">:</span> <span class="p">{</span> <span class="n">todo</span> <span class="k">in</span>
+    <span class="nv">url</span><span class="p">:</span> <span class="s">"https://myweb.com/api/todos"</span><span class="p">,</span>
+    <span class="nv">headers</span><span class="p">:</span> <span class="n">headers</span><span class="p">,</span>
+    <span class="nv">params</span><span class="p">:</span> <span class="n">params</span><span class="p">)</span>
+    <span class="o">.</span><span class="nf">success</span><span class="p">(</span><span class="nv">responseType</span><span class="p">:</span> <span class="kt">Todo</span><span class="o">.</span><span class="k">self</span><span class="p">)</span> <span class="p">{</span> <span class="n">todo</span> <span class="k">in</span>
     <span class="nf">print</span><span class="p">(</span><span class="n">todo</span><span class="p">)</span>
-<span class="p">})</span> <span class="p">{</span> <span class="p">(</span><span class="n">error</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span> <span class="k">in</span>
-    <span class="nf">print</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
-<span class="p">}</span>
+    <span class="p">}</span>
+    <span class="o">.</span><span class="n">failure</span> <span class="p">{</span> <span class="n">error</span> <span class="k">in</span>
+    <span class="nf">print</span><span class="p">(</span><span class="n">error</span><span class="o">.</span><span class="n">localizedDescription</span><span class="p">)</span>
+    <span class="p">}</span>
 </code></pre>
 <h4 id='parameters-explanation' class='heading'>Parameters Explanation</h4>
 <h5 id='method' class='heading'>method</h5>
@@ -317,7 +336,7 @@ Multi-environment setup 🔸 Model deserialization with <b>Codables</b> 🔸 Cho
 <h5 id='responsetype' class='heading'>responseType</h5>
 
 <p>One of the following supported response types</p>
-<pre class="highlight plaintext"><code>JSON.self, Codable.self (subclasses), UIImage.self, Data.self or String.self
+<pre class="highlight plaintext"><code>Codable.self (implementations), UIImage.self, Data.self or String.self
 </code></pre>
 <h5 id='onsuccess' class='heading'>onSuccess</h5>
 
@@ -346,13 +365,14 @@ Multi-environment setup 🔸 Model deserialization with <b>Codables</b> 🔸 Cho
         <span class="nv">url</span><span class="p">:</span> <span class="s">"https://myweb.com/todos"</span><span class="p">,</span>
         <span class="nv">headers</span><span class="p">:</span> <span class="n">headers</span><span class="p">,</span>
         <span class="nv">params</span><span class="p">:</span> <span class="n">params</span><span class="p">,</span>
-        <span class="nv">configuration</span><span class="p">:</span> <span class="n">configuration</span><span class="p">)</span><span class="o">.</span><span class="nf">start</span><span class="p">(</span><span class="nv">queue</span><span class="p">:</span> <span class="n">myQueue</span><span class="p">,</span>
-                                            <span class="nv">responseType</span><span class="p">:</span> <span class="kt">String</span><span class="o">.</span><span class="k">self</span><span class="p">,</span>
-                                            <span class="nv">onSuccess</span><span class="p">:</span> <span class="p">{</span> <span class="n">response</span> <span class="k">in</span>
-    <span class="nf">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
-<span class="p">})</span> <span class="p">{</span> <span class="p">(</span><span class="n">error</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span> <span class="k">in</span>
-    <span class="nf">print</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
-<span class="p">}</span>
+        <span class="nv">configuration</span><span class="p">:</span> <span class="n">configuration</span><span class="p">)</span>
+    <span class="o">.</span><span class="nf">queue</span><span class="p">(</span><span class="n">queue</span><span class="p">)</span>
+    <span class="o">.</span><span class="nf">success</span><span class="p">(</span><span class="nv">responseType</span><span class="p">:</span> <span class="kt">String</span><span class="o">.</span><span class="k">self</span><span class="p">)</span> <span class="p">{</span> <span class="n">response</span> <span class="k">in</span>
+        <span class="nf">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="o">.</span><span class="n">failure</span> <span class="p">{</span> <span class="n">error</span> <span class="k">in</span>
+        <span class="nf">print</span><span class="p">(</span><span class="n">error</span><span class="o">.</span><span class="n">localizedDescription</span><span class="p">)</span>
+    <span class="p">}</span>
 </code></pre>
 
 <p>The request above uses a custom queue <strong>myQueue</strong> with a failure mode of <strong>.continue</strong> (default), which means that the queue continues its execution if a request fails.</p>
@@ -449,12 +469,12 @@ Multi-environment setup 🔸 Model deserialization with <b>Codables</b> 🔸 Cho
 
 <p>To create the request you have to initialize a <strong>Router</strong> instance and specialize it with your defined Router, in our case <strong>TodosRoute</strong>:</p>
 <pre class="highlight swift"><code><span class="kt">Router</span><span class="o">&lt;</span><span class="kt">TodosRoute</span><span class="o">&gt;</span><span class="p">()</span><span class="o">.</span><span class="nf">request</span><span class="p">(</span><span class="nv">for</span><span class="p">:</span> <span class="o">.</span><span class="nf">add</span><span class="p">(</span><span class="nv">title</span><span class="p">:</span> <span class="s">"Go shopping!"</span><span class="p">))</span>
-    <span class="o">.</span><span class="nf">start</span><span class="p">(</span><span class="nv">responseType</span><span class="p">:</span> <span class="kt">Todo</span><span class="o">.</span><span class="k">self</span><span class="p">,</span>
-           <span class="nv">onSuccess</span><span class="p">:</span> <span class="p">{</span> <span class="n">todo</span> <span class="k">in</span>
-    <span class="c1">// do something with todo</span>
-<span class="p">})</span> <span class="p">{</span> <span class="p">(</span><span class="n">error</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span> <span class="k">in</span>
-    <span class="c1">// show error</span>
-<span class="p">}</span>
+    <span class="o">.</span><span class="nf">success</span><span class="p">(</span><span class="nv">responseType</span><span class="p">:</span> <span class="kt">Todo</span><span class="o">.</span><span class="k">self</span><span class="p">)</span> <span class="p">{</span> <span class="n">todo</span> <span class="k">in</span>
+        <span class="c1">// do something with todo</span>
+    <span class="p">}</span>
+    <span class="o">.</span><span class="n">failure</span> <span class="p">{</span> <span class="n">error</span> <span class="k">in</span>
+        <span class="c1">// do something with error</span>
+    <span class="p">}</span>
 </code></pre>
 
 <p><a name="queue_hooks"></a></p>
@@ -488,25 +508,23 @@ Multi-environment setup 🔸 Model deserialization with <b>Codables</b> 🔸 Cho
 <p>To see all the available errors, please visit the <a href="https://billp.github.io/TermiNetwork/Enums/TNError.html" target="_blank">TNError</a> in documentation.</p>
 <h4 id='example' class='heading'>Example</h4>
 <pre class="highlight swift"><code><span class="kt">Router</span><span class="o">&lt;</span><span class="kt">TodosRoute</span><span class="o">&gt;</span><span class="p">()</span><span class="o">.</span><span class="nf">request</span><span class="p">(</span><span class="nv">for</span><span class="p">:</span> <span class="o">.</span><span class="nf">add</span><span class="p">(</span><span class="nv">title</span><span class="p">:</span> <span class="s">"Go shopping!"</span><span class="p">))</span>
-                    <span class="o">.</span><span class="nf">start</span><span class="p">(</span><span class="nv">responseType</span><span class="p">:</span> <span class="kt">Todo</span><span class="o">.</span><span class="k">self</span><span class="p">,</span>
-   <span class="nv">onSuccess</span><span class="p">:</span> <span class="p">{</span> <span class="n">todo</span> <span class="k">in</span>
-       <span class="c1">// do something with todo</span>
-   <span class="p">},</span>
-   <span class="nv">onFailure</span><span class="p">:</span> <span class="p">{</span> <span class="p">(</span><span class="n">error</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span> <span class="k">in</span>
-       <span class="k">switch</span> <span class="n">error</span> <span class="p">{</span>
-       <span class="k">case</span> <span class="o">.</span><span class="nf">notSuccess</span><span class="p">(</span><span class="k">let</span> <span class="nv">statusCode</span><span class="p">):</span>
-            <span class="nf">debugPrint</span><span class="p">(</span><span class="s">"Status code "</span> <span class="o">+</span> <span class="kt">String</span><span class="p">(</span><span class="n">statusCode</span><span class="p">))</span>
-            <span class="k">break</span>
-       <span class="k">case</span> <span class="o">.</span><span class="nf">networkError</span><span class="p">(</span><span class="k">let</span> <span class="nv">error</span><span class="p">):</span>
-            <span class="nf">debugPrint</span><span class="p">(</span><span class="s">"Network error: "</span> <span class="o">+</span> <span class="n">error</span><span class="o">.</span><span class="n">localizedDescription</span><span class="p">)</span>
-            <span class="k">break</span>
-       <span class="k">case</span> <span class="o">.</span><span class="nf">cancelled</span><span class="p">(</span><span class="k">let</span> <span class="nv">error</span><span class="p">):</span>
-            <span class="nf">debugPrint</span><span class="p">(</span><span class="s">"Request cancelled with error: "</span> <span class="o">+</span> <span class="n">error</span><span class="o">.</span><span class="n">localizedDescription</span><span class="p">)</span>
-            <span class="k">break</span>
-       <span class="k">default</span><span class="p">:</span>
-            <span class="nf">debugPrint</span><span class="p">(</span><span class="s">"Error: "</span> <span class="o">+</span> <span class="n">error</span><span class="o">.</span><span class="n">localizedDescription</span><span class="p">)</span>
-    <span class="p">}</span>
-<span class="p">})</span>
+      <span class="o">.</span><span class="nf">success</span><span class="p">(</span><span class="nv">responseType</span><span class="p">:</span> <span class="kt">Todo</span><span class="o">.</span><span class="k">self</span><span class="p">)</span> <span class="p">{</span> <span class="n">todo</span> <span class="k">in</span>
+         <span class="c1">// do something with todo</span>
+      <span class="p">},</span>
+      <span class="o">.</span><span class="nv">failure</span><span class="p">:</span> <span class="p">{</span> <span class="n">error</span> <span class="k">in</span>
+          <span class="k">switch</span> <span class="n">error</span> <span class="p">{</span>
+          <span class="k">case</span> <span class="o">.</span><span class="nf">notSuccess</span><span class="p">(</span><span class="k">let</span> <span class="nv">statusCode</span><span class="p">):</span>
+               <span class="nf">debugPrint</span><span class="p">(</span><span class="s">"Status code "</span> <span class="o">+</span> <span class="kt">String</span><span class="p">(</span><span class="n">statusCode</span><span class="p">))</span>
+               <span class="k">break</span>
+          <span class="k">case</span> <span class="o">.</span><span class="nf">networkError</span><span class="p">(</span><span class="k">let</span> <span class="nv">error</span><span class="p">):</span>
+               <span class="nf">debugPrint</span><span class="p">(</span><span class="s">"Network error: "</span> <span class="o">+</span> <span class="n">error</span><span class="o">.</span><span class="n">localizedDescription</span><span class="p">)</span>
+               <span class="k">break</span>
+          <span class="k">case</span> <span class="o">.</span><span class="nf">cancelled</span><span class="p">(</span><span class="k">let</span> <span class="nv">error</span><span class="p">):</span>
+               <span class="nf">debugPrint</span><span class="p">(</span><span class="s">"Request cancelled with error: "</span> <span class="o">+</span> <span class="n">error</span><span class="o">.</span><span class="n">localizedDescription</span><span class="p">)</span>
+               <span class="k">break</span>
+          <span class="k">default</span><span class="p">:</span>
+               <span class="nf">debugPrint</span><span class="p">(</span><span class="s">"Error: "</span> <span class="o">+</span> <span class="n">error</span><span class="o">.</span><span class="n">localizedDescription</span><span class="p">)</span>
+       <span class="p">}</span>
 </code></pre>
 
 <p><a name="transformers"></a></p>
@@ -535,13 +553,17 @@ Multi-environment setup 🔸 Model deserialization with <b>Codables</b> 🔸 Cho
 <h4 id='example' class='heading'>Example</h4>
 <pre class="highlight swift"><code><span class="kt">Router</span><span class="o">&lt;</span><span class="kt">CityRoute</span><span class="o">&gt;</span><span class="p">()</span>
     <span class="o">.</span><span class="nf">request</span><span class="p">(</span><span class="nv">for</span><span class="p">:</span> <span class="o">.</span><span class="n">cities</span><span class="p">)</span>
-    <span class="o">.</span><span class="nf">start</span><span class="p">(</span><span class="nv">transformer</span><span class="p">:</span> <span class="kt">CitiesTransformer</span><span class="o">.</span><span class="k">self</span><span class="p">,</span>
-           <span class="nv">onSuccess</span><span class="p">:</span> <span class="p">{</span> <span class="n">cities</span> <span class="k">in</span>
-    <span class="c1">// Cities are of type [City] (domain)</span>
-    <span class="k">self</span><span class="o">.</span><span class="n">cities</span> <span class="o">=</span> <span class="n">cities</span>
-<span class="p">},</span> <span class="nv">onFailure</span><span class="p">:</span> <span class="p">{</span> <span class="p">(</span><span class="n">error</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span> <span class="k">in</span>
-   <span class="c1">// Handle error</span>
-<span class="p">})</span>
+    <span class="o">.</span><span class="nf">success</span><span class="p">(</span><span class="nv">transformer</span><span class="p">:</span> <span class="kt">CitiesTransformer</span><span class="o">.</span><span class="k">self</span><span class="p">)</span> <span class="p">{</span> <span class="n">cities</span> <span class="k">in</span>
+        <span class="k">self</span><span class="o">.</span><span class="n">cities</span> <span class="o">=</span> <span class="n">cities</span>
+    <span class="p">}</span>
+    <span class="o">.</span><span class="n">failure</span> <span class="p">{</span> <span class="n">error</span> <span class="k">in</span>
+        <span class="k">switch</span> <span class="n">error</span> <span class="p">{</span>
+        <span class="k">case</span> <span class="o">.</span><span class="nv">cancelled</span><span class="p">:</span>
+            <span class="k">break</span>
+        <span class="k">default</span><span class="p">:</span>
+            <span class="k">self</span><span class="o">.</span><span class="n">errorMessage</span> <span class="o">=</span> <span class="n">error</span><span class="o">.</span><span class="n">localizedDescription</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
 </code></pre>
 
 <p><a name="mock_responses"></a></p>
@@ -609,7 +631,7 @@ configuration.mockDataEnabled = true
                         <span class="nv">url</span><span class="p">:</span> <span class="s">"https://www.myserviceapi.com/login"</span><span class="p">,</span>
                         <span class="nv">params</span><span class="p">:</span> <span class="p">[</span><span class="s">"username"</span><span class="p">:</span> <span class="s">"johndoe"</span><span class="p">,</span>
                                  <span class="s">"password"</span><span class="p">:</span> <span class="s">"p@44w0rd"</span><span class="p">])</span>
-                    <span class="o">.</span><span class="nf">start</span><span class="p">(</span><span class="nv">responseType</span><span class="p">:</span> <span class="kt">LoginResponse</span><span class="o">.</span><span class="k">self</span><span class="p">)</span> <span class="p">{</span> <span class="n">response</span> <span class="k">in</span>
+                    <span class="o">.</span><span class="nf">success</span><span class="p">(</span><span class="nv">responseType</span><span class="p">:</span> <span class="kt">LoginResponse</span><span class="o">.</span><span class="k">self</span><span class="p">)</span> <span class="p">{</span> <span class="n">response</span> <span class="k">in</span>
                         <span class="k">let</span> <span class="nv">authorizationValue</span> <span class="o">=</span> <span class="kt">String</span><span class="p">(</span><span class="nv">format</span><span class="p">:</span> <span class="s">"Bearer %@"</span><span class="p">,</span> <span class="n">response</span><span class="o">.</span><span class="n">token</span><span class="p">)</span>
 
                         <span class="c1">// Update the global header in configuration which is inherited by all requests.</span>
@@ -622,8 +644,8 @@ configuration.mockDataEnabled = true
                         <span class="nf">proceed</span><span class="p">(</span><span class="o">.</span><span class="nf">retry</span><span class="p">(</span><span class="nv">delay</span><span class="p">:</span> <span class="n">retryDelay</span><span class="p">))</span>
                     <span class="p">}</span>
             <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-                <span class="c1">// Continue if the retry limit is reached</span>
-                <span class="nf">proceed</span><span class="p">(</span><span class="o">.</span><span class="k">continue</span><span class="p">)</span>
+        <span class="c1">// Continue if the retry limit is reached</span>
+            <span class="nf">proceed</span><span class="p">(</span><span class="o">.</span><span class="k">continue</span><span class="p">)</span>
             <span class="p">}</span>
         <span class="k">default</span><span class="p">:</span>
             <span class="nf">proceed</span><span class="p">(</span><span class="o">.</span><span class="k">continue</span><span class="p">)</span>
@@ -725,7 +747,7 @@ configuration.mockDataEnabled = true
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2020 <a class="link" href="https://github.com/billp/TermiNetwork" target="_blank" rel="external">Vasilis Panagiotopoulos</a>. All rights reserved. (Last updated: 2020-12-30)</p>
+      <p>&copy; 2021 <a class="link" href="https://github.com/billp/TermiNetwork" target="_blank" rel="external">Vasilis Panagiotopoulos</a>. All rights reserved. (Last updated: 2021-01-13)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.6</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
     </section>
   </body>

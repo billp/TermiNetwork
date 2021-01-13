@@ -110,20 +110,19 @@ struct FileDownloader: View {
         request = Request(method: .get,
                           url: fileURL,
                           configuration: configuration)
-            .startDownload(filePath: outputFile,
-                           progressUpdate: { (bytesDownloaded, bytesTotal, progress) in
-                            self.progress = progress * 100
-                            self.bytesDownloaded = bytesDownloaded
-                            self.bytesTotal = bytesTotal
-                           },
-                           onSuccess: {
-                            self.downloadStarted = false
-                            self.downloadFinished = true
-                           },
-                           onFailure: { error, _ in
-                            self.error = error.localizedDescription ?? ""
-                            resetDownload()
-                           })
+            .download(filePath: outputFile,
+                      progressUpdate: { (bytesDownloaded, bytesTotal, progress) in
+                        self.progress = progress * 100
+                        self.bytesDownloaded = bytesDownloaded
+                        self.bytesTotal = bytesTotal
+                      }, completionHandler: {
+                        self.downloadStarted = false
+                        self.downloadFinished = true
+                      })
+            .failure { error in
+                self.error = error.localizedDescription ?? ""
+                resetDownload()
+            }
     }
 
     func removeFileIfNeeded(at path: String) {

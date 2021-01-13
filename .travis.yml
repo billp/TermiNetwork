@@ -1,3 +1,6 @@
 language: objective-c
 osx_image: xcode12.2
-script: xcodebuild test -scheme TermiNetworkTests -destination 'platform=iOS Simulator,name=iPhone 11 Pro Max'
+script:
+  - xcodebuild test -scheme TermiNetworkTests -destination 'platform=iOS Simulator,name=iPhone 11 Pro Max'
+after_success:
+  - bash <(curl -s https://codecov.io/bash)

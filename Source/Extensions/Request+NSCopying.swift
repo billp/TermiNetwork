@@ -20,10 +20,11 @@
 import Foundation
 
 extension Request: NSCopying {
+    /// Clones a Request instance.
     public func copy(with zone: NSZone? = nil) -> Any {
         let request = Request()
         request.method = method
-        request.currentQueue = currentQueue
+        request.queue = queue
         request.params = params
         request.path = path
         request.pathType = pathType

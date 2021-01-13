@@ -49,14 +49,15 @@ class TestInterceptors: XCTestCase {
                                             value2: 1,
                                             value3: 2,
                                             value4: "",
-                                            value5: nil)).start(responseType: TestJSONParams.self,
-                                                                onSuccess: { response in
-            failed = !(response.param3 == 2)
-            expectation.fulfill()
-        }, onFailure: { _, _ in
-            failed = true
-            expectation.fulfill()
-        })
+                                            value5: nil))
+            .success(responseType: TestJSONParams.self) { response in
+                failed = !(response.param3 == 2)
+                expectation.fulfill()
+            }
+            .failure { _ in
+                failed = true
+                expectation.fulfill()
+            }
 
         wait(for: [expectation], timeout: 60)
 
@@ -73,17 +74,18 @@ class TestInterceptors: XCTestCase {
                                             value2: 1,
                                             value3: 2,
                                             value4: "",
-                                            value5: nil)).start(responseType: TestJSONParams.self,
-                                                                onSuccess: { response in
-            failed = !(response.param3 == 2)
-            expectation.fulfill()
-        }, onFailure: { error, _ in
-            print(error)
-            failed = true
-            expectation.fulfill()
-        })
+                                            value5: nil))
+            .success(responseType: TestJSONParams.self) { response in
+                failed = !(response.param3 == 2)
+                expectation.fulfill()
+            }
+            .failure { error in
+                print(error)
+                failed = true
+                expectation.fulfill()
+            }
 
-        wait(for: [expectation], timeout: 60)
+        wait(for: [expectation], timeout: 120)
 
         XCTAssert(!failed)
     }
@@ -104,26 +106,26 @@ class TestInterceptors: XCTestCase {
         var progressSucceded = false
         var successCount = 0
 
-        router.request(for: .fileUpload(url: url, param: "test")).startUpload(
-            responseType: FileResponse.self,
-            progressUpdate: { bytesSent, totalBytes, progress in
-                if bytesSent == totalBytes && progress == 1 {
-                    progressSucceded = true
-                }
-            },
-            onSuccess: { response in
-                if response.success && response.checksum == checksum {
-                    successCount  += 1
-                }
-                failed = !progressSucceded
-                expectation.fulfill()
-            },
-            onFailure: { _, _ in
+        router.request(for: .fileUpload(url: url, param: "test"))
+            .upload(responseType: FileResponse.self,
+                    progressUpdate: { bytesSent, totalBytes, progress in
+                        if bytesSent == totalBytes && progress == 1 {
+                            progressSucceded = true
+                        }
+                    },
+                    responseHandler: { response in
+                        if response.success && response.checksum == checksum {
+                            successCount  += 1
+                        }
+                        failed = !progressSucceded
+                        expectation.fulfill()
+                    })
+            .failure { _ in
                 failed = true
                 expectation.fulfill()
-            })
+            }
 
-        wait(for: [expectation], timeout: 60)
+        wait(for: [expectation], timeout: 120)
 
         XCTAssert(!failed)
     }
@@ -144,21 +146,22 @@ class TestInterceptors: XCTestCase {
         try? FileManager.default.removeItem(at: cacheURL)
 
         router.request(for: .fileDownload)
-            .startDownload(filePath: cacheURL.path,
-                           progressUpdate: { bytesSent, totalBytes, progress in
-                if bytesSent == totalBytes && progress == 1 {
-                    failed = false
-                }
-            }, onSuccess: {
-                failed = TestHelpers.sha256(url: cacheURL) !=
-                    "b64fb87ce1e10bc7aa14e272262753200414f74a3059c5d7afb443c36be06531"
+            .download(filePath: cacheURL.path,
+                      progressUpdate: { bytesSent, totalBytes, progress in
+                        if bytesSent == totalBytes && progress == 1 {
+                            failed = false
+                        }
+                    }, completionHandler: {
+                        failed = TestHelpers.sha256(url: cacheURL) !=
+                            "b64fb87ce1e10bc7aa14e272262753200414f74a3059c5d7afb443c36be06531"
 
-                expectation.fulfill()
-            }, onFailure: { (error, _) in
+                        expectation.fulfill()
+                    })
+            .failure { error in
                 failed = true
                 print(String(describing: error.localizedDescription))
                 expectation.fulfill()
-        })
+            }
 
         wait(for: [expectation], timeout: 500)
 
@@ -179,15 +182,16 @@ class TestInterceptors: XCTestCase {
                                                           value3: 2,
                                                           value4: "",
                                                           value5: nil))
-        request.start(responseType: TestJSONParams.self,
-                      onSuccess: { response in
-                        failed = !(response.param3 == 2 &&
-                                    (request.associatedObject as? NSNumber)?.boolValue == true)
+
+        request.success(responseType: TestJSONParams.self) { response in
+            failed = !(response.param3 == 2 &&
+                        (request.associatedObject as? NSNumber)?.boolValue == true)
             expectation.fulfill()
-        }, onFailure: { _, _ in
+        }
+        .failure { _ in
             failed = true
             expectation.fulfill()
-        })
+        }
 
         wait(for: [expectation], timeout: 60)
 
@@ -207,9 +211,7 @@ class TestInterceptors: XCTestCase {
 
         let authValue = UnauthorizedInterceptor.authorizationValue
         let request = router.request(for: .testStatusCode(code: 401))
-        request.start(responseType: Data.self,
-                      onSuccess: { _ in
-
+        request.success(responseType: Data.self) { _ in
             let dummyRequest = try? self.router.request(for: .testStatusCode(code: 200)).asRequest()
             failed = !(
                 Environment.current.configuration?.headers?["Authorization"] == authValue &&
@@ -218,12 +220,13 @@ class TestInterceptors: XCTestCase {
             )
 
             expectation.fulfill()
-        }, onFailure: { _, _ in
+        }
+        .failure { _ in
             failed = true
             expectation.fulfill()
-        })
+        }
 
-        wait(for: [expectation], timeout: 60)
+        wait(for: [expectation], timeout: 180)
 
         router.configuration?.interceptors?.removeLast()
 

@@ -22,19 +22,19 @@ import Foundation
 /// Enum to specify multipart/form-data parameters that can be used in upload tasks.
 public enum MultipartFormDataPartType {
     /// Simple key-value case.
-    /// - Parameters:
+    /// - Parameters
     ///   - value: The value of the multipart/form-data parameter.
     case value(value: String)
 
     /// Data case.
-    /// - Parameters:
+    /// - Parameters
     ///   - data: The data  to upload of the multipart/form-data parameter.
     ///   - filename: The filename value of the multipart/form-data parameter.
     ///   - contentType: The Content-Type of the multipart/form-data parameter.
     case data(data: Data, filename: String?, contentType: String?)
 
     /// URL case.
-    /// - Parameters:
+    /// - Parameters
     ///   - file: The file URL that contains the data that will be uploaded.
     ///   - filename: The filename value of the multipart/form-data parameter.
     ///   - contentType: The Content-Type of the multipart/form-data parameter.

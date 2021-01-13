@@ -38,10 +38,11 @@ extension ImageViewType {
     fileprivate static func downloadImage(request: Request,
                                           onSuccess: @escaping SuccessCallback<ImageType>,
                                           onFailure: @escaping FailureCallback) throws -> Request {
-        request.start(queue: imageViewQueue,
-                      responseType: ImageType.self,
-                      onSuccess: onSuccess,
-                      onFailure: onFailure)
+        request.queue(imageViewQueue)
+            .success(responseType: ImageType.self, responseHandler: onSuccess)
+            .failure(responseType: Data.self) { (data, error) in
+                onFailure(error, data)
+            }
 
         return request
     }

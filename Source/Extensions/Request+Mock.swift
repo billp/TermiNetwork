@@ -24,14 +24,15 @@ extension Request {
         return self.configuration.mockDataEnabled ?? false
     }
 
+    @discardableResult
     internal func createMockResponse(request: URLRequest,
                                      completionHandler: ((Data, URLResponse?) -> Void)?,
-                                     onFailure: FailureCallback? = nil) -> URLSessionDataTask {
+                                     onFailure: FailureCallbackWithType<Data>? = nil) -> URLSessionDataTask {
         let fakeSession = URLSession(configuration: URLSession.shared.configuration)
                             .dataTask(with: request)
 
         guard let filePath = mockFilePath?.convertedPath else {
-            onFailure?(.invalidMockData(path), nil)
+            onFailure?(nil, .invalidMockData(path))
             return fakeSession
         }
 
@@ -53,11 +54,19 @@ extension Request {
             }
         } else {
             randomizeResponse {
-                onFailure?(.invalidMockData(filePath), nil)
+                onFailure?(nil, .invalidMockData(filePath))
             }
         }
 
         return fakeSession
+    }
+
+    internal func createDefaultMockResponse() {
+        createMockResponse(request: urlRequest!,
+                           completionHandler: successCompletionHandler,
+                           onFailure: { data, error in
+                                self.failureCompletionHandler?(error, data, self.urlResponse)
+                           })
     }
 
     fileprivate func delay(_ delay: TimeInterval,
@@ -78,7 +87,9 @@ extension Request {
                 return
         }
 
-        delay(randomizer(between: min,
-                         and: max), block: block)
+        let mockDelay = randomizer(between: min, and: max)
+        self.mockDelay = mockDelay
+
+        delay(mockDelay, block: block)
     }
 }

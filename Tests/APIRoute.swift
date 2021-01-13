@@ -64,7 +64,8 @@ enum APIRoute: RouteProtocol {
                 path: .path(["test_headers"]),
                 headers: ["Authorization": "0",
                           "Custom-Header": "0",
-                          "User-Agent": "ios"]
+                          "User-Agent": "ios"],
+                mockFilePath: .path(["main-router", "invalid.json"])
             )
         case let .testGetParams(value1, value2, value3, value4, value5):
             return RouteConfiguration(

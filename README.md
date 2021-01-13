@@ -1,5 +1,4 @@
 
-
 <p></p>
 <p align="center">
   <img src="https://raw.githubusercontent.com/billp/TermiNetwork/master/TermiNetworkLogo.svg" alt="" data-canonical-src="" width="80%" />
@@ -7,11 +6,15 @@
 
 <p align="center"><b> A zero-dependency networking solution for building modern and secure iOS, watchOS, macOS and tvOS applications.</b>
   <br /><br />
-    <img src="https://travis-ci.org/billp/TermiNetwork.svg?branch=1.0.0-new-structure" />
+  <img src="https://travis-ci.org/billp/TermiNetwork.svg" />
   <img src="https://img.shields.io/cocoapods/v/TermiNetwork.svg?style=flat" />
+  <img src="https://img.shields.io/badge/Carthage-compatible-green" />
   <img src="https://img.shields.io/badge/Language-Swift 5.3-blue" />
   <img src="https://img.shields.io/github/license/billp/TermiNetwork" />
   <img src="https://img.shields.io/cocoapods/p/TermiNetwork" />
+  <a href="https://codecov.io/gh/billp/TermiNetwork">
+    <img src="https://codecov.io/gh/billp/TermiNetwork/branch/master/graph/badge.svg?token=QI9KOV99AG"/>
+  </a>
   <img src="https://billp.github.io/TermiNetwork/badge.svg" />
 </p>
 
@@ -19,6 +22,11 @@
 <p align="center">
 Multi-environment setup 🔸 Model deserialization with <b>Codables</b> 🔸 Choose the response type you want: <b>Codable</b>, <b>UIImage</b>, <b>Data</b> or <b>String</b> 🔸 <b>UIKit</b>/<b>SwiftUI</b> helpers for downloading remote images 🔸 Routers 🔸 Transformers (convert rest models to domain models) 🔸 Error handling 🔸 Interceptors 🔸 Mock responses 🔸 Certificate pinning  🔸 Flexible configuration  🔸 Middleware  🔸 File/Data Upload/Download 🔸 Pretty printed debug information
 </p>
+<br />
+<p align="center">
+<img alt="" data-canonical-src="" width="80%" src="https://user-images.githubusercontent.com/1566052/104446854-b33bc100-55a3-11eb-8a7b-9fcb51fc9a51.png" /><br /><br />
+<i>This is a low resolution diagram of <b>TermiNetwork</b> that shows how its componets are connected to each other.</I></p>
+<br />
 
 #### Table of contents
 - [Installation](#installation)
@@ -49,14 +57,14 @@ You can install **TermiNetwork** with one of the following ways...
 
 Add the following line to your **Podfile** and run **pod install** in your terminal:
 ```ruby
-pod 'TermiNetwork', '~> 1.0.5'
+pod 'TermiNetwork', '~> 2.0.0'
 ```
 
 ### Carthage
 
 Add the following line to your **Carthage** and run **carthage update** in your terminal:
 ```ruby
-github "billp/TermiNetwork" ~> 1.0.5
+github "billp/TermiNetwork" ~> 2.0.0
 ```
 
 ### Swift Package Manager
@@ -95,14 +103,15 @@ let params = ["title": "Go shopping."]
 let headers = ["x-auth": "abcdef1234"]
 
 Request(method: .post,
-        url: "https://myweb.com/api/todos",
-        headers: headers,
-        params: params).start(responseType: Todo.self,
-                              onSuccess: { todo in
-    print(todo)
-}) { (error, data) in
-    print(error)
-}
+	url: "https://myweb.com/api/todos",
+	headers: headers,
+	params: params)
+    .success(responseType: Todo.self) { todo in
+	print(todo)
+    }
+    .failure { error in
+	print(error.localizedDescription)
+    }
 ```
 
 #### Parameters Explanation
@@ -116,7 +125,7 @@ One of the following supported HTTP methods:
 ##### responseType
 One of the following supported response types
 ```
-JSON.self, Codable.self (subclasses), UIImage.self, Data.self or String.self
+Codable.self (implementations), UIImage.self, Data.self or String.self
 ```
 
 ##### onSuccess
@@ -148,13 +157,14 @@ Request(method: .post,
         url: "https://myweb.com/todos",
         headers: headers,
         params: params,
-        configuration: configuration).start(queue: myQueue,
-                                            responseType: String.self,
-                                            onSuccess: { response in
-    print(response)
-}) { (error, data) in
-    print(error)
-}
+        configuration: configuration)
+    .queue(queue)
+    .success(responseType: String.self) { response in
+        print(response)
+    }
+    .failure { error in
+        print(error.localizedDescription)
+    }
 ```
 The request above uses a custom queue **myQueue** with a failure mode of **.continue** (default), which means that the queue continues its execution if a request fails.
 
@@ -254,12 +264,12 @@ You can optionally pass a **configuration** object to each case if you want prov
 To create the request you have to initialize a **Router** instance and specialize it with your defined Router, in our case **TodosRoute**:
 ```swift
 Router<TodosRoute>().request(for: .add(title: "Go shopping!"))
-    .start(responseType: Todo.self,
-           onSuccess: { todo in
-    // do something with todo
-}) { (error, data) in
-    // show error
-}
+    .success(responseType: Todo.self) { todo in
+        // do something with todo
+    }
+    .failure { error in
+        // do something with error
+    }
 ```
 
 <a name="queue_hooks"></a>
@@ -300,25 +310,23 @@ To see all the available errors, please visit the <a href="https://billp.github.
 
 ```swift
 Router<TodosRoute>().request(for: .add(title: "Go shopping!"))
-                    .start(responseType: Todo.self,
-   onSuccess: { todo in
-       // do something with todo
-   },
-   onFailure: { (error, data) in
-       switch error {
-       case .notSuccess(let statusCode):
-            debugPrint("Status code " + String(statusCode))
-            break
-       case .networkError(let error):
-            debugPrint("Network error: " + error.localizedDescription)
-            break
-       case .cancelled(let error):
-            debugPrint("Request cancelled with error: " + error.localizedDescription)
-            break
-       default:
-            debugPrint("Error: " + error.localizedDescription)
-    }
-})
+      .success(responseType: Todo.self) { todo in
+         // do something with todo
+      },
+      .failure: { error in
+          switch error {
+          case .notSuccess(let statusCode):
+               debugPrint("Status code " + String(statusCode))
+               break
+          case .networkError(let error):
+               debugPrint("Network error: " + error.localizedDescription)
+               break
+          case .cancelled(let error):
+               debugPrint("Request cancelled with error: " + error.localizedDescription)
+               break
+          default:
+               debugPrint("Error: " + error.localizedDescription)
+       }
 ```
 <a name="transformers"></a>
 ## Transformers
@@ -350,13 +358,17 @@ Finally, pass the **CitiesTransformer** in the Request's start method:
 ```swift
 Router<CityRoute>()
     .request(for: .cities)
-    .start(transformer: CitiesTransformer.self,
-           onSuccess: { cities in
-    // Cities are of type [City] (domain)
-    self.cities = cities
-}, onFailure: { (error, data) in
-   // Handle error
-})
+    .success(transformer: CitiesTransformer.self) { cities in
+        self.cities = cities
+    }
+    .failure { error in
+        switch error {
+        case .cancelled:
+            break
+        default:
+            self.errorMessage = error.localizedDescription
+        }
+    }
 ```
 
 <a name="mock_responses"></a>
@@ -423,7 +435,7 @@ final class UnauthorizedInterceptor: InterceptorProtocol {
                         url: "https://www.myserviceapi.com/login",
                         params: ["username": "johndoe",
                                  "password": "p@44w0rd"])
-                    .start(responseType: LoginResponse.self) { response in
+                    .success(responseType: LoginResponse.self) { response in
                         let authorizationValue = String(format: "Bearer %@", response.token)
 
                         // Update the global header in configuration which is inherited by all requests.
@@ -436,8 +448,8 @@ final class UnauthorizedInterceptor: InterceptorProtocol {
                         proceed(.retry(delay: retryDelay))
                     }
             } else {
-	            // Continue if the retry limit is reached
-	            proceed(.continue)
+	 	// Continue if the retry limit is reached
+	    	proceed(.continue)
             }
         default:
             proceed(.continue)

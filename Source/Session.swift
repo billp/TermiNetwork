@@ -27,17 +27,14 @@ internal final class Session<ResultType>: NSObject, URLSessionDataDelegate, URLS
 
     var progressCallback: ProgressCallbackType?
     var completedCallback: ((ResultType?, URLResponse?, Error?) -> Void)?
-    var failureCallback: FailureCallback?
     var inputStream: InputStream?
 
     init(with request: Request,
          progressCallback: ProgressCallbackType? = nil,
-         completedCallback: ((ResultType?, URLResponse?, Error?) -> Void)? = nil,
-         failureCallback: FailureCallback? = nil) {
+         completedCallback: ((ResultType?, URLResponse?, Error?) -> Void)? = nil) {
         self.request = request
         self.progressCallback = progressCallback
         self.completedCallback = completedCallback
-        self.failureCallback = failureCallback
     }
 
     func urlSession(_ session: URLSession,
@@ -52,13 +49,7 @@ internal final class Session<ResultType>: NSObject, URLSessionDataDelegate, URLS
     }
 
     func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
-        if let error = error {
-            let tnError = TNError.networkError(error)
-
-            failureCallback?(tnError, receivedData)
-        } else {
-            completedCallback?(receivedData as? ResultType, task.response, error)
-        }
+        completedCallback?(receivedData as? ResultType, task.response, error)
     }
 
     func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive data: Data) {

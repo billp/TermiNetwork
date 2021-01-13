@@ -65,6 +65,8 @@ public enum TNError: Error {
     /// Thrown when the response headers cannot be retrieved.
     /// Typicaly when you forget to call the start() method.
     case cannotReadResponseHeaders
+    /// Thrown when the response is empty.
+    case emptyResponse
 }
 
 extension TNError: LocalizedError {
@@ -117,6 +119,8 @@ extension TNError: LocalizedError {
             return NSLocalizedString("Cannot read response headers. Did you forget to call to call the start() method?", comment: "TNError")
         case .pinningError:
             return NSLocalizedString("Certificate pinning failed validation.", comment: "TNError")
+        case .emptyResponse:
+            return NSLocalizedString("The response should not be empty.", comment: "TNError")
         }
     }
 }

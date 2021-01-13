@@ -96,7 +96,7 @@ internal class Log {
                 break
             }
 
-            if let data = data {
+            if let data = data, !data.isEmpty {
                 if let responseJSON = data.toJSONString() {
                     print(String(format: "📦 Response: %@", responseJSON))
                 } else if let stringResponse = String(data: data, encoding: .utf8) {

@@ -57,17 +57,17 @@ struct CityExplorerView: View {
 
         activeRequest = Router<CityRoute>()
             .request(for: .cities)
-            .start(transformer: CitiesTransformer.self,
-                   onSuccess: { cities in
-            self.cities = cities
-        }, onFailure: { (error, _) in
-            switch error {
-            case .cancelled:
-                break
-            default:
-                self.errorMessage = error.localizedDescription
+            .success(transformer: CitiesTransformer.self) { cities in
+                self.cities = cities
             }
-        })
+            .failure { error in
+                switch error {
+                case .cancelled:
+                    break
+                default:
+                    self.errorMessage = error.localizedDescription
+                }
+            }
     }
 
     func onDisappear() {

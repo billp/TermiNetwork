@@ -61,21 +61,23 @@ class TestDownloadOperations: XCTestCase {
         try? FileManager.default.removeItem(at: cacheURL)
 
         router.request(for: .fileDownload)
-            .startDownload(filePath: cacheURL.path,
-                           progressUpdate: { bytesSent, totalBytes, progress in
-                if bytesSent == totalBytes && progress == 1 {
-                    failed = false
-                }
-            }, onSuccess: {
-                failed = TestHelpers.sha256(url: cacheURL) !=
-                    "b64fb87ce1e10bc7aa14e272262753200414f74a3059c5d7afb443c36be06531"
+            .download(filePath: cacheURL.path,
+                      progressUpdate: { bytesSent, totalBytes, progress in
+                        if bytesSent == totalBytes && progress == 1 {
+                            failed = false
+                        }
+                      },
+                      completionHandler: {
+                        failed = TestHelpers.sha256(url: cacheURL) !=
+                            "b64fb87ce1e10bc7aa14e272262753200414f74a3059c5d7afb443c36be06531"
 
-                expectation.fulfill()
-            }, onFailure: { (error, _) in
+                        expectation.fulfill()
+                      })
+            .failure { error in
                 failed = true
                 print(String(describing: error.localizedDescription))
                 expectation.fulfill()
-        })
+            }
 
         wait(for: [expectation], timeout: 500)
 
@@ -88,19 +90,22 @@ class TestDownloadOperations: XCTestCase {
         var failed = true
 
         router.request(for: .fileDownload)
-            .startDownload(filePath: "",
-                           progressUpdate: { bytesSent, totalBytes, progress in
-                if bytesSent == totalBytes && progress == 1 {
+            .download(filePath: "",
+                      progressUpdate: { bytesSent, totalBytes, progress in
+                        if bytesSent == totalBytes && progress == 1 {
+                            failed = false
+                        }
+                      },
+                      completionHandler: {
+                        failed = true
+                        expectation.fulfill()
+                      })
+            .failure { error in
+                if case .invalidFileURL = error {
                     failed = false
                 }
-            }, onSuccess: {
-                failed = true
                 expectation.fulfill()
-            }, onFailure: { (error, _) in
-                failed = false
-                print(String(describing: error.localizedDescription))
-                expectation.fulfill()
-        })
+            }
 
         wait(for: [expectation], timeout: 500)
 
