@@ -368,9 +368,9 @@ public final class Request: Operation {
         guard dataTask == nil else {
             return
         }
-        dataTask = SessionTaskFactoryDeprecated.makeUploadTask(with: self,
-                                                               progressUpdate: progress,
-                                                               completionHandler: { data, urlResponse in
+        dataTask = SessionTaskFactory.makeUploadTask(with: self,
+                                                     progressUpdate: progress,
+                                                     completionHandler: { data, urlResponse in
             self.successCompletionHandler?(data, urlResponse)
         }, onFailure: { error, data in
             self.failureCompletionHandler?(error, data, self.urlResponse)
@@ -384,10 +384,10 @@ public final class Request: Operation {
         guard dataTask == nil else {
             return
         }
-        dataTask = SessionTaskFactoryDeprecated.makeDownloadTask(with: self,
-                                                                 filePath: filePath,
-                                                                 progressUpdate: progressUpdate,
-                                                                 completionHandler: { data, urlResponse in
+        dataTask = SessionTaskFactory.makeDownloadTask(with: self,
+                                                       filePath: filePath,
+                                                       progressUpdate: progressUpdate,
+                                                       completionHandler: { data, urlResponse in
             self.successCompletionHandler?(Data(), urlResponse)
         }, onFailure: { error, data in
             self.failureCompletionHandler?(error, data, self.urlResponse)
