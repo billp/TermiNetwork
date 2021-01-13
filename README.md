@@ -421,7 +421,7 @@ The following Interceptor implementation tries to refresh the access token with 
 ```swift
 final class UnauthorizedInterceptor: InterceptorProtocol {
     let retryDelay: TimeInterval = 0.1
-	let retryLimit = 5
+    let retryLimit = 5
 
     func requestFinished(responseData data: Data?,
                          error: TNError?,
