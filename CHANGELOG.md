@@ -1,5 +1,20 @@
 # Changelog
 
+## [2.0.1](https://github.com/billp/TermiNetwork/tree/2.0.1) (2021-01-14)
+
+[Full Changelog](https://github.com/billp/TermiNetwork/compare/2.0.0...2.0.1)
+
+**Closed issues:**
+
+- Update TestPinning test cases to use the new response callbacks [\#14](https://github.com/billp/TermiNetwork/issues/14)
+- Fix testQueueFailureModeCancelAll test case [\#13](https://github.com/billp/TermiNetwork/issues/13)
+- Remove warning about operation queue when its finished but never started [\#12](https://github.com/billp/TermiNetwork/issues/12)
+
+**Merged pull requests:**
+
+- Remove warning about operation queue when its finished but never started \(fixes \#12\) [\#16](https://github.com/billp/TermiNetwork/pull/16) ([billp](https://github.com/billp))
+- Update TestPinning test cases to use the new response callbacks \(fixes \#14\) [\#15](https://github.com/billp/TermiNetwork/pull/15) ([billp](https://github.com/billp))
+
 ## [2.0.0](https://github.com/billp/TermiNetwork/tree/2.0.0) (2021-01-14)
 
 [Full Changelog](https://github.com/billp/TermiNetwork/compare/1.0.5...2.0.0)
