@@ -256,7 +256,7 @@ class TestQueueDeprecated: XCTestCase {
 
     func testQueueFailureModeContinue() {
         var numberOfRequests = 8
-        let queue = Queue(failureMode: .cancelAll)
+        let queue = Queue(failureMode: .continue)
         let expectation = XCTestExpectation(description: "testQueueFailureModeContinue")
         queue.maxConcurrentOperationCount = 1
 
