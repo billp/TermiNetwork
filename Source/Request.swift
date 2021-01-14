@@ -254,6 +254,12 @@ public final class Request: Operation {
     /// Cancels a request
     public override func cancel() {
         super.cancel()
+
+        /// Set executing to true in case it is not started
+        if !_executing {
+            _executing = true
+        }
+
         dataTask?.cancel()
     }
 
@@ -464,9 +470,9 @@ public final class Request: Operation {
         self._finished = true
 
         self.queue.afterOperationFinished(request: self,
-                                           data: data,
-                                           response: urlResponse,
-                                           tnError: error)
+                                          data: data,
+                                          response: urlResponse,
+                                          tnError: error)
         if !skipLogOnComplete {
             Log.logRequest(request: self,
                            data: data,

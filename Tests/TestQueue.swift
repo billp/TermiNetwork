@@ -262,7 +262,6 @@ class TestQueue: XCTestCase {
             let url = index == 5 ? "http://localhost.unkownhost" : "http://google.com"
 
             let call = Request(method: .get, url: url, headers: nil, params: nil)
-
             call.queue(queue)
                 .success(responseType: Data.self) { _ in
                     numberOfRequests -= 1
@@ -285,7 +284,7 @@ class TestQueue: XCTestCase {
 
     func testQueueFailureModeContinue() {
         var numberOfRequests = 8
-        let queue = Queue(failureMode: .cancelAll)
+        let queue = Queue(failureMode: .continue)
         let expectation = XCTestExpectation(description: "testQueueFailureModeContinue")
         queue.maxConcurrentOperationCount = 1
 
@@ -308,6 +307,6 @@ class TestQueue: XCTestCase {
 
         wait(for: [expectation], timeout: 60)
 
-        XCTAssert(queue.operationCount == 0)
+        XCTAssert(queue.operationCount == 0 && numberOfRequests == 1)
     }
 }
