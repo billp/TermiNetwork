@@ -1,4 +1,4 @@
-// TestPinning.swift
+// TestPinningDeprecated.swift
 //
 // Copyright © 2018-2021 Vasilis Panagiotopoulos. All rights reserved.
 //
@@ -20,7 +20,7 @@
 import XCTest
 import TermiNetwork
 
-class TestPinning: XCTestCase {
+class TestPinningDeprecated: XCTestCase {
 
     var bundle: Bundle = {
         return Bundle(for: TestPinning.self)
@@ -52,44 +52,42 @@ class TestPinning: XCTestCase {
     }
 
      func testValidCertificate() {
-        let expectation = XCTestExpectation(description: "testValidCertificate")
-        var failed = true
+           let expectation = XCTestExpectation(description: "testValidCertificate")
+           var failed = true
 
-        Request(route: APIRoute.testPinning(certPath: validCertPath))
-            .success(responseType: String.self) { _ in
+            let request = Request(route: APIRoute.testPinning(certPath: validCertPath))
+           request.start(responseType: String.self, onSuccess: { _ in
+               failed = false
+               expectation.fulfill()
+           }, onFailure: { _, _ in
+               failed = true
+               expectation.fulfill()
+           })
+
+           wait(for: [expectation], timeout: 100)
+
+           XCTAssert(!failed)
+       }
+
+       func testInvalidCertificate() {
+           let expectation = XCTestExpectation(description: "testInvalidCertificate")
+           var failed = true
+
+           let request = Request(route: APIRoute.testPinning(certPath: invalidCertPath))
+           request.start(responseType: String.self, onSuccess: { _ in
+                failed = true
+                expectation.fulfill()
+           }, onFailure: { error, _ in
+            if case .pinningError = error {
                 failed = false
-                expectation.fulfill()
-            }
-            .failure { _ in
+            } else {
                 failed = true
-                expectation.fulfill()
             }
+            expectation.fulfill()
+           })
 
-        wait(for: [expectation], timeout: 100)
+           wait(for: [expectation], timeout: 100)
 
-        XCTAssert(!failed)
-    }
-
-    func testInvalidCertificate() {
-        let expectation = XCTestExpectation(description: "testInvalidCertificate")
-        var failed = true
-
-        Request(route: APIRoute.testPinning(certPath: invalidCertPath))
-            .success(responseType: String.self) { _ in
-                failed = true
-                expectation.fulfill()
-            }
-            .failure { error in
-                if case .pinningError = error {
-                    failed = false
-                } else {
-                    failed = true
-                }
-                expectation.fulfill()
-            }
-
-        wait(for: [expectation], timeout: 100)
-
-        XCTAssert(!failed)
-    }
+           XCTAssert(!failed)
+       }
 }
