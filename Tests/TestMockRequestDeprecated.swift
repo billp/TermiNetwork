@@ -1,4 +1,4 @@
-// TestMockRequests.swift
+// TestMockRequestDeprecated.swift
 //
 // Copyright © 2018-2021 Vasilis Panagiotopoulos. All rights reserved.
 //
@@ -20,7 +20,7 @@
 import XCTest
 import TermiNetwork
 
-class TestMockRequests: XCTestCase {
+class TestMockRequestDeprecated: XCTestCase {
     static var envConfiguration: Configuration = {
         let conf = Configuration()
         conf.verbose = true
@@ -74,7 +74,7 @@ class TestMockRequests: XCTestCase {
     }
 
     var router2: Router<APIRoute> {
-        return Router<APIRoute>(configuration: TestMockRequests.mockDelayConfiguration)
+        return Router<APIRoute>(configuration: TestMockRequestDeprecated.mockDelayConfiguration)
     }
 
     override func setUp() {
@@ -92,11 +92,11 @@ class TestMockRequests: XCTestCase {
         let expectation = XCTestExpectation(description: "testEnvConfiguration")
         var failed = true
 
-        router.request(for: .testHeaders)
-            .success(responseType: TestHeaders.self) { response in
-                failed = !(response.customHeader == "yo man!!!!")
-                expectation.fulfill()
-            }
+        router.request(for: .testHeaders).start(responseType: TestHeaders.self,
+                                                onSuccess: { response in
+                                                    failed = !(response.customHeader == "yo man!!!!")
+                                                    expectation.fulfill()
+                                                }, onFailure: nil)
 
         wait(for: [expectation], timeout: 60)
 
@@ -107,52 +107,21 @@ class TestMockRequests: XCTestCase {
     func testMockDelay() {
         let expectation = XCTestExpectation(description: "testMockDelay")
         var failed = true
+        let now = Date().timeIntervalSince1970
+        router2.request(for: .testHeaders).start(responseType: TestHeaders.self,
+                                                 onSuccess: { response in
+                                                        let res = now.distance(to: Date().timeIntervalSince1970)
+                                                        let timeCheck = res >= TestMockRequestDeprecated
+                                                            .mockDelayConfiguration.mockDelay!.min
+                                                            && res <= TestMockRequestDeprecated
+                                                                .mockDelayConfiguration.mockDelay!.max
+                                                    failed = !(response.customHeader == "yo man!!!!" && timeCheck)
+                                                        expectation.fulfill()
+                                                    }, onFailure: nil)
 
-        let queue = Queue()
-        queue.maxConcurrentOperationCount = 20
-
-        queue.afterAllRequestsCallback = { _ in
-            expectation.fulfill()
-        }
-
-        for _ in 0..<100 {
-            let req = router2.request(for: .testHeaders)
-            req.configuration.verbose = false
-            req.queue(queue)
-               .success(responseType: TestHeaders.self) { response in
-                    let res = req.mockDelay ?? 0
-                    let timeCheck = res >= TestMockRequests
-                        .mockDelayConfiguration.mockDelay!.min
-                        && res <= TestMockRequests
-                            .mockDelayConfiguration.mockDelay!.max
-                    failed = failed && !(response.customHeader == "yo man!!!!" && timeCheck)
-               }
-        }
         wait(for: [expectation], timeout: 60)
 
         XCTAssert(!failed)
-    }
 
-    func testMockFailed() {
-        let expectation = XCTestExpectation(description: "testMockFailed")
-        var failed = true
-
-        let req = router2.request(for: .testOverrideHeaders)
-        req.configuration.verbose = false
-        req.success(responseType: TestHeaders.self) { _ in
-            failed = true
-            expectation.fulfill()
-        }
-        .failure { error in
-            if case .invalidMockData = error {
-                failed = false
-            } else {
-                failed = true
-            }
-            expectation.fulfill()
-        }
-        wait(for: [expectation], timeout: 60)
-
-        XCTAssert(!failed)
     }
 }

@@ -1,4 +1,4 @@
-// String+Extensions.swift
+// TestCache.swift
 //
 // Copyright © 2018-2021 Vasilis Panagiotopoulos. All rights reserved.
 //
@@ -17,14 +17,26 @@
 // FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
 // ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-import Foundation
+import XCTest
+@testable import TermiNetwork
 
-extension String {
-    var fileName: String {
-        return URL(fileURLWithPath: self).deletingPathExtension().lastPathComponent
+class TestCache: XCTestCase {
+
+    override func setUp() {
+        super.setUp()
     }
 
-    var fileExtension: String {
-        return URL(fileURLWithPath: self).pathExtension
+    override func tearDown() {
+        super.tearDown()
+    }
+
+    func testConfigureCache() {
+        let count = 200
+        let size = 1024*100*100
+
+        Cache.shared.configureCache(countLimit: count, size: size)
+
+        XCTAssert(Cache.shared.cache.countLimit == count)
+        XCTAssert(Cache.shared.cache.totalCostLimit == size)
     }
 }
