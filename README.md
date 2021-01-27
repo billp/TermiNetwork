@@ -20,7 +20,7 @@
 
 <hr />
 <p align="center"><i>
-🚀 <b>TermiNetwork</b> was tested with great success in a production environment with a heavy load of asynchronous requests and thousands of unique clients per day</i>.<p>
+🚀 <b>TermiNetwork</b> was tested with great success in a production environment with a heavy load of asynchronous requests and tens of thousands of unique clients per day</i>.<p>
 <hr />
 
 ## Features
