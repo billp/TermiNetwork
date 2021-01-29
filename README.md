@@ -1,4 +1,5 @@
 
+
 <p></p>
 <p align="center">
   <img src="https://raw.githubusercontent.com/billp/TermiNetwork/master/TermiNetworkLogo.svg" alt="" data-canonical-src="" width="80%" />
@@ -20,18 +21,28 @@
 
 <hr />
 <p align="center"><i>
-🚀 <b>TermiNetwork</b> was tested with great success in a production environment with a heavy load of asynchronous requests and tens of thousands of unique clients per day</i>.<p>
+🚀 <b>TermiNetwork</b> was tested in a production environment with a heavy load of asynchronous requests and tens of thousands of unique clients per day</i>.<p>
 <hr />
-
-## Features
-<p align="center">
-Multi-environment setup 🔸 Model deserialization with <b>Codables</b> 🔸 Choose the response type you want: <b>Codable</b>, <b>UIImage</b>, <b>Data</b> or <b>String</b> 🔸 <b>UIKit</b>/<b>SwiftUI</b> helpers for downloading remote images 🔸 Routers 🔸 Transformers (convert rest models to domain models) 🔸 Error handling 🔸 Interceptors 🔸 Mock responses 🔸 Certificate pinning  🔸 Flexible configuration  🔸 Middleware  🔸 File/Data Upload/Download 🔸 Pretty printed debug information
-</p>
-<br />
 <p align="center">
 <img alt="" data-canonical-src="" width="80%" src="https://user-images.githubusercontent.com/1566052/104446854-b33bc100-55a3-11eb-8a7b-9fcb51fc9a51.png" /><br /><br />
 <i>This is a low resolution diagram of <b>TermiNetwork</b> that shows how its componets are connected to each other.</I></p>
 <br />
+
+## Features
+🔸 Multi-environment setup 
+🔸 Model deserialization with <b>Codables</b> 
+🔸 Choose the response type you want: <b>Codable</b>, <b>UIImage</b>, <b>Data</b> or <b>String</b> 
+🔸 <b>UIKit</b>/<b>SwiftUI</b> helpers for downloading remote images 
+🔸 Organize your Requests with Routers
+🔸 Transformers: convert REST models to DOMAIN models
+🔸 Error Handling 
+🔸 Interceptors
+🔸 Mock Responses 
+🔸 Certificate Pinning  
+🔸 Flexible Configuration
+🔸 Middleware  
+🔸 File/Data Upload/Download 
+🔸 Pretty printed debug information
 
 #### Table of contents
 - [Installation](#installation)
