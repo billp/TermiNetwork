@@ -1,5 +1,6 @@
 
 
+
 <p></p>
 <p align="center">
   <img src="https://raw.githubusercontent.com/billp/TermiNetwork/master/TermiNetworkLogo.svg" alt="" data-canonical-src="" width="80%" />
@@ -18,11 +19,9 @@
   </a>
   <img src="https://billp.github.io/TermiNetwork/badge.svg" />
 </p>
-
-<hr />
-<p align="center"><i>
-🚀 <b>TermiNetwork</b> was tested in a production environment with a heavy load of asynchronous requests and tens of thousands of unique clients per day</i>.<p>
-<hr />
+<p align="center">
+🚀 <i><b>TermiNetwork</b> was tested in a production environment with a heavy load of asynchronous requests and tens of thousands of unique clients per day</i>.<p>
+<br />
 <p align="center">
 <img alt="" data-canonical-src="" width="80%" src="https://user-images.githubusercontent.com/1566052/104446854-b33bc100-55a3-11eb-8a7b-9fcb51fc9a51.png" /><br /><br />
 <i>This is a low resolution diagram of <b>TermiNetwork</b> that shows how its componets are connected to each other.</I></p>
