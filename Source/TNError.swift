@@ -67,6 +67,8 @@ public enum TNError: Error {
     case cannotReadResponseHeaders
     /// Thrown when the response is empty.
     case emptyResponse
+    /// Thrown the reachability core function call cannot be itialized.
+    case reachabilityError
 }
 
 extension TNError: LocalizedError {
@@ -121,6 +123,8 @@ extension TNError: LocalizedError {
             return NSLocalizedString("Certificate pinning failed validation.", comment: "TNError")
         case .emptyResponse:
             return NSLocalizedString("The response should not be empty.", comment: "TNError")
+        case .reachabilityError:
+            return NSLocalizedString("Cannot initialize reachability.", comment: "TNError")
         }
     }
 }

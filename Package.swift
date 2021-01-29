@@ -17,7 +17,7 @@ let package = Package(
     targets: [
         .target(
             name: "TermiNetwork",
-	    path: "Source")
+            path: "Source")
     ],
     swiftLanguageVersions: [.v5]
 )
