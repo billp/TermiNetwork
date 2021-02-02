@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.1.1](https://github.com/billp/TermiNetwork/tree/2.1.1) (2021-02-02)
+
+[Full Changelog](https://github.com/billp/TermiNetwork/compare/2.1.0...2.1.1)
+
+## [2.1.0](https://github.com/billp/TermiNetwork/tree/2.1.0) (2021-02-02)
+
+[Full Changelog](https://github.com/billp/TermiNetwork/compare/2.0.1...2.1.0)
+
+**Merged pull requests:**
+
+- Disable Reachability for watchOS \(\#22\) [\#23](https://github.com/billp/TermiNetwork/pull/23) ([billp](https://github.com/billp))
+- Add network reachability \(\#18\) [\#21](https://github.com/billp/TermiNetwork/pull/21) ([billp](https://github.com/billp))
+
 ## [2.0.1](https://github.com/billp/TermiNetwork/tree/2.0.1) (2021-01-14)
 
 [Full Changelog](https://github.com/billp/TermiNetwork/compare/2.0.0...2.0.1)
