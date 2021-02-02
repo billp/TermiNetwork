@@ -51,6 +51,11 @@ struct DemoApp: Identifiable {
                destination: AnyView(EncryptedCommunicationView())
            ),
            DemoApp(
+                name: "Reachability",
+                description: "Monitor network state changes",
+                destination: AnyView(Reachability())
+            ),
+           DemoApp(
                name: "File Uploader",
                description: "Upload files with progress",
                destination: AnyView(FileUploader())

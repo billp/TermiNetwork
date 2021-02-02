@@ -28,22 +28,23 @@
 <br />
 
 ## Features
-🔸 Multi-environment setup <br />
-🔸 Model deserialization with <b>Codables</b><br />
-🔸 Choose the response type you want: <b>Codable</b>, <b>UIImage</b>, <b>Data</b> or <b>String</b><br />
-🔸 <b>UIKit</b>/<b>SwiftUI</b> helpers for downloading remote images<br />
-🔸 Organize your Requests with Routers<br />
-🔸 Transformers: convert REST models to DOMAIN models<br />
-🔸 Error Handling<br />
-🔸 Interceptors<br />
-🔸 Mock Responses<br />
-🔸 Certificate Pinning<br />
-🔸 Flexible Configuration<br />
-🔸 Middleware<br />
-🔸 File/Data Upload/Download<br />
-🔸 Pretty printed debug information
+⇨ Multi-environment setup <br />
+⇨ Model deserialization with <b>Codables</b><br />
+⇨ Choose the response type you want: <b>Codable</b>, <b>UIImage</b>, <b>Data</b> or <b>String</b><br />
+⇨ <b>UIKit</b>/<b>SwiftUI</b> helpers for downloading remote images<br />
+⇨ Organize your Requests with Routers<br />
+⇨ Reachability<br />
+⇨ Transformers: convert REST models to DOMAIN models<br />
+⇨ Error Handling<br />
+⇨ Interceptors<br />
+⇨ Mock Responses<br />
+⇨ Certificate Pinning<br />
+⇨ Flexible Configuration<br />
+⇨ Middleware<br />
+⇨ File/Data Upload/Download<br />
+⇨ Pretty printed debug information
 
-#### Table of contents
+### Table of contents
 - [Installation](#installation)
 - [Demo Application](#demo_app)
 - [Usage](#usage)
@@ -55,6 +56,7 @@
 	  - [Make a request](#construct_request)
 - [Queue Hooks](#queue_hooks)
 - [Error Handling](#error_handling)
+- [Reachability](#reachability)
 - [Transformers](#transformers)
 - [Mock responses](#mock_responses)
 - [Interceptors](#interceptors)
@@ -343,6 +345,26 @@ Router<TodosRoute>().request(for: .add(title: "Go shopping!"))
                debugPrint("Error: " + error.localizedDescription)
        }
 ```
+
+<a name="reachability"></a>
+## Reachability
+With Reachability you can monitor the network state of the device, like whether it is connected through wifi or cellular network.
+#### Example
+
+```swift
+let reachability = Reachability()
+try? reachability.monitorState { state in
+    switch state {
+    case .wifi:
+        // Connected through wifi
+    case .cellular:
+        // Connected through cellular network
+    case .unavailable:
+        // No connection
+    }
+}
+```
+
 <a name="transformers"></a>
 ## Transformers
 
@@ -488,7 +510,7 @@ configuration.interceptors = [UnauthorizedInterceptor.self]
 TermiNetwork provides two different helpers for setting remote images.
 <a name="swift_ui_image_helper"></a>
 ### SwiftUI Image Helper
-#### Example
+#### Examples
 1.  **Example with URL**
 
 	```swift

@@ -1,6 +1,33 @@
 {
   "warnings": [
-
+    {
+      "file": "/Users/billpanagiotopoulos/Projects/TermiNetwork/Source/Reachability.swift",
+      "line": 25,
+      "symbol": "ReachabilityState.wifi",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/billpanagiotopoulos/Projects/TermiNetwork/Source/Reachability.swift",
+      "line": 26,
+      "symbol": "ReachabilityState.cellular",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/billpanagiotopoulos/Projects/TermiNetwork/Source/Reachability.swift",
+      "line": 27,
+      "symbol": "ReachabilityState.unavailable",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/billpanagiotopoulos/Projects/TermiNetwork/Source/Reachability.swift",
+      "line": 51,
+      "symbol": "Reachability.init(hostname:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    }
   ],
   "source_directory": "/Users/billpanagiotopoulos/Projects/TermiNetwork"
 }
