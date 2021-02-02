@@ -1268,6 +1268,7 @@
 					"@loader_path/Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MARKETING_VERSION = 2.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.billp.TermiNetwork;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				RESOURCES_TARGETED_DEVICE_FAMILY = "";
@@ -1299,6 +1300,7 @@
 					"@loader_path/Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MARKETING_VERSION = 2.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.billp.TermiNetwork;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				RESOURCES_TARGETED_DEVICE_FAMILY = "";
@@ -1366,6 +1368,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 2.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.billp.TermiNetworkExamples;
 				PRODUCT_NAME = TermiNetworkExamples;
 				SDKROOT = iphoneos;
@@ -1388,6 +1391,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 2.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.billp.TermiNetworkExamples;
 				PRODUCT_NAME = TermiNetworkExamples;
 				SDKROOT = iphoneos;

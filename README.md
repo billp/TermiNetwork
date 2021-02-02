@@ -74,14 +74,14 @@ You can install **TermiNetwork** with one of the following ways...
 
 Add the following line to your **Podfile** and run **pod install** in your terminal:
 ```ruby
-pod 'TermiNetwork', '~> 2.0.1'
+pod 'TermiNetwork', '~> 2.1.0'
 ```
 
 ### Carthage
 
 Add the following line to your **Carthage** and run **carthage update** in your terminal:
 ```ruby
-github "billp/TermiNetwork" ~> 2.0.1
+github "billp/TermiNetwork" ~> 2.1.0
 ```
 
 ### Swift Package Manager
