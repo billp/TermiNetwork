@@ -28,21 +28,21 @@
 <br />
 
 ## Features
-➡️ Multi-environment setup <br />
-➡️ Model deserialization with <b>Codables</b><br />
-➡️ Choose the response type you want: <b>Codable</b>, <b>UIImage</b>, <b>Data</b> or <b>String</b><br />
-➡️ <b>UIKit</b>/<b>SwiftUI</b> helpers for downloading remote images<br />
-➡️ Organize your Requests with Routers<br />
-➡️ Reachability<br />
-➡️ Transformers: convert REST models to DOMAIN models<br />
-➡️ Error Handling<br />
-➡️ Interceptors<br />
-➡️ Mock Responses<br />
-➡️ Certificate Pinning<br />
-➡️ Flexible Configuration<br />
-➡️ Middleware<br />
-➡️ File/Data Upload/Download<br />
-➡️ Pretty printed debug information
+➡️ &nbsp;Multi-environment setup <br />
+➡️ &nbsp;Model deserialization with <b>Codables</b><br />
+➡️ &nbsp;Choose the response type you want: <b>Codable</b>, <b>UIImage</b>, <b>Data</b> or <b>String</b><br />
+➡️ &nbsp;<b>UIKit</b>/<b>SwiftUI</b> helpers for downloading remote images<br />
+➡️ &nbsp;Organize your Requests with Routers<br />
+➡️ &nbsp;Reachability<br />
+➡️ &nbsp;Transformers: convert REST models to DOMAIN models<br />
+➡️ &nbsp;Error Handling<br />
+➡️ &nbsp;Interceptors<br />
+➡️ &nbsp;Mock Responses<br />
+➡️ &nbsp;Certificate Pinning<br />
+➡️ &nbsp;Flexible Configuration<br />
+➡️ &nbsp;Middleware<br />
+➡️ &nbsp;File/Data Upload/Download<br />
+➡️ &nbsp;Pretty printed debug information
 
 ### Table of contents
 - [Installation](#installation)
