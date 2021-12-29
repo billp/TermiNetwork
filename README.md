@@ -12,14 +12,14 @@
   <img src="https://img.shields.io/github/license/billp/TermiNetwork" />
   <img src="https://img.shields.io/cocoapods/p/TermiNetwork" />
   <a href="https://codecov.io/gh/billp/TermiNetwork">
-    <img src="https://codecov.io/gh/billp/TermiNetwork/branch/master/graph/badge.svg?token=QI9KOV99AG"/>
+    <img src="https://codecov.io/gh/billp/TermiNetwork/branch/master/graph/badge.svg?token=QI9KOV99AG" />
   </a>
   <img src="https://billp.github.io/TermiNetwork/badge.svg" />
 </p>
 <p align="center">
 🚀 <i><b>TermiNetwork</b> has been tested in a production environment with a heavy load of asynchronous requests and tens of thousands of unique clients per day</i>.
-<br /><br />
-<img alt="" data-canonical-src="" alt="TermiNetworkDiagram" src="https://user-images.githubusercontent.com/1566052/147611305-f98fd35b-0125-4f21-ae15-52ad6d215b7c.png" />
+<img alt="" data-canonical-src="" alt="TermiNetworkDiagram" src="https://user-images.githubusercontent.com/1566052/147670852-89f59e53-22bb-4087-a1c3-f2156a201a5b.png" />
+<br />
 <i>This is a high level diagram of <b>TermiNetwork</b> showing how its componets are connected to each other.</I>
 <br /><br />
 	
