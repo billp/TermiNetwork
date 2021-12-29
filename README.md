@@ -28,21 +28,21 @@
 <a href="https://apps.apple.com/us/app/car-gr/id1278899131"><img width="100em" src="https://user-images.githubusercontent.com/1566052/147670506-589b271f-f4b7-4c81-a2de-94507f1980c0.png" /></a>
 
 ## Features
-▫️ Multi-environment setup <br />
-▫️ Model deserialization with <b>Codables</b><br />
-▫️ Decode response in the appropriate response type: <b>Codable</b>, <b>UIImage</b>, <b>Data</b> or <b>String</b><br />
-▫️ <b>UIKit</b>/<b>SwiftUI</b> helpers for downloading remote images<br />
-▫️ Group your Requests in Routers<br />
-▫️ Reachability support<br />
-▫️ Transformers: convert models from one type to another easily<br />
-▫️ Error Handling<br />
-▫️ Interceptors<br />
-▫️ Mock Responses<br />
-▫️ Certificate Pinning<br />
-▫️ Flexible Configuration<br />
-▫️ Middleware<br />
-▫️ File/Data Upload/Download<br />
-▫️ Pretty printed debug information
+- [x] Multi-environment setup <br />
+- [x] Model deserialization with <b>Codables</b><br />
+- [x] Decode response in the appropriate response type: <b>Codable</b>, <b>UIImage</b>, <b>Data</b> or <b>String</b><br />
+- [x] <b>UIKit</b>/<b>SwiftUI</b> helpers for downloading remote images<br />
+- [x] Group your Requests in Routers<br />
+- [x] Reachability support<br />
+- [x] Transformers: convert models from one type to another easily<br />
+- [x] Error Handling<br />
+- [x] Interceptors<br />
+- [x] Mock Responses<br />
+- [x] Certificate Pinning<br />
+- [x] Flexible Configuration<br />
+- [x] Middleware<br />
+- [x] File/Data Upload/Download<br />
+- [x] Pretty printed debug information
 
 ### Table of contents
 - [Installation](#installation)
