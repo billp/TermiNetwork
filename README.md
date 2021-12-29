@@ -3,7 +3,7 @@
 
 <p></p>
 <p align="center">
-  <img src="https://raw.githubusercontent.com/billp/TermiNetwork/master/TermiNetworkLogo.svg" alt="" data-canonical-src="" width="80%" />
+  <img src="https://raw.githubusercontent.com/billp/TermiNetwork/issue-26-Support_Xcode_13_x/TermiNetworkLogo.svg" alt="" data-canonical-src="" width="500rem" />
 </p>
 
 <p align="center"><b> A zero-dependency networking solution for building modern and secure iOS, watchOS, macOS and tvOS applications.</b>
@@ -20,29 +20,28 @@
   <img src="https://billp.github.io/TermiNetwork/badge.svg" />
 </p>
 <p align="center">
-🚀 <i><b>TermiNetwork</b> was tested in a production environment with a heavy load of asynchronous requests and tens of thousands of unique clients per day</i>.<p>
-<br />
-<p align="center">
-<img alt="" data-canonical-src="" width="80%" src="https://user-images.githubusercontent.com/1566052/104446854-b33bc100-55a3-11eb-8a7b-9fcb51fc9a51.png" /><br /><br />
-<i>This is a low resolution diagram of <b>TermiNetwork</b> that shows how its componets are connected to each other.</I></p>
-<br />
+🚀 <i><b>TermiNetwork</b> has been tested in a production environment with a heavy load of asynchronous requests and tens of thousands of unique clients per day</i>.
+<br /><br />
+<img alt="" data-canonical-src="" alt="TermiNetworkDiagram" src="https://user-images.githubusercontent.com/1566052/147611305-f98fd35b-0125-4f21-ae15-52ad6d215b7c.png" />
+<i>This is a high level diagram of <b>TermiNetwork</b> showing how its componets are connected to each other.</I>
+<br /><br />
 
 ## Features
-➡️ &nbsp;Multi-environment setup <br />
-➡️ &nbsp;Model deserialization with <b>Codables</b><br />
-➡️ &nbsp;Choose the response type you want: <b>Codable</b>, <b>UIImage</b>, <b>Data</b> or <b>String</b><br />
-➡️ &nbsp;<b>UIKit</b>/<b>SwiftUI</b> helpers for downloading remote images<br />
-➡️ &nbsp;Organize your Requests with Routers<br />
-➡️ &nbsp;Reachability<br />
-➡️ &nbsp;Transformers: convert REST models to DOMAIN models<br />
-➡️ &nbsp;Error Handling<br />
-➡️ &nbsp;Interceptors<br />
-➡️ &nbsp;Mock Responses<br />
-➡️ &nbsp;Certificate Pinning<br />
-➡️ &nbsp;Flexible Configuration<br />
-➡️ &nbsp;Middleware<br />
-➡️ &nbsp;File/Data Upload/Download<br />
-➡️ &nbsp;Pretty printed debug information
+▫️ Multi-environment setup <br />
+▫️ Model deserialization with <b>Codables</b><br />
+▫️ Decode response in the appropriate response type: <b>Codable</b>, <b>UIImage</b>, <b>Data</b> or <b>String</b><br />
+▫️ <b>UIKit</b>/<b>SwiftUI</b> helpers for downloading remote images<br />
+▫️ Group your Requests in Routers<br />
+▫️ Reachability support<br />
+▫️ Transformers: convert models from one type to another easily<br />
+▫️ Error Handling<br />
+▫️ Interceptors<br />
+▫️ Mock Responses<br />
+▫️ Certificate Pinning<br />
+▫️ Flexible Configuration<br />
+▫️ Middleware<br />
+▫️ File/Data Upload/Download<br />
+▫️ Pretty printed debug information
 
 ### Table of contents
 - [Installation](#installation)

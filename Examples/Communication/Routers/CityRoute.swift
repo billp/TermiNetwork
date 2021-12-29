@@ -33,23 +33,23 @@ enum CityRoute: RouteProtocol {
         switch self {
         case .cities:
             return RouteConfiguration(method: .get,
-                                        path: .path(["cities"]),
-                                        mockFilePath:
+                                      path: .path(["cities"]),
+                                      mockFilePath:
                                             .path(["Cities", "cities.json"]))
         case .city(let id):
             return RouteConfiguration(method: .get,
-                                        path: .path(["city", String(id)]),
-                                        mockFilePath:
+                                      path: .path(["city", String(id)]),
+                                      mockFilePath:
                                             .path(["Cities", "Details", String(format: "%i.json", id)]))
         case .thumb(let city):
             return RouteConfiguration(method: .get,
-                                        path: .path([city.thumb ?? ""]),
-                                        mockFilePath:
+                                      path: .path([city.thumb ?? ""]),
+                                      mockFilePath:
                                             .path(["Cities", "Thumbs", String(format: "%i.jpg", city.cityID)]))
         case .image(let city):
             return RouteConfiguration(method: .get,
-                                        path: .path([city.image ?? ""]),
-                                        mockFilePath:
+                                      path: .path([city.image ?? ""]),
+                                      mockFilePath:
                                             .path(["Cities", "Images", String(format: "%i.jpg", city.cityID)]))
         case .pinning(let configuration):
             return RouteConfiguration(

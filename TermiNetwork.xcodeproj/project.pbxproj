@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		23B36A0D277BB6D100A270B7 /* CryptoSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 23B36A0C277BB6D100A270B7 /* CryptoSwift */; };
 		F309C0ED25A512AB00D10877 /* Request+ResponseTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = F309C0EC25A512AB00D10877 /* Request+ResponseTypes.swift */; };
 		F30A298A258787320046C8E6 /* MiscRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = F30A2989258787320046C8E6 /* MiscRoute.swift */; };
 		F30A298E2587881D0046C8E6 /* RSEncryptedModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F30A298D258788180046C8E6 /* RSEncryptedModel.swift */; };
@@ -49,8 +50,6 @@
 		F32BB57B25A8ADCE00E6E096 /* StatusCodeTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F32BB57A25A8ADCE00E6E096 /* StatusCodeTransformer.swift */; };
 		F32C3D13243E499E004497BC /* TestPinning.swift in Sources */ = {isa = PBXBuildFile; fileRef = F32C3D12243E499E004497BC /* TestPinning.swift */; };
 		F3309DB4258AA05700BB018D /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F3309DB3258AA05700BB018D /* Launch Screen.storyboard */; };
-		F3309DBF258ABF1200BB018D /* CryptoSwift in Frameworks */ = {isa = PBXBuildFile; productRef = F3309DBE258ABF1200BB018D /* CryptoSwift */; };
-		F3309DE7258AC45800BB018D /* CryptoSwift in Frameworks */ = {isa = PBXBuildFile; productRef = F3309DE6258AC45800BB018D /* CryptoSwift */; };
 		F3319E9C246AD71C00D94AFE /* MultipartFormDataPartType.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3319E9B246AD71C00D94AFE /* MultipartFormDataPartType.swift */; };
 		F333429A25792E9D0087BDBA /* ErrorModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F333429925792E9D0087BDBA /* ErrorModel.swift */; };
 		F3354D7825C737F600E02BC3 /* TestReachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3354D7725C737F600E02BC3 /* TestReachability.swift */; };
@@ -168,6 +167,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		23B36A07277BB5B800A270B7 /* CryptoKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CryptoKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS15.2.sdk/System/Library/Frameworks/CryptoKit.framework; sourceTree = DEVELOPER_DIR; };
 		F309C0EC25A512AB00D10877 /* Request+ResponseTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Request+ResponseTypes.swift"; sourceTree = "<group>"; };
 		F30A2986258783B40046C8E6 /* CryptoMiddleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoMiddleware.swift; sourceTree = "<group>"; };
 		F30A2989258787320046C8E6 /* MiscRoute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiscRoute.swift; sourceTree = "<group>"; };
@@ -305,6 +305,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				23B36A0D277BB6D100A270B7 /* CryptoSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -313,7 +314,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				F3196837243D01E1008725CE /* TermiNetwork.framework in Frameworks */,
-				F3309DBF258ABF1200BB018D /* CryptoSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -322,7 +322,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				F3D16EC82575299900F7B523 /* TermiNetwork.framework in Frameworks */,
-				F3309DE7258AC45800BB018D /* CryptoSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -771,6 +770,7 @@
 		F3D16EC72575299900F7B523 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				23B36A07277BB5B800A270B7 /* CryptoKit.framework */,
 				F39474D725C8A1730084CB25 /* SystemConfiguration.framework */,
 			);
 			name = Frameworks;
@@ -815,6 +815,7 @@
 			);
 			name = TermiNetwork;
 			packageProductDependencies = (
+				23B36A0C277BB6D100A270B7 /* CryptoSwift */,
 			);
 			productName = TermiNetwork;
 			productReference = F319682D243D01E1008725CE /* TermiNetwork.framework */;
@@ -836,7 +837,6 @@
 			);
 			name = TermiNetworkTests;
 			packageProductDependencies = (
-				F3309DBE258ABF1200BB018D /* CryptoSwift */,
 			);
 			productName = TermiNetworkTests;
 			productReference = F3196836243D01E1008725CE /* TermiNetworkTests.xctest */;
@@ -858,7 +858,6 @@
 			);
 			name = "TermiNetworkExamples (iOS)";
 			packageProductDependencies = (
-				F3309DE6258AC45800BB018D /* CryptoSwift */,
 			);
 			productName = "TermiNetworkExamples (iOS)";
 			productReference = F3556080257527C40047D46D /* TermiNetworkExamples.app */;
@@ -897,7 +896,7 @@
 			);
 			mainGroup = F3196823243D01E1008725CE;
 			packageReferences = (
-				F3309DBD258ABF1200BB018D /* XCRemoteSwiftPackageReference "CryptoSwift" */,
+				23B36A0B277BB6D100A270B7 /* XCRemoteSwiftPackageReference "CryptoSwift" */,
 			);
 			productRefGroup = F319682E243D01E1008725CE /* Products */;
 			projectDirPath = "";
@@ -959,7 +958,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if which swiftlint >/dev/null; then\n    swiftlint --path \"$PROJECT_DIR/Source\" --config \"$PROJECT_DIR/.swiftlint.yml\"\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+			shellScript = "export PATH=\"/opt/homebrew/bin/:$PATH\"\nif which swiftlint >/dev/null; then\n    swiftlint --path \"$PROJECT_DIR/Source\" --config \"$PROJECT_DIR/.swiftlint.yml\"\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
 		};
 		F3196885243D0904008725CE /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1443,25 +1442,20 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		F3309DBD258ABF1200BB018D /* XCRemoteSwiftPackageReference "CryptoSwift" */ = {
+		23B36A0B277BB6D100A270B7 /* XCRemoteSwiftPackageReference "CryptoSwift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/krzyzanowskim/CryptoSwift";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 1.3.8;
+				minimumVersion = 1.0.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		F3309DBE258ABF1200BB018D /* CryptoSwift */ = {
+		23B36A0C277BB6D100A270B7 /* CryptoSwift */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = F3309DBD258ABF1200BB018D /* XCRemoteSwiftPackageReference "CryptoSwift" */;
-			productName = CryptoSwift;
-		};
-		F3309DE6258AC45800BB018D /* CryptoSwift */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = F3309DBD258ABF1200BB018D /* XCRemoteSwiftPackageReference "CryptoSwift" */;
+			package = 23B36A0B277BB6D100A270B7 /* XCRemoteSwiftPackageReference "CryptoSwift" */;
 			productName = CryptoSwift;
 		};
 /* End XCSwiftPackageProductDependency section */

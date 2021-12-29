@@ -24,7 +24,7 @@ extension Request {
 
     func makeResponseFailureHandler(responseHandler: @escaping (TNError) -> Void)
                             -> (TNError, Data?, URLResponse?) -> Void {
-        return { error, data, urlResponse  in
+        return { error, data, _  in
             self.handleDataTaskCompleted(with: data,
                                          error: error,
                                          onFailureCallback: { responseHandler(error) })
@@ -71,7 +71,7 @@ extension Request {
     func makeDecodableResponseFailureHandler<T: Decodable>(decodableType: T.Type,
                                                            responseHandler: @escaping (T?, TNError) -> Void)
                             -> (TNError, Data?, URLResponse?) -> Void {
-        return { error, data, urlResponse  in
+        return { error, data, _  in
             // Check to see if there is already a deserialization error from success
             if case .cannotDeserialize = error {
                 responseHandler(nil, error)
