@@ -393,7 +393,7 @@ public final class Request: Operation {
         dataTask = SessionTaskFactory.makeDownloadTask(with: self,
                                                        filePath: filePath,
                                                        progressUpdate: progressUpdate,
-                                                       completionHandler: { data, urlResponse in
+                                                       completionHandler: { _, urlResponse in
             self.successCompletionHandler?(Data(), urlResponse)
         }, onFailure: { error, data in
             self.failureCompletionHandler?(error, data, self.urlResponse)

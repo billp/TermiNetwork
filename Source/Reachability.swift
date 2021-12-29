@@ -113,7 +113,7 @@ open class Reachability {
                         .passRetained(self)
                         .toOpaque()
 
-        let callback: SCNetworkReachabilityCallBack = { (reachability, flags, info) in
+        let callback: SCNetworkReachabilityCallBack = { (_, flags, info) in
             guard let info = info else { return }
 
             Unmanaged<Reachability>.fromOpaque(info)

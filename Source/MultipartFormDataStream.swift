@@ -221,7 +221,7 @@ internal class MultipartFormDataStream: NSObject, StreamDelegate {
 
         data.withUnsafeBytes { buffer in
             var maxLength = 0
-            if case .stream(_, _) = currentBodyPart {
+            if case .stream = currentBodyPart {
                 currentOffset = 0
                 maxLength = count < Constants.bufferSize ? count : Constants.bufferSize
             } else {
