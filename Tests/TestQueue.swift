@@ -38,7 +38,7 @@ class TestQueue: XCTestCase {
         let queue = Queue()
         let expectation = XCTestExpectation(description: "testQueue")
 
-        queue.afterAllRequestsCallback = { error in
+        queue.afterAllRequestsCallback = { _ in
             expectation.fulfill()
         }
 
@@ -194,7 +194,7 @@ class TestQueue: XCTestCase {
             expectation.fulfill()
         }
 
-        queue.beforeEachRequestCallback = { req in
+        queue.beforeEachRequestCallback = { _ in
             startedRequests += 1
         }
 
@@ -224,7 +224,7 @@ class TestQueue: XCTestCase {
         let queue = Queue()
         let expectation = XCTestExpectation(description: "testQueueCancellation")
 
-        queue.afterAllRequestsCallback = { error in
+        queue.afterAllRequestsCallback = { _ in
             DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: {
                 expectation.fulfill()
             })
@@ -267,7 +267,7 @@ class TestQueue: XCTestCase {
                     numberOfRequests -= 1
                 }
                 .failure { error in
-                    if case .cancelled(_) = error {
+                    if case .cancelled = error {
                     } else {
                         numberOfRequests -= 1
                     }
@@ -288,7 +288,7 @@ class TestQueue: XCTestCase {
         let expectation = XCTestExpectation(description: "testQueueFailureModeContinue")
         queue.maxConcurrentOperationCount = 1
 
-        queue.afterAllRequestsCallback = { error in
+        queue.afterAllRequestsCallback = { _ in
             DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: {
                 expectation.fulfill()
             })

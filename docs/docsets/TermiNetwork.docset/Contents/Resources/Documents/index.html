@@ -20,27 +20,27 @@
     <header class="header">
       <p class="header-col header-col--primary">
         <a class="header-link" href="index.html">
-          TermiNetwork 2.1.0 Docs
+          TermiNetwork 3.0.0 Docs
         </a>
          (100% documented)
       </p>
     
-      <p class="header-col--secondary">
+      <div class="header-col--secondary">
         <form role="search" action="search.json">
           <input type="text" placeholder="Search documentation" data-typeahead>
         </form>
-      </p>
+      </div>
     
         <p class="header-col header-col--secondary">
           <a class="header-link" href="https://github.com/billp/TermiNetwork">
-            <img class="header-icon" src="img/gh.png"/>
+            <img class="header-icon" src="img/gh.png" alt="GitHub"/>
             View on GitHub
           </a>
         </p>
     
         <p class="header-col header-col--secondary">
           <a class="header-link" href="dash-feed://https%3A%2F%2Fbillp.github.io%2FTermiNetwork%2Fdocsets%2FTermiNetwork.xml">
-            <img class="header-icon" src="img/dash.png"/>
+            <img class="header-icon" src="img/dash.png" alt="Dash"/>
             Install in Dash
           </a>
         </p>
@@ -48,7 +48,7 @@
 
     <p class="breadcrumbs">
       <a class="breadcrumb" href="index.html">TermiNetwork Reference</a>
-      <img class="carat" src="img/carat.png" />
+      <img class="carat" src="img/carat.png" alt=""/>
       TermiNetwork  Reference
     </p>
 
@@ -224,7 +224,7 @@
             <p></p>
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/billp/TermiNetwork/master/TermiNetworkLogo.svg" alt="" data-canonical-src="" width="80%" />
+  <img src="https://raw.githubusercontent.com/billp/TermiNetwork/master/TermiNetworkLogo.svg" alt="" data-canonical-src="" width="500rem" />
 </p>
 
 <p align="center"><b> A zero-dependency networking solution for building modern and secure iOS, watchOS, macOS and tvOS applications.</b>
@@ -236,36 +236,38 @@
   <img src="https://img.shields.io/github/license/billp/TermiNetwork" />
   <img src="https://img.shields.io/cocoapods/p/TermiNetwork" />
   <a href="https://codecov.io/gh/billp/TermiNetwork">
-    <img src="https://codecov.io/gh/billp/TermiNetwork/branch/master/graph/badge.svg?token=QI9KOV99AG"/>
+    <img src="https://codecov.io/gh/billp/TermiNetwork/branch/master/graph/badge.svg?token=QI9KOV99AG" />
   </a>
   <img src="https://billp.github.io/TermiNetwork/badge.svg" />
 </p>
 
-<p align="center">
-🚀 <i><b>TermiNetwork</b> was tested in a production environment with a heavy load of asynchronous requests and tens of thousands of unique clients per day</i>.<p>
+<p><p align="center">
+🚀 <i><b>TermiNetwork</b> has been tested in a production environment with a heavy load of asynchronous requests and tens of thousands of unique clients per day</i>.
+<br /><br />
+<img alt="" data-canonical-src="" alt="TermiNetworkDiagram" src="https://raw.githubusercontent.com/billp/TermiNetwork/master/TermiNetworkDiagram.svg" />
 <br />
-<p align="center">
-<img alt="" data-canonical-src="" width="80%" src="https://user-images.githubusercontent.com/1566052/104446854-b33bc100-55a3-11eb-8a7b-9fcb51fc9a51.png" /><br /><br />
-<i>This is a low resolution diagram of <b>TermiNetwork</b> that shows how its componets are connected to each other.</I></p>
+<i>This is a high level diagram of <b>TermiNetwork</b> showing how its componets are connected to each other.</I>
+<br /><br /></p>
+<h1 id='who-39-s-using-terminetwork' class='heading'>Who&rsquo;s using TermiNetwork</h1>
 
-<p><br /></p>
+<p><a href="https://apps.apple.com/us/app/car-gr/id1278899131"><img width="100em" src="https://user-images.githubusercontent.com/1566052/147670506-589b271f-f4b7-4c81-a2de-94507f1980c0.png" /></a></p>
 <h2 id='features' class='heading'>Features</h2>
 
-<p>⇨ Multi-environment setup <br />
-⇨ Model deserialization with <b>Codables</b><br />
-⇨ Choose the response type you want: <b>Codable</b>, <b>UIImage</b>, <b>Data</b> or <b>String</b><br />
-⇨ <b>UIKit</b>/<b>SwiftUI</b> helpers for downloading remote images<br />
-⇨ Organize your Requests with Routers<br />
-⇨ Reachability<br />
-⇨ Transformers: convert REST models to DOMAIN models<br />
-⇨ Error Handling<br />
-⇨ Interceptors<br />
-⇨ Mock Responses<br />
-⇨ Certificate Pinning<br />
-⇨ Flexible Configuration<br />
-⇨ Middleware<br />
-⇨ File/Data Upload/Download<br />
-⇨ Pretty printed debug information</p>
+<p>▫️ Multi-environment setup <br />
+▫️ Model deserialization with <b>Codables</b><br />
+▫️ Decode response in the appropriate response type: <b>Codable</b>, <b>UIImage</b>, <b>Data</b> or <b>String</b><br />
+▫️ <b>UIKit</b>/<b>SwiftUI</b> helpers for downloading remote images<br />
+▫️ Group your Requests in Routers<br />
+▫️ Reachability support<br />
+▫️ Transformers: convert models from one type to another easily<br />
+▫️ Error Handling<br />
+▫️ Interceptors<br />
+▫️ Mock Responses<br />
+▫️ Certificate Pinning<br />
+▫️ Flexible Configuration<br />
+▫️ Middleware<br />
+▫️ File/Data Upload/Download<br />
+▫️ Pretty printed debug information</p>
 <h3 id='table-of-contents' class='heading'>Table of contents</h3>
 
 <ul>
@@ -307,12 +309,12 @@
 <h3 id='cocoapods' class='heading'>CocoaPods</h3>
 
 <p>Add the following line to your <strong>Podfile</strong> and run <strong>pod install</strong> in your terminal:</p>
-<pre class="highlight ruby"><code><span class="n">pod</span> <span class="s1">'TermiNetwork'</span><span class="p">,</span> <span class="s1">'~&gt; 2.0.1'</span>
+<pre class="highlight ruby"><code><span class="n">pod</span> <span class="s1">'TermiNetwork'</span><span class="p">,</span> <span class="s1">'~&gt; 2.1.1'</span>
 </code></pre>
 <h3 id='carthage' class='heading'>Carthage</h3>
 
 <p>Add the following line to your <strong>Carthage</strong> and run <strong>carthage update</strong> in your terminal:</p>
-<pre class="highlight ruby"><code><span class="n">github</span> <span class="s2">"billp/TermiNetwork"</span> <span class="o">~&gt;</span> <span class="mf">2.0</span><span class="o">.</span><span class="mi">1</span>
+<pre class="highlight ruby"><code><span class="n">github</span> <span class="s2">"billp/TermiNetwork"</span> <span class="o">~&gt;</span> <span class="mi">2</span><span class="o">.</span><span class="mi">1</span><span class="o">.</span><span class="mi">1</span>
 </code></pre>
 <h3 id='swift-package-manager' class='heading'>Swift Package Manager</h3>
 
@@ -791,9 +793,8 @@ configuration.mockDataEnabled = true
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2021 <a class="link" href="https://github.com/billp/TermiNetwork" target="_blank" rel="external">Vasilis Panagiotopoulos</a>. All rights reserved. (Last updated: 2021-02-02)</p>
-      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.6</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+      <p>&copy; 2021 <a class="link" href="https://github.com/billp/TermiNetwork" target="_blank" rel="external noopener">Vasilis Panagiotopoulos</a>. All rights reserved. (Last updated: 2021-12-29)</p>
+      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.1</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
     </section>
   </body>
-</div>
 </html>

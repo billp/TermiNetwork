@@ -923,7 +923,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if which swiftlint >/dev/null; then\n    swiftlint --path \"./Tests\" --config \"$PROJECT_DIR/.swiftlint.yml\"\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+			shellScript = "export PATH=\"/opt/homebrew/bin/:$PATH\"\nif which swiftlint >/dev/null; then\n    swiftlint --path \"./Tests\" --config \"$PROJECT_DIR/.swiftlint.yml\"\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -960,7 +960,6 @@
 				F3116AB62460A09E00DFE453 /* UIImageView+Extensions.swift in Sources */,
 				F3AA5132256EA13E00D64D31 /* FileStreamer.swift in Sources */,
 				F309C0ED25A512AB00D10877 /* Request+ResponseTypes.swift in Sources */,
-				F3116AB72460A09E00DFE453 /* String+Extensions.swift in Sources */,
 				F3850CAE243D104900F7CC13 /* Configuration.swift in Sources */,
 				F3850CAA243D104900F7CC13 /* Path.swift in Sources */,
 				F32195B325782E1A000941F1 /* InterceptorProtocol.swift in Sources */,
@@ -1204,7 +1203,7 @@
 					"@loader_path/Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
-				MARKETING_VERSION = 2.1.0;
+				MARKETING_VERSION = 3.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.billp.TermiNetwork;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				RESOURCES_TARGETED_DEVICE_FAMILY = "";
@@ -1236,7 +1235,7 @@
 					"@loader_path/Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
-				MARKETING_VERSION = 2.1.0;
+				MARKETING_VERSION = 3.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.billp.TermiNetwork;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				RESOURCES_TARGETED_DEVICE_FAMILY = "";

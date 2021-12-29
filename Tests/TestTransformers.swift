@@ -122,7 +122,6 @@ class TestTransformers: XCTestCase {
         XCTAssert(!failed)
     }
 
-
     func testGetParamsWithTransformerFailure() {
         let expectation = XCTestExpectation(description: "testGetParamsWithTransformer")
         var failed = true

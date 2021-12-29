@@ -217,7 +217,7 @@ class TestRequest: XCTestCase {
         let queue = Queue()
         var failed = true
 
-        queue.afterAllRequestsCallback = { error in
+        queue.afterAllRequestsCallback = { _ in
             failed = queue.operations.count > 0
             expectation.fulfill()
         }
@@ -252,7 +252,7 @@ class TestRequest: XCTestCase {
         var failed = true
         Queue.shared.cancelAllOperations()
 
-        Queue.shared.afterEachRequestCallback = { call, data, URLResponse, error in
+        Queue.shared.afterEachRequestCallback = { _, _, _, _ in
             failed = false
             expectation.fulfill()
         }
@@ -401,7 +401,6 @@ class TestRequest: XCTestCase {
                 failed = headers?["Content-Type"] != "application/json; charset=utf-8"
                 expectation.fulfill()
             }
-
 
         wait(for: [expectation], timeout: 60)
         XCTAssert(!failed)
