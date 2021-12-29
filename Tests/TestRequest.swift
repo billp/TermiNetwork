@@ -396,11 +396,12 @@ class TestRequest: XCTestCase {
         let expectation = XCTestExpectation(description: "testResponseHeaders")
 
         routerWithMiddleware.request(for: .testEncryptParams(value: "Hola!!!"))
-            .startEmpty()
+            .success(responseType: Data.self, responseHandler: { _ in })
             .responseHeaders { (headers, _) in
                 failed = headers?["Content-Type"] != "application/json; charset=utf-8"
                 expectation.fulfill()
             }
+
 
         wait(for: [expectation], timeout: 60)
         XCTAssert(!failed)
