@@ -12,3 +12,6 @@ jobs:
       run: sudo xcode-select -switch /Applications/Xcode_13.2.1.app && /usr/bin/xcodebuild -version
     - name: Run unit tests
       run: xcodebuild test -scheme TermiNetworkTests -destination 'platform=iOS Simulator,name=iPhone 13 Pro,OS=15.2'
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v1.2.1
+
