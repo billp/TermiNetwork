@@ -1,5 +1,33 @@
 # Changelog
 
+## [3.0.0](https://github.com/billp/TermiNetwork/tree/3.0.0) (2021-12-29)
+
+[Full Changelog](https://github.com/billp/TermiNetwork/compare/2.1.1...3.0.0)
+
+**Implemented enhancements:**
+
+- Implement HPKP \(HTTP Public Key Pinning\) [\#20](https://github.com/billp/TermiNetwork/issues/20)
+- Add network reachability [\#18](https://github.com/billp/TermiNetwork/issues/18)
+- Increase test coverage  [\#17](https://github.com/billp/TermiNetwork/issues/17)
+
+**Fixed bugs:**
+
+- Update heroku ssl certificate [\#24](https://github.com/billp/TermiNetwork/issues/24)
+
+**Closed issues:**
+
+- Remove integration with Travis [\#28](https://github.com/billp/TermiNetwork/issues/28)
+- Support Xcode 13.x [\#26](https://github.com/billp/TermiNetwork/issues/26)
+- Disable Reachability for watchOS [\#22](https://github.com/billp/TermiNetwork/issues/22)
+- Remove deprecated functions and classes [\#19](https://github.com/billp/TermiNetwork/issues/19)
+
+**Merged pull requests:**
+
+- Increase test coverage \(\#17\) [\#31](https://github.com/billp/TermiNetwork/pull/31) ([billp](https://github.com/billp))
+- Remove integration with Travis \(\#28\) [\#29](https://github.com/billp/TermiNetwork/pull/29) ([billp](https://github.com/billp))
+- Issue 26 support Xcode 13.x [\#27](https://github.com/billp/TermiNetwork/pull/27) ([billp](https://github.com/billp))
+- Update heroku ssl certificate \(\#24\) [\#25](https://github.com/billp/TermiNetwork/pull/25) ([billp](https://github.com/billp))
+
 ## [2.1.1](https://github.com/billp/TermiNetwork/tree/2.1.1) (2021-02-02)
 
 [Full Changelog](https://github.com/billp/TermiNetwork/compare/2.1.0...2.1.1)
