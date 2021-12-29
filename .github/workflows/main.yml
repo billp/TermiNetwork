@@ -11,4 +11,4 @@ jobs:
     - name: Select Xcode
       run: sudo xcode-select -switch /Applications/Xcode_13.2.1.app && /usr/bin/xcodebuild -version
     - name: Run unit tests
-      run: xcodebuild test -scheme TermiNetwork -workspace TermiNetwork.xcworkspace -destination 'platform=iOS Simulator,name=iPhone 13 Pro,OS=15.2' | xcpretty && exit ${PIPESTATUS[0]}
+      run: xcodebuild test -scheme TermiNetwork -workspace TermiNetwork.xworkspace -destination 'platform=iOS Simulator,name=iPhone 13 Pro,OS=15.2' | xcpretty && exit ${PIPESTATUS[0]}
