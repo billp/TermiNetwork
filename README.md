@@ -5,7 +5,7 @@
 
 <p align="center"><b> A zero-dependency networking solution for building modern and secure iOS, watchOS, macOS and tvOS applications.</b>
   <br /><br />
-  <img src="https://travis-ci.org/billp/TermiNetwork.svg" />
+  <img src="https://github.com/billp/TermiNetwork/actions/workflows/main.yml/badge.svg" />
   <img src="https://img.shields.io/cocoapods/v/TermiNetwork.svg?style=flat" />
   <img src="https://img.shields.io/badge/Carthage-compatible-green" />
   <img src="https://img.shields.io/badge/Language-Swift 5.3-blue" />
