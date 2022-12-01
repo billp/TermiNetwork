@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'TermiNetwork'
-  s.version          = '3.0.0'
+  s.version          = '3.1.0'
   s.summary          = 'A zero-dependency networking solution for building modern and secure iOS, watchOS, macOS and tvOS applications.'
   s.homepage         = 'https://github.com/billp/TermiNetwork.git'
   s.license          = 'MIT'

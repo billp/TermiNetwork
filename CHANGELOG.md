@@ -1,5 +1,18 @@
 # Changelog
 
+## [Unreleased](https://github.com/billp/TermiNetwork/tree/HEAD)
+
+[Full Changelog](https://github.com/billp/TermiNetwork/compare/3.0.0...HEAD)
+
+**Closed issues:**
+
+- Update pinning test certificate [\#32](https://github.com/billp/TermiNetwork/issues/32)
+
+**Merged pull requests:**
+
+- Add support for async/await \(\#34\) [\#36](https://github.com/billp/TermiNetwork/pull/36) ([billp](https://github.com/billp))
+- Update pinning test certificate \(\#32\) [\#33](https://github.com/billp/TermiNetwork/pull/33) ([billp](https://github.com/billp))
+
 ## [3.0.0](https://github.com/billp/TermiNetwork/tree/3.0.0) (2021-12-29)
 
 [Full Changelog](https://github.com/billp/TermiNetwork/compare/2.1.1...3.0.0)
