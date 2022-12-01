@@ -39,7 +39,7 @@ class CertificatePinningManager {
             completionHandler(.performDefaultHandling, nil)
             return
         }
-        DispatchQueue.global(qos: .background).async { [weak request] in
+        DispatchQueue.global(qos: .background).async {
             if let certData = self.request?.configuration.certificateData,
                let remoteCert = SecTrustGetCertificateAtIndex(serverTrust, 0) {
                 let policies = NSMutableArray()
