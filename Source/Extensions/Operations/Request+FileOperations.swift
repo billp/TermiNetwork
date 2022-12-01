@@ -1,6 +1,6 @@
 // Request+FileOperations.swift
 //
-// Copyright © 2018-2021 Vasilis Panagiotopoulos. All rights reserved.
+// Copyright © 2018-2022 Vassilis Panagiotopoulos. All rights reserved.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in the
@@ -19,7 +19,7 @@
 
 import Foundation
 
-extension Request {
+public extension Request {
     // MARK: Upload - Decodable
 
     /// Executed when the upload request is succeeded and the response has successfully deserialized.
@@ -30,9 +30,9 @@ extension Request {
     ///    - responseHandler: The completion handler with the deserialized object
     /// - returns: The Request object.
     @discardableResult
-    public func upload<T: Decodable>(responseType: T.Type,
-                                     progressUpdate: ProgressCallbackType?,
-                                     responseHandler: @escaping SuccessCallback<T>) -> Request {
+    func upload<T: Decodable>(responseType: T.Type,
+                              progressUpdate: ProgressCallbackType?,
+                              responseHandler: @escaping SuccessCallback<T>) -> Request {
         self.successCompletionHandler = self.makeDecodableResponseSuccessHandler(decodableType: T.self,
                                                                                  responseHandler: responseHandler)
         executeUploadRequestIfNeeded(withProgressCallback: progressUpdate)
@@ -49,9 +49,9 @@ extension Request {
     ///    - responseHandler: The completion handler with the deserialized object as ToType.
     /// - returns: The Request object.
     @discardableResult
-    public func upload<FromType: Decodable, ToType>(transformer: Transformer<FromType, ToType>.Type,
-                                                    progressUpdate: ProgressCallbackType?,
-                                                    responseHandler: @escaping SuccessCallback<ToType>)
+    func upload<FromType: Decodable, ToType>(transformer: Transformer<FromType, ToType>.Type,
+                                             progressUpdate: ProgressCallbackType?,
+                                             responseHandler: @escaping SuccessCallback<ToType>)
                                             -> Request {
         self.successCompletionHandler = self.makeTransformedResponseSuccessHandler(transformer: transformer,
                                                                                    responseHandler: responseHandler)
@@ -69,9 +69,9 @@ extension Request {
     ///    - responseHandler: The completion handler with the String object.
     /// - returns: The Request object.
     @discardableResult
-    public func upload(responseType: String.Type,
-                       progressUpdate: ProgressCallbackType?,
-                       responseHandler: @escaping (String) -> Void) -> Request {
+    func upload(responseType: String.Type,
+                progressUpdate: ProgressCallbackType?,
+                responseHandler: @escaping (String) -> Void) -> Request {
         self.successCompletionHandler = self.makeStringResponseSuccessHandler(responseHandler: responseHandler)
         executeUploadRequestIfNeeded(withProgressCallback: progressUpdate)
         return self
@@ -87,9 +87,9 @@ extension Request {
     ///    - responseHandler: The completion handler with the Data object.
     /// - returns: The Request object.
     @discardableResult
-    public func upload(responseType: Data.Type,
-                       progressUpdate: ProgressCallbackType?,
-                       responseHandler: @escaping SuccessCallback<Data>) -> Request {
+    func upload(responseType: Data.Type,
+                progressUpdate: ProgressCallbackType?,
+                responseHandler: @escaping SuccessCallback<Data>) -> Request {
         self.successCompletionHandler = self.makeDataResponseSuccessHandler(responseHandler: responseHandler)
         executeUploadRequestIfNeeded(withProgressCallback: progressUpdate)
         return self
@@ -100,16 +100,16 @@ extension Request {
     /// Executed when the download request is succeeded.
     ///
     /// - parameters:
-    ///    - filePath: The destination file path to save the file.
+    ///    - destinationPath: The destination file path to save the file.
     ///    - progressUpdate: specifies a progress callback to get upload progress updates.
     ///    - completionHandler: The completion handler with the Data object.
     /// - returns: The Request object.
     @discardableResult
-    public func download(filePath: String,
-                         progressUpdate: ProgressCallbackType?,
-                         completionHandler: @escaping SuccessCallbackWithoutType) -> Request {
+    func download(destinationPath: String,
+                  progressUpdate: ProgressCallbackType?,
+                  completionHandler: @escaping SuccessCallbackWithoutType) -> Request {
         self.successCompletionHandler = self.makeResponseSuccessHandler(responseHandler: completionHandler)
-        executeDownloadRequestIfNeeded(withFilePath: filePath,
+        executeDownloadRequestIfNeeded(withFilePath: destinationPath,
                                        progressUpdate: progressUpdate)
         return self
     }

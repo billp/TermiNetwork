@@ -8,6 +8,8 @@ jobs:
     - uses: actions/checkout@v1
     - name: List available Xcode versions
       run: ls /Applications | grep Xcode
+    - name: Remove Package.resolved
+      run: rm *.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved
     - name: Select Xcode
       run: sudo xcode-select -switch /Applications/Xcode_14.0.1.app && /usr/bin/xcodebuild -version
     - name: Run unit tests

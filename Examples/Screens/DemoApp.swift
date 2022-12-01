@@ -1,6 +1,6 @@
 // DemoApp.swift
 //
-// Copyright © 2018-2021 Vasilis Panagiotopoulos. All rights reserved.
+// Copyright © 2018-2022 Vassilis Panagiotopoulos. All rights reserved.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in the
@@ -28,17 +28,18 @@ struct DemoApp: Identifiable {
     var description: String
     var destination: AnyView
 
+    @MainActor
     static var Apps: [DemoApp] {
         [
            DemoApp(
                name: "City Explorer",
                description: "Router, Transformers, Codables",
-               destination: AnyView(CityExplorerView())
+               destination: AnyView(CityExplorerView(viewModel: .init(usesMockData: false)))
            ),
            DemoApp(
                name: "City Explorer - Offline Mode",
                description: "Router, Transformers, Codables, Mock Data",
-               destination: AnyView(CityExplorerView(usesMockData: true))
+               destination: AnyView(CityExplorerView(viewModel: .init(usesMockData: true)))
            ),
            DemoApp(
                name: "Certificate Pinning",
@@ -58,7 +59,7 @@ struct DemoApp: Identifiable {
            DemoApp(
                name: "File Uploader",
                description: "Upload files with progress",
-               destination: AnyView(FileUploader())
+               destination: AnyView(FileUploader(viewModel: .init()))
            ),
            DemoApp(
                name: "File Downloader",

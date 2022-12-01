@@ -1,6 +1,6 @@
 // GlobalNetworkErrorHandler.swift
 //
-// Copyright © 2018-2021 Vasilis Panagiotopoulos. All rights reserved.
+// Copyright © 2018-2022 Vassilis Panagiotopoulos. All rights reserved.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in the
@@ -36,11 +36,15 @@ final class ServiceErrorInterceptor: InterceptorProtocol {
                 proceed(.retry(delay: self.retryDelay))
             }
             break
-        case .notSuccess(let statusCode):
-            showRetryDialog(
-                errorMessage: NSLocalizedString(String(format: "Server Error (%i) please try again.", statusCode),
-                                                comment: "")) {
-                proceed(.retry(delay: self.retryDelay))
+        case .notSuccess(let statusCode, _):
+            if statusCode / 500 == 1 {
+                showRetryDialog(
+                    errorMessage: NSLocalizedString(String(format: "Server Error (%i) please try again.", statusCode),
+                                                    comment: "")) {
+                    proceed(.retry(delay: self.retryDelay))
+                }
+            } else {
+                proceed(.continue)
             }
             break
         default:
@@ -49,16 +53,17 @@ final class ServiceErrorInterceptor: InterceptorProtocol {
     }
 
     func showRetryDialog(errorMessage: String, retryAction: @escaping () -> Void) {
-        let alert = UIAlertController(title: NSLocalizedString("Something went wrong", comment: ""),
-                                      message: errorMessage,
-                                      preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Retry", style: .default, handler: { _ in
-            retryAction()
-        }))
-        alert.addAction(UIAlertAction(title: "Close", style: .cancel, handler: nil))
-        if let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
-            scene.windows.first?.rootViewController?.present(alert, animated: false, completion: nil)
+        DispatchQueue.main.async {
+            let alert = UIAlertController(title: NSLocalizedString("Something went wrong", comment: ""),
+                                          message: errorMessage,
+                                          preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Retry", style: .default, handler: { _ in
+                retryAction()
+            }))
+            alert.addAction(UIAlertAction(title: "Close", style: .cancel, handler: nil))
+            if let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
+                scene.windows.first?.rootViewController?.present(alert, animated: false, completion: nil)
+            }
         }
     }
-
 }

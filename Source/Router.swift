@@ -1,6 +1,6 @@
 // Router.swift
 //
-// Copyright © 2018-2021 Vasilis Panagiotopoulos. All rights reserved.
+// Copyright © 2018-2022 Vassilis Panagiotopoulos. All rights reserved.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in the
@@ -39,8 +39,8 @@ public final class Router<Route: RouteProtocol> {
     /// - parameters:
     ///    - route: a RouteProtocol enum value
     public func request(for route: Route) -> Request {
-        return Request(route: route,
-                       environment: environment,
-                       configuration: configuration)
+        Request(route: route,
+                environment: environment,
+                configuration: configuration)
     }
 }

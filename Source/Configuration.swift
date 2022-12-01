@@ -1,6 +1,6 @@
 // Configuration.swift
 //
-// Copyright © 2018-2021 Vasilis Panagiotopoulos. All rights reserved.
+// Copyright © 2018-2022 Vassilis Panagiotopoulos. All rights reserved.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in the
@@ -23,7 +23,7 @@ import Foundation
 /// - parameters:
 ///   - min: The lower bound of interval.
 ///   - max: The upper bound of interval.
-public typealias MockDelayType = (min: TimeInterval, max: TimeInterval)
+public typealias MockDelayRange = (min: TimeInterval, max: TimeInterval)
 
 /// A configuration class that can be used with Environment, Router, Route and Request.
 /// A configuration object follows the following rules:
@@ -56,7 +56,7 @@ public final class Configuration {
     /// Enables or disables request mocking.
     public var mockDataEnabled: Bool?
     /// Specifies a delay when mock data is used.
-    public var mockDelay: MockDelayType?
+    public var mockDelay: MockDelayRange?
     /// Specifies a key decoding strategy. Take a look
     /// at: https://developer.apple.com/documentation/foundation/jsondecoder/keydecodingstrategy
     public var keyDecodingStrategy: JSONDecoder.KeyDecodingStrategy?
@@ -99,7 +99,7 @@ public final class Configuration {
                 headers: [String: String]? = nil,
                 mockDataBundle: Bundle? = nil,
                 mockDataEnabled: Bool? = nil,
-                mockDelay: MockDelayType? = nil,
+                mockDelay: MockDelayRange? = nil,
                 keyDecodingStrategy: JSONDecoder.KeyDecodingStrategy? = nil,
                 interceptors: [InterceptorProtocol.Type]? = nil,
                 requestMiddleware: [RequestMiddlewareProtocol.Type]? = nil) {
@@ -166,7 +166,7 @@ extension Configuration {
                                headers: [:],
                                mockDataBundle: nil,
                                mockDataEnabled: false,
-                               mockDelay: MockDelayType(min: 0.01, max: 0.07))
+                               mockDelay: MockDelayRange(min: 0.01, max: 0.07))
     }
 
     // swiftlint:disable cyclomatic_complexity

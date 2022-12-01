@@ -1,6 +1,6 @@
 // TNError.swift
 //
-// Copyright © 2018-2021 Vasilis Panagiotopoulos. All rights reserved.
+// Copyright © 2018-2022 Vassilis Panagiotopoulos. All rights reserved.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in the
@@ -38,8 +38,8 @@ public enum TNError: Error {
     case cannotConvertToString
     /// Thrown when a network error occured. It contains the NSURLError.
     case networkError(Error)
-    /// Thrown when a request is not succeeded (it's not 2xx). It contains the HTTP Status Code.
-    case notSuccess(Int)
+    /// Thrown when a request is not succeeded (it's not 2xx). It contains the HTTP Status Code and the response Data.
+    case notSuccess(Int, Data)
     /// Thrown when a request is cancelled.
     case cancelled(Error)
     /// Thorwn when certificate pinning validation fails.
@@ -94,11 +94,11 @@ extension TNError: LocalizedError {
             let fullDescription = String(format: "className: %@. %@%@", className, debugDescription, errorKeys)
             return NSLocalizedString("Cannot deserialize: ", comment: "TNError") + fullDescription
         case .networkError(let error):
-                return NSLocalizedString("Network error: ", comment: "TNError") + error.localizedDescription
+            return NSLocalizedString("Network error: ", comment: "TNError") + error.localizedDescription
         case .cannotConvertToString:
             return NSLocalizedString("Cannot convert to String", comment: "TNError")
-        case .notSuccess(let code):
-            return String(format: NSLocalizedString("The request returned an HTTP status code: %i", comment: "TNError"), code)
+        case .notSuccess(let code, let data):
+            return String(format: NSLocalizedString("The request returned an HTTP status code: %i, data: %@", comment: "TNError"), code, String(describing: data))
         case .cancelled(let error):
             return NSLocalizedString("The request has been cancelled: ", comment: "TNError") + error.localizedDescription
         case .invalidMockData(let path):

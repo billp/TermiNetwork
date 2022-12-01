@@ -1,6 +1,6 @@
 // TestExtensions.swift
 //
-// Copyright © 2018-2021 Vasilis Panagiotopoulos. All rights reserved.
+// Copyright © 2018-2022 Vassilis Panagiotopoulos. All rights reserved.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in the
@@ -127,9 +127,9 @@ class TestExtensions: XCTestCase {
         var failed = true
         var tmp = 1
 
-        let image = Image(withRequest: Request.init(method: .get, url: sampleImageURL),
+        let image = Image(request: .init(method: .get, url: sampleImageURL),
                           defaultImage: nil,
-                          resize: nil,
+                          resizeTo: nil,
                           preprocessImage: { image in
                               tmp += 1
                               if tmp != 2 {
@@ -154,9 +154,9 @@ class TestExtensions: XCTestCase {
         var failed = true
         var tmp = 1
 
-        let image = Image(withURL: sampleImageURL,
+        let image = Image(url: sampleImageURL,
                           defaultImage: nil,
-                          resize: nil,
+                          resizeTo: nil,
                           preprocessImage: { image in
                               tmp += 1
                               if tmp != 2 {

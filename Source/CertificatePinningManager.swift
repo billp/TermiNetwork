@@ -1,6 +1,6 @@
 // CertificatePinningManager.swift
 //
-// Copyright © 2018-2021 Vasilis Panagiotopoulos. All rights reserved.
+// Copyright © 2018-2022 Vassilis Panagiotopoulos. All rights reserved.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in the
@@ -39,27 +39,31 @@ class CertificatePinningManager {
             completionHandler(.performDefaultHandling, nil)
             return
         }
+        DispatchQueue.global(qos: .background).async { [weak request] in
+            if let certData = self.request?.configuration.certificateData,
+               let remoteCert = SecTrustGetCertificateAtIndex(serverTrust, 0) {
+                let policies = NSMutableArray()
+                policies.add(SecPolicyCreateSSL(true, (self.challenge.protectionSpace.host as CFString)))
+                SecTrustSetPolicies(serverTrust, policies)
 
-        if let certData = request?.configuration.certificateData,
-            let remoteCert = SecTrustGetCertificateAtIndex(serverTrust, 0) {
-            let policies = NSMutableArray()
-            policies.add(SecPolicyCreateSSL(true, (challenge.protectionSpace.host as CFString)))
-            SecTrustSetPolicies(serverTrust, policies)
+                // Evaluate server certificate
+                var error: CFError?
+                let isServerTrusted = SecTrustEvaluateWithError(serverTrust, &error)
 
-            // Evaluate server certificate
-            var error: CFError?
-            let isServerTrusted = SecTrustEvaluateWithError(serverTrust, &error)
-
-            let remoteCertificateData: NSData = SecCertificateCopyData(remoteCert)
-            if isServerTrusted && error == nil && certData.contains(remoteCertificateData) {
-                challengeDisposition = .useCredential
+                let remoteCertificateData: NSData = SecCertificateCopyData(remoteCert)
+                if isServerTrusted && error == nil && certData.contains(remoteCertificateData) {
+                    challengeDisposition = .useCredential
+                } else {
+                    self.request?.pinningErrorOccured = true
+                }
             } else {
-                request?.pinningErrorOccured = true
+                challengeDisposition = .performDefaultHandling
             }
-        } else {
-            challengeDisposition = .performDefaultHandling
+
+            DispatchQueue.main.async {
+                self.completionHandler(challengeDisposition,
+                                       URLCredential(trust: serverTrust))
+            }
         }
-        completionHandler(challengeDisposition,
-                          URLCredential(trust: serverTrust))
     }
 }

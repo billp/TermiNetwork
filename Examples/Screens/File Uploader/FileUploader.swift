@@ -1,6 +1,6 @@
 // FileUploader.swift
 //
-// Copyright © 2018-2021 Vasilis Panagiotopoulos. All rights reserved.
+// Copyright © 2018-2022 Vassilis Panagiotopoulos. All rights reserved.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in the
@@ -22,37 +22,25 @@ import SwiftUI
 import TermiNetwork
 
 struct FileUploader: View {
-    @State var fileName: String = ""
-    @State var fileChecksum: String?
-    @State var uploadedFileChecksum: String?
-    @State var progress: Float = 0
-    @State var bytesUploaded: Int = 0
-    @State var bytesTotal: Int = 0
-    @State var uploadStarted: Bool = false
-    @State var uploadFinished: Bool = false
-    @State var error: String?
-    @State var outputFile: String = ""
-    @State var request: Request?
-    @State var imageUrl: URL?
-    @State var showCaptureImageView: Bool = false
-
+    @StateObject var viewModel: ViewModel
+    
     var body: some View {
         VStack {
             UIHelpers.button("🌄 Select Photo",
                              action: {
-                                imageUrl = nil
-                                fileChecksum = nil
-                                uploadedFileChecksum = nil
-                                resetUpload()
-                                showCaptureImageView.toggle()
-                             })
-                .disabled(uploadStarted)
+                viewModel.imageUrl = nil
+                viewModel.fileChecksum = nil
+                viewModel.uploadedFileChecksum = nil
+                viewModel.resetUpload()
+                viewModel.showCaptureImageView.toggle()
+            })
+            .disabled(viewModel.uploadStarted)
 
-            if imageUrl != nil {
+            if viewModel.imageUrl != nil {
                 UIHelpers.fieldLabel("Filename")
-                UIHelpers.customTextField("Filename...", text: $fileName)
+                UIHelpers.customTextField("Filename...", text: $viewModel.fileName)
             }
-            if let fileChecksum = fileChecksum {
+            if let fileChecksum = viewModel.fileChecksum {
                 Text("Local file checksum")
                     .font(.footnote)
                     .bold()
@@ -61,7 +49,7 @@ struct FileUploader: View {
                 Text(fileChecksum)
                     .font(.footnote)
             }
-            if let uploadedFileChecksum = uploadedFileChecksum {
+            if let uploadedFileChecksum = viewModel.uploadedFileChecksum {
                 Text("Uploaded file checksum")
                     .font(.footnote)
                     .bold()
@@ -70,19 +58,19 @@ struct FileUploader: View {
                 Text(uploadedFileChecksum)
                     .font(.footnote)
             }
-            if showCaptureImageView {
-                CaptureImageView(isShown: $showCaptureImageView,
-                                 imageUrl: $imageUrl,
-                                 fileName: $fileName,
-                                 checksum: $fileChecksum)
+            if viewModel.showCaptureImageView {
+                CaptureImageView(isShown: $viewModel.showCaptureImageView,
+                                 imageUrl: $viewModel.imageUrl,
+                                 fileName: $viewModel.fileName,
+                                 checksum: $viewModel.fileChecksum)
             }
-            if uploadStarted {
-                if bytesTotal > 0 {
-                    ProgressView(value: progress, total: 100)
+            if viewModel.uploadStarted {
+                if viewModel.bytesTotal > 0 {
+                    ProgressView(value: viewModel.progress, total: 100)
                         .padding(.top, 5)
                     Text(String(format: "%.1f of %.1f MB uploaded.",
-                                Float(bytesUploaded)/1024/1024,
-                                Float(bytesTotal)/1024/1024))
+                                Float(viewModel.bytesUploaded)/1024/1024,
+                                Float(viewModel.bytesTotal)/1024/1024))
                         .font(.footnote)
                         .padding(.top, 10)
                 } else {
@@ -90,109 +78,142 @@ struct FileUploader: View {
                         .padding(.top, /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/)
                 }
             }
-            if uploadFinished && fileChecksum == uploadedFileChecksum {
+            if viewModel.uploadFinished && viewModel.fileChecksum == viewModel.uploadedFileChecksum {
                 Text("Success")
                     .font(.footnote)
                     .bold()
                     .padding(.top, /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/)
                     .foregroundColor(.green)
             }
-            if let error = error {
+            if let error = viewModel.error {
                 Text(error)
                     .padding(.top, 10)
                     .font(.footnote)
                     .foregroundColor(.red)
             }
             Spacer()
-            UIHelpers.button(!uploadStarted ? "Start Upload" : "Stop Upload",
-                             action: uploadAction)
-                .padding(.bottom, 20)
+            UIHelpers.button(!viewModel.uploadStarted ? "Start Upload" : "Stop Upload",
+                             action: { 
+                viewModel.uploadAction() 
+            })
+            .padding(.bottom, 20)
 
         }
         .padding([.leading, .trailing, .top], 20)
         .navigationTitle("File Uploader")
-        .onDisappear(perform: clearAndCancelUpload)
+        .onDisappear(perform: { 
+            viewModel.clearAndCancelUpload() 
+        })
     }
+}
 
-    // MARK: UI Helpers
-    func updateFilename(_ url: String) {
-        self.fileName = String(url.split(separator: "/").last ?? "")
-    }
+extension FileUploader {
+    class ViewModel: ObservableObject {
+        private var request: Request?
 
-    // MARK: Actions
-    func uploadAction() {
-        guard !uploadStarted else {
-            clearAndCancelUpload()
-            return
+        @Published var fileName: String = ""
+        @Published var fileChecksum: String?
+        @Published var uploadedFileChecksum: String?
+        @Published var progress: Float = 0
+        @Published var bytesUploaded: Int = 0
+        @Published var bytesTotal: Int = 0
+        @Published var uploadStarted: Bool = false
+        @Published var uploadFinished: Bool = false
+        @Published var error: String?
+        @Published var outputFile: String = ""
+        @Published var imageUrl: URL?
+        @Published var showCaptureImageView: Bool = false
+        
+        func resetUpload() {
+            uploadStarted = false
+            uploadFinished = false
+            bytesTotal = 0
+            bytesUploaded = 0
         }
-
-        uploadFile()
-        uploadStarted = true
-        uploadFinished = false
-    }
-
-    // MARK: Helpers
-    func uploadFile() {
-        guard let imageUrl = imageUrl else {
-            return
+        
+        func clearAndCancelUpload() {
+            request?.cancel()
+            resetUpload()
         }
-
-        // Enable verbose
-        let configuration = Configuration()
-        configuration.verbose = true
-
-        // Construct the final path of the uploaded file
-        outputFile = documentsDirectory().appendingPathComponent(fileName).path
-
-        // Remove old file if exists
-        removeFileIfNeeded(at: outputFile)
-
-        // Reset upload
-        error = nil
-        uploadedFileChecksum = nil
-
-        resetUpload()
-
-        // Start the request
-
-        request = Router<MiscRoute>().request(for: .upload(fileUrl: imageUrl))
-            .upload(transformer: FileUploadTransformer.self,
-                    progressUpdate: { (bytesUploaded, bytesTotal, progress) in
-                        self.progress = progress * 100
-                        self.bytesUploaded = bytesUploaded
-                        self.bytesTotal = bytesTotal
-                    },
-                    responseHandler: { response in
-                        self.uploadStarted = false
-                        self.uploadFinished = true
-                        self.uploadedFileChecksum = response.checksum
-                    })
-            .failure { error in
-                self.error = error.localizedDescription ?? ""
-                resetUpload()
+        
+        func documentsDirectory() -> URL {
+            let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+            let documentsDirectory = paths[0]
+            return documentsDirectory
+        }
+        
+        // MARK: Helpers
+        
+        @MainActor
+        func uploadFile() async {
+            guard let imageUrl = imageUrl else {
+                return
             }
-    }
 
-    func removeFileIfNeeded(at path: String) {
-        try? FileManager.default.removeItem(atPath: path)
-    }
+            // Enable verbose
+            let configuration = Configuration()
+            configuration.verbose = true
 
-    func resetUpload() {
-        uploadStarted = false
-        uploadFinished = false
-        bytesTotal = 0
-        bytesUploaded = 0
-    }
+            // Construct the final path of the uploaded file
+            outputFile = documentsDirectory().appendingPathComponent(fileName).path
 
-    func clearAndCancelUpload() {
-        request?.cancel()
-        resetUpload()
-    }
+            // Remove old file if exists
+            removeFileIfNeeded(at: outputFile)
 
-    func documentsDirectory() -> URL {
-        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-        let documentsDirectory = paths[0]
-        return documentsDirectory
+            // Reset upload
+            error = nil
+            uploadedFileChecksum = nil
+
+            resetUpload()
+
+            // Start the request
+
+            let request = Router<MiscRoute>().request(for: .upload(fileUrl: imageUrl))
+            self.request = request
+            
+            do {
+                uploadStarted = true
+                uploadFinished = false
+
+                let response = try await request.asyncUpload(
+                    using: FileUploadTransformer.self, 
+                    progressUpdate: { [weak self] bytesProcessed, totalBytes, progress in
+                        guard let self = self else { return }
+                        self.progress = progress * 100
+                        self.bytesUploaded = bytesProcessed
+                        self.bytesTotal = totalBytes
+                    }
+                )
+                self.uploadStarted = false
+                self.uploadFinished = true
+                self.uploadedFileChecksum = response.checksum
+            } catch let error {
+                self.error = error.localizedDescription 
+                self.resetUpload()
+            }
+        }
+
+        func removeFileIfNeeded(at path: String) {
+            try? FileManager.default.removeItem(atPath: path)
+        }
+        
+        // MARK: UI Helpers
+        func updateFilename(_ url: String) {
+            self.fileName = String(url.split(separator: "/").last ?? "")
+        }
+
+        // MARK: Actions
+        @MainActor func uploadAction() {
+            guard !uploadStarted else {
+                clearAndCancelUpload()
+                return
+            }
+        
+            Task {
+                await uploadFile()
+            }
+            
+        }
     }
 }
 

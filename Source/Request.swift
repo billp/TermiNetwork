@@ -1,6 +1,6 @@
 // Request.swift
 //
-// Copyright © 2018-2021 Vasilis Panagiotopoulos. All rights reserved.
+// Copyright © 2018-2022 Vassilis Panagiotopoulos. All rights reserved.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in the
@@ -81,8 +81,6 @@ public final class Request: Operation {
     internal var urlResponse: URLResponse?
     internal var skipLogOnComplete: Bool = false
 
-    /// Holds the completion handler for success. DEPRECATED: Will be removed form future releases.
-    internal var dataTaskSuccessCompletionHandler: ((Data, URLResponse?) -> Void)?
     /// Holds the completion handler for success.
     internal var successCompletionHandler: ((Data, URLResponse?) -> Void)?
     /// Holds the completion handler for failure.
@@ -255,12 +253,10 @@ public final class Request: Operation {
     public override func cancel() {
         super.cancel()
 
-        /// Set executing to true in case it is not started
-        if !_executing {
-            executing(true)
+        // Call cancel only if not any previous error occured.
+        if error == nil {
+            dataTask?.cancel()
         }
-
-        dataTask?.cancel()
     }
 
     // MARK: Helper methods
@@ -356,9 +352,13 @@ public final class Request: Operation {
             return
         }
         dataTask = SessionTaskFactory.makeDataTask(with: self,
-                                                   completionHandler: { data, urlResponse in
+                                                   completionHandler: { [weak self] data, urlResponse in
+            guard let self = self else { return }
+
             self.successCompletionHandler?(data ?? Data(), urlResponse)
-        }, onFailure: { data, error in
+        }, onFailure: { [weak self] data, error in
+            guard let self = self else { return }
+
             // If no failure completion handler is specified...
             if self.failureCompletionHandler == nil {
                 // use the default one.
@@ -376,9 +376,11 @@ public final class Request: Operation {
         }
         dataTask = SessionTaskFactory.makeUploadTask(with: self,
                                                      progressUpdate: progress,
-                                                     completionHandler: { data, urlResponse in
+                                                     completionHandler: { [weak self] data, urlResponse in
+            guard let self = self else { return }
             self.successCompletionHandler?(data, urlResponse)
-        }, onFailure: { error, data in
+        }, onFailure: { [weak self] error, data in
+            guard let self = self else { return }
             self.failureCompletionHandler?(error, data, self.urlResponse)
         })
         queue.addOperation(self)
@@ -393,9 +395,11 @@ public final class Request: Operation {
         dataTask = SessionTaskFactory.makeDownloadTask(with: self,
                                                        filePath: filePath,
                                                        progressUpdate: progressUpdate,
-                                                       completionHandler: { _, urlResponse in
+                                                       completionHandler: { [weak self] _, urlResponse in
+            guard let self = self else { return }
             self.successCompletionHandler?(Data(), urlResponse)
-        }, onFailure: { error, data in
+        }, onFailure: { [weak self] error, data in
+            guard let self = self else { return }
             self.failureCompletionHandler?(error, data, self.urlResponse)
         })
         queue.addOperation(self)
@@ -413,17 +417,18 @@ public final class Request: Operation {
 
         self.processNextInterceptorIfNeeded(
             data: data,
-            error: error) { processedData, processedError in
-            if let error = processedError {
-                self.handleDataTaskFailure(with: processedData,
-                                           urlResponse: urlResponse,
-                                           error: error,
-                                           onFailure: onFailureCallback ?? {})
-            } else {
-                self.handleDataTaskSuccess(with: processedData,
-                                           urlResponse: urlResponse,
-                                           onSuccess: onSuccessCallback ?? {})
-            }
+            error: error) { [weak self] processedData, processedError in
+                guard let self = self else { return }
+                if let error = processedError {
+                    self.handleDataTaskFailure(with: processedData,
+                                               urlResponse: urlResponse,
+                                               error: error,
+                                               onFailure: onFailureCallback ?? {})
+                } else {
+                    self.handleDataTaskSuccess(with: processedData,
+                                               urlResponse: urlResponse,
+                                               onSuccess: onSuccessCallback ?? {})
+                }
         }
     }
 
@@ -449,6 +454,7 @@ public final class Request: Operation {
                                            data: data,
                                            response: urlResponse,
                                            tnError: nil)
+
     }
 
     func handleDataTaskFailure(with data: Data?,

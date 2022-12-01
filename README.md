@@ -30,6 +30,7 @@
 ## Features
 - [x] Multi-environment setup <br />
 - [x] Model deserialization with <b>Codables</b><br />
+- [x] Async await support<br />
 - [x] Decode response in the appropriate response type: <b>Codable</b>, <b>UIImage</b>, <b>Data</b> or <b>String</b><br />
 - [x] <b>UIKit</b>/<b>SwiftUI</b> helpers for downloading remote images<br />
 - [x] Group your Requests in Routers<br />
@@ -119,16 +120,32 @@ The following example creates a request that adds a new Todo:
 let params = ["title": "Go shopping."]
 let headers = ["x-auth": "abcdef1234"]
 
-Request(method: .post,
+Request(method: .get,
 	url: "https://myweb.com/api/todos",
 	headers: headers,
 	params: params)
-    .success(responseType: Todo.self) { todo in
-	print(todo)
+    .success(responseType: Todo.self) { todos in
+	print(todos)
     }
     .failure { error in
 	print(error.localizedDescription)
     }
+```
+
+or with **async await**:
+
+```swift
+let request = Request(method: .get, 
+                      url: "https://myweb.com/api/todos", 
+                      headers: headers, 
+                      params: params)
+
+do {
+    let todos: [Todo] = try await request.async()
+    print(todos)
+} catch let error { 
+    print(error.localizedDescription)
+}
 ```
 
 #### Parameters Explanation

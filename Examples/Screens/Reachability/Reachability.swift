@@ -1,6 +1,6 @@
 // Reachability.swift
 //
-// Copyright © 2018-2021 Vasilis Panagiotopoulos. All rights reserved.
+// Copyright © 2018-2022 Vassilis Panagiotopoulos. All rights reserved.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in the
@@ -22,30 +22,50 @@ import SwiftUI
 import TermiNetwork
 
 struct Reachability: View {
-    var reachability: TermiNetwork.Reachability? = TermiNetwork.Reachability(hostname: "google.com")
-    
-    @State var state: String = ""
+    @StateObject var viewModel: ViewModel = .init()
 
     var body: some View {
         VStack {
             HStack {
                 Text("Network state:")
-                Text(state)
+                Text(viewModel.status)
             }
         }
         .padding([.leading, .trailing, .top], 20)
         .navigationTitle("Reachability")
-        .onAppear(perform: startMonitoringState)
-        .onDisappear(perform: stopMonitoringState)
-    }
-
-    func startMonitoringState() {
-        try? reachability?.monitorState { state in
-            self.state = String(describing: state)
+        .onDisappear { [unowned viewModel] in
+            viewModel.onDisappear()
         }
     }
+}
 
-    func stopMonitoringState() {
-        reachability?.stopMonitoring()
+extension Reachability {
+    @MainActor
+    class ViewModel: ObservableObject {
+        @Published var status: String = ""
+
+        private var reachability: TermiNetwork.Reachability? = TermiNetwork.Reachability(hostname: "google.com")
+        
+        init() {
+            startMonitoringState()
+        }
+        
+        private func startMonitoringState() {
+            try? reachability?.monitorState { [weak self] state in
+                self?.status = String(describing: state)
+            }
+        }
+
+        private func stopMonitoringState() {
+            reachability?.stopMonitoring()
+        }
+        
+        func onDisappear() {
+            stopMonitoringState()
+        }
+        
+        deinit {
+            print("deinit")
+        }
     }
 }

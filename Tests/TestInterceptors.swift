@@ -1,6 +1,6 @@
 // TestInterceptors.swift
 //
-// Copyright © 2018-2021 Vasilis Panagiotopoulos. All rights reserved.
+// Copyright © 2018-2022 Vassilis Panagiotopoulos. All rights reserved.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in the
@@ -146,14 +146,14 @@ class TestInterceptors: XCTestCase {
         try? FileManager.default.removeItem(at: cacheURL)
 
         router.request(for: .fileDownload)
-            .download(filePath: cacheURL.path,
+            .download(destinationPath: cacheURL.path,
                       progressUpdate: { bytesSent, totalBytes, progress in
                         if bytesSent == totalBytes && progress == 1 {
                             failed = false
                         }
                     }, completionHandler: {
                         failed = TestHelpers.sha256(url: cacheURL) !=
-                            "b64fb87ce1e10bc7aa14e272262753200414f74a3059c5d7afb443c36be06531"
+                            "63b54b4506e233839f55e1228b59a1fcdec7d5ff9c13073c8a1faf92e9dcc977"
 
                         expectation.fulfill()
                     })
