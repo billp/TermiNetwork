@@ -1,6 +1,6 @@
 // Session.swift
 //
-// Copyright © 2018-2021 Vasilis Panagiotopoulos. All rights reserved.
+// Copyright © 2018-2022 Vassilis Panagiotopoulos. All rights reserved.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in the
@@ -23,11 +23,13 @@ import Foundation
 internal final class Session<ResultType>: NSObject, URLSessionDataDelegate, URLSessionDownloadDelegate {
     weak var request: Request?
 
-    var receivedData: Data?
+    private var receivedData: Data?
+    private var progressCallback: ProgressCallbackType?
+    private var completedCallback: ((ResultType?, URLResponse?, Error?) -> Void)?
+    private var inputStream: InputStream?
 
-    var progressCallback: ProgressCallbackType?
-    var completedCallback: ((ResultType?, URLResponse?, Error?) -> Void)?
-    var inputStream: InputStream?
+    private var downloadLocation: URL?
+    private var downloadedFileCannotBeMovedError: Error?
 
     init(with request: Request,
          progressCallback: ProgressCallbackType? = nil,
@@ -49,7 +51,19 @@ internal final class Session<ResultType>: NSObject, URLSessionDataDelegate, URLS
     }
 
     func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
-        completedCallback?(receivedData as? ResultType, task.response, error)
+        if case .download = request?.requestType {
+            if let downloadedFileCannotBeMovedError = downloadedFileCannotBeMovedError {
+                completedCallback?(nil,
+                                   task.response,
+                                   TNError.downloadedFileCannotBeSaved(downloadedFileCannotBeMovedError))
+            } else {
+                completedCallback?(downloadLocation as? ResultType, task.response, error)
+            }
+        } else {
+            completedCallback?(receivedData as? ResultType, task.response, error)
+        }
+
+        session.invalidateAndCancel()
     }
 
     func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive data: Data) {
@@ -72,7 +86,13 @@ internal final class Session<ResultType>: NSObject, URLSessionDataDelegate, URLS
     func urlSession(_ session: URLSession,
                     downloadTask: URLSessionDownloadTask,
                     didFinishDownloadingTo location: URL) {
-        completedCallback?(location as? ResultType, nil, downloadTask.error)
+        let destination = location.appendingPathExtension(".received")
+        do {
+            try FileManager.default.moveItem(atPath: location.path, toPath: destination.path)
+            downloadLocation = destination
+        } catch let downloadedFileCannotBeMovedError {
+            self.downloadedFileCannotBeMovedError = downloadedFileCannotBeMovedError
+        }
     }
 
     func urlSession(_ session: URLSession,

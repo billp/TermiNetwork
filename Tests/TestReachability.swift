@@ -1,6 +1,6 @@
 // TestReachability.swift
 //
-// Copyright © 2018-2021 Vasilis Panagiotopoulos. All rights reserved.
+// Copyright © 2018-2022 Vassilis Panagiotopoulos. All rights reserved.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in the
@@ -18,7 +18,7 @@
 // ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 import XCTest
-import TermiNetwork
+@testable import TermiNetwork
 
 class TestReachability: XCTestCase {
     override func setUp() {

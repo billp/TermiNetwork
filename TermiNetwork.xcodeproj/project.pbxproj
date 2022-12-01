@@ -3,10 +3,18 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2300B81929092EA4006C2445 /* Request+FileOperationsAsync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2300B81829092EA4006C2445 /* Request+FileOperationsAsync.swift */; };
+		2305D18A290993DD00E6CEB0 /* TestDownloadOperationsAsync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2305D189290993DD00E6CEB0 /* TestDownloadOperationsAsync.swift */; };
+		2305D18C2909957400E6CEB0 /* TestUploadOperationsAsync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2305D18B2909957400E6CEB0 /* TestUploadOperationsAsync.swift */; };
+		2368F53A28F5B85900639D17 /* TestRequestAsync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2368F53928F5B85900639D17 /* TestRequestAsync.swift */; };
+		2368F53C28F5B98E00639D17 /* Request+Async.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2368F53B28F5B98E00639D17 /* Request+Async.swift */; };
+		23ACE2692932369B00BA45D5 /* www.billp.dev.cer in Resources */ = {isa = PBXBuildFile; fileRef = 2332504629251BC30082EDC7 /* www.billp.dev.cer */; };
+		23ACE26A2932371100BA45D5 /* forums.swift.org.cer in Resources */ = {isa = PBXBuildFile; fileRef = F383AEAB257ED51500DE43FA /* forums.swift.org.cer */; };
+		23ACE26B2932371100BA45D5 /* www.billp.dev.cer in Resources */ = {isa = PBXBuildFile; fileRef = 2332504629251BC30082EDC7 /* www.billp.dev.cer */; };
 		23B36A0D277BB6D100A270B7 /* CryptoSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 23B36A0C277BB6D100A270B7 /* CryptoSwift */; };
 		F309C0ED25A512AB00D10877 /* Request+ResponseTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = F309C0EC25A512AB00D10877 /* Request+ResponseTypes.swift */; };
 		F30A298A258787320046C8E6 /* MiscRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = F30A2989258787320046C8E6 /* MiscRoute.swift */; };
@@ -73,7 +81,6 @@
 		F37C5F6324589E26005BF48B /* SessionTaskFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = F37C5F6224589E26005BF48B /* SessionTaskFactory.swift */; };
 		F383AEA8257ECC8300DE43FA /* CertificatePinningView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F383AE9A257ECC0700DE43FA /* CertificatePinningView.swift */; };
 		F383AEAD257ED51500DE43FA /* forums.swift.org.cer in Resources */ = {isa = PBXBuildFile; fileRef = F383AEAB257ED51500DE43FA /* forums.swift.org.cer */; };
-		F383AEAE257ED51500DE43FA /* herokuapp.com.cer in Resources */ = {isa = PBXBuildFile; fileRef = F383AEAC257ED51500DE43FA /* herokuapp.com.cer */; };
 		F3850C87243D103700F7CC13 /* TestExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3850C79243D103700F7CC13 /* TestExtensions.swift */; };
 		F3850C88243D103700F7CC13 /* Env.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3850C7A243D103700F7CC13 /* Env.swift */; };
 		F3850C89243D103700F7CC13 /* TestQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3850C7B243D103700F7CC13 /* TestQueue.swift */; };
@@ -82,7 +89,6 @@
 		F3850C8C243D103700F7CC13 /* TestParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3850C7F243D103700F7CC13 /* TestParams.swift */; };
 		F3850C8D243D103700F7CC13 /* TestJSONParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3850C80243D103700F7CC13 /* TestJSONParams.swift */; };
 		F3850C8E243D103700F7CC13 /* TestHeaders.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3850C81243D103700F7CC13 /* TestHeaders.swift */; };
-		F3850C90243D103700F7CC13 /* forums.swift.org.cer in Resources */ = {isa = PBXBuildFile; fileRef = F3850C83243D103700F7CC13 /* forums.swift.org.cer */; };
 		F3850C93243D103700F7CC13 /* TestTNErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3850C86243D103700F7CC13 /* TestTNErrors.swift */; };
 		F3850CA6243D104900F7CC13 /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3850C96243D104900F7CC13 /* Router.swift */; };
 		F3850CA8243D104900F7CC13 /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3850C98243D104900F7CC13 /* Session.swift */; };
@@ -114,7 +120,6 @@
 		F3AA5132256EA13E00D64D31 /* FileStreamer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3AA5131256EA13E00D64D31 /* FileStreamer.swift */; };
 		F3AA5147256EF53000D64D31 /* TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3AA5146256EF53000D64D31 /* TestHelpers.swift */; };
 		F3AF556925987256000E01D8 /* DoNothingInterceptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3AF556825987256000E01D8 /* DoNothingInterceptor.swift */; };
-		F3B0F35B250A3121009FF4D0 /* herokuapp.com.cer in Resources */ = {isa = PBXBuildFile; fileRef = F3B0F35A250A3121009FF4D0 /* herokuapp.com.cer */; };
 		F3D16EC82575299900F7B523 /* TermiNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F319682D243D01E1008725CE /* TermiNetwork.framework */; };
 		F3D16EC92575299900F7B523 /* TermiNetwork.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F319682D243D01E1008725CE /* TermiNetwork.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		F3F255E9244C33B800517BF7 /* RouteConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3F255E8244C33B800517BF7 /* RouteConfiguration.swift */; };
@@ -155,6 +160,12 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		2300B81829092EA4006C2445 /* Request+FileOperationsAsync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Request+FileOperationsAsync.swift"; sourceTree = "<group>"; };
+		2305D189290993DD00E6CEB0 /* TestDownloadOperationsAsync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestDownloadOperationsAsync.swift; sourceTree = "<group>"; };
+		2305D18B2909957400E6CEB0 /* TestUploadOperationsAsync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestUploadOperationsAsync.swift; sourceTree = "<group>"; };
+		2332504629251BC30082EDC7 /* www.billp.dev.cer */ = {isa = PBXFileReference; lastKnownFileType = file; name = www.billp.dev.cer; path = Tests/www.billp.dev.cer; sourceTree = SOURCE_ROOT; };
+		2368F53928F5B85900639D17 /* TestRequestAsync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestRequestAsync.swift; sourceTree = "<group>"; };
+		2368F53B28F5B98E00639D17 /* Request+Async.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Request+Async.swift"; sourceTree = "<group>"; };
 		23B36A07277BB5B800A270B7 /* CryptoKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CryptoKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS15.2.sdk/System/Library/Frameworks/CryptoKit.framework; sourceTree = DEVELOPER_DIR; };
 		F309C0EC25A512AB00D10877 /* Request+ResponseTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Request+ResponseTypes.swift"; sourceTree = "<group>"; };
 		F30A2986258783B40046C8E6 /* CryptoMiddleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoMiddleware.swift; sourceTree = "<group>"; };
@@ -225,7 +236,6 @@
 		F37C5F6224589E26005BF48B /* SessionTaskFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionTaskFactory.swift; sourceTree = "<group>"; };
 		F383AE9A257ECC0700DE43FA /* CertificatePinningView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CertificatePinningView.swift; sourceTree = "<group>"; };
 		F383AEAB257ED51500DE43FA /* forums.swift.org.cer */ = {isa = PBXFileReference; lastKnownFileType = file; name = forums.swift.org.cer; path = Tests/forums.swift.org.cer; sourceTree = SOURCE_ROOT; };
-		F383AEAC257ED51500DE43FA /* herokuapp.com.cer */ = {isa = PBXFileReference; lastKnownFileType = file; name = herokuapp.com.cer; path = Tests/herokuapp.com.cer; sourceTree = SOURCE_ROOT; };
 		F3850C79243D103700F7CC13 /* TestExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestExtensions.swift; sourceTree = "<group>"; };
 		F3850C7A243D103700F7CC13 /* Env.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Env.swift; sourceTree = "<group>"; };
 		F3850C7B243D103700F7CC13 /* TestQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestQueue.swift; sourceTree = "<group>"; };
@@ -234,7 +244,6 @@
 		F3850C7F243D103700F7CC13 /* TestParams.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestParams.swift; sourceTree = "<group>"; };
 		F3850C80243D103700F7CC13 /* TestJSONParams.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestJSONParams.swift; sourceTree = "<group>"; };
 		F3850C81243D103700F7CC13 /* TestHeaders.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestHeaders.swift; sourceTree = "<group>"; };
-		F3850C83243D103700F7CC13 /* forums.swift.org.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = forums.swift.org.cer; sourceTree = "<group>"; };
 		F3850C85243D103700F7CC13 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F3850C86243D103700F7CC13 /* TestTNErrors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestTNErrors.swift; sourceTree = "<group>"; };
 		F3850C96243D104900F7CC13 /* Router.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
@@ -269,7 +278,6 @@
 		F3AA5131256EA13E00D64D31 /* FileStreamer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileStreamer.swift; sourceTree = "<group>"; };
 		F3AA5146256EF53000D64D31 /* TestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestHelpers.swift; sourceTree = "<group>"; };
 		F3AF556825987256000E01D8 /* DoNothingInterceptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoNothingInterceptor.swift; sourceTree = "<group>"; };
-		F3B0F35A250A3121009FF4D0 /* herokuapp.com.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = herokuapp.com.cer; sourceTree = "<group>"; };
 		F3F255E8244C33B800517BF7 /* RouteConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteConfiguration.swift; sourceTree = "<group>"; };
 		F3F48287245EBE8000656449 /* TestUploadOperations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestUploadOperations.swift; sourceTree = "<group>"; };
 		F3F4828C245EE58C00656449 /* MultipartFormDataStream.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultipartFormDataStream.swift; sourceTree = "<group>"; };
@@ -365,6 +373,7 @@
 				F30B77D525967FE600681359 /* Request+Interceptors.swift */,
 				F3A4B14725968ED0004812B6 /* Request+NSCopying.swift */,
 				F309C0EC25A512AB00D10877 /* Request+ResponseTypes.swift */,
+				2368F53B28F5B98E00639D17 /* Request+Async.swift */,
 				F3116AB42460A09E00DFE453 /* Dictionary+Extensions.swift */,
 				F3116AB52460A09E00DFE453 /* Data+Extensions.swift */,
 				F3116AAC2460A09E00DFE453 /* UIImageView+Extensions.swift */,
@@ -377,6 +386,7 @@
 			isa = PBXGroup;
 			children = (
 				F3116AB12460A09E00DFE453 /* Request+FileOperations.swift */,
+				2300B81829092EA4006C2445 /* Request+FileOperationsAsync.swift */,
 				F3116AB22460A09E00DFE453 /* Request+DataOperations.swift */,
 				F387B0E72579501000A8C0C7 /* Decodable+Transformer.swift */,
 			);
@@ -571,6 +581,7 @@
 				F3850C7B243D103700F7CC13 /* TestQueue.swift */,
 				F3850C7C243D103700F7CC13 /* TestEnvironment.swift */,
 				F3363E6425A6395800699E73 /* TestRequest.swift */,
+				2368F53928F5B85900639D17 /* TestRequestAsync.swift */,
 				F3850C86243D103700F7CC13 /* TestTNErrors.swift */,
 				F35B533924422FAE00C1853A /* TestConfiguration.swift */,
 				F398575125AC945A00DCCAAE /* TestMockedRequest.swift */,
@@ -627,9 +638,9 @@
 			isa = PBXGroup;
 			children = (
 				F35B533D2443325400C1853A /* MockData.bundle */,
-				F3B0F35A250A3121009FF4D0 /* herokuapp.com.cer */,
 				F33684D3246692E400C64471 /* photo.jpg */,
-				F3850C83243D103700F7CC13 /* forums.swift.org.cer */,
+				F383AEAB257ED51500DE43FA /* forums.swift.org.cer */,
+				2332504629251BC30082EDC7 /* www.billp.dev.cer */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -706,8 +717,6 @@
 			isa = PBXGroup;
 			children = (
 				F3309DB3258AA05700BB018D /* Launch Screen.storyboard */,
-				F383AEAB257ED51500DE43FA /* forums.swift.org.cer */,
-				F383AEAC257ED51500DE43FA /* herokuapp.com.cer */,
 				F355607B257527C40047D46D /* Assets.xcassets */,
 				F3556082257527C40047D46D /* Info.plist */,
 				F37A17FD257D49A8003EFB1F /* MockData.bundle */,
@@ -728,7 +737,9 @@
 			isa = PBXGroup;
 			children = (
 				F3556064257401330047D46D /* TestDownloadOperations.swift */,
+				2305D189290993DD00E6CEB0 /* TestDownloadOperationsAsync.swift */,
 				F3F48287245EBE8000656449 /* TestUploadOperations.swift */,
+				2305D18B2909957400E6CEB0 /* TestUploadOperationsAsync.swift */,
 			);
 			name = "Data Operations";
 			sourceTree = "<group>";
@@ -818,7 +829,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1220;
-				LastUpgradeCheck = 1200;
+				LastUpgradeCheck = 1400;
 				ORGANIZATIONNAME = "Bill Panagiotopoulos";
 				TargetAttributes = {
 					F319682C243D01E1008725CE = {
@@ -869,10 +880,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				23ACE26B2932371100BA45D5 /* www.billp.dev.cer in Resources */,
+				23ACE26A2932371100BA45D5 /* forums.swift.org.cer in Resources */,
 				F35B533E2443325400C1853A /* MockData.bundle in Resources */,
-				F3B0F35B250A3121009FF4D0 /* herokuapp.com.cer in Resources */,
 				F33684D52466939200C64471 /* photo.jpg in Resources */,
-				F3850C90243D103700F7CC13 /* forums.swift.org.cer in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -880,8 +891,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				23ACE2692932369B00BA45D5 /* www.billp.dev.cer in Resources */,
 				F383AEAD257ED51500DE43FA /* forums.swift.org.cer in Resources */,
-				F383AEAE257ED51500DE43FA /* herokuapp.com.cer in Resources */,
 				F355608F257527C40047D46D /* Assets.xcassets in Resources */,
 				F3309DB4258AA05700BB018D /* Launch Screen.storyboard in Resources */,
 				F37A17FE257D49A8003EFB1F /* MockData.bundle in Resources */,
@@ -893,6 +904,7 @@
 /* Begin PBXShellScriptBuildPhase section */
 		F3196884243D08FD008725CE /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);
@@ -906,10 +918,11 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "export PATH=\"/opt/homebrew/bin/:$PATH\"\nif which swiftlint >/dev/null; then\n    swiftlint --path \"$PROJECT_DIR/Source\" --config \"$PROJECT_DIR/.swiftlint.yml\"\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+			shellScript = "export PATH=\"/opt/homebrew/bin/:$PATH\"\nif which swiftlint >/dev/null; then\n   swiftlint --path \"$PROJECT_DIR/Source\" --config \"$PROJECT_DIR/.swiftlint.yml\"\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
 		};
 		F3196885243D0904008725CE /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);
@@ -948,6 +961,7 @@
 				F3850CAF243D104900F7CC13 /* Queue.swift in Sources */,
 				F3116ABC2460A09E00DFE453 /* Request+Middleware.swift in Sources */,
 				F387B0E82579501000A8C0C7 /* Decodable+Transformer.swift in Sources */,
+				2368F53C28F5B98E00639D17 /* Request+Async.swift in Sources */,
 				F3116AC32460A91B00DFE453 /* MultipartFormDataHelpers.swift in Sources */,
 				F3319E9C246AD71C00D94AFE /* MultipartFormDataPartType.swift in Sources */,
 				F373779225C4B4720075EFA3 /* Reachability.swift in Sources */,
@@ -969,6 +983,7 @@
 				F3116ABD2460A09E00DFE453 /* Dictionary+Extensions.swift in Sources */,
 				F31F88BC257C11C900D9A802 /* UIImage+Extensions.swift in Sources */,
 				F34BA6722590E63D007CE8D6 /* CertificatePinningManager.swift in Sources */,
+				2300B81929092EA4006C2445 /* Request+FileOperationsAsync.swift in Sources */,
 				F3850CAC243D104900F7CC13 /* Operation.swift in Sources */,
 				F3A4B14825968ED0004812B6 /* Request+NSCopying.swift in Sources */,
 				F37C5F6324589E26005BF48B /* SessionTaskFactory.swift in Sources */,
@@ -980,6 +995,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F35B533A24422FAE00C1853A /* TestConfiguration.swift in Sources */,
+				2305D18A290993DD00E6CEB0 /* TestDownloadOperationsAsync.swift in Sources */,
 				F398575225AC945A00DCCAAE /* TestMockedRequest.swift in Sources */,
 				F3850C93243D103700F7CC13 /* TestTNErrors.swift in Sources */,
 				F3850C8E243D103700F7CC13 /* TestHeaders.swift in Sources */,
@@ -1008,9 +1024,11 @@
 				F3850C8D243D103700F7CC13 /* TestJSONParams.swift in Sources */,
 				F387B0F7257958EB00A8C0C7 /* TestTransformers.swift in Sources */,
 				F397EC9F244F74360082E12D /* CryptoMiddleware.swift in Sources */,
+				2368F53A28F5B85900639D17 /* TestRequestAsync.swift in Sources */,
 				F37014B32598FCC80022B7D6 /* UnauthorizedInterceptor.swift in Sources */,
 				F3F48288245EBF6D00656449 /* TestUploadOperations.swift in Sources */,
 				F3850C89243D103700F7CC13 /* TestQueue.swift in Sources */,
+				2305D18C2909957400E6CEB0 /* TestUploadOperationsAsync.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1100,6 +1118,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -1163,6 +1182,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -1190,6 +1210,7 @@
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
+				DEAD_CODE_STRIPPING = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -1222,6 +1243,7 @@
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
+				DEAD_CODE_STRIPPING = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -1254,6 +1276,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
+				DEAD_CODE_STRIPPING = YES;
 				INFOPLIST_FILE = Tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1275,6 +1298,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
+				DEAD_CODE_STRIPPING = YES;
 				INFOPLIST_FILE = Tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

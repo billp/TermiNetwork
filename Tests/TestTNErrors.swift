@@ -1,6 +1,6 @@
 // TestTNErrors.swift
 //
-// Copyright © 2018-2021 Vasilis Panagiotopoulos. All rights reserved.
+// Copyright © 2018-2022 Vassilis Panagiotopoulos. All rights reserved.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in the
@@ -266,7 +266,7 @@ class TestTNErrors: XCTestCase {
             }
             .failure { error in
                 switch error {
-                case .notSuccess(let code):
+                case .notSuccess(let code, _):
                     failed = code != 404
                 default:
                     failed = true
@@ -366,7 +366,7 @@ class TestTNErrors: XCTestCase {
         }
         .failure(responseType: StatusCode.self) { obj, error in
             switch error {
-            case .notSuccess(let statusCode):
+            case .notSuccess(let statusCode, _):
                 failed = !(statusCode == 401 && obj?.statusCode == "401")
             default:
                 failed = true
@@ -390,7 +390,7 @@ class TestTNErrors: XCTestCase {
         }
         .failure(transformer: StatusCodeTransformer.self) { obj, error in
             switch error {
-            case .notSuccess(let statusCode):
+            case .notSuccess(let statusCode, _):
                 failed = !(statusCode == 401 && obj?.value == "401")
             default:
                 failed = true

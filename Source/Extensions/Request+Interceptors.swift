@@ -1,6 +1,6 @@
 // Request+Interceptors.swift
 //
-// Copyright © 2018-2021 Vasilis Panagiotopoulos. All rights reserved.
+// Copyright © 2018-2022 Vassilis Panagiotopoulos. All rights reserved.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in the
@@ -33,7 +33,8 @@ extension Request {
         if let nextInterceptor = interceptors?.first {
             nextInterceptor.requestFinished(responseData: data,
                                             error: error,
-                                            request: self) { action in
+                                            request: self) { [weak self] action in
+                guard let self = self else { return }
                 switch action {
                 case .continue:
                     self.interceptorContinueAction(data: data,
@@ -79,8 +80,6 @@ extension Request {
         if let data = data, error == nil, retryCount > 0 {
             // ...and the interceptor is the last in chain.
             if interceptors?.isEmpty == true {
-                // DEPRECATED: Will be removed from future relases.
-                dataTaskSuccessCompletionHandler?(data, urlResponse)
                 // Call the success completion handler directly.
                 successCompletionHandler?(data, urlResponse)
             } else {
@@ -97,7 +96,7 @@ extension Request {
             } else {
                 // Else move to the next interceptor.
                 processNextInterceptorIfNeeded(data: data,
-                                               error: nil,
+                                               error: error,
                                                finishCallback: finishCallback)
             }
 
@@ -124,7 +123,9 @@ extension Request {
         // Prevent duplicate print log on completed.
         newRequest.skipLogOnComplete = true
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + delay) { [weak self] in
+            guard let self = self else { return }
+
             // Reset the request start time.
             self.startedAt = Date()
 
@@ -152,13 +153,19 @@ extension Request {
                           finishCallback: @escaping InterceptorFinishedCallbackType) {
         request
             .queue(request.queue)
-            .success(responseType: Data.self) { data in
-            self.urlResponse = request.urlResponse
-            self.processNextInterceptorIfNeeded(data: data,
-                                                error: nil,
-                                                finishCallback: finishCallback)
+            .success(responseType: Data.self) { [weak self, weak request] data in
+                guard let self = self else { return }
+                guard let request = request else { return }
+
+                self.urlResponse = request.urlResponse
+                self.processNextInterceptorIfNeeded(data: data,
+                                                    error: nil,
+                                                    finishCallback: finishCallback)
         }
-        .failure(responseType: Data.self) { data, error in
+        .failure(responseType: Data.self) {  [weak self, weak request] data, error in
+            guard let self = self else { return }
+            guard let request = request else { return }
+
             self.urlResponse = request.urlResponse
             self.processNextInterceptorIfNeeded(data: data,
                                                 error: error,
@@ -174,15 +181,20 @@ extension Request {
                             finishCallback: @escaping InterceptorFinishedCallbackType) {
 
         request
-            .queue(request.queue)
             .upload(responseType: Data.self,
-                       progressUpdate: self.progressCallback) { data in
+                       progressUpdate: self.progressCallback) { [weak self, weak request] data in
+                guard let self = self else { return }
+                guard let request = request else { return }
+
                 self.urlResponse = request.urlResponse
                 self.processNextInterceptorIfNeeded(data: data,
                                                     error: nil,
                                                     finishCallback: finishCallback)
             }
-            .failure(responseType: Data.self) { data, error in
+            .failure(responseType: Data.self) {  [weak self, weak request] data, error in
+                guard let self = self else { return }
+                guard let request = request else { return }
+
                 self.urlResponse = request.urlResponse
                 self.processNextInterceptorIfNeeded(data: data,
                                                     error: error,
@@ -199,14 +211,20 @@ extension Request {
                               finishCallback: @escaping InterceptorFinishedCallbackType) {
         request
             .queue(request.queue)
-            .download(filePath: filePath,
-                         progressUpdate: self.progressCallback) {
+            .download(destinationPath: filePath,
+                      progressUpdate: self.progressCallback) { [weak self, weak request] in
+                guard let self = self else { return }
+                guard let request = request else { return }
+
                 self.urlResponse = request.urlResponse
                 self.processNextInterceptorIfNeeded(data: Data(),
                     error: nil,
                     finishCallback: finishCallback)
             }
-            .failure(responseType: Data.self) { data, error in
+            .failure(responseType: Data.self) { [weak self, weak request] data, error in
+                guard let self = self else { return }
+                guard let request = request else { return }
+
                 self.urlResponse = request.urlResponse
                 self.processNextInterceptorIfNeeded(data: data,
                                                     error: error,

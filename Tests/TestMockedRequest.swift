@@ -1,6 +1,6 @@
 // TestMockRequests.swift
 //
-// Copyright © 2018-2021 Vasilis Panagiotopoulos. All rights reserved.
+// Copyright © 2018-2022 Vassilis Panagiotopoulos. All rights reserved.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in the
@@ -50,7 +50,7 @@ class TestMockedRequests: XCTestCase {
         if let bundlePath = Bundle(for: TestConfiguration.self).path(forResource: "MockData", ofType: "bundle") {
             conf.mockDataBundle = Bundle(path: bundlePath)
             conf.mockDataEnabled = true
-            conf.mockDelay = MockDelayType(min: 0.3, max: 2.05)
+            conf.mockDelay = MockDelayRange(min: 0.3, max: 2.05)
         }
 
         return conf

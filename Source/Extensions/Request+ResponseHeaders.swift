@@ -1,6 +1,6 @@
 // Request+ResponseHeaders.swift
 //
-// Copyright © 2018-2021 Vasilis Panagiotopoulos. All rights reserved.
+// Copyright © 2018-2022 Vassilis Panagiotopoulos. All rights reserved.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in the
@@ -25,15 +25,11 @@ public extension Request {
     /// Reads the response headers from request after its completion.
     /// - parameters:
     ///     - headersCallback: A closure that provides the response headers or an error.
-    func responseHeaders(_ headersCallback: @escaping ([String: String]?, TNError?) -> Void) {
-        guard dataTask != nil else {
-            headersCallback(nil, .cannotReadResponseHeaders)
-            return
-        }
-
+    @discardableResult
+    func responseHeaders(_ headersCallback: @escaping ([String: String]?, TNError?) -> Void) -> Self {
         guard processedHeaders == nil else {
             headersCallback(processedHeaders, nil)
-            return
+            return self
         }
 
         self.responseHeadersClosure = { [weak self] urlResponse in
@@ -45,5 +41,6 @@ public extension Request {
             self?.processedHeaders = processedHeaders
             headersCallback(processedHeaders, nil)
         }
+        return self
     }
 }

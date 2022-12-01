@@ -1,6 +1,6 @@
 // TestRequest.swift
 //
-// Copyright © 2018-2021 Vasilis Panagiotopoulos. All rights reserved.
+// Copyright © 2018-2022 Vassilis Panagiotopoulos. All rights reserved.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in the
@@ -343,7 +343,7 @@ class TestRequest: XCTestCase {
                 expectation2.fulfill()
             }
             .failure { error in
-                if case .notSuccess(404) = error {
+                if case .notSuccess(404, _) = error {
                     failed = false
                 }
                 expectation2.fulfill()
@@ -399,25 +399,6 @@ class TestRequest: XCTestCase {
             .success(responseType: Data.self, responseHandler: { _ in })
             .responseHeaders { (headers, _) in
                 failed = headers?["Content-Type"] != "application/json; charset=utf-8"
-                expectation.fulfill()
-            }
-
-        wait(for: [expectation], timeout: 60)
-        XCTAssert(!failed)
-    }
-
-    func testInvalidResponseHeaders() {
-        var failed = true
-
-        let expectation = XCTestExpectation(description: "testMiddleware")
-
-        routerWithMiddleware.request(for: .testEncryptParams(value: "Hola!!!"))
-            .responseHeaders { (_, error) in
-                if case .cannotReadResponseHeaders = error {
-                    failed = false
-                } else {
-                    failed = true
-                }
                 expectation.fulfill()
             }
 

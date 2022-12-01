@@ -1,6 +1,6 @@
 // Request+ResponseTypes.swift
 //
-// Copyright © 2018-2021 Vasilis Panagiotopoulos. All rights reserved.
+// Copyright © 2018-2022 Vassilis Panagiotopoulos. All rights reserved.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in the
@@ -23,29 +23,32 @@ extension Request {
     // MARK: Empty
 
     func makeResponseFailureHandler(responseHandler: @escaping (TNError) -> Void)
-                            -> (TNError, Data?, URLResponse?) -> Void {
-        return { error, data, _  in
-            self.handleDataTaskCompleted(with: data,
-                                         error: error,
-                                         onFailureCallback: { responseHandler(error) })
+                                    -> (TNError, Data?, URLResponse?) -> Void {
+        return { [weak self] error, data, _  in
+            self?.handleDataTaskCompleted(with: data,
+                                          error: error,
+                                          onFailureCallback: { responseHandler(error) })
         }
     }
 
     func makeResponseSuccessHandler(responseHandler: @escaping () -> Void)
-                            -> (Data?, URLResponse?) -> Void {
-        return { data, urlResponse  in
-            self.handleDataTaskCompleted(with: data,
-                                         urlResponse: urlResponse,
-                                         onSuccessCallback: { responseHandler() })
+                                    -> (Data?, URLResponse?) -> Void {
+        return { [weak self] data, urlResponse  in
+            self?.handleDataTaskCompleted(with: data,
+                                          urlResponse: urlResponse,
+                                          onSuccessCallback: { responseHandler() })
         }
     }
 
     // MARK: Decodable
 
-    func makeDecodableResponseSuccessHandler<T: Decodable>(decodableType: T.Type,
-                                                           responseHandler: @escaping (T) -> Void)
-                            -> ((Data, URLResponse?) -> Void)? {
-        return { data, urlResponse in
+    func makeDecodableResponseSuccessHandler<T: Decodable>(
+        decodableType: T.Type,
+        responseHandler: @escaping (T) -> Void
+    ) -> ((Data, URLResponse?) -> Void)? {
+        return { [weak self] data, urlResponse in
+            guard let self = self else { return }
+
             let object: T!
 
             do {
@@ -56,7 +59,8 @@ extension Request {
                 self.handleDataTaskCompleted(with: data,
                                              urlResponse: urlResponse,
                                              error: tnError,
-                                             onFailureCallback: {
+                                             onFailureCallback: { [ weak self] in
+                                                guard let self = self else { return }
                                                 self.failureCompletionHandler?(tnError, data, urlResponse)
                                              })
                 return
@@ -68,10 +72,12 @@ extension Request {
         }
     }
 
-    func makeDecodableResponseFailureHandler<T: Decodable>(decodableType: T.Type,
-                                                           responseHandler: @escaping (T?, TNError) -> Void)
-                            -> (TNError, Data?, URLResponse?) -> Void {
-        return { error, data, _  in
+    func makeDecodableResponseFailureHandler<T: Decodable>(
+        decodableType: T.Type,
+        responseHandler: @escaping (T?, TNError) -> Void
+    ) -> (TNError, Data?, URLResponse?) -> Void {
+        return { [weak self] error, data, _  in
+            guard let self = self else { return }
             // Check to see if there is already a deserialization error from success
             if case .cannotDeserialize = error {
                 responseHandler(nil, error)
@@ -101,11 +107,11 @@ extension Request {
 
     // MARK: - Transformers
 
-    func makeTransformedResponseSuccessHandler<FromType: Decodable,
-                                               ToType>(transformer: Transformer<FromType, ToType>.Type,
-                                                       responseHandler: @escaping (ToType) -> Void)
-                            -> (Data, URLResponse?) -> Void {
-        return { data, urlResponse  in
+    func makeTransformedResponseSuccessHandler<FromType: Decodable, ToType>(
+        transformer: Transformer<FromType, ToType>.Type, responseHandler: @escaping (ToType) -> Void
+    ) -> (Data, URLResponse?) -> Void {
+        return { [weak self] data, urlResponse  in
+            guard let self = self else { return }
             let object: FromType!
 
             do {
@@ -116,7 +122,8 @@ extension Request {
                 self.handleDataTaskCompleted(with: data,
                                              urlResponse: urlResponse,
                                              error: tnError,
-                                             onFailureCallback: {
+                                             onFailureCallback: { [weak self] in
+                                                guard let self = self else { return }
                                                 self.failureCompletionHandler?(tnError, data, urlResponse)
                                              })
                 return
@@ -135,7 +142,8 @@ extension Request {
                 }
                 self.handleDataTaskCompleted(with: data,
                                              error: tnError,
-                                             onFailureCallback: {
+                                             onFailureCallback: { [weak self] in
+                                                guard let self = self else { return }
                                                 self.failureCompletionHandler?(tnError, data, urlResponse)
                                              })
             }
@@ -146,8 +154,9 @@ extension Request {
                                                ToType>(transformer: Transformer<FromType, ToType>.Type,
                                                        responseHandler: @escaping (ToType?, TNError) -> Void)
                             -> (TNError, Data?, URLResponse?) -> Void {
-        return { error, data, urlResponse  in
-            guard let data = data else {
+        return { [weak self] error, data, urlResponse  in
+            guard let self = self,
+                  let data = data else {
                 responseHandler(nil, .emptyResponse)
                 return
             }
@@ -185,7 +194,8 @@ extension Request {
                 }
                 self.handleDataTaskCompleted(with: data,
                                              error: tnError,
-                                             onFailureCallback: {
+                                             onFailureCallback: { [weak self] in
+                                                guard let self = self else { return }
                                                 self.failureCompletionHandler?(tnError, data, urlResponse)
                                              })
             }
@@ -195,8 +205,9 @@ extension Request {
     // MARK: Image
 
     func makeImageResponseSuccessHandler(responseHandler: @escaping (ImageType) -> Void)
-                            -> ((Data, URLResponse?) -> Void)? {
-        return { data, urlResponse  in
+        -> ((Data, URLResponse?) -> Void)? {
+        return { [weak self] data, urlResponse in
+            guard let self = self else { return }
             let image = ImageType(data: data)
 
             if image == nil {
@@ -204,7 +215,8 @@ extension Request {
                 self.handleDataTaskCompleted(with: data,
                                              urlResponse: urlResponse,
                                              error: tnError,
-                                             onFailureCallback: {
+                                             onFailureCallback: { [weak self] in
+                                                guard let self = self else { return }
                                                 self.failureCompletionHandler?(tnError, data, urlResponse)
                                              })
 
@@ -220,7 +232,8 @@ extension Request {
 
     func makeStringResponseSuccessHandler(responseHandler: @escaping (String) -> Void)
                             -> ((Data, URLResponse?) -> Void)? {
-        return { data, urlResponse  in
+        return { [weak self] data, urlResponse  in
+            guard let self = self else { return }
             if let string = String(data: data, encoding: .utf8) {
 
                 self.handleDataTaskCompleted(with: data,
@@ -231,7 +244,8 @@ extension Request {
                 self.handleDataTaskCompleted(with: data,
                                              urlResponse: urlResponse,
                                              error: tnError,
-                                             onFailureCallback: {
+                                             onFailureCallback: { [weak self] in
+                                                guard let self = self else { return }
                                                 self.failureCompletionHandler?(tnError, data, urlResponse)
                                              })
             }
@@ -240,7 +254,8 @@ extension Request {
 
     func makeStringResponseFailureHandler(responseHandler: @escaping (String?, TNError) -> Void)
                             -> (TNError, Data?, URLResponse?) -> Void {
-        return { error, data, urlResponse  in
+        return { [weak self] error, data, urlResponse  in
+            guard let self = self else { return }
             // Check to see if there is already a deserialization error from success
             if case .cannotDeserialize = error {
                 responseHandler(nil, error)
@@ -266,7 +281,8 @@ extension Request {
 
     func makeDataResponseSuccessHandler(responseHandler: @escaping (Data) -> Void)
                             -> ((Data, URLResponse?) -> Void)? {
-        return { data, urlResponse in
+        return { [weak self] data, urlResponse in
+            guard let self = self else { return }
             self.handleDataTaskCompleted(with: data,
                                          urlResponse: urlResponse,
                                          onSuccessCallback: { responseHandler(data) })
@@ -275,7 +291,8 @@ extension Request {
 
     func makeDataResponseFailureHandler(responseHandler: @escaping (Data?, TNError) -> Void)
                             -> (TNError, Data?, URLResponse?) -> Void {
-        return { error, data, urlResponse  in
+        return { [weak self] error, data, urlResponse in
+            guard let self = self else { return }
             // Check to see if there is already a deserialization error from success
             if case .cannotDeserialize = error {
                 responseHandler(nil, error)
@@ -290,9 +307,7 @@ extension Request {
                 self.handleDataTaskCompleted(with: data,
                                              urlResponse: urlResponse,
                                              error: error,
-                                             onFailureCallback: {
-                                                responseHandler(nil, error)
-                                             })
+                                             onFailureCallback: { responseHandler(nil, error) })
             }
         }
     }

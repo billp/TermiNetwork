@@ -1,6 +1,6 @@
 // SessionTaskFactory.swift
 //
-// Copyright © 2018-2021 Vasilis Panagiotopoulos. All rights reserved.
+// Copyright © 2018-2022 Vassilis Panagiotopoulos. All rights reserved.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in the
@@ -30,9 +30,6 @@ internal class SessionTaskFactory {
                              completionHandler: ((Data?, URLResponse?) -> Void)?,
                              onFailure: FailureCallbackWithType<Data>?) -> URLSessionDataTask? {
 
-        // Hold completionHandler for later use. (Backward compatibility: remove this in later versions)
-        request.dataTaskSuccessCompletionHandler = completionHandler
-
         let urlRequest: URLRequest!
         do {
             urlRequest = try request.asRequest()
@@ -58,7 +55,8 @@ internal class SessionTaskFactory {
                                  delegate: Session<Data>(with: request),
                                  delegateQueue: OperationQueue.current)
 
-        let dataTask = session.dataTask(with: urlRequest) { data, urlResponse, error in
+        let dataTask = session.dataTask(with: urlRequest) { [weak request] data, urlResponse, error in
+            guard let request = request else { return }
             request.urlResponse = urlResponse
 
             let dataResult = RequestHelpers.processData(with: request,
@@ -71,6 +69,7 @@ internal class SessionTaskFactory {
             } else {
                 completionHandler?(dataResult.data, urlResponse)
             }
+            session.invalidateAndCancel()
         }
 
         return dataTask
@@ -86,8 +85,6 @@ internal class SessionTaskFactory {
                                completionHandler: ((Data, URLResponse?) -> Void)?,
                                onFailure: FailureCallback?) -> URLSessionUploadTask? {
 
-        // Hold completionHandler for later use. (Backward compatibility: remove this in later versions)
-        request.dataTaskSuccessCompletionHandler = completionHandler
         request.progressCallback = progressUpdate
 
         guard let params = request.params as? [String: MultipartFormDataPartType] else {
@@ -119,7 +116,8 @@ internal class SessionTaskFactory {
 
         let sessionDelegate = Session<Data>(with: request,
                                             progressCallback: progressUpdate,
-                                            completedCallback: { (data, urlResponse, error) in
+                                            completedCallback: { [weak request] data, urlResponse, error in
+            guard let request = request else { return }
             request.urlResponse = urlResponse
 
             let dataResult = RequestHelpers.processData(with: request,
@@ -154,9 +152,6 @@ internal class SessionTaskFactory {
                                  progressUpdate: ProgressCallbackType?,
                                  completionHandler: ((Data?, URLResponse?) -> Void)?,
                                  onFailure: FailureCallback?) -> URLSessionDownloadTask? {
-        // Hold completionHandler for later use. (Backward compatibility: remove this in later versions)
-        request.dataTaskSuccessCompletionHandler = completionHandler
-
         let urlRequest: URLRequest!
         do {
             urlRequest = try request.asRequest()
@@ -174,7 +169,8 @@ internal class SessionTaskFactory {
         // Set the type of the request
         request.requestType = .download(destinationPath)
 
-        let callback: ((URL?, URLResponse?, Error?) -> Void)? = { url, urlResponse, error in
+        let callback: ((URL?, URLResponse?, Error?) -> Void)? = { [weak request] url, urlResponse, error in
+            guard let request = request else { return }
             request.urlResponse = urlResponse
 
             let dataResult = RequestHelpers.processData(with: request,
@@ -196,10 +192,12 @@ internal class SessionTaskFactory {
                 }
             }
         }
+
+        let sessionDelegate = Session<URL>(with: request,
+                                           progressCallback: progressUpdate,
+                                           completedCallback: callback)
         let session = URLSession(configuration: URLSessionConfiguration.default,
-                                 delegate: Session<URL>(with: request,
-                                                        progressCallback: progressUpdate,
-                                                        completedCallback: callback),
+                                 delegate: sessionDelegate,
                                  delegateQueue: OperationQueue.current)
 
         let task = session.downloadTask(with: urlRequest)

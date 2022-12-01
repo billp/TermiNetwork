@@ -1,6 +1,6 @@
 // UIImageView+Extensions.swift
 //
-// Copyright © 2018-2021 Vasilis Panagiotopoulos. All rights reserved.
+// Copyright © 2018-2022 Vassilis Panagiotopoulos. All rights reserved.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in the
@@ -120,7 +120,8 @@ extension ImageViewType {
         #endif
 
         setActiveCallInImageView(try ImageViewType.downloadImage(request: request,
-                                                                   onSuccess: { image in
+                                                                   onSuccess: { [weak self] image in
+            guard let self = self else { return }
             var image = image
 
             DispatchQueue.global(qos: .background).async {
@@ -139,7 +140,9 @@ extension ImageViewType {
                     onFinish?(image, nil)
                 }
             }
-        }, onFailure: { error, _ in
+        }, onFailure: { [weak self] error, _ in
+            guard let self = self else { return }
+
             #if os(watchOS)
             self.setImage(nil)
             #else

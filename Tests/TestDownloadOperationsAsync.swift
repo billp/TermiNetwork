@@ -1,4 +1,4 @@
-// TestDownloadOperations.swift
+// TestDownloadOperationsAsync.swift
 //
 // Copyright © 2018-2022 Vassilis Panagiotopoulos. All rights reserved.
 //
@@ -20,7 +20,7 @@
 import XCTest
 import TermiNetwork
 
-class TestDownloadOperations: XCTestCase {
+class TestDownloadOperationsAsync: XCTestCase {
     lazy var configuration: Configuration = {
         return Configuration(cachePolicy: .reloadIgnoringLocalAndRemoteCacheData,
                              verbose: true)
@@ -47,9 +47,7 @@ class TestDownloadOperations: XCTestCase {
         var checksum: String
     }
 
-    func testFileDownload() {
-        let expectation = XCTestExpectation(description: "testFileDownload")
-
+    func testFileDownload() async {
         var failed = true
 
         guard var cacheURL = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first else {
@@ -60,54 +58,44 @@ class TestDownloadOperations: XCTestCase {
 
         try? FileManager.default.removeItem(at: cacheURL)
 
-        router.request(for: .fileDownload)
-            .download(destinationPath: cacheURL.path,
-                      progressUpdate: { bytesSent, totalBytes, progress in
-                        if bytesSent == totalBytes && progress == 1 {
-                            failed = false
-                        }
-                      },
-                      completionHandler: {
-                        failed = TestHelpers.sha256(url: cacheURL) !=
-                            "63b54b4506e233839f55e1228b59a1fcdec7d5ff9c13073c8a1faf92e9dcc977"
+        do {
+            try await router.request(for: .fileDownload)
+                .asyncDownload(destinationPath: cacheURL.path,
+                               progressUpdate: { bytesSent, totalBytes, progress in
+                    if bytesSent == totalBytes && progress == 1 {
+                        failed = false
+                    }
+                  })
 
-                        expectation.fulfill()
-                      })
-            .failure { error in
-                failed = true
-                print(String(describing: error.localizedDescription))
-                expectation.fulfill()
-            }
+            failed = TestHelpers.sha256(url: cacheURL) !=
+                "63b54b4506e233839f55e1228b59a1fcdec7d5ff9c13073c8a1faf92e9dcc977"
 
-        wait(for: [expectation], timeout: 500)
+        } catch let error {
+            failed = true
+            print(error.localizedDescription)
+        }
 
         XCTAssert(!failed)
     }
 
-    func testInvalidFileDownload() {
-        let expectation = XCTestExpectation(description: "testInvalidFileDownload")
-
+    func testInvalidFileDownload() async {
         var failed = true
 
-        router.request(for: .fileDownload)
-            .download(destinationPath: "",
-                      progressUpdate: { bytesSent, totalBytes, progress in
-                        if bytesSent == totalBytes && progress == 1 {
-                            failed = false
-                        }
-                      },
-                      completionHandler: {
-                        failed = true
-                        expectation.fulfill()
-                      })
-            .failure { error in
-                if case .invalidFileURL = error {
-                    failed = false
-                }
-                expectation.fulfill()
-            }
+        do {
+            try await router.request(for: .fileDownload)
+                .asyncDownload(destinationPath: "",
+                               progressUpdate: { bytesSent, totalBytes, progress in
+                    if bytesSent == totalBytes && progress == 1 {
+                        failed = false
+                    }
+                })
 
-        wait(for: [expectation], timeout: 500)
+            failed = true
+        } catch let error {
+            if case .invalidFileURL = error as? TNError {
+                failed = false
+            }
+        }
 
         XCTAssert(!failed)
     }

@@ -1,6 +1,6 @@
 // Request+Mock.swift
 //
-// Copyright © 2018-2021 Vasilis Panagiotopoulos. All rights reserved.
+// Copyright © 2018-2022 Vassilis Panagiotopoulos. All rights reserved.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in the
@@ -25,9 +25,9 @@ extension Request {
     }
 
     @discardableResult
-    internal func createMockResponse(request: URLRequest,
-                                     completionHandler: ((Data, URLResponse?) -> Void)?,
-                                     onFailure: FailureCallbackWithType<Data>? = nil) -> URLSessionDataTask {
+    internal func createMockedResponse(request: URLRequest,
+                                       completionHandler: ((Data, URLResponse?) -> Void)?,
+                                       onFailure: FailureCallbackWithType<Data>? = nil) -> URLSessionDataTask {
         let fakeSession = URLSession(configuration: URLSession.shared.configuration)
                             .dataTask(with: request)
 
@@ -62,11 +62,12 @@ extension Request {
     }
 
     internal func createDefaultMockResponse() {
-        createMockResponse(request: urlRequest!,
-                           completionHandler: successCompletionHandler,
-                           onFailure: { data, error in
-                                self.failureCompletionHandler?(error, data, self.urlResponse)
-                           })
+        createMockedResponse(request: urlRequest!,
+                             completionHandler: successCompletionHandler,
+                             onFailure: { [weak self] data, error in
+            guard let self = self else { return }
+            self.failureCompletionHandler?(error, data, self.urlResponse)
+        })
     }
 
     fileprivate func delay(_ delay: TimeInterval,
@@ -77,6 +78,11 @@ extension Request {
     fileprivate func randomizer(between min: TimeInterval,
                                 and max: TimeInterval) -> TimeInterval {
         var numberGenerator = SystemRandomNumberGenerator()
+
+        guard max > min else {
+            return 0.0
+        }
+
         return Double.random(in: min..<max, using: &numberGenerator)
     }
 

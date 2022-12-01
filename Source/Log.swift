@@ -1,6 +1,6 @@
 // Log.swift
 //
-// Copyright © 2018-2021 Vasilis Panagiotopoulos. All rights reserved.
+// Copyright © 2018-2022 Vassilis Panagiotopoulos. All rights reserved.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in the
@@ -55,7 +55,7 @@ internal class Log {
             }
 
             if request.configuration.mockDataEnabled == true {
-                print("🗂 Mock Data Enabled.")
+                print("🗂 Mocked response.")
             }
             print(String(format: "🎛️ Method: %@", request.method.rawValue.uppercased()))
             if case .data = request.requestType,

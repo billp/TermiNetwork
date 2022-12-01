@@ -1,6 +1,6 @@
 // CityExplorerDetails.swift
 //
-// Copyright © 2018-2021 Vasilis Panagiotopoulos. All rights reserved.
+// Copyright © 2018-2022 Vassilis Panagiotopoulos. All rights reserved.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in the
@@ -22,55 +22,80 @@ import SwiftUI
 import TermiNetwork
 
 struct CityExplorerDetails: View {
-    @State var activeRequest: Request?
-    @State var city: City
-    @State var errorMessage: String?
-    @State var cityFetched: Bool = false
+
+    @StateObject var viewModel: ViewModel
+    
+    init(viewModel: ViewModel) {
+        Environment.current.configuration?.mockDataEnabled = viewModel.usesMockData
+        self._viewModel = .init(wrappedValue: viewModel)
+    }
 
     var body: some View {
         VStack {
-            if let errorMessage = errorMessage {
+            if let errorMessage = viewModel.errorMessage {
                 Text(errorMessage)
                     .multilineTextAlignment(.center)
                     .accentColor(.red)
                     .font(.caption)
                     .padding(EdgeInsets(top: 0, leading: 30, bottom: 0, trailing: 30))
-            } else if !cityFetched {
+            } else if !viewModel.cityFetched {
                 ProgressView()
             } else {
-                GeometryReader { geometry in
-                    CityDetailsEntry(city: city,
-                                     imageWidth: geometry.size.width,
-                                     imageHeight: 300)
-                }
+                CityDetailsEntry(city: viewModel.city,
+                                 imageHeight: 300)
             }
         }
-        .navigationTitle(city.name)
-        .onAppear(perform: loadCity)
-        .onDisappear(perform: activeRequest?.cancel)
+        .navigationTitle(viewModel.city.name)
+        .onAppear(perform: viewModel.onAppear)
+        .onDisappear(perform: viewModel.onDisappear)
     }
+}
 
-    func loadCity() {
-        activeRequest = Router<CityRoute>()
-            .request(for: .city(id: city.cityID))
-            .success(transformer: CityTransformer.self) { city in
-                self.city = city
-                self.cityFetched = true
+extension CityExplorerDetails {
+    class ViewModel: ObservableObject {
+        var activeRequest: Request?
+        @Published var city: City
+        var cityFetched: Bool = false
+        var errorMessage: String?
+        var usesMockData: Bool
+        
+        init(city: City, usesMockData: Bool) {
+            self.city = city
+            self.usesMockData = usesMockData
+        }
+        
+        func onAppear() {
+            Task {
+                await loadCity()
             }
-            .failure { error in
+        }
+        
+        func onDisappear() {
+            activeRequest?.cancel()
+        }
+        
+        @MainActor func loadCity() async {            
+            let request = Router<CityRoute>().request(for: .city(id: city.cityID))
+
+            do {
+                city = try await request.asyncUpload(using: CityTransformer.self)
+                self.cityFetched = true
+            } catch let error as TNError {
                 switch error {
                 case .cancelled:
                     break
                 default:
-                    self.errorMessage = error.localizedDescription
+                    errorMessage = error.localizedDescription
                 }
-            }
+            } catch { }
+            
+            activeRequest = request
+        }
     }
 }
 
 struct CityDetailsEntry: View {
     var city: City
-    var imageWidth: CGFloat
     var imageHeight: CGFloat
 
     var body: some View {
@@ -87,10 +112,8 @@ struct CityDetailsEntry: View {
         }
     }
 
-    var thumbView: AnyView {
-        AnyView(TermiNetwork.Image(withRequest: Router<CityRoute>().request(for: .image(city: city)),
-                                   resize: CGSize(width: imageWidth * UIScreen.main.scale,
-                                              height: imageHeight * UIScreen.main.scale))
-                               .aspectRatio(contentMode: .fill))
+    var thumbView: some View {
+        TermiNetwork.Image(request: Router<CityRoute>().request(for: .image(city: city)))
+            .aspectRatio(contentMode: .fill)
     }
 }

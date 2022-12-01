@@ -1,6 +1,6 @@
 // CityExplorerView.swift
 //
-// Copyright © 2018-2021 Vasilis Panagiotopoulos. All rights reserved.
+// Copyright © 2018-2022 Vassilis Panagiotopoulos. All rights reserved.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in the
@@ -22,67 +22,45 @@ import TermiNetwork
 import Combine
 
 struct CityExplorerView: View {
-    var usesMockData: Bool = false
-
-    @State var cities: [City] = []
-    @State var request: Request?
-    @State var errorMessage: String?
-    @State var activeRequest: Request?
+    
+    @StateObject var viewModel: ViewModel
 
     var body: some View {
         VStack {
-            if let errorMessage = errorMessage {
+            if let errorMessage = viewModel.errorMessage {
                 Text(errorMessage)
                     .multilineTextAlignment(.center)
                     .accentColor(.red)
                     .font(.caption)
                     .padding(EdgeInsets(top: 0, leading: 30, bottom: 0, trailing: 30))
-            } else if cities.count == 0 {
+            } else if viewModel.cities.count == 0 {
                 ProgressView()
             } else {
-                List(cities, id: \.id) { city in
-                    CityRow(city: city,
+                List(viewModel.cities, id: \.id) { city in
+                    CityRow(city: city, 
+                            usesMockData: viewModel.usesMockData,
                             thumbWidth: 100,
                             thumbHeight: 100)
                 }
             }
         }
         .navigationTitle("City Explorer")
-        .onAppear(perform: loadCities)
-        .onDisappear(perform: onDisappear)
-    }
-
-    func loadCities() {
-        Environment.current.configuration?.mockDataEnabled = usesMockData
-
-        activeRequest = Router<CityRoute>()
-            .request(for: .cities)
-            .success(transformer: CitiesTransformer.self) { cities in
-                self.cities = cities
-            }
-            .failure { error in
-                switch error {
-                case .cancelled:
-                    break
-                default:
-                    self.errorMessage = error.localizedDescription
-                }
-            }
-    }
-
-    func onDisappear() {
-        activeRequest?.cancel()
-        Environment.current.configuration?.mockDataEnabled = false
+        .onDisappear { 
+            viewModel.onDissapear() 
+        }
     }
 }
 
 struct CityRow: View {
     var city: City
+    var usesMockData: Bool
     var thumbWidth: CGFloat
     var thumbHeight: CGFloat
+    
+    @State private var imageLoaded: Bool = false
 
     var body: some View {
-        NavigationLink(destination: CityExplorerDetails(city: self.city)) {
+        NavigationLink(destination: CityExplorerDetails(viewModel: .init(city: city, usesMockData: usesMockData))) {
             Color(.sRGB, red: 0.922, green: 0.922, blue: 0.922, opacity: 1.0)
                 .frame(width: thumbWidth, height: thumbHeight)
                 .overlay(thumbView)
@@ -91,11 +69,61 @@ struct CityRow: View {
         }
     }
 
-    var thumbView: AnyView {
+    @ViewBuilder
+    var thumbView: some View {
         let request = Router<CityRoute>().request(for: .thumb(city: city))
-        return AnyView(
-            TermiNetwork.Image(withRequest: request, resize: CGSize(width: thumbWidth * UIScreen.main.scale,
-                                                                    height: thumbHeight * UIScreen.main.scale))
-                .aspectRatio(contentMode: .fill))
+        
+        ZStack {
+            if !imageLoaded {
+                ProgressView()
+            }
+            
+            TermiNetwork.Image(request: request, 
+                               resizeTo: CGSize(width: thumbWidth,
+                                                height: thumbHeight),
+                               onFinish: { _, _ in
+                imageLoaded = true
+            })
+            .aspectRatio(contentMode: .fill)
+        }
+    }
+}
+
+extension CityExplorerView {
+    @MainActor class ViewModel: ObservableObject {        
+        private var activeRequest: Request?
+        
+        @Published var cities: [City] = []
+        @Published var errorMessage: String?
+        
+        var usesMockData: Bool
+        
+        init(usesMockData: Bool) {
+            self.usesMockData = usesMockData
+            Environment.current.configuration?.mockDataEnabled = usesMockData
+
+            Task {
+                await loadCities()
+            }
+        }
+        
+        func onDissapear() {
+            activeRequest?.cancel()
+        }
+        
+        func loadCities() async {
+            activeRequest = Router<CityRoute>().request(for: .cities)
+            
+            do {
+                cities = try await activeRequest?.async(using: CitiesTransformer.self) ?? []
+            } catch let error {
+                switch error as? TNError {
+                case .cancelled:
+                    break
+                default:
+                    self.errorMessage = error.localizedDescription
+                }
+            }
+        }
     }
 }

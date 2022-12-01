@@ -1,6 +1,6 @@
 // Reachability.swift
 //
-// Copyright © 2018-2021 Vasilis Panagiotopoulos. All rights reserved.
+// Copyright © 2018-2022 Vassilis Panagiotopoulos. All rights reserved.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in the
@@ -51,6 +51,7 @@ open class Reachability {
     private var reachabilityFlags: SCNetworkReachabilityFlags?
     private var monitorUpdatesCallback: ReachabilityUpdateClosureType?
     private var hostname: String?
+    private var lastState: ReachabilityState?
 
     // MARK: Initializers
 
@@ -94,7 +95,10 @@ open class Reachability {
                     state = .wifi
                 }
             #endif
-            monitorUpdatesCallback?(state)
+            lastState = state
+            DispatchQueue.main.async {
+                self.monitorUpdatesCallback?(state)
+            }
         }
     }
 
@@ -110,7 +114,7 @@ open class Reachability {
                                                    copyDescription: nil)
 
         context.info = Unmanaged<Reachability>
-                        .passRetained(self)
+                        .passUnretained(self)
                         .toOpaque()
 
         let callback: SCNetworkReachabilityCallBack = { (_, flags, info) in
@@ -128,13 +132,13 @@ open class Reachability {
             throw TNError.reachabilityError
         }
 
-        Reachability.reachabilityQueue.async {
+        Reachability.reachabilityQueue.async { [weak self] in
             var flags = SCNetworkReachabilityFlags()
             let success = withUnsafeMutablePointer(to: &flags) {
                 SCNetworkReachabilityGetFlags(reachability, UnsafeMutablePointer($0))
             }
 
-            self.updateFlags(success ? flags : nil)
+            self?.updateFlags(success ? flags : nil)
         }
 
         monitoringStarted = true
@@ -167,6 +171,14 @@ open class Reachability {
 
         self.reachability = reachability
         self.monitorUpdatesCallback = closure
+
+        // Notify caller with the last state.
+        if let lastState = lastState {
+            DispatchQueue.main.async {
+                self.monitorUpdatesCallback?(lastState)
+            }
+        }
+
         try startMonitoring()
     }
 
@@ -188,7 +200,7 @@ open class Reachability {
     /// - Parameters:
     ///     - flags: Returns a boolean indicating if the given flags are contained
     ///     to the previous received flags.
-    open func containsFlags(_ flags: [SCNetworkReachabilityFlags]) -> Bool {
+    func containsFlags(_ flags: [SCNetworkReachabilityFlags]) -> Bool {
         guard let lastFlags = self.reachabilityFlags else {
             return false
         }

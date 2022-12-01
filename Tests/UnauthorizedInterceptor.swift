@@ -1,6 +1,6 @@
 // GlobalInterceptor.swift
 //
-// Copyright © 2018-2021 Vasilis Panagiotopoulos. All rights reserved.
+// Copyright © 2018-2022 Vassilis Panagiotopoulos. All rights reserved.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in the
@@ -32,7 +32,7 @@ final class UnauthorizedInterceptor: InterceptorProtocol {
                          request: Request,
                          proceed: @escaping (InterceptionAction) -> Void) {
         switch error {
-        case .notSuccess(let statusCode):
+        case .notSuccess(let statusCode, _):
             if statusCode == 401, request.retryCount < retryLimit {
                 // Login to get a new token.
                 UnauthorizedInterceptor.currentStatusCode = 200
