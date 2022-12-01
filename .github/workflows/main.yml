@@ -11,9 +11,9 @@ jobs:
     - name: Remove Package.resolved
       run: rm *.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved
     - name: Select Xcode
-      run: sudo xcode-select -switch /Applications/Xcode_14.0.1.app && /usr/bin/xcodebuild -version
+      run: sudo xcode-select -switch /Applications/Xcode_14.1.app && /usr/bin/xcodebuild -version
     - name: Run unit tests
-      run: xcodebuild test -scheme TermiNetworkTests -destination 'platform=iOS Simulator,name=iPhone 13 Pro,OS=15.2'
+      run: xcodebuild test -scheme TermiNetworkTests -destination 'platform=iOS Simulator,name=iPhone 14 Pro,OS=16.1'
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v1.2.1
 
