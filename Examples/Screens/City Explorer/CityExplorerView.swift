@@ -22,7 +22,7 @@ import TermiNetwork
 import Combine
 
 struct CityExplorerView: View {
-    
+
     @StateObject var viewModel: ViewModel
 
     var body: some View {
@@ -37,7 +37,7 @@ struct CityExplorerView: View {
                 ProgressView()
             } else {
                 List(viewModel.cities, id: \.id) { city in
-                    CityRow(city: city, 
+                    CityRow(city: city,
                             usesMockData: viewModel.usesMockData,
                             thumbWidth: 100,
                             thumbHeight: 100)
@@ -45,8 +45,8 @@ struct CityExplorerView: View {
             }
         }
         .navigationTitle("City Explorer")
-        .onDisappear { 
-            viewModel.onDissapear() 
+        .onDisappear {
+            viewModel.onDissapear()
         }
     }
 }
@@ -56,7 +56,7 @@ struct CityRow: View {
     var usesMockData: Bool
     var thumbWidth: CGFloat
     var thumbHeight: CGFloat
-    
+
     @State private var imageLoaded: Bool = false
 
     var body: some View {
@@ -72,13 +72,13 @@ struct CityRow: View {
     @ViewBuilder
     var thumbView: some View {
         let request = Router<CityRoute>().request(for: .thumb(city: city))
-        
+
         ZStack {
             if !imageLoaded {
                 ProgressView()
             }
-            
-            TermiNetwork.Image(request: request, 
+
+            TermiNetwork.Image(request: request,
                                resizeTo: CGSize(width: thumbWidth,
                                                 height: thumbHeight),
                                onFinish: { _, _ in
@@ -90,14 +90,14 @@ struct CityRow: View {
 }
 
 extension CityExplorerView {
-    @MainActor class ViewModel: ObservableObject {        
+    @MainActor class ViewModel: ObservableObject {
         private var activeRequest: Request?
-        
+
         @Published var cities: [City] = []
         @Published var errorMessage: String?
-        
+
         var usesMockData: Bool
-        
+
         init(usesMockData: Bool) {
             self.usesMockData = usesMockData
             Environment.current.configuration?.mockDataEnabled = usesMockData
@@ -106,14 +106,14 @@ extension CityExplorerView {
                 await loadCities()
             }
         }
-        
+
         func onDissapear() {
             activeRequest?.cancel()
         }
-        
+
         func loadCities() async {
             activeRequest = Router<CityRoute>().request(for: .cities)
-            
+
             do {
                 cities = try await activeRequest?.async(using: CitiesTransformer.self) ?? []
             } catch let error {

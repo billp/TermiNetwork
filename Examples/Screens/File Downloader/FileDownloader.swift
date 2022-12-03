@@ -57,7 +57,7 @@ struct FileDownloader: View {
                     .foregroundColor(.red)
             }
             Spacer()
-            UIHelpers.button(!viewModel.downloadStarted ? "Start Download" : "Stop Download") { 
+            UIHelpers.button(!viewModel.downloadStarted ? "Start Download" : "Stop Download") {
                 viewModel.downloadAction()
             }
             .padding(.bottom, 20)
@@ -82,17 +82,17 @@ extension FileDownloader {
         @Published var downloadFinished: Bool = false
         @Published var error: String?
         @Published var outputFile: String = ""
-        
+
         var request: Request?
         var configuration: Configuration
-        
+
         init() {
             // Enable verbose
             let configuration = Configuration()
             configuration.verbose = true
             self.configuration = configuration
         }
-        
+
         // MARK: UI Helpers
         func updateFilename(_ url: String) {
             fileName = String(url.split(separator: "/").last ?? "")
@@ -109,9 +109,9 @@ extension FileDownloader {
                 await downloadFile()
             }
         }
-    
+
         // MARK: Helpers
-    
+
         func downloadFile() async {
 
             // Construct the final path of the downloaded file
@@ -123,27 +123,28 @@ extension FileDownloader {
             // Reset download
             error = nil
             resetDownload()
-            
+
             request = Request(method: .get,
                               url: fileURL,
                               configuration: configuration)
-            
+
             downloadStarted = true
             downloadFinished = false
 
             do {
-                try await request?.asyncDownload(destinationPath: outputFile,
-                                                 progressUpdate: { [unowned self] (bytesDownloaded, bytesTotal, progress) in
-                                                   self.progress = progress * 100
-                                                   self.bytesDownloaded = bytesDownloaded
-                                                   self.bytesTotal = bytesTotal
-                                                 })
+                try await request?.asyncDownload(
+                    destinationPath: outputFile,
+                    progressUpdate: { [unowned self] (bytesDownloaded, bytesTotal, progress) in
+                        self.progress = progress * 100
+                        self.bytesDownloaded = bytesDownloaded
+                        self.bytesTotal = bytesTotal
+                })
             } catch let error {
-                self.error = error.localizedDescription 
+                self.error = error.localizedDescription
                 resetDownload()
             }
         }
-    
+
         func resetDownload() {
             downloadStarted = false
             downloadFinished = false
@@ -161,9 +162,9 @@ extension FileDownloader {
             let documentsDirectory = paths[0]
             return documentsDirectory
         }
-        
+
         func removeFileIfNeeded(at path: String) {
             try? FileManager.default.removeItem(atPath: path)
         }
-    }    
+    }
 }
