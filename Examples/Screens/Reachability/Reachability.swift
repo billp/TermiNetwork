@@ -45,11 +45,11 @@ extension Reachability {
         @Published var status: String = ""
 
         private var reachability: TermiNetwork.Reachability? = TermiNetwork.Reachability(hostname: "google.com")
-        
+
         init() {
             startMonitoringState()
         }
-        
+
         private func startMonitoringState() {
             try? reachability?.monitorState { [weak self] state in
                 self?.status = String(describing: state)
@@ -59,13 +59,9 @@ extension Reachability {
         private func stopMonitoringState() {
             reachability?.stopMonitoring()
         }
-        
+
         func onDisappear() {
             stopMonitoringState()
-        }
-        
-        deinit {
-            print("deinit")
         }
     }
 }

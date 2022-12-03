@@ -35,7 +35,6 @@ final class ServiceErrorInterceptor: InterceptorProtocol {
             showRetryDialog(errorMessage: error.localizedDescription) {
                 proceed(.retry(delay: self.retryDelay))
             }
-            break
         case .notSuccess(let statusCode, _):
             if statusCode / 500 == 1 {
                 showRetryDialog(
@@ -46,7 +45,6 @@ final class ServiceErrorInterceptor: InterceptorProtocol {
             } else {
                 proceed(.continue)
             }
-            break
         default:
             proceed(.continue)
         }

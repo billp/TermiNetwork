@@ -19,7 +19,7 @@
 
 import Foundation
 
-private protocol TransformerProtocol: NSObject {
+public protocol TransformerProtocol: NSObject {
     associatedtype FromType
     associatedtype ToType
 

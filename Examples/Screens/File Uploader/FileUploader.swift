@@ -23,7 +23,7 @@ import TermiNetwork
 
 struct FileUploader: View {
     @StateObject var viewModel: ViewModel
-    
+
     var body: some View {
         VStack {
             UIHelpers.button("🌄 Select Photo",
@@ -93,16 +93,16 @@ struct FileUploader: View {
             }
             Spacer()
             UIHelpers.button(!viewModel.uploadStarted ? "Start Upload" : "Stop Upload",
-                             action: { 
-                viewModel.uploadAction() 
+                             action: {
+                viewModel.uploadAction()
             })
             .padding(.bottom, 20)
 
         }
         .padding([.leading, .trailing, .top], 20)
         .navigationTitle("File Uploader")
-        .onDisappear(perform: { 
-            viewModel.clearAndCancelUpload() 
+        .onDisappear(perform: {
+            viewModel.clearAndCancelUpload()
         })
     }
 }
@@ -123,27 +123,27 @@ extension FileUploader {
         @Published var outputFile: String = ""
         @Published var imageUrl: URL?
         @Published var showCaptureImageView: Bool = false
-        
+
         func resetUpload() {
             uploadStarted = false
             uploadFinished = false
             bytesTotal = 0
             bytesUploaded = 0
         }
-        
+
         func clearAndCancelUpload() {
             request?.cancel()
             resetUpload()
         }
-        
+
         func documentsDirectory() -> URL {
             let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
             let documentsDirectory = paths[0]
             return documentsDirectory
         }
-        
+
         // MARK: Helpers
-        
+
         @MainActor
         func uploadFile() async {
             guard let imageUrl = imageUrl else {
@@ -170,13 +170,13 @@ extension FileUploader {
 
             let request = Router<MiscRoute>().request(for: .upload(fileUrl: imageUrl))
             self.request = request
-            
+
             do {
                 uploadStarted = true
                 uploadFinished = false
 
                 let response = try await request.asyncUpload(
-                    using: FileUploadTransformer.self, 
+                    using: FileUploadTransformer.self,
                     progressUpdate: { [weak self] bytesProcessed, totalBytes, progress in
                         guard let self = self else { return }
                         self.progress = progress * 100
@@ -188,7 +188,7 @@ extension FileUploader {
                 self.uploadFinished = true
                 self.uploadedFileChecksum = response.checksum
             } catch let error {
-                self.error = error.localizedDescription 
+                self.error = error.localizedDescription
                 self.resetUpload()
             }
         }
@@ -196,7 +196,7 @@ extension FileUploader {
         func removeFileIfNeeded(at path: String) {
             try? FileManager.default.removeItem(atPath: path)
         }
-        
+
         // MARK: UI Helpers
         func updateFilename(_ url: String) {
             self.fileName = String(url.split(separator: "/").last ?? "")
@@ -208,11 +208,10 @@ extension FileUploader {
                 clearAndCancelUpload()
                 return
             }
-        
+
             Task {
                 await uploadFile()
             }
-            
         }
     }
 }

@@ -24,7 +24,7 @@ import TermiNetwork
 struct CityExplorerDetails: View {
 
     @StateObject var viewModel: ViewModel
-    
+
     init(viewModel: ViewModel) {
         Environment.current.configuration?.mockDataEnabled = viewModel.usesMockData
         self._viewModel = .init(wrappedValue: viewModel)
@@ -58,23 +58,23 @@ extension CityExplorerDetails {
         var cityFetched: Bool = false
         var errorMessage: String?
         var usesMockData: Bool
-        
+
         init(city: City, usesMockData: Bool) {
             self.city = city
             self.usesMockData = usesMockData
         }
-        
+
         func onAppear() {
             Task {
                 await loadCity()
             }
         }
-        
+
         func onDisappear() {
             activeRequest?.cancel()
         }
-        
-        @MainActor func loadCity() async {            
+
+        @MainActor func loadCity() async {
             let request = Router<CityRoute>().request(for: .city(id: city.cityID))
 
             do {
@@ -88,7 +88,7 @@ extension CityExplorerDetails {
                     errorMessage = error.localizedDescription
                 }
             } catch { }
-            
+
             activeRequest = request
         }
     }

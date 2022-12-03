@@ -48,8 +48,8 @@ class TestHelpers {
         var randomString = ""
 
         for _ in 0 ..< length {
-            let rand = arc4random_uniform(len)
-            var nextChar = letters.character(at: Int(rand))
+            let rand = Int.random(in: 0..<Int(len))
+            var nextChar = letters.character(at: rand)
             randomString += NSString(characters: &nextChar, length: 1) as String
         }
 
