@@ -2,7 +2,19 @@
 
 ## [Unreleased](https://github.com/billp/TermiNetwork/tree/HEAD)
 
-[Full Changelog](https://github.com/billp/TermiNetwork/compare/3.0.0...HEAD)
+[Full Changelog](https://github.com/billp/TermiNetwork/compare/3.1.0...HEAD)
+
+**Closed issues:**
+
+- Add support for async/await  [\#34](https://github.com/billp/TermiNetwork/issues/34)
+
+**Merged pull requests:**
+
+- Change access level of Transformer's internal protocol type \(\#37\) [\#38](https://github.com/billp/TermiNetwork/pull/38) ([billp](https://github.com/billp))
+
+## [3.1.0](https://github.com/billp/TermiNetwork/tree/3.1.0) (2022-12-01)
+
+[Full Changelog](https://github.com/billp/TermiNetwork/compare/3.0.0...3.1.0)
 
 **Closed issues:**
 
