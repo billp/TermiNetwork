@@ -53,12 +53,14 @@ class RequestHelpers {
                 customError = TNError.notSuccess(statusCode, data ?? .init())
             }
         }
-
-        do {
-            data = try request.handleMiddlewareProcessResponseIfNeeded(responseData: data)
-        } catch {
-            if let error = error as? TNError {
-                customError = error
+      
+        if customError == nil {
+            do {
+                data = try request.handleMiddlewareProcessResponseIfNeeded(responseData: data)
+            } catch {
+                if let error = error as? TNError {
+                    customError = error
+                }
             }
         }
 
