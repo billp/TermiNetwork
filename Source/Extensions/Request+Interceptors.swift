@@ -152,7 +152,7 @@ extension Request {
     func retryDataRequest(request: Request,
                           finishCallback: @escaping InterceptorFinishedCallbackType) {
         request
-            .queue(request.queue)
+            .queue(Queue(failureMode: .continue))
             .success(responseType: Data.self) { [weak self, weak request] data in
                 guard let self = self else { return }
                 guard let request = request else { return }
@@ -210,7 +210,7 @@ extension Request {
                               filePath: String,
                               finishCallback: @escaping InterceptorFinishedCallbackType) {
         request
-            .queue(request.queue)
+            .queue(Queue(failureMode: .continue))
             .download(destinationPath: filePath,
                       progressUpdate: self.progressCallback) { [weak self, weak request] in
                 guard let self = self else { return }
