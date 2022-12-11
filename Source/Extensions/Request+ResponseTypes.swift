@@ -56,13 +56,7 @@ extension Request {
                                                         self.configuration.keyDecodingStrategy) as T
             } catch let error {
                 let tnError = TNError.cannotDeserialize(String(describing: T.self), error)
-                self.handleDataTaskCompleted(with: data,
-                                             urlResponse: urlResponse,
-                                             error: tnError,
-                                             onFailureCallback: { [ weak self] in
-                                                guard let self = self else { return }
-                                                self.failureCompletionHandler?(tnError, data, urlResponse)
-                                             })
+                self.failureCompletionHandler?(tnError, data, urlResponse)
                 return
             }
 
