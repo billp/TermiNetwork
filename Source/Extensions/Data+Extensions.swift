@@ -40,7 +40,7 @@ public extension Data {
     func toJSONString() -> String? {
         if let dictionary = try? JSONSerialization.jsonObject(with: self, options: []) {
             if let jsonData = try? JSONSerialization.data(withJSONObject: dictionary,
-                                                          options: .prettyPrinted),
+                                                          options: [.prettyPrinted, .withoutEscapingSlashes]),
                 let jsonString = String(data: jsonData, encoding: .utf8) {
                 return jsonString
             }
