@@ -53,7 +53,7 @@ class RequestHelpers {
                 customError = TNError.notSuccess(statusCode, data ?? .init())
             }
         }
-      
+
         if customError == nil {
             do {
                 data = try request.handleMiddlewareProcessResponseIfNeeded(responseData: data)

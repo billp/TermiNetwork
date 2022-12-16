@@ -109,8 +109,6 @@ struct FileUploader: View {
 
 extension FileUploader {
     class ViewModel: ObservableObject {
-        private var request: Request?
-
         @Published var fileName: String = ""
         @Published var fileChecksum: String?
         @Published var uploadedFileChecksum: String?
@@ -124,6 +122,8 @@ extension FileUploader {
         @Published var imageUrl: URL?
         @Published var showCaptureImageView: Bool = false
 
+        private var uploadTask: Task<(), Never>?
+
         func resetUpload() {
             uploadStarted = false
             uploadFinished = false
@@ -132,7 +132,7 @@ extension FileUploader {
         }
 
         func clearAndCancelUpload() {
-            request?.cancel()
+            uploadTask?.cancel()
             resetUpload()
         }
 
@@ -168,22 +168,21 @@ extension FileUploader {
 
             // Start the request
 
-            let request = Router<MiscRoute>().request(for: .upload(fileUrl: imageUrl))
-            self.request = request
-
             do {
                 uploadStarted = true
                 uploadFinished = false
 
-                let response = try await request.asyncUpload(
-                    using: FileUploadTransformer.self,
-                    progressUpdate: { [weak self] bytesProcessed, totalBytes, progress in
-                        guard let self = self else { return }
-                        self.progress = progress * 100
-                        self.bytesUploaded = bytesProcessed
-                        self.bytesTotal = totalBytes
-                    }
-                )
+                let response = try await Router<MiscRoute>()
+                    .request(for: .upload(fileUrl: imageUrl))
+                    .asyncUpload(
+                        using: FileUploadTransformer.self,
+                        progressUpdate: { [weak self] bytesProcessed, totalBytes, progress in
+                            guard let self = self else { return }
+                            self.progress = progress * 100
+                            self.bytesUploaded = bytesProcessed
+                            self.bytesTotal = totalBytes
+                        }
+                    )
                 self.uploadStarted = false
                 self.uploadFinished = true
                 self.uploadedFileChecksum = response.checksum
@@ -209,7 +208,7 @@ extension FileUploader {
                 return
             }
 
-            Task {
+            uploadTask = Task {
                 await uploadFile()
             }
         }

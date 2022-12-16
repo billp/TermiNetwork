@@ -73,6 +73,43 @@ class TestUploadOperationsAsync: XCTestCase {
         XCTAssert(!failed && completed)
     }
 
+    func testDataUploadCancel() {
+        let expectation = XCTestExpectation(description: "testDataUploadCancel")
+
+        let task = Task {
+            var failed = true
+
+            guard let filePath = Bundle(for: TestUploadOperations.self).path(forResource: "photo",
+                                                                             ofType: "jpg"),
+            let uploadData = try? Data(contentsOf: URL(fileURLWithPath: filePath)) else {
+                assert(false)
+            }
+
+            do {
+                try await router.request(for: .dataUpload(data: uploadData, param: "bhbbrbrbrhbh"))
+                    .asyncUpload(
+                        as: FileResponse.self,
+                        progressUpdate: nil)
+
+                expectation.fulfill()
+            } catch let error {
+                let error = error as? TNError
+                if case .cancelled = error {
+                    failed = false
+                } else {
+                    failed = true
+                }
+
+                expectation.fulfill()
+                XCTAssert(!failed)
+            }
+        }
+
+        task.cancel()
+
+        wait(for: [expectation], timeout: 60)
+    }
+
     func testDataUploadWithTransformer() async {
         var failed = true
         var completed = false
@@ -99,6 +136,42 @@ class TestUploadOperationsAsync: XCTestCase {
         }
 
         XCTAssert(!failed && completed)
+    }
+
+    func testDataUploadWithTransformerCancel() {
+        let expectation = XCTestExpectation(description: "testDataUploadWithTransformerCancel")
+
+        let task = Task {
+            var failed = true
+
+            guard let filePath = Bundle(for: TestUploadOperations.self).path(forResource: "photo",
+                                                                             ofType: "jpg"),
+            let uploadData = try? Data(contentsOf: URL(fileURLWithPath: filePath)) else {
+                assert(false)
+            }
+
+            do {
+                try await router.request(for: .dataUpload(data: uploadData, param: "bhbbrbrbrhbh"))
+                    .asyncUpload(using: TestUploadTransformer.self,
+                                 progressUpdate: nil)
+
+                expectation.fulfill()
+            } catch let error {
+                let error = error as? TNError
+                if case .cancelled = error {
+                    failed = false
+                } else {
+                    failed = true
+                }
+
+                expectation.fulfill()
+                XCTAssert(!failed)
+            }
+        }
+
+        task.cancel()
+
+        wait(for: [expectation], timeout: 60)
     }
 
     func testFileUpload() async {

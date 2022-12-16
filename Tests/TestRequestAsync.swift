@@ -70,6 +70,35 @@ class TestRequestAsync: XCTestCase {
         XCTAssert(response != nil)
     }
 
+    func testStringResponseCancel() {
+        let expectation = XCTestExpectation(description: "testStringResponseCancel")
+        let request = Request(method: .get, url: "https://www.github.com")
+        request.configuration.verbose = true
+
+        let task = Task {
+            var failed = true
+
+            do {
+                try await request.async(as: String.self)
+                expectation.fulfill()
+            } catch let error {
+                let error = error as? TNError
+                if case .cancelled = error {
+                    failed = false
+                } else {
+                    failed = true
+                }
+
+                expectation.fulfill()
+                XCTAssert(!failed)
+            }
+        }
+
+        task.cancel()
+
+        wait(for: [expectation], timeout: 60)
+    }
+
     func testDataResponse() async {
         let request = Request(method: .get, url: "https://www.github.com")
         request.configuration.verbose = true
@@ -84,6 +113,35 @@ class TestRequestAsync: XCTestCase {
         XCTAssertFalse(failed)
     }
 
+    func testDataResponseCancel() {
+        let expectation = XCTestExpectation(description: "testDataResponseCancel")
+        let request = Request(method: .get, url: "https://www.github.com")
+        request.configuration.verbose = true
+
+        let task = Task {
+            var failed = true
+
+            do {
+                try await request.async(as: Data.self)
+                expectation.fulfill()
+            } catch let error {
+                let error = error as? TNError
+                if case .cancelled = error {
+                    failed = false
+                } else {
+                    failed = true
+                }
+
+                expectation.fulfill()
+                XCTAssert(!failed)
+            }
+        }
+
+        task.cancel()
+
+        wait(for: [expectation], timeout: 60)
+    }
+
     func testGetParamsWithTransformerSuccess() async {
         let testModel = try? await router.request(
             for: .testGetParams(value1: true,
@@ -94,6 +152,39 @@ class TestRequestAsync: XCTestCase {
         ).async(using: TestTransformer.self)
 
         XCTAssert(testModel?.value == "true")
+    }
+
+    func testGetParamsWithTransformerCancel() {
+        let expectation = XCTestExpectation(description: "testGetParamsWithTransformerCancel")
+
+        let task = Task {
+            var failed = true
+
+            do {
+                try await router.request(
+                    for: .testGetParams(value1: true,
+                                        value2: 3,
+                                        value3: 5.13453124189,
+                                        value4: "test",
+                                        value5: nil)
+                ).async(using: TestTransformer.self)
+                expectation.fulfill()
+            } catch let error {
+                let error = error as? TNError
+                if case .cancelled = error {
+                    failed = false
+                } else {
+                    failed = true
+                }
+
+                expectation.fulfill()
+                XCTAssert(!failed)
+            }
+        }
+
+        task.cancel()
+
+        wait(for: [expectation], timeout: 60)
     }
 
     func testGetParamsWithTransformerSuccessTransformError() async {

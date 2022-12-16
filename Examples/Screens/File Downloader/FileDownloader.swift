@@ -20,6 +20,7 @@
 import Foundation
 import SwiftUI
 import TermiNetwork
+import Combine
 
 struct FileDownloader: View {
     @StateObject var viewModel: ViewModel = .init()
@@ -36,14 +37,21 @@ struct FileDownloader: View {
                 if viewModel.bytesTotal > 0 {
                     ProgressView(value: viewModel.progress, total: 100)
                         .padding(.top, 5)
-                    Text(String(format: "%.1f of %.1f MB downloaded.",
+                    Text(String(format: "%.1f of %.1f MB downloaded. (%.2f%%)",
                                 Float(viewModel.bytesDownloaded)/1024/1024,
-                                Float(viewModel.bytesTotal)/1024/1024))
+                                Float(viewModel.bytesTotal)/1024/1024,
+                                viewModel.progress))
                     .font(.footnote)
                     .padding(.top, 10)
                 } else {
                     ProgressView()
                         .padding(.top, /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/)
+                }
+
+                if !viewModel.downloadRate.isZero {
+                    Text(String(format: "Download rate: %.1fMB/s", viewModel.downloadRate))
+                        .font(.footnote)
+                        .padding(.top, 20)
                 }
             }
             if viewModel.downloadFinished {
@@ -62,6 +70,11 @@ struct FileDownloader: View {
             }
             .padding(.bottom, 20)
         }
+        .onReceive(viewModel.currentTimePublisher,
+                   perform: { _ in
+            viewModel.downloadRate = Float(viewModel.bytesDownloadedInOneSecond) / Float(1024 * 1024)
+            viewModel.bytesDownloadedInOneSecond = 0
+        })
         .padding([.leading, .trailing, .top], 20)
         .navigationTitle("File Downloader")
         .onDisappear {
@@ -76,6 +89,7 @@ extension FileDownloader {
         @Published var fileURL: String = "https://releases.ubuntu.com/20.04.1/ubuntu-20.04.1-desktop-amd64.iso"
         @Published var fileName: String = "ubuntu-20.04.1-desktop-amd64.iso"
         @Published var progress: Float = 0
+        @Published var downloadRate: Float = 0
         @Published var bytesDownloaded: Int = 0
         @Published var bytesTotal: Int = 0
         @Published var downloadStarted: Bool = false
@@ -83,14 +97,18 @@ extension FileDownloader {
         @Published var error: String?
         @Published var outputFile: String = ""
 
-        var request: Request?
-        var configuration: Configuration
+        private var configuration: Configuration
+        private var downloadTask: Task<(), Never>?
+        var currentTimePublisher: Timer.TimerPublisher
+        private var cancellables = Set<AnyCancellable>()
+        var bytesDownloadedInOneSecond: Int = 0
 
         init() {
             // Enable verbose
             let configuration = Configuration()
             configuration.verbose = true
             self.configuration = configuration
+            self.currentTimePublisher = Self.createTimerPublisher()
         }
 
         // MARK: UI Helpers
@@ -105,7 +123,7 @@ extension FileDownloader {
                 return
             }
 
-            Task {
+            downloadTask = Task {
                 await downloadFile()
             }
         }
@@ -124,19 +142,24 @@ extension FileDownloader {
             error = nil
             resetDownload()
 
-            request = Request(method: .get,
-                              url: fileURL,
-                              configuration: configuration)
-
             downloadStarted = true
             downloadFinished = false
 
+            self.currentTimePublisher = Self.createTimerPublisher()
+            self.currentTimePublisher
+                .connect()
+                .store(in: &cancellables)
             do {
-                try await request?.asyncDownload(
+                try await Request(method: .get,
+                                  url: fileURL,
+                                  configuration: configuration)
+                .asyncDownload(
                     destinationPath: outputFile,
                     progressUpdate: { [unowned self] (bytesDownloaded, bytesTotal, progress) in
+                        let currentDownloadedBytes = bytesDownloaded - self.bytesDownloaded
                         self.progress = progress * 100
                         self.bytesDownloaded = bytesDownloaded
+                        self.bytesDownloadedInOneSecond += currentDownloadedBytes
                         self.bytesTotal = bytesTotal
                 })
             } catch let error {
@@ -150,10 +173,13 @@ extension FileDownloader {
             downloadFinished = false
             bytesTotal = 0
             bytesDownloaded = 0
+            downloadRate = 0
+            bytesDownloadedInOneSecond = 0
+            cancellables.removeAll()
         }
 
         func clearAndCancelDownload() {
-            request?.cancel()
+            downloadTask?.cancel()
             resetDownload()
         }
 
@@ -165,6 +191,12 @@ extension FileDownloader {
 
         func removeFileIfNeeded(at path: String) {
             try? FileManager.default.removeItem(atPath: path)
+        }
+
+        private static func createTimerPublisher() -> Timer.TimerPublisher {
+            Timer.TimerPublisher(interval: 1.0,
+                                 runLoop: .main,
+                                 mode: .default)
         }
     }
 }
