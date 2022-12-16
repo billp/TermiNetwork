@@ -200,6 +200,26 @@ Request(method: .post,
         print(error.localizedDescription)
     }
 ```
+
+or with **async await**:
+
+```swift
+do {
+    let response = try Request(
+    	method: .post,
+	url: "https://myweb.com/todos",
+	headers: headers,
+	params: params,
+	configuration: configuration
+    )
+    .queue(queue)
+    .async(as: String.self)
+} catch let error {
+    print(error.localizedDescription)
+}
+```
+
+
 The request above uses a custom queue **myQueue** with a failure mode of **.continue** (default), which means that the queue continues its execution if a request fails.
 
 <a name="complete_setup"></a>
@@ -306,6 +326,18 @@ Router<TodosRoute>().request(for: .add(title: "Go shopping!"))
     }
 ```
 
+or with **async await**
+
+```swift
+do {
+    let toto: Todo = Router<TodosRoute>()
+	.request(for: .add(title: "Go shopping!"))
+	.async()
+} catch let error {
+    print(error.localizedDescription)
+}
+```
+
 <a name="queue_hooks"></a>
 
 ## Queue Hooks
@@ -355,12 +387,34 @@ Router<TodosRoute>().request(for: .add(title: "Go shopping!"))
           case .networkError(let error):
                debugPrint("Network error: " + error.localizedDescription)
                break
-          case .cancelled(let error):
-               debugPrint("Request cancelled with error: " + error.localizedDescription)
+          case .cancelled:
+               debugPrint("Request cancelled")
                break
           default:
                debugPrint("Error: " + error.localizedDescription)
        }
+```
+
+or with **async await**
+```swift
+do {
+    let todo: Todo = Router<TodosRoute>()
+	.request(for: .add(title: "Go shopping!"))
+	.async()
+} catch let error {
+    switch error as? TNError {
+    case .notSuccess(let statusCode, _):
+	 debugPrint("Status code " + String(statusCode))
+	 break
+    case .networkError(let error):
+	 debugPrint("Network error: " + error.localizedDescription)
+	 break
+    case .cancelled:
+	 debugPrint("Request cancelled")
+	 break
+    default:
+	 debugPrint("Error: " + error.localizedDescription)
+ }
 ```
 
 <a name="reachability"></a>
@@ -423,6 +477,22 @@ Router<CityRoute>()
             self.errorMessage = error.localizedDescription
         }
     }
+```
+
+or with **async await**
+```swift
+do {
+    let cities = await Router<CityRoute>()
+        .request(for: .cities)
+        .async(using: CitiesTransformer.self)
+} catch let error {
+    switch error as? TNError {
+    case .cancelled:
+        break
+    default:
+        self.errorMessage = error.localizedDescription
+    }
+}
 ```
 
 <a name="mock_responses"></a>
