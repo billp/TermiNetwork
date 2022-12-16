@@ -57,6 +57,7 @@
 	  - [Make a request](#construct_request)
 - [Queue Hooks](#queue_hooks)
 - [Error Handling](#error_handling)
+- [Cancelling a Request](#request_cancelling)
 - [Reachability](#reachability)
 - [Transformers](#transformers)
 - [Mock responses](#mock_responses)
@@ -378,7 +379,7 @@ To see all the available errors, please visit the <a href="https://billp.github.
 Router<TodosRoute>().request(for: .add(title: "Go shopping!"))
       .success(responseType: Todo.self) { todo in
          // do something with todo
-      },
+      }
       .failure: { error in
           switch error {
           case .notSuccess(let statusCode):
@@ -415,6 +416,50 @@ do {
     default:
 	 debugPrint("Error: " + error.localizedDescription)
  }
+```
+<a name="request_cancelling"></a>
+## Cancelling a request
+You can cancel a request that is executing by calling the .cancel() method.
+#### Example
+	
+```swift
+let params = ["title": "Go shopping."]
+let headers = ["x-auth": "abcdef1234"]
+
+let request = Request(method: .get, 
+	      url: "https://myweb.com/api/todos", 
+	      headers: headers, 
+	      params: params)
+
+	
+request.success(responseType: Todo.self) { todos in
+    print(todos)
+}
+.failure { error in
+    print(error.localizedDescription)
+}
+	
+request.cancel()
+```
+
+or with **async await**:
+
+```swift
+
+let task = Task {
+    let request = Request(method: .get, 
+	url: "https://myweb.com/api/todos", 
+	headers: headers, 
+	params: params)
+    do {
+        let todos: [Todo] = try await request.async()
+        print(todos)
+    } catch let error { 
+        print(error.localizedDescription)
+    }
+}
+
+task.cancel()
 ```
 
 <a name="reachability"></a>
