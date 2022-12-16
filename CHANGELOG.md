@@ -1,8 +1,8 @@
 # Changelog
 
-## [Unreleased](https://github.com/billp/TermiNetwork/tree/HEAD)
+## [3.2.0](https://github.com/billp/TermiNetwork/tree/HEAD)
 
-[Full Changelog](https://github.com/billp/TermiNetwork/compare/3.1.1...HEAD)
+[Full Changelog](https://github.com/billp/TermiNetwork/compare/3.1.1...3.2.0)
 
 **Implemented enhancements:**
 
