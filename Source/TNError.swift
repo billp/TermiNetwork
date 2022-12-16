@@ -41,7 +41,7 @@ public enum TNError: Error {
     /// Thrown when a request is not succeeded (it's not 2xx). It contains the HTTP Status Code and the response Data.
     case notSuccess(Int, Data)
     /// Thrown when a request is cancelled.
-    case cancelled(Error)
+    case cancelled(Error?)
     /// Thorwn when certificate pinning validation fails.
     case pinningError
     /// Thrown when a request is mocked but the data is invalid (e.g. cannot parse JSON).
@@ -100,7 +100,11 @@ extension TNError: LocalizedError {
         case .notSuccess(let code, let data):
             return String(format: NSLocalizedString("The request returned an HTTP status code: %i, data: %@", comment: "TNError"), code, String(describing: data))
         case .cancelled(let error):
-            return NSLocalizedString("The request has been cancelled: ", comment: "TNError") + error.localizedDescription
+            if let error = error {
+                return NSLocalizedString("The request has been cancelled: ", comment: "TNError") + error.localizedDescription
+            } else {
+                return NSLocalizedString("The request has been cancelled.", comment: "TNError")
+            }
         case .invalidMockData(let path):
             return String(format: NSLocalizedString("Invalid mock data file: '%@'", comment: "TNError"), path)
         case .middlewareError(let error):

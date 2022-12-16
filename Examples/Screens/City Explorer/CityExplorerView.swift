@@ -45,7 +45,10 @@ struct CityExplorerView: View {
             }
         }
         .navigationTitle("City Explorer")
-        .onDisappear {
+        .onAppear { [unowned viewModel] in
+            viewModel.onAppear()
+        }
+        .onDisappear { [unowned viewModel] in
             viewModel.onDissapear()
         }
     }
@@ -91,7 +94,7 @@ struct CityRow: View {
 
 extension CityExplorerView {
     @MainActor class ViewModel: ObservableObject {
-        private var activeRequest: Request?
+        private var fetchCitiesTask: Task<(), Never>?
 
         @Published var cities: [City] = []
         @Published var errorMessage: String?
@@ -101,26 +104,28 @@ extension CityExplorerView {
         init(usesMockData: Bool) {
             self.usesMockData = usesMockData
             Environment.current.configuration?.mockDataEnabled = usesMockData
+        }
 
-            Task {
+        func onAppear() {
+            guard fetchCitiesTask == nil else {
+                return
+            }
+            self.fetchCitiesTask = Task {
                 await loadCities()
             }
         }
 
         func onDissapear() {
-            activeRequest?.cancel()
+            fetchCitiesTask?.cancel()
         }
 
         func loadCities() async {
-            activeRequest = Router<CityRoute>().request(for: .cities)
-
             do {
-                cities = try await activeRequest?.async(using: CitiesTransformer.self) ?? []
+                cities = try await Router<CityRoute>()
+                    .request(for: .cities)
+                    .async(using: CitiesTransformer.self)
             } catch let error {
-                switch error as? TNError {
-                case .cancelled:
-                    break
-                default:
+                if let error = error as? TNError {
                     self.errorMessage = error.localizedDescription
                 }
             }

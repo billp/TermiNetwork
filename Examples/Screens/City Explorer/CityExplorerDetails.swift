@@ -53,7 +53,7 @@ struct CityExplorerDetails: View {
 
 extension CityExplorerDetails {
     class ViewModel: ObservableObject {
-        var activeRequest: Request?
+        var fetchCityDetailsTask: Task<(), Never>?
         @Published var city: City
         var cityFetched: Bool = false
         var errorMessage: String?
@@ -65,13 +65,16 @@ extension CityExplorerDetails {
         }
 
         func onAppear() {
-            Task {
+            guard fetchCityDetailsTask == nil else {
+                return
+            }
+            fetchCityDetailsTask = Task {
                 await loadCity()
             }
         }
 
         func onDisappear() {
-            activeRequest?.cancel()
+            fetchCityDetailsTask?.cancel()
         }
 
         @MainActor func loadCity() async {
@@ -88,8 +91,6 @@ extension CityExplorerDetails {
                     errorMessage = error.localizedDescription
                 }
             } catch { }
-
-            activeRequest = request
         }
     }
 }

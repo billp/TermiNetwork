@@ -78,6 +78,45 @@ class TestDownloadOperationsAsync: XCTestCase {
         XCTAssert(!failed)
     }
 
+    func testFileDownloadCancel() {
+        let expectation = XCTestExpectation(description: "testFileDownloadCancel")
+
+        let task = Task {
+            var failed = true
+            guard var cacheURL = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first else {
+                XCTAssert(false)
+                return
+            }
+            cacheURL.appendPathComponent("testDownload")
+            try? FileManager.default.removeItem(at: cacheURL)
+
+            do {
+                try await router.request(for: .fileDownload)
+                    .asyncDownload(destinationPath: cacheURL.path,
+                                   progressUpdate: { bytesSent, totalBytes, progress in
+                        if bytesSent == totalBytes && progress == 1 {
+                            failed = false
+                        }
+                      })
+                expectation.fulfill()
+            } catch let error {
+                let error = error as? TNError
+                if case .cancelled = error {
+                    failed = false
+                } else {
+                    failed = true
+                }
+
+                expectation.fulfill()
+                XCTAssert(!failed)
+            }
+        }
+
+        task.cancel()
+
+        wait(for: [expectation], timeout: 60)
+    }
+
     func testInvalidFileDownload() async {
         var failed = true
 

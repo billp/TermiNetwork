@@ -29,13 +29,18 @@ public extension Request {
     /// - throws: A TNError in case of failure.
     @discardableResult
     func async<T: Decodable>(as type: T.Type) async throws -> T {
-        try await withCheckedThrowingContinuation { configuration in
-            success(responseType: T.self) { response in
-                configuration.resume(returning: response)
+        try await withTaskCancellationHandler {
+            try Task.checkCancellation()
+            return try await withCheckedThrowingContinuation { configuration in
+                success(responseType: T.self) { response in
+                    configuration.resume(returning: response)
+                }
+                .failure { error in
+                    configuration.resume(throwing: error)
+                }
             }
-            .failure { error in
-                configuration.resume(throwing: error)
-            }
+        } onCancel: { [weak self] in
+            self?.cancel()
         }
     }
 
@@ -56,13 +61,18 @@ public extension Request {
     /// - throws: A TNError in case of failure.
     @discardableResult
     func async(as type: String.Type) async throws -> String {
-        try await withCheckedThrowingContinuation { configuration in
-            success(responseType: type.self) { response in
-                configuration.resume(returning: response)
+        try await withTaskCancellationHandler {
+            try checkTaskCancellation()
+            return try await withCheckedThrowingContinuation { configuration in
+                success(responseType: type.self) { response in
+                    configuration.resume(returning: response)
+                }
+                .failure { error in
+                    configuration.resume(throwing: error)
+                }
             }
-            .failure { error in
-                configuration.resume(throwing: error)
-            }
+        } onCancel: { [weak self] in
+            self?.cancel()
         }
     }
 
@@ -74,13 +84,18 @@ public extension Request {
     /// - throws: A TNError in case of failure.
     @discardableResult
     func async(as type: Data.Type) async throws -> Data {
-        try await withCheckedThrowingContinuation { configuration in
-            success(responseType: type.self) { response in
-                configuration.resume(returning: response)
+        try await withTaskCancellationHandler {
+            try checkTaskCancellation()
+            return try await withCheckedThrowingContinuation { configuration in
+                success(responseType: type.self) { response in
+                    configuration.resume(returning: response)
+                }
+                .failure { error in
+                    configuration.resume(throwing: error)
+                }
             }
-            .failure { error in
-                configuration.resume(throwing: error)
-            }
+        } onCancel: { [weak self] in
+            self?.cancel()
         }
     }
 
@@ -92,13 +107,18 @@ public extension Request {
     /// - throws: A TNError in case of failure.
     @discardableResult
     func async(as type: ImageType.Type) async throws -> ImageType {
-        try await withCheckedThrowingContinuation { configuration in
-            success(responseType: ImageType.self) { response in
-                configuration.resume(returning: response)
+        try await withTaskCancellationHandler {
+            try checkTaskCancellation()
+            return try await withCheckedThrowingContinuation { configuration in
+                success(responseType: ImageType.self) { response in
+                    configuration.resume(returning: response)
+                }
+                .failure { error in
+                    configuration.resume(throwing: error)
+                }
             }
-            .failure { error in
-                configuration.resume(throwing: error)
-            }
+        }  onCancel: { [weak self] in
+            self?.cancel()
         }
     }
 
@@ -110,13 +130,28 @@ public extension Request {
     /// - throws: A TNError in case of failure.
     @discardableResult
     func async<From: Decodable, To>(using transformer: Transformer<From, To>.Type) async throws -> To {
-        try await withCheckedThrowingContinuation { configuration in
-            success(transformer: transformer) { response in
-                configuration.resume(returning: response)
+        try await withTaskCancellationHandler {
+            try checkTaskCancellation()
+            return try await withCheckedThrowingContinuation { configuration in
+                success(transformer: transformer) { response in
+                    configuration.resume(returning: response)
+                }
+                .failure { error in
+                    configuration.resume(throwing: error)
+                }
             }
-            .failure { error in
-                configuration.resume(throwing: error)
-            }
+        } onCancel: { [weak self] in
+            self?.cancel()
+        }
+    }
+
+    // MARK: - Helpers
+
+    /// Checks if the task has been cancelled and throws an Error in that case.
+    func checkTaskCancellation() throws {
+        if Task.isCancelled {
+            cancel()
+            throw TNError.cancelled(nil)
         }
     }
 }

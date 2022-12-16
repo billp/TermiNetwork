@@ -253,7 +253,7 @@ public final class Request: Operation {
     public override func cancel() {
         super.cancel()
 
-        // Call cancel only if not any previous error occured.
+        // Call cancel only if no previous error occured.
         if error == nil {
             dataTask?.cancel()
         }
