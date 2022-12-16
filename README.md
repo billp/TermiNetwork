@@ -31,18 +31,18 @@
 - [x] Multi-environment setup <br />
 - [x] Model deserialization with <b>Codables</b><br />
 - [x] Async await support<br />
-- [x] Decode response in the appropriate response type: <b>Codable</b>, <b>UIImage</b>, <b>Data</b> or <b>String</b><br />
-- [x] <b>UIKit</b>/<b>SwiftUI</b> helpers for downloading remote images<br />
-- [x] Group your Requests in Routers<br />
-- [x] Reachability support<br />
+- [x] Decodes response to the given type: <b>Codable</b>, <b>Transformer</b>, <b>UIImage</b>, <b>Data</b> or <b>String</b><br />
+- [x] <b>UIKit</b>/<b>SwiftUI</b> extensions for downloading remote images<br />
+- [x] Request grouping with Routers<br />
+- [x] Detects network status with Reachability<br />
 - [x] Transformers: convert models from one type to another easily<br />
 - [x] Error Handling<br />
 - [x] Interceptors<br />
-- [x] Mock Responses<br />
+- [x] Request mocking<br />
 - [x] Certificate Pinning<br />
-- [x] Flexible Configuration<br />
-- [x] Middleware<br />
-- [x] File/Data Upload/Download<br />
+- [x] Flexible configuration<br />
+- [x] Middleware support<br />
+- [x] File/Data Upload/Download support<br />
 - [x] Pretty printed debug information
 
 ### Table of contents
