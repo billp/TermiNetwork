@@ -2,7 +2,31 @@
 
 ## [Unreleased](https://github.com/billp/TermiNetwork/tree/HEAD)
 
-[Full Changelog](https://github.com/billp/TermiNetwork/compare/3.1.0...HEAD)
+[Full Changelog](https://github.com/billp/TermiNetwork/compare/3.1.1...HEAD)
+
+**Implemented enhancements:**
+
+- Write test cases covering task cancelation [\#44](https://github.com/billp/TermiNetwork/issues/44)
+- Wrap all async functions with withTaskCancellationHandler that cancels the request if needed [\#43](https://github.com/billp/TermiNetwork/issues/43)
+- Support task cancellation on async functions [\#42](https://github.com/billp/TermiNetwork/issues/42)
+
+**Closed issues:**
+
+- Unescape escaped slashes of response from logger [\#49](https://github.com/billp/TermiNetwork/issues/49)
+- Fix duplicated debug print on codable deserialisation error [\#46](https://github.com/billp/TermiNetwork/issues/46)
+- No need to handle middleware if there is already an error [\#40](https://github.com/billp/TermiNetwork/issues/40)
+- Change access level of Transformer's internal protocol type [\#37](https://github.com/billp/TermiNetwork/issues/37)
+
+**Merged pull requests:**
+
+- Support task cancellation on async functions \(\#42\) [\#51](https://github.com/billp/TermiNetwork/pull/51) ([billp](https://github.com/billp))
+- Unescape escaped slashes of response from logger \(\#49\) [\#50](https://github.com/billp/TermiNetwork/pull/50) ([billp](https://github.com/billp))
+- Fix duplicated debug print on codable deserialisation error \(\#46\) [\#47](https://github.com/billp/TermiNetwork/pull/47) ([billp](https://github.com/billp))
+- if there is already an error, then no need to handle the middleware [\#39](https://github.com/billp/TermiNetwork/pull/39) ([voynovia](https://github.com/voynovia))
+
+## [3.1.1](https://github.com/billp/TermiNetwork/tree/3.1.1) (2022-12-04)
+
+[Full Changelog](https://github.com/billp/TermiNetwork/compare/3.1.0...3.1.1)
 
 **Closed issues:**
 

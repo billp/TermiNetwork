@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Decodable Extension Reference</title>
+    <title>TransformerProtocol Protocol Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset="utf-8">
@@ -14,9 +14,9 @@
   </head>
   <body>
 
-    <a name="//apple_ref/swift/Extension/Decodable" class="dashAnchor"></a>
+    <a name="//apple_ref/swift/Protocol/TransformerProtocol" class="dashAnchor"></a>
 
-    <a title="Decodable Extension Reference"></a>
+    <a title="TransformerProtocol Protocol Reference"></a>
 
     <header class="header">
       <p class="header-col header-col--primary">
@@ -50,7 +50,7 @@
     <p class="breadcrumbs">
       <a class="breadcrumb" href="../index.html">TermiNetwork Reference</a>
       <img class="carat" src="../img/carat.png" alt=""/>
-      Decodable Extension Reference
+      TransformerProtocol Protocol Reference
     </p>
 
     <div class="content-wrapper">
@@ -224,15 +224,15 @@
 
         <section class="section">
           <div class="section-content top-matter">
-            <h1>Decodable</h1>
+            <h1>TransformerProtocol</h1>
               <div class="declaration">
                 <div class="language">
                   
-                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">extension</span> <span class="kt">Decodable</span></code></pre>
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">TransformerProtocol</span> <span class="p">:</span> <span class="kt">NSObject</span></code></pre>
 
                 </div>
               </div>
-            <p>Decodable extension for Transformers</p>
+            <p>Undocumented</p>
 
           </div>
         </section>
@@ -244,9 +244,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:Se12TermiNetworkE9transform4withqd_0_AA11TransformerCyqd__qd_0_G_tKr0_lF"></a>
-                    <a name="//apple_ref/swift/Method/transform(with:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:Se12TermiNetworkE9transform4withqd_0_AA11TransformerCyqd__qd_0_G_tKr0_lF">transform(with:<wbr>)</a>
+                    <a name="/s:12TermiNetwork19TransformerProtocolP8FromTypeQa"></a>
+                    <a name="//apple_ref/swift/Alias/FromType" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TermiNetwork19TransformerProtocolP8FromTypeQa">FromType</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -254,39 +254,70 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Transforms the decodable object with the specified transformer.</p>
+                        <p>Undocumented</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="n">transform</span><span class="o">&lt;</span><span class="kt">FromType</span><span class="p">,</span> <span class="kt">ToType</span><span class="o">&gt;</span><span class="p">(</span><span class="n">with</span> <span class="nv">transformer</span><span class="p">:</span> <span class="kt"><a href="../Classes/Transformer.html">Transformer</a></span><span class="o">&lt;</span><span class="kt">FromType</span><span class="p">,</span> <span class="kt">ToType</span><span class="o">&gt;</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">ToType</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">associatedtype</span> <span class="kt">FromType</span></code></pre>
 
                         </div>
                       </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>transformer</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The transformer object that handles the transformation.</p>
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TermiNetwork19TransformerProtocolP6ToTypeQa"></a>
+                    <a name="//apple_ref/swift/Alias/ToType" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TermiNetwork19TransformerProtocolP6ToTypeQa">ToType</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
                       </div>
-                      <div>
-                        <h4>Return Value</h4>
-                        <p>The transformed object</p>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">associatedtype</span> <span class="kt">ToType</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TermiNetwork19TransformerProtocolP9transformy6ToTypeQz04FromG0QzKF"></a>
+                    <a name="//apple_ref/swift/Method/transform(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TermiNetwork19TransformerProtocolP9transformy6ToTypeQz04FromG0QzKF">transform(_:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">transform</span><span class="p">(</span><span class="n">_</span> <span class="nv">object</span><span class="p">:</span> <span class="kt"><a href="../Protocols/TransformerProtocol.html#/s:12TermiNetwork19TransformerProtocolP8FromTypeQa">FromType</a></span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Protocols/TransformerProtocol.html#/s:12TermiNetwork19TransformerProtocolP6ToTypeQa">ToType</a></span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>

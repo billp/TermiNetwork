@@ -1,6 +1,33 @@
 {
   "warnings": [
-
+    {
+      "file": "/Users/v.a.panagiotopoulos/Projects/TermiNetwork/Source/Extensions/Operations/Decodable+Transformer.swift",
+      "line": 22,
+      "symbol": "TransformerProtocol",
+      "symbol_kind": "source.lang.swift.decl.protocol",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/v.a.panagiotopoulos/Projects/TermiNetwork/Source/Extensions/Operations/Decodable+Transformer.swift",
+      "line": 23,
+      "symbol": "TransformerProtocol.FromType",
+      "symbol_kind": "source.lang.swift.decl.associatedtype",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/v.a.panagiotopoulos/Projects/TermiNetwork/Source/Extensions/Operations/Decodable+Transformer.swift",
+      "line": 24,
+      "symbol": "TransformerProtocol.ToType",
+      "symbol_kind": "source.lang.swift.decl.associatedtype",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/v.a.panagiotopoulos/Projects/TermiNetwork/Source/Extensions/Operations/Decodable+Transformer.swift",
+      "line": 26,
+      "symbol": "TransformerProtocol.transform(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    }
   ],
   "source_directory": "/Users/v.a.panagiotopoulos/Projects/TermiNetwork"
 }

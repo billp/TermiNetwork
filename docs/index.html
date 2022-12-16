@@ -20,9 +20,9 @@
     <header class="header">
       <p class="header-col header-col--primary">
         <a class="header-link" href="index.html">
-          TermiNetwork 3.0.0 Docs
+          TermiNetwork 3.2.0 Docs
         </a>
-         (100% documented)
+         (98% documented)
       </p>
     
       <div class="header-col--secondary">
@@ -147,6 +147,9 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Protocols/RouteProtocol.html">RouteProtocol</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Protocols/TransformerProtocol.html">TransformerProtocol</a>
               </li>
             </ul>
           </li>
@@ -291,6 +294,7 @@
 </ul></li>
 <li><a href="#queue_hooks">Queue Hooks</a></li>
 <li><a href="#error_handling">Error Handling</a></li>
+<li><a href="#request_cancelling">Cancelling a Request</a></li>
 <li><a href="#reachability">Reachability</a></li>
 <li><a href="#transformers">Transformers</a></li>
 <li><a href="#mock_responses">Mock responses</a></li>
@@ -312,16 +316,16 @@
 <h3 id='cocoapods' class='heading'>CocoaPods</h3>
 
 <p>Add the following line to your <strong>Podfile</strong> and run <strong>pod install</strong> in your terminal:</p>
-<pre class="highlight ruby"><code><span class="n">pod</span> <span class="s1">'TermiNetwork'</span><span class="p">,</span> <span class="s1">'~&gt; 3.0.0'</span>
+<pre class="highlight ruby"><code><span class="n">pod</span> <span class="s1">'TermiNetwork'</span><span class="p">,</span> <span class="s1">'~&gt; 3.2.0'</span>
 </code></pre>
 <h3 id='carthage' class='heading'>Carthage</h3>
 
 <p>Add the following line to your <strong>Carthage</strong> and run <strong>carthage update</strong> in your terminal:</p>
-<pre class="highlight ruby"><code><span class="n">github</span> <span class="s2">"billp/TermiNetwork"</span> <span class="o">~&gt;</span> <span class="mi">3</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">0</span>
+<pre class="highlight ruby"><code><span class="n">github</span> <span class="s2">"billp/TermiNetwork"</span> <span class="o">~&gt;</span> <span class="mi">3</span><span class="o">.</span><span class="mi">2</span><span class="o">.</span><span class="mi">0</span>
 </code></pre>
 <h3 id='swift-package-manager' class='heading'>Swift Package Manager</h3>
 
-<p>Go to <strong>File</strong> &gt; <strong>Swift Packages</strong> &gt; <strong>Add Package Dependency</strong> and add the following URL :</p>
+<p>Go to <strong>File</strong> &gt; <strong>Swift Packages</strong> &gt; <strong>Add Package Dependency</strong> and add the following URL:</p>
 <pre class="highlight plaintext"><code>https://github.com/billp/TermiNetwork
 </code></pre>
 
@@ -418,6 +422,22 @@
     <span class="o">.</span><span class="n">failure</span> <span class="p">{</span> <span class="n">error</span> <span class="k">in</span>
         <span class="nf">print</span><span class="p">(</span><span class="n">error</span><span class="o">.</span><span class="n">localizedDescription</span><span class="p">)</span>
     <span class="p">}</span>
+</code></pre>
+
+<p>or with <strong>async await</strong>:</p>
+<pre class="highlight swift"><code><span class="k">do</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="nv">response</span> <span class="o">=</span> <span class="k">try</span> <span class="kt">Request</span><span class="p">(</span>
+        <span class="nv">method</span><span class="p">:</span> <span class="o">.</span><span class="n">post</span><span class="p">,</span>
+    <span class="nv">url</span><span class="p">:</span> <span class="s">"https://myweb.com/todos"</span><span class="p">,</span>
+    <span class="nv">headers</span><span class="p">:</span> <span class="n">headers</span><span class="p">,</span>
+    <span class="nv">params</span><span class="p">:</span> <span class="n">params</span><span class="p">,</span>
+    <span class="nv">configuration</span><span class="p">:</span> <span class="n">configuration</span>
+    <span class="p">)</span>
+    <span class="o">.</span><span class="nf">queue</span><span class="p">(</span><span class="n">queue</span><span class="p">)</span>
+    <span class="o">.</span><span class="nf">async</span><span class="p">(</span><span class="nv">as</span><span class="p">:</span> <span class="kt">String</span><span class="o">.</span><span class="k">self</span><span class="p">)</span>
+<span class="p">}</span> <span class="k">catch</span> <span class="k">let</span> <span class="nv">error</span> <span class="p">{</span>
+    <span class="nf">print</span><span class="p">(</span><span class="n">error</span><span class="o">.</span><span class="n">localizedDescription</span><span class="p">)</span>
+<span class="p">}</span>
 </code></pre>
 
 <p>The request above uses a custom queue <strong>myQueue</strong> with a failure mode of <strong>.continue</strong> (default), which means that the queue continues its execution if a request fails.</p>
@@ -522,6 +542,16 @@
     <span class="p">}</span>
 </code></pre>
 
+<p>or with <strong>async await</strong></p>
+<pre class="highlight swift"><code><span class="k">do</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="nv">toto</span><span class="p">:</span> <span class="kt">Todo</span> <span class="o">=</span> <span class="kt">Router</span><span class="o">&lt;</span><span class="kt">TodosRoute</span><span class="o">&gt;</span><span class="p">()</span>
+    <span class="o">.</span><span class="nf">request</span><span class="p">(</span><span class="nv">for</span><span class="p">:</span> <span class="o">.</span><span class="nf">add</span><span class="p">(</span><span class="nv">title</span><span class="p">:</span> <span class="s">"Go shopping!"</span><span class="p">))</span>
+    <span class="o">.</span><span class="nf">async</span><span class="p">()</span>
+<span class="p">}</span> <span class="k">catch</span> <span class="k">let</span> <span class="nv">error</span> <span class="p">{</span>
+    <span class="nf">print</span><span class="p">(</span><span class="n">error</span><span class="o">.</span><span class="n">localizedDescription</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre>
+
 <p><a name="queue_hooks"></a></p>
 <h2 id='queue-hooks' class='heading'>Queue Hooks</h2>
 
@@ -555,7 +585,7 @@
 <pre class="highlight swift"><code><span class="kt">Router</span><span class="o">&lt;</span><span class="kt">TodosRoute</span><span class="o">&gt;</span><span class="p">()</span><span class="o">.</span><span class="nf">request</span><span class="p">(</span><span class="nv">for</span><span class="p">:</span> <span class="o">.</span><span class="nf">add</span><span class="p">(</span><span class="nv">title</span><span class="p">:</span> <span class="s">"Go shopping!"</span><span class="p">))</span>
       <span class="o">.</span><span class="nf">success</span><span class="p">(</span><span class="nv">responseType</span><span class="p">:</span> <span class="kt">Todo</span><span class="o">.</span><span class="k">self</span><span class="p">)</span> <span class="p">{</span> <span class="n">todo</span> <span class="k">in</span>
          <span class="c1">// do something with todo</span>
-      <span class="p">},</span>
+      <span class="p">}</span>
       <span class="o">.</span><span class="nv">failure</span><span class="p">:</span> <span class="p">{</span> <span class="n">error</span> <span class="k">in</span>
           <span class="k">switch</span> <span class="n">error</span> <span class="p">{</span>
           <span class="k">case</span> <span class="o">.</span><span class="nf">notSuccess</span><span class="p">(</span><span class="k">let</span> <span class="nv">statusCode</span><span class="p">):</span>
@@ -564,12 +594,75 @@
           <span class="k">case</span> <span class="o">.</span><span class="nf">networkError</span><span class="p">(</span><span class="k">let</span> <span class="nv">error</span><span class="p">):</span>
                <span class="nf">debugPrint</span><span class="p">(</span><span class="s">"Network error: "</span> <span class="o">+</span> <span class="n">error</span><span class="o">.</span><span class="n">localizedDescription</span><span class="p">)</span>
                <span class="k">break</span>
-          <span class="k">case</span> <span class="o">.</span><span class="nf">cancelled</span><span class="p">(</span><span class="k">let</span> <span class="nv">error</span><span class="p">):</span>
-               <span class="nf">debugPrint</span><span class="p">(</span><span class="s">"Request cancelled with error: "</span> <span class="o">+</span> <span class="n">error</span><span class="o">.</span><span class="n">localizedDescription</span><span class="p">)</span>
+          <span class="k">case</span> <span class="o">.</span><span class="nv">cancelled</span><span class="p">:</span>
+               <span class="nf">debugPrint</span><span class="p">(</span><span class="s">"Request cancelled"</span><span class="p">)</span>
                <span class="k">break</span>
           <span class="k">default</span><span class="p">:</span>
                <span class="nf">debugPrint</span><span class="p">(</span><span class="s">"Error: "</span> <span class="o">+</span> <span class="n">error</span><span class="o">.</span><span class="n">localizedDescription</span><span class="p">)</span>
        <span class="p">}</span>
+</code></pre>
+
+<p>or with <strong>async await</strong></p>
+<pre class="highlight swift"><code><span class="k">do</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="nv">todo</span><span class="p">:</span> <span class="kt">Todo</span> <span class="o">=</span> <span class="kt">Router</span><span class="o">&lt;</span><span class="kt">TodosRoute</span><span class="o">&gt;</span><span class="p">()</span>
+    <span class="o">.</span><span class="nf">request</span><span class="p">(</span><span class="nv">for</span><span class="p">:</span> <span class="o">.</span><span class="nf">add</span><span class="p">(</span><span class="nv">title</span><span class="p">:</span> <span class="s">"Go shopping!"</span><span class="p">))</span>
+    <span class="o">.</span><span class="nf">async</span><span class="p">()</span>
+<span class="p">}</span> <span class="k">catch</span> <span class="k">let</span> <span class="nv">error</span> <span class="p">{</span>
+    <span class="k">switch</span> <span class="n">error</span> <span class="k">as?</span> <span class="kt">TNError</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="o">.</span><span class="nf">notSuccess</span><span class="p">(</span><span class="k">let</span> <span class="nv">statusCode</span><span class="p">,</span> <span class="n">_</span><span class="p">):</span>
+     <span class="nf">debugPrint</span><span class="p">(</span><span class="s">"Status code "</span> <span class="o">+</span> <span class="kt">String</span><span class="p">(</span><span class="n">statusCode</span><span class="p">))</span>
+     <span class="k">break</span>
+    <span class="k">case</span> <span class="o">.</span><span class="nf">networkError</span><span class="p">(</span><span class="k">let</span> <span class="nv">error</span><span class="p">):</span>
+     <span class="nf">debugPrint</span><span class="p">(</span><span class="s">"Network error: "</span> <span class="o">+</span> <span class="n">error</span><span class="o">.</span><span class="n">localizedDescription</span><span class="p">)</span>
+     <span class="k">break</span>
+    <span class="k">case</span> <span class="o">.</span><span class="nv">cancelled</span><span class="p">:</span>
+     <span class="nf">debugPrint</span><span class="p">(</span><span class="s">"Request cancelled"</span><span class="p">)</span>
+     <span class="k">break</span>
+    <span class="k">default</span><span class="p">:</span>
+     <span class="nf">debugPrint</span><span class="p">(</span><span class="s">"Error: "</span> <span class="o">+</span> <span class="n">error</span><span class="o">.</span><span class="n">localizedDescription</span><span class="p">)</span>
+ <span class="p">}</span>
+</code></pre>
+
+<p><a name="request_cancelling"></a></p>
+<h2 id='cancelling-a-request' class='heading'>Cancelling a request</h2>
+
+<p>You can cancel a request that is executing by calling the .cancel() method.</p>
+<h4 id='example' class='heading'>Example</h4>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">params</span> <span class="o">=</span> <span class="p">[</span><span class="s">"title"</span><span class="p">:</span> <span class="s">"Go shopping."</span><span class="p">]</span>
+<span class="k">let</span> <span class="nv">headers</span> <span class="o">=</span> <span class="p">[</span><span class="s">"x-auth"</span><span class="p">:</span> <span class="s">"abcdef1234"</span><span class="p">]</span>
+
+<span class="k">let</span> <span class="nv">request</span> <span class="o">=</span> <span class="kt">Request</span><span class="p">(</span><span class="nv">method</span><span class="p">:</span> <span class="o">.</span><span class="k">get</span><span class="p">,</span> 
+          <span class="nv">url</span><span class="p">:</span> <span class="s">"https://myweb.com/api/todos"</span><span class="p">,</span> 
+          <span class="nv">headers</span><span class="p">:</span> <span class="n">headers</span><span class="p">,</span> 
+          <span class="nv">params</span><span class="p">:</span> <span class="n">params</span><span class="p">)</span>
+
+
+<span class="n">request</span><span class="o">.</span><span class="nf">success</span><span class="p">(</span><span class="nv">responseType</span><span class="p">:</span> <span class="kt">Todo</span><span class="o">.</span><span class="k">self</span><span class="p">)</span> <span class="p">{</span> <span class="n">todos</span> <span class="k">in</span>
+    <span class="nf">print</span><span class="p">(</span><span class="n">todos</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="o">.</span><span class="n">failure</span> <span class="p">{</span> <span class="n">error</span> <span class="k">in</span>
+    <span class="nf">print</span><span class="p">(</span><span class="n">error</span><span class="o">.</span><span class="n">localizedDescription</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="n">request</span><span class="o">.</span><span class="nf">cancel</span><span class="p">()</span>
+</code></pre>
+
+<p>or with <strong>async await</strong>:</p>
+<pre class="highlight swift"><code>
+<span class="k">let</span> <span class="nv">task</span> <span class="o">=</span> <span class="kt">Task</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="nv">request</span> <span class="o">=</span> <span class="kt">Request</span><span class="p">(</span><span class="nv">method</span><span class="p">:</span> <span class="o">.</span><span class="k">get</span><span class="p">,</span> 
+    <span class="nv">url</span><span class="p">:</span> <span class="s">"https://myweb.com/api/todos"</span><span class="p">,</span> 
+    <span class="nv">headers</span><span class="p">:</span> <span class="n">headers</span><span class="p">,</span> 
+    <span class="nv">params</span><span class="p">:</span> <span class="n">params</span><span class="p">)</span>
+    <span class="k">do</span> <span class="p">{</span>
+        <span class="k">let</span> <span class="nv">todos</span><span class="p">:</span> <span class="p">[</span><span class="kt">Todo</span><span class="p">]</span> <span class="o">=</span> <span class="k">try</span> <span class="n">await</span> <span class="n">request</span><span class="o">.</span><span class="nf">async</span><span class="p">()</span>
+        <span class="nf">print</span><span class="p">(</span><span class="n">todos</span><span class="p">)</span>
+    <span class="p">}</span> <span class="k">catch</span> <span class="k">let</span> <span class="nv">error</span> <span class="p">{</span> 
+        <span class="nf">print</span><span class="p">(</span><span class="n">error</span><span class="o">.</span><span class="n">localizedDescription</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="n">task</span><span class="o">.</span><span class="nf">cancel</span><span class="p">()</span>
 </code></pre>
 
 <p><a name="reachability"></a></p>
@@ -627,6 +720,21 @@
             <span class="k">self</span><span class="o">.</span><span class="n">errorMessage</span> <span class="o">=</span> <span class="n">error</span><span class="o">.</span><span class="n">localizedDescription</span>
         <span class="p">}</span>
     <span class="p">}</span>
+</code></pre>
+
+<p>or with <strong>async await</strong></p>
+<pre class="highlight swift"><code><span class="k">do</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="nv">cities</span> <span class="o">=</span> <span class="n">await</span> <span class="kt">Router</span><span class="o">&lt;</span><span class="kt">CityRoute</span><span class="o">&gt;</span><span class="p">()</span>
+        <span class="o">.</span><span class="nf">request</span><span class="p">(</span><span class="nv">for</span><span class="p">:</span> <span class="o">.</span><span class="n">cities</span><span class="p">)</span>
+        <span class="o">.</span><span class="nf">async</span><span class="p">(</span><span class="nv">using</span><span class="p">:</span> <span class="kt">CitiesTransformer</span><span class="o">.</span><span class="k">self</span><span class="p">)</span>
+<span class="p">}</span> <span class="k">catch</span> <span class="k">let</span> <span class="nv">error</span> <span class="p">{</span>
+    <span class="k">switch</span> <span class="n">error</span> <span class="k">as?</span> <span class="kt">TNError</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="o">.</span><span class="nv">cancelled</span><span class="p">:</span>
+        <span class="k">break</span>
+    <span class="k">default</span><span class="p">:</span>
+        <span class="k">self</span><span class="o">.</span><span class="n">errorMessage</span> <span class="o">=</span> <span class="n">error</span><span class="o">.</span><span class="n">localizedDescription</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 </code></pre>
 
 <p><a name="mock_responses"></a></p>
@@ -810,7 +918,7 @@ configuration.mockDataEnabled = true
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2022 <a class="link" href="https://github.com/billp/TermiNetwork" target="_blank" rel="external noopener">Vasilis Panagiotopoulos</a>. All rights reserved. (Last updated: 2022-12-01)</p>
+      <p>&copy; 2022 <a class="link" href="https://github.com/billp/TermiNetwork" target="_blank" rel="external noopener">Vasilis Panagiotopoulos</a>. All rights reserved. (Last updated: 2022-12-16)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.3</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
     </section>
   </body>
