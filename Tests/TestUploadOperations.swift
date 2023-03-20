@@ -1,6 +1,6 @@
 // TestUploadOperations.swift
 //
-// Copyright © 2018-2022 Vassilis Panagiotopoulos. All rights reserved.
+// Copyright © 2018-2023 Vassilis Panagiotopoulos. All rights reserved.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in the
@@ -26,9 +26,9 @@ class TestUploadOperations: XCTestCase {
                                verbose: true)
     }()
 
-    lazy var router: Router<APIRoute> = {
-        return Router<APIRoute>(environment: Env.termiNetworkRemote,
-                                configuration: configuration)
+    lazy var client: Client<TestRepository> = {
+        return .init(environment: Env.termiNetworkRemote,
+                     configuration: configuration)
     }()
 
     override func setUp() {
@@ -55,7 +55,7 @@ class TestUploadOperations: XCTestCase {
 
         let checksum = TestHelpers.sha256(url: URL(fileURLWithPath: filePath))
 
-        router.request(for: .dataUpload(data: uploadData, param: "bhbbrbrbrhbh"))
+        client.request(for: .dataUpload(data: uploadData, param: "bhbbrbrbrhbh"))
             .upload(responseType: FileResponse.self,
                     progressUpdate: { bytesSent, totalBytes, progress in
                         completed = bytesSent == totalBytes && progress == 1
@@ -89,7 +89,7 @@ class TestUploadOperations: XCTestCase {
 
         let checksum = TestHelpers.sha256(url: URL(fileURLWithPath: filePath))
 
-        router.request(for: .dataUpload(data: uploadData, param: "bhbbrbrbrhbh"))
+        client.request(for: .dataUpload(data: uploadData, param: "bhbbrbrbrhbh"))
             .upload(transformer: TestUploadTransformer.self,
                     progressUpdate: { bytesSent, totalBytes, progress in
                         completed = bytesSent == totalBytes && progress == 1
@@ -125,7 +125,7 @@ class TestUploadOperations: XCTestCase {
         queue.maxConcurrentOperationCount = 1
 
         for _ in 0..<iterations {
-            router.request(for: .fileUpload(url: url, param: "bhbbrbrbrhbh"))
+            client.request(for: .fileUpload(url: url, param: "bhbbrbrbrhbh"))
                 .queue(queue)
                 .upload(responseType: FileResponse.self,
                         progressUpdate: { bytesSent, totalBytes, progress in
@@ -164,10 +164,10 @@ class TestUploadOperations: XCTestCase {
 
         let urls = (0..<iterations).map { TestHelpers.createDummyFile(String($0)) }
         let checksums = urls.map { TestHelpers.sha256(url: $0!) }
-        router.configuration?.timeoutInterval = 600
+        client.configuration?.timeoutInterval = 600
 
         for key in 0..<iterations {
-            router.request(for: .fileUpload(url: urls[key]!, param: "bhbbrbrbrhbh"))
+            client.request(for: .fileUpload(url: urls[key]!, param: "bhbbrbrbrhbh"))
                 .queue(queue)
                 .upload(responseType: FileResponse.self,
                         progressUpdate: { bytesSent, totalBytes, progress in
@@ -203,7 +203,7 @@ class TestUploadOperations: XCTestCase {
 
         var failed: Bool = false
 
-        router.request(for: .fileUpload(url: URL(string: "http://www.google.com")!,
+        client.request(for: .fileUpload(url: URL(string: "http://www.google.com")!,
                                         param: "tsttt"))
             .upload(responseType: FileResponse.self,
                     progressUpdate: nil,

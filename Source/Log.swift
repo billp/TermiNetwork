@@ -1,6 +1,6 @@
 // Log.swift
 //
-// Copyright © 2018-2022 Vassilis Panagiotopoulos. All rights reserved.
+// Copyright © 2018-2023 Vassilis Panagiotopoulos. All rights reserved.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in the
@@ -42,82 +42,81 @@ internal class Log {
             }
             return
         }
-        DispatchQueue.main.async {
-            let url = urlRequest.url?.absoluteString ?? "n/a"
-            let headers = urlRequest.allHTTPHeaderFields
 
-            print(String(format: "🌎 URL: %@", url))
+        let url = urlRequest.url?.absoluteString ?? "n/a"
+        let headers = urlRequest.allHTTPHeaderFields
 
-            if let customError = error {
-                print(String(format: "❌ Error: %@", (customError.localizedDescription ?? "")))
-            } else if let response = request.urlResponse as? HTTPURLResponse {
-                print(String(format: "✅ Status: %@", String(response.statusCode)))
-            }
+        print(String(format: "🌎 URL: %@", url))
 
-            if request.configuration.mockDataEnabled == true {
-                print("🗂 Mocked response.")
-            }
-            print(String(format: "🎛️ Method: %@", request.method.rawValue.uppercased()))
-            if case .data = request.requestType,
-               case .started = state {
-                print(String(format: "🔮 CURL: %@", urlRequest.curlString))
-            }
+        if let customError = error {
+            print(String(format: "❌ Error: %@", (customError.localizedDescription ?? "")))
+        } else if let response = request.urlResponse as? HTTPURLResponse {
+            print(String(format: "✅ Status: %@", String(response.statusCode)))
+        }
 
-            if request.configuration.certificateData != nil {
-                print("🔒 Pinning Enabled")
-            }
+        if request.configuration.mockDataEnabled == true {
+            print("🗂 Mocked response.")
+        }
+        print(String(format: "🎛️ Method: %@", request.method.rawValue.uppercased()))
+        if case .data = request.requestType,
+           case .started = state {
+            print(String(format: "🔮 CURL: %@", urlRequest.curlString))
+        }
 
-            if let middleware = request.configuration.requestMiddleware, middleware.count > 0 {
-                print(String(format: "🧪 Middleware: %@",
-                             middleware.map { String(describing: $0) }
-                                        .joined(separator: ", ")))
-            }
+        if request.configuration.certificateData != nil {
+            print("🔒 Pinning Enabled")
+        }
 
-            if let params = request.params as [String: AnyObject]?,
-                params.keys.count > 0,
-                request.method != .get {
-                if case .upload = request.requestType {
-                    print("🗃️ Request Body: multipart/form-data")
-                } else {
-                    print(String(format: "🗃️ Request Body: %@", (params.toJSONString() ?? "")))
-                }
-            }
+        if let middleware = request.configuration.requestMiddleware, middleware.count > 0 {
+            print(String(format: "🧪 Middleware: %@",
+                         middleware.map { String(describing: $0) }
+                .joined(separator: ", ")))
+        }
 
-            switch state {
-            case .started:
-                if let headers = headers, headers.keys.count > 0 {
-                    print(String(format: "📃 Request Headers: %@", headers.toJSONString() ?? ""))
-                }
-            case .finished:
-                request.responseHeaders { (headers, _) in
-                    print(String(format: "📃 Response Headers: %@", headers?.toJSONString() ?? ""))
-                }
-            default:
-                break
+        if let params = request.params as [String: AnyObject]?,
+           params.keys.count > 0,
+           request.method != .get {
+            if case .upload = request.requestType {
+                print("🗃️ Request Body: multipart/form-data")
+            } else {
+                print(String(format: "🗃️ Request Body: %@", (params.toJSONString() ?? "")))
             }
+        }
 
-            if let data = data, !data.isEmpty {
-                if let responseJSON = data.toJSONString() {
-                    print(String(format: "📦 Response: %@", responseJSON))
-                } else if let stringResponse = String(data: data, encoding: .utf8) {
-                    print(String(format: "📦 Response: %@",
-                                 (stringResponse.isEmpty ? "[empty-response]" : stringResponse)))
-                } else {
-                    print("📦 Response: [non-printable]")
-                }
-            } else if case .download(let destinationPath) = request.requestType,
-                      case .finished = state, error == nil {
-                print(String(format: "📦 File saved to: '%@'", destinationPath))
+        switch state {
+        case .started:
+            if let headers = headers, headers.keys.count > 0 {
+                print(String(format: "📃 Request Headers: %@", headers.toJSONString() ?? ""))
             }
+        case .finished:
+            request.responseHeaders { (headers, _) in
+                print(String(format: "📃 Response Headers: %@", headers?.toJSONString() ?? ""))
+            }
+        default:
+            break
+        }
 
-            switch state {
-            case .started:
-                print("🚀 Request Started...\n")
-            case .finished:
-                print(String(format: "🏁 Request completed in %.5f seconds.\n", request.duration ?? 0))
-            case .unknown:
-                break
+        if let data = data, !data.isEmpty {
+            if let responseJSON = data.toJSONString() {
+                print(String(format: "📦 Response: %@", responseJSON))
+            } else if let stringResponse = String(data: data, encoding: .utf8) {
+                print(String(format: "📦 Response: %@",
+                             (stringResponse.isEmpty ? "[empty-response]" : stringResponse)))
+            } else {
+                print("📦 Response: [non-printable]")
             }
+        } else if case .download(let destinationPath) = request.requestType,
+                  case .finished = state, error == nil {
+            print(String(format: "📦 File saved to: '%@'", destinationPath))
+        }
+
+        switch state {
+        case .started:
+            print("🚀 Request Started...\n")
+        case .finished:
+            print(String(format: "🏁 Request completed in %.5f seconds.\n", request.duration ?? 0))
+        case .unknown:
+            break
         }
     }
 

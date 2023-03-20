@@ -1,6 +1,6 @@
 // TestRequest.swift
 //
-// Copyright © 2018-2022 Vassilis Panagiotopoulos. All rights reserved.
+// Copyright © 2018-2023 Vassilis Panagiotopoulos. All rights reserved.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in the
@@ -22,24 +22,22 @@ import XCTest
 import TermiNetwork
 
 class TestRequest: XCTestCase {
-    lazy var router: Router<APIRoute> = {
-        return Router<APIRoute>(configuration: Configuration(verbose: true))
+    lazy var client: Client<TestRepository> = {
+        return .init(configuration: Configuration(verbose: true))
     }()
 
-    lazy var router2: Router<APIRoute> = {
-        return Router<APIRoute>(environment: Env.google)
+    lazy var client2: Client<TestRepository> = {
+        return .init(environment: Env.google)
     }()
 
-    lazy var routerWithMiddleware: Router<APIRoute> = {
+    lazy var clientWithMiddleware: Client<TestRepository> = {
         let configuration = Configuration()
         configuration.requestMiddleware = [CryptoMiddleware.self]
         configuration.verbose = true
         configuration.requestBodyType = .JSON
 
-        let router = Router<APIRoute>(environment: Env.termiNetworkRemote,
-                                        configuration: configuration)
-
-        return router
+        return Client<TestRepository>(environment: Env.termiNetworkRemote,
+                                      configuration: configuration)
     }()
 
     override func setUp() {
@@ -57,7 +55,7 @@ class TestRequest: XCTestCase {
         let expectation = XCTestExpectation(description: "testHeaders")
         var failed = true
 
-        router.request(for: .testHeaders)
+        client.request(for: .testHeaders)
             .success(responseType: TestHeaders.self) { object in
                 failed = !(object.authorization == "XKJajkBXAUIbakbxjkasbxjkas" && object.customHeader == "test!!!!")
                 expectation.fulfill()
@@ -75,7 +73,7 @@ class TestRequest: XCTestCase {
         let expectation = XCTestExpectation(description: "testOverrideHeaders")
         var failed = true
 
-        router.request(for: .testOverrideHeaders)
+        client.request(for: .testOverrideHeaders)
             .success(responseType: TestHeaders.self) { object in
                 failed = !(object.authorization == "0" &&
                             object.customHeader == "0" &&
@@ -95,7 +93,7 @@ class TestRequest: XCTestCase {
         let expectation = XCTestExpectation(description: "testGetParams")
         var failed = true
 
-        router.request(for: .testGetParams(value1: true,
+        client.request(for: .testGetParams(value1: true,
                                            value2: 3,
                                            value3: 5.13453124189,
                                            value4: "test",
@@ -122,7 +120,7 @@ class TestRequest: XCTestCase {
         let expectation = XCTestExpectation(description: "testGetParamsEscaped")
         var failed = true
 
-        router.request(for: .testGetParams(value1: true,
+        client.request(for: .testGetParams(value1: true,
                                            value2: 3,
                                            value3: 5.13453124189,
                                            value4: "τεστ",
@@ -149,7 +147,7 @@ class TestRequest: XCTestCase {
         let expectation = XCTestExpectation(description: "testPostParams")
         var failed = true
 
-        router.request(for: .testPostParamsxWWWFormURLEncoded(value1: true,
+        client.request(for: .testPostParamsxWWWFormURLEncoded(value1: true,
                                                               value2: 3,
                                                               value3: 5.13453124189,
                                                               value4: "test",
@@ -175,7 +173,7 @@ class TestRequest: XCTestCase {
         let expectation = XCTestExpectation(description: "testJSONRequestPostParams")
         var failed = true
 
-        router.request(for: .testPostParams(value1: true,
+        client.request(for: .testPostParams(value1: true,
                                             value2: 3,
                                             value3: 5.13453124189,
                                             value4: "test",
@@ -269,11 +267,11 @@ class TestRequest: XCTestCase {
         var failed = true
         Queue.shared.cancelAllOperations()
 
-        let request = Request(route: APIRoute.testPostParams(value1: true,
-                                                               value2: 3,
-                                                               value3: 5.13453124189,
-                                                               value4: "test",
-                                                               value5: nil))
+        let request = Request(endpoint: TestRepository.testPostParams(value1: true,
+                                                                      value2: 3,
+                                                                      value3: 5.13453124189,
+                                                                      value4: "test",
+                                                                      value5: nil))
         request.configuration.requestBodyType = .JSON
         request.configuration.verbose = true
         request.success(responseType: String.self) { _ in
@@ -286,21 +284,21 @@ class TestRequest: XCTestCase {
     }
 
     func testConfiguration() {
-        var request = Request(route: APIRoute.testInvalidParams(value1: "a", value2: "b"))
+        var request = Request(endpoint: TestRepository.testInvalidParams(value1: "a", value2: "b"))
         var urlRequest = try? request.asRequest()
         XCTAssert(urlRequest?.timeoutInterval == 60)
         XCTAssert(request.configuration.cachePolicy == .useProtocolCachePolicy)
         XCTAssert(request.configuration.requestBodyType == .xWWWFormURLEncoded)
 
         Environment.set(Env.termiNetworkLocal)
-        request = Request(route: APIRoute.testHeaders)
+        request = Request(endpoint: TestRepository.testHeaders)
         urlRequest = try? request.asRequest()
         XCTAssert(urlRequest?.timeoutInterval == 32)
         XCTAssert(request.configuration.cachePolicy == .returnCacheDataElseLoad)
         XCTAssert(request.configuration.requestBodyType == .JSON)
 
         Environment.set(Env.termiNetworkRemote)
-        request = Request(route: APIRoute.testConfiguration)
+        request = Request(endpoint: TestRepository.testConfiguration)
         urlRequest = try? request.asRequest()
         XCTAssert(urlRequest?.timeoutInterval == 12)
         XCTAssert(request.configuration.cachePolicy == .reloadIgnoringLocalAndRemoteCacheData)
@@ -315,7 +313,7 @@ class TestRequest: XCTestCase {
 
         var failed = true
 
-        router.request(for: .testGetParams(value1: false,
+        client.request(for: .testGetParams(value1: false,
                                            value2: 2,
                                            value3: 3,
                                            value4: "1",
@@ -335,7 +333,7 @@ class TestRequest: XCTestCase {
 
         failed = true
 
-        router2.request(for: .testGetParams(value1: false,
+        client2.request(for: .testGetParams(value1: false,
                                             value2: 2,
                                             value3: 3,
                                             value4: "1",
@@ -359,7 +357,7 @@ class TestRequest: XCTestCase {
 
         let expectation = XCTestExpectation(description: "testMiddleware")
 
-        routerWithMiddleware.request(for: .testEncryptParams(value: "Hola!!!"))
+        clientWithMiddleware.request(for: .testEncryptParams(value: "Hola!!!"))
             .success(responseType: EncryptedModel.self) { model in
                 failed = model.value != "Hola!!!"
                 expectation.fulfill()
@@ -379,11 +377,11 @@ class TestRequest: XCTestCase {
 
     fileprivate func sampleRequest(queue: Queue? = Queue.shared,
                                    onSuccess: SuccessCallback<TestJSONParams>? = nil) {
-        let call = Request(route: APIRoute.testPostParams(value1: true,
-                                                          value2: 3,
-                                                          value3: 5.13453124189,
-                                                          value4: "test",
-                                                          value5: nil))
+        let call = Request(endpoint: TestRepository.testPostParams(value1: true,
+                                                                   value2: 3,
+                                                                   value3: 5.13453124189,
+                                                                   value4: "test",
+                                                                   value5: nil))
         call.configuration.requestBodyType = .JSON
         call.queue(queue ?? Queue.shared)
             .success(responseType: TestJSONParams.self) { object in
@@ -396,7 +394,7 @@ class TestRequest: XCTestCase {
 
         let expectation = XCTestExpectation(description: "testResponseHeaders")
 
-        routerWithMiddleware.request(for: .testEncryptParams(value: "Hola!!!"))
+        clientWithMiddleware.request(for: .testEncryptParams(value: "Hola!!!"))
             .success(responseType: Data.self, responseHandler: { _ in })
             .responseHeaders { (headers, _) in
                 failed = headers?["Content-Type"] != "application/json; charset=utf-8"

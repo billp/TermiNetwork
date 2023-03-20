@@ -1,6 +1,6 @@
 // TestTNErrors.swift
 //
-// Copyright © 2018-2022 Vassilis Panagiotopoulos. All rights reserved.
+// Copyright © 2018-2023 Vassilis Panagiotopoulos. All rights reserved.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in the
@@ -22,9 +22,7 @@ import XCTest
 import TermiNetwork
 
 class TestTNErrors: XCTestCase {
-    var router: Router<APIRoute> {
-       return Router<APIRoute>()
-    }
+    lazy var client: Client<TestRepository> = .init()
 
     override func setUp() {
         super.setUp()
@@ -52,7 +50,7 @@ class TestTNErrors: XCTestCase {
                 expectation.fulfill()
             }
             .failure { error in
-                if case TNError.environmenotSet = error {
+                if case TNError.environmentNotSet = error {
                     failed = true
                 } else {
                     failed = false
@@ -65,12 +63,12 @@ class TestTNErrors: XCTestCase {
         XCTAssert(!failed)
     }
 
-    func testEnvironmenotSetWithRoute() {
+    func testDidNotSetEnvironmentWithEndpoint() {
         Environment.current = nil
-        let expectation = XCTestExpectation(description: "testEnvironmenotSetWithRoute")
+        let expectation = XCTestExpectation(description: "testDidNotSetEnvironmentWithEndpoint")
         var failed = true
 
-        router.request(for: .testPostParams(value1: true,
+        client.request(for: .testPostParams(value1: true,
                                             value2: 1,
                                             value3: 2,
                                             value4: "Dsa",
@@ -80,7 +78,7 @@ class TestTNErrors: XCTestCase {
                 expectation.fulfill()
             }
             .failure { error in
-                if case TNError.environmenotSet = error {
+                if case TNError.environmentNotSet = error {
                     failed = false
                 }
                 expectation.fulfill()
@@ -115,7 +113,7 @@ class TestTNErrors: XCTestCase {
         let expectation = XCTestExpectation(description: "testResponseDataIsNotEmpty")
         var failed = true
 
-        router.request(for: .testEmptyBody)
+        client.request(for: .testEmptyBody)
             .success(responseType: Data.self) { _ in
                 expectation.fulfill()
                 failed = false
@@ -134,7 +132,7 @@ class TestTNErrors: XCTestCase {
         let expectation = XCTestExpectation(description: "testResponseInvalidImageData")
         var failed = true
 
-        router.request(for: .testPostParams(value1: false,
+        client.request(for: .testPostParams(value1: false,
                                             value2: 1,
                                             value3: 2,
                                             value4: "",
@@ -162,7 +160,7 @@ class TestTNErrors: XCTestCase {
         let expectation = XCTestExpectation(description: "testResponseValidImageData")
         var failed = true
 
-        router.request(for: .testImage(imageName: "sample.jpeg"))
+        client.request(for: .testImage(imageName: "sample.jpeg"))
             .success(responseType: UIImage.self) { _ in
                 expectation.fulfill()
                 failed = false
@@ -181,7 +179,7 @@ class TestTNErrors: XCTestCase {
         let expectation = XCTestExpectation(description: "testResponseCannotDeserialize")
         var failed = true
 
-        router.request(for: .testInvalidParams(value1: "a", value2: "b"))
+        client.request(for: .testInvalidParams(value1: "a", value2: "b"))
             .success(responseType: TestParams.self) { _ in
                 failed = true
                 expectation.fulfill()
@@ -207,7 +205,7 @@ class TestTNErrors: XCTestCase {
         let expectation = XCTestExpectation(description: "testResponseCanDeserialize")
         var failed = true
 
-        router.request(for: .testGetParams(value1: false,
+        client.request(for: .testGetParams(value1: false,
                                            value2: 3,
                                            value3: 1.32,
                                            value4: "Test",
@@ -232,7 +230,7 @@ class TestTNErrors: XCTestCase {
         let expectation = XCTestExpectation(description: "tesetworkError")
         var failed = true
 
-        let req = router.request(for: .testInvalidParams(value1: "a", value2: "b"))
+        let req = client.request(for: .testInvalidParams(value1: "a", value2: "b"))
         req.configuration.interceptors = []
 
         req.success(responseType: Data.self) { _ in
@@ -260,7 +258,7 @@ class TestTNErrors: XCTestCase {
         let expectation = XCTestExpectation(description: "tesotSuccess")
         var failed = true
 
-        router.request(for: .testStatusCode(code: 404))
+        client.request(for: .testStatusCode(code: 404))
             .success(responseType: String.self) { _ in
                 expectation.fulfill()
                 failed = true
@@ -271,10 +269,9 @@ class TestTNErrors: XCTestCase {
                     failed = code != 404
                 default:
                     failed = true
+                }
+                expectation.fulfill()
             }
-
-            expectation.fulfill()
-        }
 
         wait(for: [expectation], timeout: 60)
 
@@ -285,7 +282,7 @@ class TestTNErrors: XCTestCase {
         let expectation = XCTestExpectation(description: "testCancelled")
         var failed = true
 
-        let request = Request(route: APIRoute.testStatusCode(code: 404))
+        let request = Request(endpoint: TestRepository.testStatusCode(code: 404))
         request.success(responseType: Data.self) { _ in
             expectation.fulfill()
         }
@@ -310,7 +307,7 @@ class TestTNErrors: XCTestCase {
         let expectation = XCTestExpectation(description: "testErrorCannotDeserialize")
         var failed = true
 
-        let request = Request(route: APIRoute.testStatusCode(code: 404))
+        let request = Request(endpoint: TestRepository.testStatusCode(code: 404))
         request.success(responseType: TestParams.self) { _ in
             expectation.fulfill()
         }
@@ -333,11 +330,11 @@ class TestTNErrors: XCTestCase {
         let expectation = XCTestExpectation(description: "testErrorCannotDeserialize")
         var failed = true
 
-        let request = Request(route: APIRoute.testGetParams(value1: false,
-                                                            value2: 3,
-                                                            value3: 1.32,
-                                                            value4: "Test",
-                                                            value5: nil))
+        let request = Request(endpoint: TestRepository.testGetParams(value1: false,
+                                                                     value2: 3,
+                                                                     value3: 1.32,
+                                                                     value4: "Test",
+                                                                     value5: nil))
         request.success(responseType: EncryptedModel.self) { _ in
             expectation.fulfill()
         }
@@ -360,7 +357,7 @@ class TestTNErrors: XCTestCase {
         let expectation = XCTestExpectation(description: "testErrorCannotDeserialize")
         var failed = true
 
-        let request = Request(route: APIRoute.testStatusCode(code: 401))
+        let request = Request(endpoint: TestRepository.testStatusCode(code: 401))
         request.configuration.keyDecodingStrategy = .convertFromSnakeCase
         request.success(responseType: EncryptedModel.self) { _ in
             expectation.fulfill()
@@ -384,7 +381,7 @@ class TestTNErrors: XCTestCase {
         let expectation = XCTestExpectation(description: "testErrorCannotDeserialize")
         var failed = true
 
-        let request = Request(route: APIRoute.testStatusCode(code: 401))
+        let request = Request(endpoint: TestRepository.testStatusCode(code: 401))
         request.configuration.keyDecodingStrategy = .convertFromSnakeCase
         request.success(responseType: EncryptedModel.self) { _ in
             expectation.fulfill()

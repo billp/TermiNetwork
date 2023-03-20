@@ -1,6 +1,6 @@
 // TestConfiguration.swift
 //
-// Copyright © 2018-2022 Vassilis Panagiotopoulos. All rights reserved.
+// Copyright © 2018-2023 Vassilis Panagiotopoulos. All rights reserved.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in the
@@ -50,7 +50,7 @@ class TestConfiguration: XCTestCase {
         return conf
     }()
 
-    static var routeConfiguration: Configuration = {
+    static var repositoryConfiguration: Configuration = {
         let conf = Configuration()
         conf.verbose = false
         conf.cachePolicy = .returnCacheDataDontLoad
@@ -78,9 +78,7 @@ class TestConfiguration: XCTestCase {
         }
     }
 
-    var router: Router<APIRoute> {
-       return Router<APIRoute>()
-    }
+    lazy var client: Client<TestRepository> = .init()
 
     override func setUp() {
         super.setUp()
@@ -94,7 +92,7 @@ class TestConfiguration: XCTestCase {
     }
 
     func testEnvConfiguration() {
-        let request = router.request(for: .testHeaders)
+        let request = client.request(for: .testHeaders)
         let reqConf = request.configuration
 
         XCTAssert(reqConf.verbose == TestConfiguration.envConfiguration.verbose)
@@ -123,7 +121,7 @@ class TestConfiguration: XCTestCase {
         Environment.set(environmentObject: Environment(url: "http://www.google.com/abc/def",
                                                            configuration: TestConfiguration.envConfiguration))
 
-        let request = router.request(for: .testHeaders)
+        let request = client.request(for: .testHeaders)
         let reqConf = request.configuration
 
         XCTAssert(reqConf.verbose == TestConfiguration.envConfiguration.verbose)
@@ -148,23 +146,23 @@ class TestConfiguration: XCTestCase {
                             .requestMiddleware.map { String(describing: $0) }))
     }
 
-    func testRouteConfiguration() {
-        let request = router.request(for:
-            .testConfigurationParameterized(conf: TestConfiguration.routeConfiguration))
+    func testEndpointConfiguration() {
+        let request = client.request(for:
+            .testConfigurationParameterized(conf: TestConfiguration.repositoryConfiguration))
         let reqConf = request.configuration
-        let routeConf = TestConfiguration.routeConfiguration
+        let endpointConf = TestConfiguration.repositoryConfiguration
 
         var allHeaders = TestConfiguration.envConfiguration.headers ?? [:]
-        let routeHeaders = routeConf.headers ?? [:]
+        let endpointHeaders = endpointConf.headers ?? [:]
 
-        allHeaders.merge(routeHeaders, uniquingKeysWith: { _, new in new})
+        allHeaders.merge(endpointHeaders, uniquingKeysWith: { _, new in new})
 
-        XCTAssert(reqConf.verbose == routeConf.verbose)
-        XCTAssert(reqConf.cachePolicy == routeConf.cachePolicy)
-        XCTAssert(reqConf.timeoutInterval == routeConf.timeoutInterval)
-        XCTAssert(reqConf.requestBodyType == routeConf.requestBodyType)
-        XCTAssert(reqConf.certificatePaths == routeConf.certificatePaths)
-        XCTAssert(reqConf.verbose == routeConf.verbose)
+        XCTAssert(reqConf.verbose == endpointConf.verbose)
+        XCTAssert(reqConf.cachePolicy == endpointConf.cachePolicy)
+        XCTAssert(reqConf.timeoutInterval == endpointConf.timeoutInterval)
+        XCTAssert(reqConf.requestBodyType == endpointConf.requestBodyType)
+        XCTAssert(reqConf.certificatePaths == endpointConf.certificatePaths)
+        XCTAssert(reqConf.verbose == endpointConf.verbose)
         XCTAssert(reqConf.headers == allHeaders)
         if case .useDefaultKeys = reqConf.keyDecodingStrategy {
             XCTAssert(true)
@@ -172,8 +170,8 @@ class TestConfiguration: XCTestCase {
             XCTAssert(false)
         }
         XCTAssert(Set(arrayLiteral: reqConf.interceptors.map { String(describing: $0) }) ==
-                    Set(arrayLiteral: routeConf.interceptors.map { String(describing: $0) }))
+                    Set(arrayLiteral: endpointConf.interceptors.map { String(describing: $0) }))
         XCTAssert(Set(arrayLiteral: reqConf.requestMiddleware.map { String(describing: $0) }) ==
-                    Set(arrayLiteral: routeConf.requestMiddleware.map { String(describing: $0) }))
+                    Set(arrayLiteral: endpointConf.requestMiddleware.map { String(describing: $0) }))
     }
 }

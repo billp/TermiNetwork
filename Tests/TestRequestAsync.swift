@@ -1,6 +1,6 @@
 // TestRequest.swift
 //
-// Copyright © 2018-2022 Vassilis Panagiotopoulos. All rights reserved.
+// Copyright © 2018-2023 Vassilis Panagiotopoulos. All rights reserved.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in the
@@ -21,25 +21,8 @@ import XCTest
 import TermiNetwork
 
 class TestRequestAsync: XCTestCase {
-    lazy var router: Router<APIRoute> = {
-        return Router<APIRoute>(configuration: Configuration(verbose: true))
-    }()
-
-    lazy var router2: Router<APIRoute> = {
-        return Router<APIRoute>(environment: Env.google)
-    }()
-
-    lazy var routerWithMiddleware: Router<APIRoute> = {
-        let configuration = Configuration()
-        configuration.requestMiddleware = [CryptoMiddleware.self]
-        configuration.verbose = true
-        configuration.requestBodyType = .JSON
-
-        let router = Router<APIRoute>(environment: Env.termiNetworkRemote,
-                                        configuration: configuration)
-
-        return router
-    }()
+    lazy var client: Client<TestRepository> = .init(configuration: Configuration(verbose: true))
+    lazy var client2: Client<TestRepository> = .init(environment: Env.google)
 
     override func setUp() {
         super.setUp()
@@ -55,7 +38,7 @@ class TestRequestAsync: XCTestCase {
     func testHeaders() async {
         var failed = true
         do {
-            let response: TestHeaders = try await router.request(for: .testHeaders).async()
+            let response: TestHeaders = try await client.request(for: .testHeaders).async()
             failed = !(response.authorization == "XKJajkBXAUIbakbxjkasbxjkas" && response.customHeader == "test!!!!")
         } catch { }
 
@@ -143,7 +126,7 @@ class TestRequestAsync: XCTestCase {
     }
 
     func testGetParamsWithTransformerSuccess() async {
-        let testModel = try? await router.request(
+        let testModel = try? await client.request(
             for: .testGetParams(value1: true,
                                 value2: 3,
                                 value3: 5.13453124189,
@@ -161,7 +144,7 @@ class TestRequestAsync: XCTestCase {
             var failed = true
 
             do {
-                try await router.request(
+                try await client.request(
                     for: .testGetParams(value1: true,
                                         value2: 3,
                                         value3: 5.13453124189,
@@ -190,7 +173,7 @@ class TestRequestAsync: XCTestCase {
     func testGetParamsWithTransformerSuccessTransformError() async {
         var failed = true
 
-        let req = router.request(
+        let req = client.request(
             for: .testGetParams(value1: true,
                                 value2: 3,
                                 value3: 5.13453124189,
@@ -211,7 +194,7 @@ class TestRequestAsync: XCTestCase {
     }
 
     func testResponseValidImageData() async {
-        let image = try? await router.request(for: .testImage(imageName: "sample.jpeg")).async(as: UIImage.self)
+        let image = try? await client.request(for: .testImage(imageName: "sample.jpeg")).async(as: UIImage.self)
 
         XCTAssertNotNil(image)
     }

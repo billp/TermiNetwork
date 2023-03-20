@@ -1,6 +1,6 @@
 // Request.swift
 //
-// Copyright © 2018-2022 Vassilis Panagiotopoulos. All rights reserved.
+// Copyright © 2018-2023 Vassilis Panagiotopoulos. All rights reserved.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in the
@@ -160,40 +160,40 @@ public final class Request: Operation {
     /// Initializes a Request.
     ///
     /// - parameters:
-    ///   - route: a RouteProtocol enum value
-    internal init(route: RouteProtocol,
+    ///   - endpoint: a EndpointProtocol enum value
+    internal init(endpoint: EndpointProtocol,
                   environment: Environment? = Environment.current,
                   configuration: Configuration? = nil) {
-        let route = route.configure()
-        self.method = route.method
-        self.headers = route.headers
-        self.params = route.params
-        self.path = route.path.convertedPath
+        let repositoryConfiguration = endpoint.configure()
+        self.method = repositoryConfiguration.method
+        self.headers = repositoryConfiguration.headers
+        self.params = repositoryConfiguration.params
+        self.path = repositoryConfiguration.path.convertedPath
         self.environment = environment
-        self.mockFilePath = route.mockFilePath
+        self.mockFilePath = repositoryConfiguration.mockFilePath
 
         if let environmentConfiguration = environment?.configuration {
             self.configuration = Configuration.override(left: self.configuration,
                                                         right: environmentConfiguration)
         }
-        if let routerConfiguration = configuration {
+        if let configuration {
             self.configuration = Configuration.override(left: self.configuration,
-                                                        right: routerConfiguration)
+                                                        right: configuration)
         }
-        if let routeConfiguration = route.configuration {
+        if let repositoryConfiguration = repositoryConfiguration.configuration {
             self.configuration = Configuration.override(left: self.configuration,
-                                                        right: routeConfiguration)
+                                                        right: repositoryConfiguration)
         }
     }
 
     /// Initializes a Request.
     ///
     /// - parameters:
-    ///   - route: a RouteProtocol enum value
+    ///   - endpoint: a EndpointProtocol enum value.
     ///   - environment: Specifies a different environment to use than the global setted environment.
-    public convenience init(route: RouteProtocol,
+    public convenience init(endpoint: EndpointProtocol,
                             environment: Environment? = Environment.current) {
-        self.init(route: route,
+        self.init(endpoint: endpoint,
                   environment: environment,
                   configuration: nil)
     }
@@ -206,7 +206,7 @@ public final class Request: Operation {
         let urlString = NSMutableString()
 
         if pathType == .relative {
-            guard let currentEnvironment = environment else { throw TNError.environmenotSet }
+            guard let currentEnvironment = environment else { throw TNError.environmentNotSet }
             urlString.setString(currentEnvironment.stringURL + "/" + path)
         } else {
             urlString.setString(path)
@@ -296,13 +296,11 @@ public final class Request: Operation {
     }
 
     fileprivate func setHeaders() throws {
-        /// Merge headers with the following order environment > route > request
+        /// Merges headers in the following order: environment > endpoint > request
         if headers == nil {
             headers = [:]
         }
-
         headers?.merge(configuration.headers ?? [:], uniquingKeysWith: { (old, _) in old })
-
         headers = try handleMiddlewareHeadersBeforeSendIfNeeded(headers: headers)
     }
 

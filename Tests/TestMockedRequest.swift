@@ -1,6 +1,6 @@
 // TestMockRequests.swift
 //
-// Copyright © 2018-2022 Vassilis Panagiotopoulos. All rights reserved.
+// Copyright © 2018-2023 Vassilis Panagiotopoulos. All rights reserved.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in the
@@ -69,13 +69,8 @@ class TestMockedRequests: XCTestCase {
         }
     }
 
-    var router: Router<APIRoute> {
-       return Router<APIRoute>()
-    }
-
-    var router2: Router<APIRoute> {
-        return Router<APIRoute>(configuration: TestMockedRequests.mockDelayConfiguration)
-    }
+    lazy var client: Client<TestRepository> = .init()
+    lazy var client2: Client<TestRepository> = .init(configuration: Self.mockDelayConfiguration)
 
     override func setUp() {
         super.setUp()
@@ -92,7 +87,7 @@ class TestMockedRequests: XCTestCase {
         let expectation = XCTestExpectation(description: "testEnvConfiguration")
         var failed = true
 
-        router.request(for: .testHeaders)
+        client.request(for: .testHeaders)
             .success(responseType: TestHeaders.self) { response in
                 failed = !(response.customHeader == "yo man!!!!")
                 expectation.fulfill()
@@ -116,7 +111,7 @@ class TestMockedRequests: XCTestCase {
         }
 
         for _ in 0..<100 {
-            let req = router2.request(for: .testHeaders)
+            let req = client2.request(for: .testHeaders)
             req.configuration.verbose = false
             req.queue(queue)
                .success(responseType: TestHeaders.self) { response in
@@ -137,7 +132,7 @@ class TestMockedRequests: XCTestCase {
         let expectation = XCTestExpectation(description: "testMockFailed")
         var failed = true
 
-        let req = router2.request(for: .testOverrideHeaders)
+        let req = client2.request(for: .testOverrideHeaders)
         req.configuration.verbose = false
         req.success(responseType: TestHeaders.self) { _ in
             failed = true
