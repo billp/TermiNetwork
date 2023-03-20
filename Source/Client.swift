@@ -1,6 +1,6 @@
-// Router.swift
+// Client.swift
 //
-// Copyright © 2018-2022 Vassilis Panagiotopoulos. All rights reserved.
+// Copyright © 2018-2023 Vassilis Panagiotopoulos. All rights reserved.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in the
@@ -19,12 +19,12 @@
 
 import Foundation
 
-/// This class is used to create instances of Router that can be used to start requests based on the given Route.
-public final class Router<Route: RouteProtocol> {
+/// This class is used to create instances of Repository that can be used to start requests based on the given endpoint.
+public final class Client<Repository: EndpointProtocol> {
     // MARK: Properties
     fileprivate var environment: Environment?
 
-    /// Router configuration
+    /// Repository configuration
     public var configuration: Configuration?
 
     /// Initialize with environment that overrides the one set by Environment.set(_).
@@ -37,9 +37,9 @@ public final class Router<Route: RouteProtocol> {
     /// Returns a Request that can be used later, e.g. for starting the request in a later time or canceling it.
     ///
     /// - parameters:
-    ///    - route: a RouteProtocol enum value
-    public func request(for route: Route) -> Request {
-        Request(route: route,
+    ///    - endpoint: a RepositoryProtocol enum value.
+    public func request(for endpoint: Repository) -> Request {
+        Request(endpoint: endpoint,
                 environment: environment,
                 configuration: configuration)
     }

@@ -1,6 +1,6 @@
-// MiscRoute.swift
+// EndpointProtocol.swift
 //
-// Copyright © 2018-2022 Vassilis Panagiotopoulos. All rights reserved.
+// Copyright © 2018-2023 Vassilis Panagiotopoulos. All rights reserved.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in the
@@ -18,26 +18,11 @@
 // ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 import Foundation
-import TermiNetwork
 
-enum MiscRoute: RouteProtocol {
-    case testEncryptParams(param: String)
-    case upload(fileUrl: URL)
-
-    func configure() -> RouteConfiguration {
-        switch self {
-        case .testEncryptParams(let value):
-            return RouteConfiguration(
-                method: .post,
-                path: .path(["test_encrypt_params"]),
-                params: ["value": value]
-            )
-        case .upload(fileUrl: let fileUrl):
-            return RouteConfiguration(
-                method: .post,
-                path: .path(["file_upload"]),
-                params: ["file": MultipartFormDataPartType.url(fileUrl)]
-            )
-        }
-    }
+/// Use this protocol to define repositories as enums.
+public protocol EndpointProtocol {
+    /// Configure your endpoints by setting defining this function. See
+    /// Examples/Communication/Repositories/CitiesRepository.swift for an example.
+    /// - returns: An EndpointProtocol for each endpoint.
+    func configure() -> EndpointConfiguration
 }

@@ -1,6 +1,6 @@
 // FileUploader.swift
 //
-// Copyright © 2018-2022 Vassilis Panagiotopoulos. All rights reserved.
+// Copyright © 2018-2023 Vassilis Panagiotopoulos. All rights reserved.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in the
@@ -172,7 +172,7 @@ extension FileUploader {
                 uploadStarted = true
                 uploadFinished = false
 
-                let response = try await Router<MiscRoute>()
+                let response = try await Client<MiscRepository>()
                     .request(for: .upload(fileUrl: imageUrl))
                     .asyncUpload(
                         using: FileUploadTransformer.self,

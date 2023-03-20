@@ -1,6 +1,6 @@
 // TestUploadOperationsAsync.swift
 //
-// Copyright © 2018-2022 Vassilis Panagiotopoulos. All rights reserved.
+// Copyright © 2018-2023 Vassilis Panagiotopoulos. All rights reserved.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in the
@@ -27,9 +27,9 @@ class TestUploadOperationsAsync: XCTestCase {
                              verbose: true)
     }()
 
-    lazy var router: Router<APIRoute> = {
-        return Router<APIRoute>(environment: Env.termiNetworkRemote,
-                                configuration: configuration)
+    lazy var client: Client<TestRepository> = {
+        return .init(environment: Env.termiNetworkRemote,
+                     configuration: configuration)
     }()
 
     override func setUp() {
@@ -56,7 +56,7 @@ class TestUploadOperationsAsync: XCTestCase {
         let checksum = TestHelpers.sha256(url: URL(fileURLWithPath: filePath))
 
         do {
-            let response = try await router.request(for: .dataUpload(data: uploadData, param: "bhbbrbrbrhbh"))
+            let response = try await client.request(for: .dataUpload(data: uploadData, param: "bhbbrbrbrhbh"))
                 .asyncUpload(
                     as: FileResponse.self,
                     progressUpdate: { bytesSent, totalBytes, progress in
@@ -86,7 +86,7 @@ class TestUploadOperationsAsync: XCTestCase {
             }
 
             do {
-                try await router.request(for: .dataUpload(data: uploadData, param: "bhbbrbrbrhbh"))
+                try await client.request(for: .dataUpload(data: uploadData, param: "bhbbrbrbrhbh"))
                     .asyncUpload(
                         as: FileResponse.self,
                         progressUpdate: nil)
@@ -123,7 +123,7 @@ class TestUploadOperationsAsync: XCTestCase {
         let checksum = TestHelpers.sha256(url: URL(fileURLWithPath: filePath))
 
         do {
-            let response = try await router.request(for: .dataUpload(data: uploadData, param: "bhbbrbrbrhbh"))
+            let response = try await client.request(for: .dataUpload(data: uploadData, param: "bhbbrbrbrhbh"))
                 .asyncUpload(using: TestUploadTransformer.self,
                              progressUpdate: { bytesSent, totalBytes, progress in
                                  completed = bytesSent == totalBytes && progress == 1
@@ -151,7 +151,7 @@ class TestUploadOperationsAsync: XCTestCase {
             }
 
             do {
-                try await router.request(for: .dataUpload(data: uploadData, param: "bhbbrbrbrhbh"))
+                try await client.request(for: .dataUpload(data: uploadData, param: "bhbbrbrbrhbh"))
                     .asyncUpload(using: TestUploadTransformer.self,
                                  progressUpdate: nil)
 
@@ -191,7 +191,7 @@ class TestUploadOperationsAsync: XCTestCase {
 
         for _ in 0..<iterations {
             do {
-                let response = try await router.request(for: .fileUpload(url: url, param: "bhbbrbrbrhbh"))
+                let response = try await client.request(for: .fileUpload(url: url, param: "bhbbrbrbrhbh"))
                     .asyncUpload(as: FileResponse.self,
                                  progressUpdate: { bytesSent, totalBytes, progress in
                         if bytesSent == totalBytes && progress == 1 {
@@ -220,7 +220,7 @@ class TestUploadOperationsAsync: XCTestCase {
 
         for key in 0..<iterations {
             do {
-                let response = try await router.request(for: .fileUpload(url: urls[key], param: "bhbbrbrbrhbh"))
+                let response = try await client.request(for: .fileUpload(url: urls[key], param: "bhbbrbrbrhbh"))
                     .asyncUpload(as: FileResponse.self,
                                  progressUpdate: { bytesSent, totalBytes, progress in
                         if bytesSent == totalBytes && progress == 1 {
@@ -247,7 +247,7 @@ class TestUploadOperationsAsync: XCTestCase {
         var failed: Bool = false
 
         do {
-            _ = try await router.request(for: .fileUpload(url: URL(string: "http://www.google.com")!,
+            _ = try await client.request(for: .fileUpload(url: URL(string: "http://www.google.com")!,
                                             param: "tsttt"))
             .asyncUpload(as: FileResponse.self,
                          progressUpdate: nil)

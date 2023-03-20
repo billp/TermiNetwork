@@ -1,6 +1,6 @@
 // Configuration.swift
 //
-// Copyright © 2018-2022 Vassilis Panagiotopoulos. All rights reserved.
+// Copyright © 2018-2023 Vassilis Panagiotopoulos. All rights reserved.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in the
@@ -25,11 +25,12 @@ import Foundation
 ///   - max: The upper bound of interval.
 public typealias MockDelayRange = (min: TimeInterval, max: TimeInterval)
 
-/// A configuration class that can be used with Environment, Router, Route and Request.
+/// A configuration class that can be used with Environment, Repository, Endpoint and Request.
 /// A configuration object follows the following rules:
 /// 1. When a Configuration object is passed to an Environment,
-/// each Router with its routes and requests will inherit this configuration.
-/// 2. When a Configuration object is passed to Router, all its routes and requests will inherit this configuration.
+/// each Repository with its Endpoints and requests will inherit this configuration.
+/// 2. When a Configuration object is passed to Repository, 
+/// all its Endpoints and Requests will inherit this configuration.
 public final class Configuration {
     // MARK: Public properties
 
@@ -49,7 +50,7 @@ public final class Configuration {
     }
     /// Enables or disables debug mode.
     public var verbose: Bool?
-    /// Additional headers of the request. They will be merged with the headers specified in RouteConfiguration.
+    /// Additional headers of the request. They will be merged with the headers specified in EndpointConfiguration.
     public var headers: [String: String]?
     /// The Bundle object of mock data used when useMockData is true.
     public var mockDataBundle: Bundle?
@@ -82,7 +83,7 @@ public final class Configuration {
     ///     - certificatePaths: The certificate file paths used for certificate pining.
     ///     - verbose: Enables or disables debug mode.
     ///     - headers: Additional headers of the request. Will be merged with the headers specified
-    ///         in RouteConfiguration.
+    ///         in EndpointConfiguration.
     ///     - mockDataBundle: The Bundle object of mock data used when useMockData is true.
     ///     - mockDataEnabled: Enables or disables request mocking.
     ///     - mockDelay: Specifies a delay when mock data is used.

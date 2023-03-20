@@ -1,6 +1,6 @@
-// RouteProtocol.swift
+// MiscRepository.swift
 //
-// Copyright © 2018-2022 Vassilis Panagiotopoulos. All rights reserved.
+// Copyright © 2018-2023 Vassilis Panagiotopoulos. All rights reserved.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in the
@@ -18,10 +18,26 @@
 // ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 import Foundation
+import TermiNetwork
 
-/// Use this protocol to define routers as enums.
-public protocol RouteProtocol {
-    /// Configure your router by setting this function. See Examples/Routers/CityRoute.swift for an example.
-    /// - returns: A RouteConfiguration object for each route.
-    func configure() -> RouteConfiguration
+enum MiscRepository: EndpointProtocol {
+    case testEncryptParams(param: String)
+    case upload(fileUrl: URL)
+
+    func configure() -> EndpointConfiguration {
+        switch self {
+        case .testEncryptParams(let value):
+            return EndpointConfiguration(
+                method: .post,
+                path: .path(["test_encrypt_params"]),
+                params: ["value": value]
+            )
+        case .upload(fileUrl: let fileUrl):
+            return EndpointConfiguration(
+                method: .post,
+                path: .path(["file_upload"]),
+                params: ["file": MultipartFormDataPartType.url(fileUrl)]
+            )
+        }
+    }
 }

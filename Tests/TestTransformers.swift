@@ -1,6 +1,6 @@
 // TestTransformers.swift
 //
-// Copyright © 2018-2022 Vassilis Panagiotopoulos. All rights reserved.
+// Copyright © 2018-2023 Vassilis Panagiotopoulos. All rights reserved.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in the
@@ -21,9 +21,7 @@ import XCTest
 import TermiNetwork
 
 class TestTransformers: XCTestCase {
-    lazy var router: Router<APIRoute> = {
-        return Router<APIRoute>(configuration: Configuration(verbose: true))
-    }()
+    lazy var client: Client<TestRepository> = .init(configuration: Configuration(verbose: true))
 
     override class func setUp() {
         Environment.set(Env.termiNetworkRemote)
@@ -49,7 +47,7 @@ class TestTransformers: XCTestCase {
         let expectation = XCTestExpectation(description: "testGetParamsWithTransformerSuccess")
         var failed = true
         var testModel: TestModel?
-        router.request(for: .testGetParams(value1: true,
+        client.request(for: .testGetParams(value1: true,
                                            value2: 3,
                                            value3: 5.13453124189,
                                            value4: "test",
@@ -72,7 +70,7 @@ class TestTransformers: XCTestCase {
         let expectation = XCTestExpectation(description: "testGetParamsWithTransformerSuccessCannotDeserialize")
         var failed = true
 
-        let req = router.request(for: .testGetParams(value1: true,
+        let req = client.request(for: .testGetParams(value1: true,
                                                      value2: 3,
                                                      value3: 5.13453124189,
                                                      value4: "test",
@@ -99,7 +97,7 @@ class TestTransformers: XCTestCase {
         let expectation = XCTestExpectation(description: "testGetParamsWithTransformerSuccessTransformError")
         var failed = true
 
-        let req = router.request(for: .testGetParams(value1: true,
+        let req = client.request(for: .testGetParams(value1: true,
                                                      value2: 3,
                                                      value3: 5.13453124189,
                                                      value4: "test",
@@ -126,7 +124,7 @@ class TestTransformers: XCTestCase {
         let expectation = XCTestExpectation(description: "testGetParamsWithTransformer")
         var failed = true
 
-        let req = router.request(for: .testGetParams(value1: true,
+        let req = client.request(for: .testGetParams(value1: true,
                                                      value2: 3,
                                                      value3: 5.13453124189,
                                                      value4: "test",

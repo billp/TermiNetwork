@@ -1,6 +1,6 @@
-// RouteConfiguration.swift
+// EndpointConfiguration.swift
 //
-// Copyright © 2018-2022 Vassilis Panagiotopoulos. All rights reserved.
+// Copyright © 2018-2023 Vassilis Panagiotopoulos. All rights reserved.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in the
@@ -19,8 +19,8 @@
 
 import Foundation
 
-/// Route configuration class which is used in Route protocol implementations.
-public final class RouteConfiguration {
+/// Endpoint configuration class which is used in EndpointProtocol implementations.
+public final class EndpointConfiguration {
     /// A Method to use, for example .get, .post, etc.
     var method: Method
     /// A path of the request (will be appended to the base URL, for example .path(["user", "13"]).
@@ -29,20 +29,20 @@ public final class RouteConfiguration {
     var params: [String: Any?]?
     /// The headers of the request. They will override (if needed) those from configuration objects.
     var headers: [String: String]?
-    /// A configuration object (Optional, e.g. if you want ot use custom configuration for a specific route).
+    /// A configuration object (Optional, e.g. if you want ot use custom configuration for a specific endpoint).
     var configuration: Configuration?
     /// A path of the file in the mock data bundle specified in configuration object.
     /// This will be used only if useMockData is set to true in the configuration object.
     var mockFilePath: Path?
 
-    /// Route configuration initializer
+    /// Endpoint configuration initializer.
     /// 
     /// - parameters:
     ///   - method: A Method to use, for example .get, .post, etc.
     ///   - path: A path of the request (will be appended to the base URL, for example .path(["user", "13"]).
     ///   - params: The parameters of the request.
     ///   - headers: A configuration object (Optional, e.g. if you want ot use custom
-    ///   configuration for a specific route).
+    ///   configuration for a specific endpoint).
     ///   - configuration: The configuration object of the request.
     ///   - mockFilePath: A path of the file in the mock data bundle specified in configuration object.
     ///         This will be used only if useMockData is set to true in the configuration object.

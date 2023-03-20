@@ -1,6 +1,6 @@
 // CityExplorerDetails.swift
 //
-// Copyright © 2018-2022 Vassilis Panagiotopoulos. All rights reserved.
+// Copyright © 2018-2023 Vassilis Panagiotopoulos. All rights reserved.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in the
@@ -46,13 +46,12 @@ struct CityExplorerDetails: View {
             }
         }
         .navigationTitle(viewModel.city.name)
-        .onAppear(perform: viewModel.onAppear)
-        .onDisappear(perform: viewModel.onDisappear)
+        .task(viewModel.loadCity)
     }
 }
 
 extension CityExplorerDetails {
-    class ViewModel: ObservableObject {
+    @MainActor class ViewModel: ObservableObject {
         var fetchCityDetailsTask: Task<(), Never>?
         @Published var city: City
         var cityFetched: Bool = false
@@ -64,21 +63,8 @@ extension CityExplorerDetails {
             self.usesMockData = usesMockData
         }
 
-        func onAppear() {
-            guard fetchCityDetailsTask == nil else {
-                return
-            }
-            fetchCityDetailsTask = Task {
-                await loadCity()
-            }
-        }
-
-        func onDisappear() {
-            fetchCityDetailsTask?.cancel()
-        }
-
-        @MainActor func loadCity() async {
-            let request = Router<CityRoute>().request(for: .city(id: city.cityID))
+        @Sendable func loadCity() async {
+            let request = Client<CitiesRepository>().request(for: .city(id: city.cityID))
 
             do {
                 city = try await request.asyncUpload(using: CityTransformer.self)
@@ -114,7 +100,7 @@ struct CityDetailsEntry: View {
     }
 
     var thumbView: some View {
-        TermiNetwork.Image(request: Router<CityRoute>().request(for: .image(city: city)))
+        TermiNetwork.Image(request: Client<CitiesRepository>().request(for: .image(city: city)))
             .aspectRatio(contentMode: .fill)
     }
 }

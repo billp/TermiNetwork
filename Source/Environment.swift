@@ -1,6 +1,6 @@
 // Environment.swift
 //
-// Copyright © 2018-2022 Vassilis Panagiotopoulos. All rights reserved.
+// Copyright © 2018-2023 Vassilis Panagiotopoulos. All rights reserved.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in the
@@ -75,7 +75,7 @@ open class Environment {
     ///     - host: The host name, e.g. s1.example.com
     ///     - suffix: The path after the host name, e.g. .path["api","v1"]
     ///     - port: The port the environment is using, e.g. 8080
-    ///     - configuration: A configuration instance that will be inherited by each request and route
+    ///     - configuration: A configuration instance that will be inherited by each request and repository.
     public init(scheme: URLScheme,
                 host: String,
                 suffix: Path? = nil,

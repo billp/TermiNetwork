@@ -1,6 +1,6 @@
 // TestPinning.swift
 //
-// Copyright © 2018-2022 Vassilis Panagiotopoulos. All rights reserved.
+// Copyright © 2018-2023 Vassilis Panagiotopoulos. All rights reserved.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in the
@@ -55,7 +55,7 @@ class TestPinning: XCTestCase {
         let expectation = XCTestExpectation(description: "testValidCertificate")
         var failed = true
 
-        Request(route: APIRoute.testPinning(certPath: validCertPath))
+        Request(endpoint: TestRepository.testPinning(certPath: validCertPath))
             .success(responseType: String.self) { _ in
                 failed = false
                 expectation.fulfill()
@@ -74,7 +74,7 @@ class TestPinning: XCTestCase {
         let expectation = XCTestExpectation(description: "testInvalidCertificate")
         var failed = true
 
-        Request(route: APIRoute.testPinning(certPath: invalidCertPath))
+        Request(endpoint: TestRepository.testPinning(certPath: invalidCertPath))
             .success(responseType: String.self) { _ in
                 failed = true
                 expectation.fulfill()

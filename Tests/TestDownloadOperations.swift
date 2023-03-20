@@ -1,6 +1,6 @@
 // TestDownloadOperations.swift
 //
-// Copyright © 2018-2022 Vassilis Panagiotopoulos. All rights reserved.
+// Copyright © 2018-2023 Vassilis Panagiotopoulos. All rights reserved.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in the
@@ -26,8 +26,8 @@ class TestDownloadOperations: XCTestCase {
                              verbose: true)
     }()
 
-    lazy var router: Router<APIRoute> = {
-        return Router<APIRoute>(environment: Env.termiNetworkRemote,
+    lazy var client: Client<TestRepository> = {
+        return Client<TestRepository>(environment: Env.termiNetworkRemote,
                                 configuration: configuration)
     }()
 
@@ -60,7 +60,7 @@ class TestDownloadOperations: XCTestCase {
 
         try? FileManager.default.removeItem(at: cacheURL)
 
-        router.request(for: .fileDownload)
+        client.request(for: .fileDownload)
             .download(destinationPath: cacheURL.path,
                       progressUpdate: { bytesSent, totalBytes, progress in
                         if bytesSent == totalBytes && progress == 1 {
@@ -89,7 +89,7 @@ class TestDownloadOperations: XCTestCase {
 
         var failed = true
 
-        router.request(for: .fileDownload)
+        client.request(for: .fileDownload)
             .download(destinationPath: "",
                       progressUpdate: { bytesSent, totalBytes, progress in
                         if bytesSent == totalBytes && progress == 1 {

@@ -1,6 +1,6 @@
 // CityExplorerView.swift
 //
-// Copyright © 2018-2022 Vassilis Panagiotopoulos. All rights reserved.
+// Copyright © 2018-2023 Vassilis Panagiotopoulos. All rights reserved.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in the
@@ -45,12 +45,7 @@ struct CityExplorerView: View {
             }
         }
         .navigationTitle("City Explorer")
-        .onAppear { [unowned viewModel] in
-            viewModel.onAppear()
-        }
-        .onDisappear { [unowned viewModel] in
-            viewModel.onDissapear()
-        }
+        .task(viewModel.loadCities)
     }
 }
 
@@ -74,7 +69,7 @@ struct CityRow: View {
 
     @ViewBuilder
     var thumbView: some View {
-        let request = Router<CityRoute>().request(for: .thumb(city: city))
+        let request = Client<CitiesRepository>().request(for: .thumb(city: city))
 
         ZStack {
             if !imageLoaded {
@@ -94,7 +89,7 @@ struct CityRow: View {
 
 extension CityExplorerView {
     @MainActor class ViewModel: ObservableObject {
-        private var fetchCitiesTask: Task<(), Never>?
+        private var initialRequestCompleted: Bool = false
 
         @Published var cities: [City] = []
         @Published var errorMessage: String?
@@ -106,24 +101,15 @@ extension CityExplorerView {
             Environment.current.configuration?.mockDataEnabled = usesMockData
         }
 
-        func onAppear() {
-            guard fetchCitiesTask == nil else {
+        @Sendable func loadCities() async {
+            guard !initialRequestCompleted else {
                 return
             }
-            self.fetchCitiesTask = Task {
-                await loadCities()
-            }
-        }
-
-        func onDissapear() {
-            fetchCitiesTask?.cancel()
-        }
-
-        func loadCities() async {
             do {
-                cities = try await Router<CityRoute>()
+                cities = try await Client<CitiesRepository>()
                     .request(for: .cities)
                     .async(using: CitiesTransformer.self)
+                initialRequestCompleted = true
             } catch let error {
                 if let error = error as? TNError {
                     self.errorMessage = error.localizedDescription

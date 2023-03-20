@@ -17,7 +17,7 @@
 		23ACE26B2932371100BA45D5 /* www.billp.dev.cer in Resources */ = {isa = PBXBuildFile; fileRef = 2332504629251BC30082EDC7 /* www.billp.dev.cer */; };
 		23B36A0D277BB6D100A270B7 /* CryptoSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 23B36A0C277BB6D100A270B7 /* CryptoSwift */; };
 		F309C0ED25A512AB00D10877 /* Request+ResponseTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = F309C0EC25A512AB00D10877 /* Request+ResponseTypes.swift */; };
-		F30A298A258787320046C8E6 /* MiscRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = F30A2989258787320046C8E6 /* MiscRoute.swift */; };
+		F30A298A258787320046C8E6 /* MiscRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = F30A2989258787320046C8E6 /* MiscRepository.swift */; };
 		F30A298E2587881D0046C8E6 /* RSEncryptedModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F30A298D258788180046C8E6 /* RSEncryptedModel.swift */; };
 		F30A29922587884B0046C8E6 /* EncryptedModelTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F30A29912587884B0046C8E6 /* EncryptedModelTransformer.swift */; };
 		F30A2998258788880046C8E6 /* EncryptedModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F30A2997258788880046C8E6 /* EncryptedModel.swift */; };
@@ -28,7 +28,7 @@
 		F31126AD257A563600775D7E /* FileResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = F31126AC257A563600775D7E /* FileResponse.swift */; };
 		F3116AA42460A04B00DFE453 /* RequestBodyGenerators.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3116AA22460A04B00DFE453 /* RequestBodyGenerators.swift */; };
 		F3116AA52460A04B00DFE453 /* RequestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3116AA32460A04B00DFE453 /* RequestHelpers.swift */; };
-		F3116AA92460A06600DFE453 /* RouteProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3116AA72460A06600DFE453 /* RouteProtocol.swift */; };
+		F3116AA92460A06600DFE453 /* EndpointProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3116AA72460A06600DFE453 /* EndpointProtocol.swift */; };
 		F3116AAA2460A06600DFE453 /* RequestMiddlewareProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3116AA82460A06600DFE453 /* RequestMiddlewareProtocol.swift */; };
 		F3116AB62460A09E00DFE453 /* UIImageView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3116AAC2460A09E00DFE453 /* UIImageView+Extensions.swift */; };
 		F3116AB82460A09E00DFE453 /* Request+Mock.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3116AAE2460A09E00DFE453 /* Request+Mock.swift */; };
@@ -85,12 +85,12 @@
 		F3850C88243D103700F7CC13 /* Env.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3850C7A243D103700F7CC13 /* Env.swift */; };
 		F3850C89243D103700F7CC13 /* TestQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3850C7B243D103700F7CC13 /* TestQueue.swift */; };
 		F3850C8A243D103700F7CC13 /* TestEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3850C7C243D103700F7CC13 /* TestEnvironment.swift */; };
-		F3850C8B243D103700F7CC13 /* APIRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3850C7D243D103700F7CC13 /* APIRoute.swift */; };
+		F3850C8B243D103700F7CC13 /* TestRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3850C7D243D103700F7CC13 /* TestRepository.swift */; };
 		F3850C8C243D103700F7CC13 /* TestParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3850C7F243D103700F7CC13 /* TestParams.swift */; };
 		F3850C8D243D103700F7CC13 /* TestJSONParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3850C80243D103700F7CC13 /* TestJSONParams.swift */; };
 		F3850C8E243D103700F7CC13 /* TestHeaders.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3850C81243D103700F7CC13 /* TestHeaders.swift */; };
 		F3850C93243D103700F7CC13 /* TestTNErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3850C86243D103700F7CC13 /* TestTNErrors.swift */; };
-		F3850CA6243D104900F7CC13 /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3850C96243D104900F7CC13 /* Router.swift */; };
+		F3850CA6243D104900F7CC13 /* Client.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3850C96243D104900F7CC13 /* Client.swift */; };
 		F3850CA8243D104900F7CC13 /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3850C98243D104900F7CC13 /* Session.swift */; };
 		F3850CAA243D104900F7CC13 /* Path.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3850C9A243D104900F7CC13 /* Path.swift */; };
 		F3850CAB243D104900F7CC13 /* TNError.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3850C9B243D104900F7CC13 /* TNError.swift */; };
@@ -112,7 +112,7 @@
 		F398575225AC945A00DCCAAE /* TestMockedRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = F398575125AC945A00DCCAAE /* TestMockedRequest.swift */; };
 		F3A0BC0F25769385005139D5 /* DemoEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3A0BC07257692E6005139D5 /* DemoEnvironment.swift */; };
 		F3A0BC1825769434005139D5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3A0BC12257693D2005139D5 /* AppDelegate.swift */; };
-		F3A0BC1C25769453005139D5 /* CityRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3A0BC1B25769453005139D5 /* CityRoute.swift */; };
+		F3A0BC1C25769453005139D5 /* CitiesRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3A0BC1B25769453005139D5 /* CitiesRepository.swift */; };
 		F3A0BC24257694F7005139D5 /* RSCity.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3A0BC23257694F7005139D5 /* RSCity.swift */; };
 		F3A0E84A25AB8F8A00A81DDD /* Types.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3A0E84925AB8F8A00A81DDD /* Types.swift */; };
 		F3A4B14825968ED0004812B6 /* Request+NSCopying.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3A4B14725968ED0004812B6 /* Request+NSCopying.swift */; };
@@ -122,7 +122,7 @@
 		F3AF556925987256000E01D8 /* DoNothingInterceptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3AF556825987256000E01D8 /* DoNothingInterceptor.swift */; };
 		F3D16EC82575299900F7B523 /* TermiNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F319682D243D01E1008725CE /* TermiNetwork.framework */; };
 		F3D16EC92575299900F7B523 /* TermiNetwork.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F319682D243D01E1008725CE /* TermiNetwork.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		F3F255E9244C33B800517BF7 /* RouteConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3F255E8244C33B800517BF7 /* RouteConfiguration.swift */; };
+		F3F255E9244C33B800517BF7 /* EndpointConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3F255E8244C33B800517BF7 /* EndpointConfiguration.swift */; };
 		F3F48288245EBF6D00656449 /* TestUploadOperations.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3F48287245EBE8000656449 /* TestUploadOperations.swift */; };
 		F3F4828D245EE58C00656449 /* MultipartFormDataStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3F4828C245EE58C00656449 /* MultipartFormDataStream.swift */; };
 		F3F9709525758C0B0045138A /* CityExplorerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3F9709425758C0B0045138A /* CityExplorerView.swift */; };
@@ -169,7 +169,7 @@
 		23B36A07277BB5B800A270B7 /* CryptoKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CryptoKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS15.2.sdk/System/Library/Frameworks/CryptoKit.framework; sourceTree = DEVELOPER_DIR; };
 		F309C0EC25A512AB00D10877 /* Request+ResponseTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Request+ResponseTypes.swift"; sourceTree = "<group>"; };
 		F30A2986258783B40046C8E6 /* CryptoMiddleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoMiddleware.swift; sourceTree = "<group>"; };
-		F30A2989258787320046C8E6 /* MiscRoute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiscRoute.swift; sourceTree = "<group>"; };
+		F30A2989258787320046C8E6 /* MiscRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiscRepository.swift; sourceTree = "<group>"; };
 		F30A298D258788180046C8E6 /* RSEncryptedModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RSEncryptedModel.swift; sourceTree = "<group>"; };
 		F30A29912587884B0046C8E6 /* EncryptedModelTransformer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncryptedModelTransformer.swift; sourceTree = "<group>"; };
 		F30A2997258788880046C8E6 /* EncryptedModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncryptedModel.swift; sourceTree = "<group>"; };
@@ -179,7 +179,7 @@
 		F31126AC257A563600775D7E /* FileResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileResponse.swift; sourceTree = "<group>"; };
 		F3116AA22460A04B00DFE453 /* RequestBodyGenerators.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestBodyGenerators.swift; sourceTree = "<group>"; };
 		F3116AA32460A04B00DFE453 /* RequestHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestHelpers.swift; sourceTree = "<group>"; };
-		F3116AA72460A06600DFE453 /* RouteProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RouteProtocol.swift; sourceTree = "<group>"; };
+		F3116AA72460A06600DFE453 /* EndpointProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EndpointProtocol.swift; sourceTree = "<group>"; };
 		F3116AA82460A06600DFE453 /* RequestMiddlewareProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestMiddlewareProtocol.swift; sourceTree = "<group>"; };
 		F3116AAC2460A09E00DFE453 /* UIImageView+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImageView+Extensions.swift"; sourceTree = "<group>"; };
 		F3116AAE2460A09E00DFE453 /* Request+Mock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Request+Mock.swift"; sourceTree = "<group>"; };
@@ -240,13 +240,13 @@
 		F3850C7A243D103700F7CC13 /* Env.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Env.swift; sourceTree = "<group>"; };
 		F3850C7B243D103700F7CC13 /* TestQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestQueue.swift; sourceTree = "<group>"; };
 		F3850C7C243D103700F7CC13 /* TestEnvironment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestEnvironment.swift; sourceTree = "<group>"; };
-		F3850C7D243D103700F7CC13 /* APIRoute.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIRoute.swift; sourceTree = "<group>"; };
+		F3850C7D243D103700F7CC13 /* TestRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestRepository.swift; sourceTree = "<group>"; };
 		F3850C7F243D103700F7CC13 /* TestParams.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestParams.swift; sourceTree = "<group>"; };
 		F3850C80243D103700F7CC13 /* TestJSONParams.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestJSONParams.swift; sourceTree = "<group>"; };
 		F3850C81243D103700F7CC13 /* TestHeaders.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestHeaders.swift; sourceTree = "<group>"; };
 		F3850C85243D103700F7CC13 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F3850C86243D103700F7CC13 /* TestTNErrors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestTNErrors.swift; sourceTree = "<group>"; };
-		F3850C96243D104900F7CC13 /* Router.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
+		F3850C96243D104900F7CC13 /* Client.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Client.swift; sourceTree = "<group>"; };
 		F3850C98243D104900F7CC13 /* Session.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
 		F3850C9A243D104900F7CC13 /* Path.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Path.swift; sourceTree = "<group>"; };
 		F3850C9B243D104900F7CC13 /* TNError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TNError.swift; sourceTree = "<group>"; };
@@ -270,7 +270,7 @@
 		F398575125AC945A00DCCAAE /* TestMockedRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestMockedRequest.swift; sourceTree = "<group>"; };
 		F3A0BC07257692E6005139D5 /* DemoEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoEnvironment.swift; sourceTree = "<group>"; };
 		F3A0BC12257693D2005139D5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		F3A0BC1B25769453005139D5 /* CityRoute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CityRoute.swift; sourceTree = "<group>"; };
+		F3A0BC1B25769453005139D5 /* CitiesRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CitiesRepository.swift; sourceTree = "<group>"; };
 		F3A0BC23257694F7005139D5 /* RSCity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RSCity.swift; sourceTree = "<group>"; };
 		F3A0E84925AB8F8A00A81DDD /* Types.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Types.swift; sourceTree = "<group>"; };
 		F3A4B14725968ED0004812B6 /* Request+NSCopying.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Request+NSCopying.swift"; sourceTree = "<group>"; };
@@ -278,7 +278,7 @@
 		F3AA5131256EA13E00D64D31 /* FileStreamer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileStreamer.swift; sourceTree = "<group>"; };
 		F3AA5146256EF53000D64D31 /* TestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestHelpers.swift; sourceTree = "<group>"; };
 		F3AF556825987256000E01D8 /* DoNothingInterceptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoNothingInterceptor.swift; sourceTree = "<group>"; };
-		F3F255E8244C33B800517BF7 /* RouteConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteConfiguration.swift; sourceTree = "<group>"; };
+		F3F255E8244C33B800517BF7 /* EndpointConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndpointConfiguration.swift; sourceTree = "<group>"; };
 		F3F48287245EBE8000656449 /* TestUploadOperations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestUploadOperations.swift; sourceTree = "<group>"; };
 		F3F4828C245EE58C00656449 /* MultipartFormDataStream.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultipartFormDataStream.swift; sourceTree = "<group>"; };
 		F3F9709425758C0B0045138A /* CityExplorerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CityExplorerView.swift; sourceTree = "<group>"; };
@@ -355,7 +355,7 @@
 		F3116AA62460A06600DFE453 /* Protocols */ = {
 			isa = PBXGroup;
 			children = (
-				F3116AA72460A06600DFE453 /* RouteProtocol.swift */,
+				F3116AA72460A06600DFE453 /* EndpointProtocol.swift */,
 				F3116AA82460A06600DFE453 /* RequestMiddlewareProtocol.swift */,
 				F32195B225782E1A000941F1 /* InterceptorProtocol.swift */,
 			);
@@ -614,8 +614,8 @@
 				F3850CA3243D104900F7CC13 /* Environment.swift */,
 				F3850CA0243D104900F7CC13 /* Request.swift */,
 				F3850C9E243D104900F7CC13 /* Configuration.swift */,
-				F3850C96243D104900F7CC13 /* Router.swift */,
-				F3F255E8244C33B800517BF7 /* RouteConfiguration.swift */,
+				F3850C96243D104900F7CC13 /* Client.swift */,
+				F3F255E8244C33B800517BF7 /* EndpointConfiguration.swift */,
 				F3850C9F243D104900F7CC13 /* Queue.swift */,
 				F3850C98243D104900F7CC13 /* Session.swift */,
 				F3850C9B243D104900F7CC13 /* TNError.swift */,
@@ -659,7 +659,7 @@
 			isa = PBXGroup;
 			children = (
 				F3850C7A243D103700F7CC13 /* Env.swift */,
-				F3850C7D243D103700F7CC13 /* APIRoute.swift */,
+				F3850C7D243D103700F7CC13 /* TestRepository.swift */,
 			);
 			name = Communication;
 			sourceTree = "<group>";
@@ -679,19 +679,19 @@
 				F3A0BC22257694E2005139D5 /* Models */,
 				F30A2985258783970046C8E6 /* Middleware */,
 				F31F8890257A807300D9A802 /* Transformers */,
-				F3A0BC21257694DC005139D5 /* Routers */,
+				F3A0BC21257694DC005139D5 /* Repositories */,
 				F3A0BC07257692E6005139D5 /* DemoEnvironment.swift */,
 			);
 			path = Communication;
 			sourceTree = "<group>";
 		};
-		F3A0BC21257694DC005139D5 /* Routers */ = {
+		F3A0BC21257694DC005139D5 /* Repositories */ = {
 			isa = PBXGroup;
 			children = (
-				F3A0BC1B25769453005139D5 /* CityRoute.swift */,
-				F30A2989258787320046C8E6 /* MiscRoute.swift */,
+				F3A0BC1B25769453005139D5 /* CitiesRepository.swift */,
+				F30A2989258787320046C8E6 /* MiscRepository.swift */,
 			);
-			path = Routers;
+			path = Repositories;
 			sourceTree = "<group>";
 		};
 		F3A0BC22257694E2005139D5 /* Models */ = {
@@ -947,7 +947,7 @@
 			files = (
 				F3850CA8243D104900F7CC13 /* Session.swift in Sources */,
 				F3850CAD243D104900F7CC13 /* Log.swift in Sources */,
-				F3116AA92460A06600DFE453 /* RouteProtocol.swift in Sources */,
+				F3116AA92460A06600DFE453 /* EndpointProtocol.swift in Sources */,
 				F3A0E84A25AB8F8A00A81DDD /* Types.swift in Sources */,
 				F3116AB82460A09E00DFE453 /* Request+Mock.swift in Sources */,
 				F31F88B4257C056200D9A802 /* Cache.swift in Sources */,
@@ -956,7 +956,7 @@
 				F3F4828D245EE58C00656449 /* MultipartFormDataStream.swift in Sources */,
 				F3116ABA2460A09E00DFE453 /* Request+FileOperations.swift in Sources */,
 				F3116ABE2460A09E00DFE453 /* Data+Extensions.swift in Sources */,
-				F3850CA6243D104900F7CC13 /* Router.swift in Sources */,
+				F3850CA6243D104900F7CC13 /* Client.swift in Sources */,
 				F33ACF4D2587F904004DAC46 /* Request+ResponseHeaders.swift in Sources */,
 				F3850CAF243D104900F7CC13 /* Queue.swift in Sources */,
 				F3116ABC2460A09E00DFE453 /* Request+Middleware.swift in Sources */,
@@ -967,7 +967,7 @@
 				F373779225C4B4720075EFA3 /* Reachability.swift in Sources */,
 				F3116AAA2460A06600DFE453 /* RequestMiddlewareProtocol.swift in Sources */,
 				F31F88A8257AD39400D9A802 /* Image.swift in Sources */,
-				F3F255E9244C33B800517BF7 /* RouteConfiguration.swift in Sources */,
+				F3F255E9244C33B800517BF7 /* EndpointConfiguration.swift in Sources */,
 				F3850CB0243D104900F7CC13 /* Request.swift in Sources */,
 				F3116AA42460A04B00DFE453 /* RequestBodyGenerators.swift in Sources */,
 				F3850CAB243D104900F7CC13 /* TNError.swift in Sources */,
@@ -1007,7 +1007,7 @@
 				F32BB57725A8A47E00E6E096 /* StatusCode.swift in Sources */,
 				F32195BD25783F29000941F1 /* GlobalInterceptor.swift in Sources */,
 				F3556065257401330047D46D /* TestDownloadOperations.swift in Sources */,
-				F3850C8B243D103700F7CC13 /* APIRoute.swift in Sources */,
+				F3850C8B243D103700F7CC13 /* TestRepository.swift in Sources */,
 				F3850C8A243D103700F7CC13 /* TestEnvironment.swift in Sources */,
 				F333429A25792E9D0087BDBA /* ErrorModel.swift in Sources */,
 				F3850C8C243D103700F7CC13 /* TestParams.swift in Sources */,
@@ -1037,7 +1037,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F355608D257527C40047D46D /* ContentView.swift in Sources */,
-				F3A0BC1C25769453005139D5 /* CityRoute.swift in Sources */,
+				F3A0BC1C25769453005139D5 /* CitiesRepository.swift in Sources */,
 				F38F34A225896ED500D5BB17 /* FileUploaderUtils.swift in Sources */,
 				F31F88CE257CCF6F00D9A802 /* ServiceErrorInterceptor.swift in Sources */,
 				F363508225894AC6002AF5DE /* FileUploader.swift in Sources */,
@@ -1046,7 +1046,7 @@
 				F30A299B25878C5F0046C8E6 /* CryptoMiddleware.swift in Sources */,
 				F31F88A4257A816400D9A802 /* City.swift in Sources */,
 				F31F88D9257CDAFA00D9A802 /* DemoApp.swift in Sources */,
-				F30A298A258787320046C8E6 /* MiscRoute.swift in Sources */,
+				F30A298A258787320046C8E6 /* MiscRepository.swift in Sources */,
 				F3A0BC0F25769385005139D5 /* DemoEnvironment.swift in Sources */,
 				F33ACF5B25880A5E004DAC46 /* FileDownloader.swift in Sources */,
 				F38F349225896AFF00D5BB17 /* FileUploadTransformer.swift in Sources */,
@@ -1322,7 +1322,7 @@
 				DEVELOPMENT_TEAM = 899S8YHUCE;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = "Examples/Supporting Files/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1345,7 +1345,7 @@
 				DEVELOPMENT_TEAM = 899S8YHUCE;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = "Examples/Supporting Files/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

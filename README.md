@@ -33,7 +33,7 @@
 - [x] Async await support<br />
 - [x] Decodes response to the given type: <b>Codable</b>, <b>Transformer</b>, <b>UIImage</b>, <b>Data</b> or <b>String</b><br />
 - [x] <b>UIKit</b>/<b>SwiftUI</b> extensions for downloading remote images<br />
-- [x] Request grouping with Routers<br />
+- [x] Request grouping with Repositories<br />
 - [x] Detects network status with Reachability<br />
 - [x] Transformers: convert models from one type to another easily<br />
 - [x] Error Handling<br />
@@ -51,9 +51,9 @@
 - [Usage](#usage)
   - [Simple usage of <b>Request</b>](#simple_usage)
   - [Advanced usage of <b>Request</b> with <b>Configuration</b> and custom <b>Queue</b>](#advanced_usage)
-  - [Complete project setup with <b>Environments</b> and <b>Routers</b> (Recommended)](#complete_setup)
+  - [Complete project setup with <b>Environments</b> and <b>Repositories</b> (Recommended)](#complete_setup)
 	  - [Environment setup](#setup_environments)
-	  - [Router setup](#setup_routers)
+	  - [Repository setup](#setup_repositories)
 	  - [Make a request](#construct_request)
 - [Queue Hooks](#queue_hooks)
 - [Error Handling](#error_handling)
@@ -225,8 +225,8 @@ The request above uses a custom queue **myQueue** with a failure mode of **.cont
 
 <a name="complete_setup"></a>
 
-## Complete setup with <b>Environments</b> and <b>Routers</b>
-The complete and recommended setup of TermiNetwork consists of defining **Environments** and **Routers**.  
+## Complete setup with <b>Environments</b> and <b>Repositories</b>
+The complete and recommended setup of TermiNetwork consists of defining **Environments** and **Repositories**.  
 
 <a name="setup_environments"></a>
 
@@ -254,71 +254,73 @@ enum MyAppEnvironments: EnvironmentProtocol {
     }
 }
 ```
-*Optionally you can  pass a **configuration** object to make all Routers and Requests to inherit the given configuration settings.*
+*Optionally you can  pass a **configuration** object to make all Repositories and Endpoints to inherit the given configuration settings.*
 
 To set your global environment use Environment.set method
 ```swift
 Environment.set(MyAppEnvironments.development)
 ```
 
-<a name="setup_routers"></a>
+<a name="setup_repositories"></a>
 
-#### Router setup
-Create a swift **enum** that implements the **RouteProtocol** and define your environments.
+#### Repository setup
+Create a swift **enum** that implements the **EndpointProtocol** and define your endpoints.
 
-The following example creates a TodosRoute with all the required API routes (cases).
+The following example creates a TodosRepository with all the required endpoints as cases.
 
 ##### Example
 ```swift
-enum TodosRoute: RouteProtocol {
-    // Define your routes
+enum TodosRepository: EndpointProtocol {
+    // Define your endpoints
     case list
     case show(id: Int)
     case add(title: String)
     case remove(id: Int)
     case setCompleted(id: Int, completed: Bool)
 
-    // Set method, path, params, headers for each route
-    func configure() -> RouteConfiguration {
-        let configuration = Configuration(requestBodyType: .JSON,
-                                          headers: ["x-auth": "abcdef1234"])
+    static let configuration = Configuration(requestBodyType: .JSON,
+                                             headers: ["x-auth": "abcdef1234"])
+
+
+    // Set method, path, params, headers for each endpoint
+    func configure() -> EndpointConfiguration {
 
         switch self {
         case .list:
-            return RouteConfiguration(method: .get,
-                                      path: .path(["todos"]), // GET /todos
-                                      configuration: configuration)
+            return .init(method: .get,
+                         path: .path(["todos"]), // GET /todos
+                         configuration: Self.configuration)
         case .show(let id):
-            return RouteConfiguration(method: .get,
-                                      path: .path(["todo", String(id)]), // GET /todos/[id]
-                                      configuration: configuration)
+            return .init(method: .get,
+                         path: .path(["todo", String(id)]), // GET /todos/[id]
+                         configuration: Self.configuration)
         case .add(let title):
-            return RouteConfiguration(method: .post,
-                                      path: .path(["todos"]), // POST /todos
-                                      params: ["title": title],
-                                      configuration: configuration)
+            return .init(method: .post,
+                         path: .path(["todos"]), // POST /todos
+                         params: ["title": title],
+                         configuration: Self.configuration)
         case .remove(let id):
-            return RouteConfiguration(method: .delete,
-                                      path: .path(["todo", String(id)]), // DELETE /todo/[id]
-                                      configuration: configuration)
+            return .init(method: .delete,
+                         path: .path(["todo", String(id)]), // DELETE /todo/[id]
+                         configuration: configuration)
         case .setCompleted(let id, let completed):
-            return RouteConfiguration(method: .patch,
-                                      path: .path(["todo", String(id)]), // PATCH /todo/[id]
-                                      params: ["completed": completed],
-                                      configuration: configuration)
+            return .init(method: .patch,
+                         path: .path(["todo", String(id)]), // PATCH /todo/[id]
+                         params: ["completed": completed],
+                         configuration: configuration)
         }
     }
 }
 
 ```
-You can optionally pass a **configuration** object to each case if you want provide different  configuration for each route.
+You can optionally pass a **configuration** object to each case if you want provide different configuration for each endpoint.
 
 <a name="construct_request"></a>
 
 #### Make a request
-To create the request you have to initialize a **Router** instance and specialize it with your defined Router, in our case **TodosRoute**:
+To create the request you have to initialize a **Client** instance and specialize it with your defined Repository, in our case **TodosRepository**:
 ```swift
-Router<TodosRoute>().request(for: .add(title: "Go shopping!"))
+Client<TodosRepository>().request(for: .add(title: "Go shopping!"))
     .success(responseType: Todo.self) { todo in
         // do something with todo
     }
@@ -331,7 +333,7 @@ or with **async await**
 
 ```swift
 do {
-    let toto: Todo = Router<TodosRoute>()
+    let toto: Todo = Client<TodosRepository>()
 	.request(for: .add(title: "Go shopping!"))
 	.async()
 } catch let error {
@@ -376,7 +378,7 @@ To see all the available errors, please visit the <a href="https://billp.github.
 #### Example
 
 ```swift
-Router<TodosRoute>().request(for: .add(title: "Go shopping!"))
+Client<TodosRepository>().request(for: .add(title: "Go shopping!"))
       .success(responseType: Todo.self) { todo in
          // do something with todo
       }
@@ -399,13 +401,14 @@ Router<TodosRoute>().request(for: .add(title: "Go shopping!"))
 or with **async await**
 ```swift
 do {
-    let todo: Todo = Router<TodosRoute>()
+    let todo: Todo = Client<TodosRepository>()
 	.request(for: .add(title: "Go shopping!"))
 	.async()
 } catch let error {
     switch error as? TNError {
-    case .notSuccess(let statusCode, _):
-	 debugPrint("Status code " + String(statusCode))
+    case .notSuccess(let statusCode, let data):
+         let errorModel = try? data.deserializeJSONData() as MyErrorModel
+	 debugPrint("Status code " + String(statusCode) + ". API Error: " + errorModel?.errorMessage)
 	 break
     case .networkError(let error):
 	 debugPrint("Network error: " + error.localizedDescription)
@@ -509,7 +512,7 @@ final class CitiesTransformer: Transformer<[RSCity], [City]> {
 Finally, pass the **CitiesTransformer** in the Request's start method:
 #### Example
 ```swift
-Router<CityRoute>()
+Client<CitiesRepository>()
     .request(for: .cities)
     .success(transformer: CitiesTransformer.self) { cities in
         self.cities = cities
@@ -527,7 +530,7 @@ Router<CityRoute>()
 or with **async await**
 ```swift
 do {
-    let cities = await Router<CityRoute>()
+    let cities = await Client<CitiesRepository>()
         .request(for: .cities)
         .async(using: CitiesTransformer.self)
 } catch let error {
@@ -560,18 +563,18 @@ do {
  	```swift
 	configuration.mockDataEnabled = true
 	```
-4. Define the mockFilePath path in your Routes
+4. Define the mockFilePath path in your endpoints.
 	 #### Example
  	```swift
-	enum CityRoute: RouteProtocol {
-    case cities
+	enum CitiesRepository: EndpointProtocol {
+        case cities
 
-    func configure() -> RouteConfiguration {
+        func configure() -> EndpointConfiguration {
         switch self {
         case .cities:
-            return RouteConfiguration(method: .get,
-                                        path: .path(["cities"]),
-                                        mockFilePath: .path(["Cities", "cities.json"]))
+            return EndpointConfiguration(method: .get,
+                                         path: .path(["cities"]),
+                                         mockFilePath: .path(["Cities", "cities.json"]))
 	        }
 	    }
 	}
@@ -655,7 +658,7 @@ TermiNetwork provides two different helpers for setting remote images.
 
 	```swift
 	var body: some View {
-	    TermiNetwork.Image(withRequest: Router<CityRoute>().request(for: .image(city: city)),
+	    TermiNetwork.Image(withRequest: Client<CitiesRepository>().request(for: .image(city: city)),
 	                       defaultImage: UIImage(named: "DefaultThumbImage"))
 	}
 	```
@@ -680,7 +683,7 @@ TermiNetwork provides two different helpers for setting remote images.
 
 	```swift
 	let imageView = UIImageView() // or NSImageView (macOS), or WKInterfaceImage (watchOS)
-	imageView.tn_setRemoteImage(request: Router<CityRoute>().request(for: .thumb(withID: "3125")),
+	imageView.tn_setRemoteImage(request: Client<CitiesRepository>().request(for: .thumb(withID: "3125")),
 	                            defaultImage: UIImage(named: "DefaultThumbImage"),
 	                            preprocessImage: { image in
 	    // Optionally pre-process image and return the new image.

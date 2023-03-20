@@ -1,6 +1,6 @@
 // TNError.swift
 //
-// Copyright © 2018-2022 Vassilis Panagiotopoulos. All rights reserved.
+// Copyright © 2018-2023 Vassilis Panagiotopoulos. All rights reserved.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in the
@@ -26,7 +26,7 @@ public enum TNError: Error {
     /// Thrown when the url is not valid.
     case invalidURL
     /// Thrown when the environment is not set.
-    case environmenotSet
+    case environmentNotSet
     /// Thrown when the params contain invalid characters.
     case invalidParams
     /// Thrown when the response object is expected to be a UIImage but it's not.
@@ -77,7 +77,7 @@ extension TNError: LocalizedError {
         switch self {
         case .invalidURL:
             return NSLocalizedString("The URL is invalid", comment: "TNError")
-        case .environmenotSet:
+        case .environmentNotSet:
             return NSLocalizedString("Environment not set, add the 'Environment.set(<Environment>)' method call in your AppDelegate application(_:didFinishLaunchingWithOptions:) method.", comment: "TNError")
         case .invalidParams:
             return NSLocalizedString("The parameters are not valid", comment: "TNError")

@@ -1,6 +1,6 @@
 // TestInterceptors.swift
 //
-// Copyright © 2018-2022 Vassilis Panagiotopoulos. All rights reserved.
+// Copyright © 2018-2023 Vassilis Panagiotopoulos. All rights reserved.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in the
@@ -21,11 +21,11 @@ import XCTest
 import TermiNetwork
 
 class TestInterceptors: XCTestCase {
-    lazy var router: Router<APIRoute> = {
+    lazy var client: Client<TestRepository> = {
         let configuration = Configuration()
         configuration.interceptors = [GlobalInterceptor.self]
         configuration.verbose = true
-        return Router<APIRoute>(configuration: configuration)
+        return Client<TestRepository>(configuration: configuration)
     }()
 
     override func setUp() {
@@ -45,7 +45,7 @@ class TestInterceptors: XCTestCase {
         let expectation = XCTestExpectation(description: "testInterceptorContinue")
         var failed = true
 
-        router.request(for: .testPostParams(value1: false,
+        client.request(for: .testPostParams(value1: false,
                                             value2: 1,
                                             value3: 2,
                                             value4: "",
@@ -70,7 +70,7 @@ class TestInterceptors: XCTestCase {
         let expectation = XCTestExpectation(description: "testInterceptorRetry")
         var failed = true
 
-        router.request(for: .testPostParams(value1: false,
+        client.request(for: .testPostParams(value1: false,
                                             value2: 1,
                                             value3: 2,
                                             value4: "",
@@ -106,7 +106,7 @@ class TestInterceptors: XCTestCase {
         var progressSucceded = false
         var successCount = 0
 
-        router.request(for: .fileUpload(url: url, param: "test"))
+        client.request(for: .fileUpload(url: url, param: "test"))
             .upload(responseType: FileResponse.self,
                     progressUpdate: { bytesSent, totalBytes, progress in
                         if bytesSent == totalBytes && progress == 1 {
@@ -145,7 +145,7 @@ class TestInterceptors: XCTestCase {
 
         try? FileManager.default.removeItem(at: cacheURL)
 
-        router.request(for: .fileDownload)
+        client.request(for: .fileDownload)
             .download(destinationPath: cacheURL.path,
                       progressUpdate: { bytesSent, totalBytes, progress in
                         if bytesSent == totalBytes && progress == 1 {
@@ -174,10 +174,10 @@ class TestInterceptors: XCTestCase {
         let expectation = XCTestExpectation(description: "testMultipleInterceptors")
         var failed = true
 
-        router.configuration?.interceptors?.append(DoNothingInterceptor.self)
-        router.configuration?.cachePolicy = .reloadIgnoringLocalCacheData
+        client.configuration?.interceptors?.append(DoNothingInterceptor.self)
+        client.configuration?.cachePolicy = .reloadIgnoringLocalCacheData
 
-        let request = router.request(for: .testPostParams(value1: false,
+        let request = client.request(for: .testPostParams(value1: false,
                                                           value2: 1,
                                                           value3: 2,
                                                           value4: "",
@@ -195,7 +195,7 @@ class TestInterceptors: XCTestCase {
 
         wait(for: [expectation], timeout: 60)
 
-        router.configuration?.interceptors?.removeLast()
+        client.configuration?.interceptors?.removeLast()
 
         XCTAssert(!failed)
     }
@@ -206,13 +206,13 @@ class TestInterceptors: XCTestCase {
         let expectation = XCTestExpectation(description: "testUnauthorizedInterceptor")
         var failed = true
 
-        router.configuration?.interceptors = [UnauthorizedInterceptor.self]
-        router.configuration?.cachePolicy = .reloadIgnoringLocalCacheData
+        client.configuration?.interceptors = [UnauthorizedInterceptor.self]
+        client.configuration?.cachePolicy = .reloadIgnoringLocalCacheData
 
         let authValue = UnauthorizedInterceptor.authorizationValue
-        let request = router.request(for: .testStatusCode(code: 401))
+        let request = client.request(for: .testStatusCode(code: 401))
         request.success(responseType: Data.self) { _ in
-            let dummyRequest = try? self.router.request(for: .testStatusCode(code: 200)).asRequest()
+            let dummyRequest = try? self.client.request(for: .testStatusCode(code: 200)).asRequest()
             failed = !(
                 Environment.current.configuration?.headers?["Authorization"] == authValue &&
                     request.headers?["Authorization"] == authValue  &&
@@ -228,7 +228,7 @@ class TestInterceptors: XCTestCase {
 
         wait(for: [expectation], timeout: 180)
 
-        router.configuration?.interceptors?.removeLast()
+        client.configuration?.interceptors?.removeLast()
 
         XCTAssert(!failed)
     }
