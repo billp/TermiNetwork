@@ -2,7 +2,7 @@
 <p align="center">
   <img src="https://raw.githubusercontent.com/billp/TermiNetwork/master/TermiNetworkLogo.svg" alt="" data-canonical-src="" width="500rem" />
 </p>
-
+who
 <p align="center"><b> A zero-dependency networking solution for building modern and secure iOS, watchOS, macOS and tvOS applications.</b>
   <br /><br />
   <img src="https://github.com/billp/TermiNetwork/actions/workflows/main.yml/badge.svg" />
@@ -23,9 +23,6 @@
 <br />
 <i>This is a high level diagram of <b>TermiNetwork</b> showing how its componets are connected to each other.</I>
 <br /><br />
-	
-# Who's using TermiNetwork
-<a href="https://apps.apple.com/us/app/car-gr/id1278899131"><img width="100em" src="https://user-images.githubusercontent.com/1566052/147670506-589b271f-f4b7-4c81-a2de-94507f1980c0.png" /></a>
 
 ## Features
 - [x] Multi-environment setup <br />
