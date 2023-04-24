@@ -19,10 +19,6 @@ who
 <p align="center">
 🚀 <i><b>TermiNetwork</b> has been tested in a production environment with a heavy load of asynchronous requests and tens of thousands of unique clients per day</i>.
 <br /><br />
-<img alt="" data-canonical-src="" alt="TermiNetworkDiagram" src="https://raw.githubusercontent.com/billp/TermiNetwork/master/TermiNetworkDiagram.svg" />
-<br />
-<i>This is a high level diagram of <b>TermiNetwork</b> showing how its componets are connected to each other.</I>
-<br /><br />
 
 ## Features
 - [x] Multi-environment setup <br />
