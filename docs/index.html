@@ -62,7 +62,13 @@
                 <a class="nav-group-task-link" href="Classes/Cache.html">Cache</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes/Client.html">Client</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Classes/Configuration.html">Configuration</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes/EndpointConfiguration.html">EndpointConfiguration</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Classes/Environment.html">Environment</a>
@@ -78,12 +84,6 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Classes/Request.html">Request</a>
-              </li>
-              <li class="nav-group-task">
-                <a class="nav-group-task-link" href="Classes/RouteConfiguration.html">RouteConfiguration</a>
-              </li>
-              <li class="nav-group-task">
-                <a class="nav-group-task-link" href="Classes/Router.html">Router</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Classes/Transformer.html">Transformer</a>
@@ -137,6 +137,9 @@
             <a class="nav-group-name-link" href="Protocols.html">Protocols</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Protocols/EndpointProtocol.html">EndpointProtocol</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Protocols/EnvironmentProtocol.html">EnvironmentProtocol</a>
               </li>
               <li class="nav-group-task">
@@ -144,9 +147,6 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Protocols/RequestMiddlewareProtocol.html">RequestMiddlewareProtocol</a>
-              </li>
-              <li class="nav-group-task">
-                <a class="nav-group-task-link" href="Protocols/RouteProtocol.html">RouteProtocol</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Protocols/TransformerProtocol.html">TransformerProtocol</a>
@@ -230,6 +230,8 @@
   <img src="https://raw.githubusercontent.com/billp/TermiNetwork/master/TermiNetworkLogo.svg" alt="" data-canonical-src="" width="500rem" />
 </p>
 
+<p>who</p>
+
 <p align="center"><b> A zero-dependency networking solution for building modern and secure iOS, watchOS, macOS and tvOS applications.</b>
   <br /><br />
   <img src="https://github.com/billp/TermiNetwork/actions/workflows/main.yml/badge.svg" />
@@ -251,27 +253,24 @@
 <br />
 <i>This is a high level diagram of <b>TermiNetwork</b> showing how its componets are connected to each other.</I>
 <br /><br /></p>
-<h1 id='who-39-s-using-terminetwork' class='heading'>Who&rsquo;s using TermiNetwork</h1>
-
-<p><a href="https://apps.apple.com/us/app/car-gr/id1278899131"><img width="100em" src="https://user-images.githubusercontent.com/1566052/147670506-589b271f-f4b7-4c81-a2de-94507f1980c0.png" /></a></p>
 <h2 id='features' class='heading'>Features</h2>
 
 <ul>
 <li>[x] Multi-environment setup <br /></li>
 <li>[x] Model deserialization with <b>Codables</b><br /></li>
 <li>[x] Async await support<br /></li>
-<li>[x] Decode response in the appropriate response type: <b>Codable</b>, <b>UIImage</b>, <b>Data</b> or <b>String</b><br /></li>
-<li>[x] <b>UIKit</b>/<b>SwiftUI</b> helpers for downloading remote images<br /></li>
-<li>[x] Group your Requests in Routers<br /></li>
-<li>[x] Reachability support<br /></li>
+<li>[x] Decodes response to the given type: <b>Codable</b>, <b>Transformer</b>, <b>UIImage</b>, <b>Data</b> or <b>String</b><br /></li>
+<li>[x] <b>UIKit</b>/<b>SwiftUI</b> extensions for downloading remote images<br /></li>
+<li>[x] Request grouping with Repositories<br /></li>
+<li>[x] Detects network status with Reachability<br /></li>
 <li>[x] Transformers: convert models from one type to another easily<br /></li>
 <li>[x] Error Handling<br /></li>
 <li>[x] Interceptors<br /></li>
-<li>[x] Mock Responses<br /></li>
+<li>[x] Request mocking<br /></li>
 <li>[x] Certificate Pinning<br /></li>
-<li>[x] Flexible Configuration<br /></li>
-<li>[x] Middleware<br /></li>
-<li>[x] File/Data Upload/Download<br /></li>
+<li>[x] Flexible configuration<br /></li>
+<li>[x] Middleware support<br /></li>
+<li>[x] File/Data Upload/Download support<br /></li>
 <li>[x] Pretty printed debug information</li>
 </ul>
 <h3 id='table-of-contents' class='heading'>Table of contents</h3>
@@ -284,11 +283,11 @@
 <ul>
 <li><a href="#simple_usage">Simple usage of <b>Request</b></a></li>
 <li><a href="#advanced_usage">Advanced usage of <b>Request</b> with <b>Configuration</b> and custom <b>Queue</b></a></li>
-<li><a href="#complete_setup">Complete project setup with <b>Environments</b> and <b>Routers</b> (Recommended)</a>
+<li><a href="#complete_setup">Complete project setup with <b>Environments</b> and <b>Repositories</b> (Recommended)</a>
 
 <ul>
 <li><a href="#setup_environments">Environment setup</a></li>
-<li><a href="#setup_routers">Router setup</a></li>
+<li><a href="#setup_repositories">Repository setup</a></li>
 <li><a href="#construct_request">Make a request</a></li>
 </ul></li>
 </ul></li>
@@ -443,9 +442,9 @@
 <p>The request above uses a custom queue <strong>myQueue</strong> with a failure mode of <strong>.continue</strong> (default), which means that the queue continues its execution if a request fails.</p>
 
 <p><a name="complete_setup"></a></p>
-<h2 id='complete-setup-with-b-environments-b-and-b-routers-b' class='heading'>Complete setup with <b>Environments</b> and <b>Routers</b></h2>
+<h2 id='complete-setup-with-b-environments-b-and-b-repositories-b' class='heading'>Complete setup with <b>Environments</b> and <b>Repositories</b></h2>
 
-<p>The complete and recommended setup of TermiNetwork consists of defining <strong>Environments</strong> and <strong>Routers</strong>.  </p>
+<p>The complete and recommended setup of TermiNetwork consists of defining <strong>Environments</strong> and <strong>Repositories</strong>.  </p>
 
 <p><a name="setup_environments"></a></p>
 <h4 id='environment-setup' class='heading'>Environment setup</h4>
@@ -472,68 +471,70 @@
 <span class="p">}</span>
 </code></pre>
 
-<p><em>Optionally you can  pass a **configuration</em>* object to make all Routers and Requests to inherit the given configuration settings.*</p>
+<p><em>Optionally you can  pass a **configuration</em>* object to make all Repositories and Endpoints to inherit the given configuration settings.*</p>
 
 <p>To set your global environment use Environment.set method</p>
 <pre class="highlight swift"><code><span class="kt">Environment</span><span class="o">.</span><span class="nf">set</span><span class="p">(</span><span class="kt">MyAppEnvironments</span><span class="o">.</span><span class="n">development</span><span class="p">)</span>
 </code></pre>
 
-<p><a name="setup_routers"></a></p>
-<h4 id='router-setup' class='heading'>Router setup</h4>
+<p><a name="setup_repositories"></a></p>
+<h4 id='repository-setup' class='heading'>Repository setup</h4>
 
-<p>Create a swift <strong>enum</strong> that implements the <strong>RouteProtocol</strong> and define your environments.</p>
+<p>Create a swift <strong>enum</strong> that implements the <strong>EndpointProtocol</strong> and define your endpoints.</p>
 
-<p>The following example creates a TodosRoute with all the required API routes (cases).</p>
+<p>The following example creates a TodosRepository with all the required endpoints as cases.</p>
 <h5 id='example' class='heading'>Example</h5>
-<pre class="highlight swift"><code><span class="kd">enum</span> <span class="kt">TodosRoute</span><span class="p">:</span> <span class="kt">RouteProtocol</span> <span class="p">{</span>
-    <span class="c1">// Define your routes</span>
+<pre class="highlight swift"><code><span class="kd">enum</span> <span class="kt">TodosRepository</span><span class="p">:</span> <span class="kt">EndpointProtocol</span> <span class="p">{</span>
+    <span class="c1">// Define your endpoints</span>
     <span class="k">case</span> <span class="n">list</span>
     <span class="k">case</span> <span class="nf">show</span><span class="p">(</span><span class="nv">id</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span>
     <span class="k">case</span> <span class="nf">add</span><span class="p">(</span><span class="nv">title</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span>
     <span class="k">case</span> <span class="nf">remove</span><span class="p">(</span><span class="nv">id</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span>
     <span class="k">case</span> <span class="nf">setCompleted</span><span class="p">(</span><span class="nv">id</span><span class="p">:</span> <span class="kt">Int</span><span class="p">,</span> <span class="nv">completed</span><span class="p">:</span> <span class="kt">Bool</span><span class="p">)</span>
 
-    <span class="c1">// Set method, path, params, headers for each route</span>
-    <span class="kd">func</span> <span class="nf">configure</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">RouteConfiguration</span> <span class="p">{</span>
-        <span class="k">let</span> <span class="nv">configuration</span> <span class="o">=</span> <span class="kt">Configuration</span><span class="p">(</span><span class="nv">requestBodyType</span><span class="p">:</span> <span class="o">.</span><span class="kt">JSON</span><span class="p">,</span>
-                                          <span class="nv">headers</span><span class="p">:</span> <span class="p">[</span><span class="s">"x-auth"</span><span class="p">:</span> <span class="s">"abcdef1234"</span><span class="p">])</span>
+    <span class="kd">static</span> <span class="k">let</span> <span class="nv">configuration</span> <span class="o">=</span> <span class="kt">Configuration</span><span class="p">(</span><span class="nv">requestBodyType</span><span class="p">:</span> <span class="o">.</span><span class="kt">JSON</span><span class="p">,</span>
+                                             <span class="nv">headers</span><span class="p">:</span> <span class="p">[</span><span class="s">"x-auth"</span><span class="p">:</span> <span class="s">"abcdef1234"</span><span class="p">])</span>
+
+
+    <span class="c1">// Set method, path, params, headers for each endpoint</span>
+    <span class="kd">func</span> <span class="nf">configure</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">EndpointConfiguration</span> <span class="p">{</span>
 
         <span class="k">switch</span> <span class="k">self</span> <span class="p">{</span>
         <span class="k">case</span> <span class="o">.</span><span class="nv">list</span><span class="p">:</span>
-            <span class="k">return</span> <span class="kt">RouteConfiguration</span><span class="p">(</span><span class="nv">method</span><span class="p">:</span> <span class="o">.</span><span class="k">get</span><span class="p">,</span>
-                                      <span class="nv">path</span><span class="p">:</span> <span class="o">.</span><span class="nf">path</span><span class="p">([</span><span class="s">"todos"</span><span class="p">]),</span> <span class="c1">// GET /todos</span>
-                                      <span class="nv">configuration</span><span class="p">:</span> <span class="n">configuration</span><span class="p">)</span>
+            <span class="k">return</span> <span class="o">.</span><span class="nf">init</span><span class="p">(</span><span class="nv">method</span><span class="p">:</span> <span class="o">.</span><span class="k">get</span><span class="p">,</span>
+                         <span class="nv">path</span><span class="p">:</span> <span class="o">.</span><span class="nf">path</span><span class="p">([</span><span class="s">"todos"</span><span class="p">]),</span> <span class="c1">// GET /todos</span>
+                         <span class="nv">configuration</span><span class="p">:</span> <span class="k">Self</span><span class="o">.</span><span class="n">configuration</span><span class="p">)</span>
         <span class="k">case</span> <span class="o">.</span><span class="nf">show</span><span class="p">(</span><span class="k">let</span> <span class="nv">id</span><span class="p">):</span>
-            <span class="k">return</span> <span class="kt">RouteConfiguration</span><span class="p">(</span><span class="nv">method</span><span class="p">:</span> <span class="o">.</span><span class="k">get</span><span class="p">,</span>
-                                      <span class="nv">path</span><span class="p">:</span> <span class="o">.</span><span class="nf">path</span><span class="p">([</span><span class="s">"todo"</span><span class="p">,</span> <span class="kt">String</span><span class="p">(</span><span class="n">id</span><span class="p">)]),</span> <span class="c1">// GET /todos/[id]</span>
-                                      <span class="nv">configuration</span><span class="p">:</span> <span class="n">configuration</span><span class="p">)</span>
+            <span class="k">return</span> <span class="o">.</span><span class="nf">init</span><span class="p">(</span><span class="nv">method</span><span class="p">:</span> <span class="o">.</span><span class="k">get</span><span class="p">,</span>
+                         <span class="nv">path</span><span class="p">:</span> <span class="o">.</span><span class="nf">path</span><span class="p">([</span><span class="s">"todo"</span><span class="p">,</span> <span class="kt">String</span><span class="p">(</span><span class="n">id</span><span class="p">)]),</span> <span class="c1">// GET /todos/[id]</span>
+                         <span class="nv">configuration</span><span class="p">:</span> <span class="k">Self</span><span class="o">.</span><span class="n">configuration</span><span class="p">)</span>
         <span class="k">case</span> <span class="o">.</span><span class="nf">add</span><span class="p">(</span><span class="k">let</span> <span class="nv">title</span><span class="p">):</span>
-            <span class="k">return</span> <span class="kt">RouteConfiguration</span><span class="p">(</span><span class="nv">method</span><span class="p">:</span> <span class="o">.</span><span class="n">post</span><span class="p">,</span>
-                                      <span class="nv">path</span><span class="p">:</span> <span class="o">.</span><span class="nf">path</span><span class="p">([</span><span class="s">"todos"</span><span class="p">]),</span> <span class="c1">// POST /todos</span>
-                                      <span class="nv">params</span><span class="p">:</span> <span class="p">[</span><span class="s">"title"</span><span class="p">:</span> <span class="n">title</span><span class="p">],</span>
-                                      <span class="nv">configuration</span><span class="p">:</span> <span class="n">configuration</span><span class="p">)</span>
+            <span class="k">return</span> <span class="o">.</span><span class="nf">init</span><span class="p">(</span><span class="nv">method</span><span class="p">:</span> <span class="o">.</span><span class="n">post</span><span class="p">,</span>
+                         <span class="nv">path</span><span class="p">:</span> <span class="o">.</span><span class="nf">path</span><span class="p">([</span><span class="s">"todos"</span><span class="p">]),</span> <span class="c1">// POST /todos</span>
+                         <span class="nv">params</span><span class="p">:</span> <span class="p">[</span><span class="s">"title"</span><span class="p">:</span> <span class="n">title</span><span class="p">],</span>
+                         <span class="nv">configuration</span><span class="p">:</span> <span class="k">Self</span><span class="o">.</span><span class="n">configuration</span><span class="p">)</span>
         <span class="k">case</span> <span class="o">.</span><span class="nf">remove</span><span class="p">(</span><span class="k">let</span> <span class="nv">id</span><span class="p">):</span>
-            <span class="k">return</span> <span class="kt">RouteConfiguration</span><span class="p">(</span><span class="nv">method</span><span class="p">:</span> <span class="o">.</span><span class="n">delete</span><span class="p">,</span>
-                                      <span class="nv">path</span><span class="p">:</span> <span class="o">.</span><span class="nf">path</span><span class="p">([</span><span class="s">"todo"</span><span class="p">,</span> <span class="kt">String</span><span class="p">(</span><span class="n">id</span><span class="p">)]),</span> <span class="c1">// DELETE /todo/[id]</span>
-                                      <span class="nv">configuration</span><span class="p">:</span> <span class="n">configuration</span><span class="p">)</span>
+            <span class="k">return</span> <span class="o">.</span><span class="nf">init</span><span class="p">(</span><span class="nv">method</span><span class="p">:</span> <span class="o">.</span><span class="n">delete</span><span class="p">,</span>
+                         <span class="nv">path</span><span class="p">:</span> <span class="o">.</span><span class="nf">path</span><span class="p">([</span><span class="s">"todo"</span><span class="p">,</span> <span class="kt">String</span><span class="p">(</span><span class="n">id</span><span class="p">)]),</span> <span class="c1">// DELETE /todo/[id]</span>
+                         <span class="nv">configuration</span><span class="p">:</span> <span class="n">configuration</span><span class="p">)</span>
         <span class="k">case</span> <span class="o">.</span><span class="nf">setCompleted</span><span class="p">(</span><span class="k">let</span> <span class="nv">id</span><span class="p">,</span> <span class="k">let</span> <span class="nv">completed</span><span class="p">):</span>
-            <span class="k">return</span> <span class="kt">RouteConfiguration</span><span class="p">(</span><span class="nv">method</span><span class="p">:</span> <span class="o">.</span><span class="n">patch</span><span class="p">,</span>
-                                      <span class="nv">path</span><span class="p">:</span> <span class="o">.</span><span class="nf">path</span><span class="p">([</span><span class="s">"todo"</span><span class="p">,</span> <span class="kt">String</span><span class="p">(</span><span class="n">id</span><span class="p">)]),</span> <span class="c1">// PATCH /todo/[id]</span>
-                                      <span class="nv">params</span><span class="p">:</span> <span class="p">[</span><span class="s">"completed"</span><span class="p">:</span> <span class="n">completed</span><span class="p">],</span>
-                                      <span class="nv">configuration</span><span class="p">:</span> <span class="n">configuration</span><span class="p">)</span>
+            <span class="k">return</span> <span class="o">.</span><span class="nf">init</span><span class="p">(</span><span class="nv">method</span><span class="p">:</span> <span class="o">.</span><span class="n">patch</span><span class="p">,</span>
+                         <span class="nv">path</span><span class="p">:</span> <span class="o">.</span><span class="nf">path</span><span class="p">([</span><span class="s">"todo"</span><span class="p">,</span> <span class="kt">String</span><span class="p">(</span><span class="n">id</span><span class="p">)]),</span> <span class="c1">// PATCH /todo/[id]</span>
+                         <span class="nv">params</span><span class="p">:</span> <span class="p">[</span><span class="s">"completed"</span><span class="p">:</span> <span class="n">completed</span><span class="p">],</span>
+                         <span class="nv">configuration</span><span class="p">:</span> <span class="n">configuration</span><span class="p">)</span>
         <span class="p">}</span>
     <span class="p">}</span>
 <span class="p">}</span>
 
 </code></pre>
 
-<p>You can optionally pass a <strong>configuration</strong> object to each case if you want provide different  configuration for each route.</p>
+<p>You can optionally pass a <strong>configuration</strong> object to each case if you want provide different configuration for each endpoint.</p>
 
 <p><a name="construct_request"></a></p>
 <h4 id='make-a-request' class='heading'>Make a request</h4>
 
-<p>To create the request you have to initialize a <strong>Router</strong> instance and specialize it with your defined Router, in our case <strong>TodosRoute</strong>:</p>
-<pre class="highlight swift"><code><span class="kt">Router</span><span class="o">&lt;</span><span class="kt">TodosRoute</span><span class="o">&gt;</span><span class="p">()</span><span class="o">.</span><span class="nf">request</span><span class="p">(</span><span class="nv">for</span><span class="p">:</span> <span class="o">.</span><span class="nf">add</span><span class="p">(</span><span class="nv">title</span><span class="p">:</span> <span class="s">"Go shopping!"</span><span class="p">))</span>
+<p>To create the request you have to initialize a <strong>Client</strong> instance and specialize it with your defined Repository, in our case <strong>TodosRepository</strong>:</p>
+<pre class="highlight swift"><code><span class="kt">Client</span><span class="o">&lt;</span><span class="kt">TodosRepository</span><span class="o">&gt;</span><span class="p">()</span><span class="o">.</span><span class="nf">request</span><span class="p">(</span><span class="nv">for</span><span class="p">:</span> <span class="o">.</span><span class="nf">add</span><span class="p">(</span><span class="nv">title</span><span class="p">:</span> <span class="s">"Go shopping!"</span><span class="p">))</span>
     <span class="o">.</span><span class="nf">success</span><span class="p">(</span><span class="nv">responseType</span><span class="p">:</span> <span class="kt">Todo</span><span class="o">.</span><span class="k">self</span><span class="p">)</span> <span class="p">{</span> <span class="n">todo</span> <span class="k">in</span>
         <span class="c1">// do something with todo</span>
     <span class="p">}</span>
@@ -544,7 +545,7 @@
 
 <p>or with <strong>async await</strong></p>
 <pre class="highlight swift"><code><span class="k">do</span> <span class="p">{</span>
-    <span class="k">let</span> <span class="nv">toto</span><span class="p">:</span> <span class="kt">Todo</span> <span class="o">=</span> <span class="kt">Router</span><span class="o">&lt;</span><span class="kt">TodosRoute</span><span class="o">&gt;</span><span class="p">()</span>
+    <span class="k">let</span> <span class="nv">toto</span><span class="p">:</span> <span class="kt">Todo</span> <span class="o">=</span> <span class="kt">Client</span><span class="o">&lt;</span><span class="kt">TodosRepository</span><span class="o">&gt;</span><span class="p">()</span>
     <span class="o">.</span><span class="nf">request</span><span class="p">(</span><span class="nv">for</span><span class="p">:</span> <span class="o">.</span><span class="nf">add</span><span class="p">(</span><span class="nv">title</span><span class="p">:</span> <span class="s">"Go shopping!"</span><span class="p">))</span>
     <span class="o">.</span><span class="nf">async</span><span class="p">()</span>
 <span class="p">}</span> <span class="k">catch</span> <span class="k">let</span> <span class="nv">error</span> <span class="p">{</span>
@@ -582,7 +583,7 @@
 
 <p>To see all the available errors, please visit the <a href="https://billp.github.io/TermiNetwork/Enums/TNError.html" target="_blank">TNError</a> in documentation.</p>
 <h4 id='example' class='heading'>Example</h4>
-<pre class="highlight swift"><code><span class="kt">Router</span><span class="o">&lt;</span><span class="kt">TodosRoute</span><span class="o">&gt;</span><span class="p">()</span><span class="o">.</span><span class="nf">request</span><span class="p">(</span><span class="nv">for</span><span class="p">:</span> <span class="o">.</span><span class="nf">add</span><span class="p">(</span><span class="nv">title</span><span class="p">:</span> <span class="s">"Go shopping!"</span><span class="p">))</span>
+<pre class="highlight swift"><code><span class="kt">Client</span><span class="o">&lt;</span><span class="kt">TodosRepository</span><span class="o">&gt;</span><span class="p">()</span><span class="o">.</span><span class="nf">request</span><span class="p">(</span><span class="nv">for</span><span class="p">:</span> <span class="o">.</span><span class="nf">add</span><span class="p">(</span><span class="nv">title</span><span class="p">:</span> <span class="s">"Go shopping!"</span><span class="p">))</span>
       <span class="o">.</span><span class="nf">success</span><span class="p">(</span><span class="nv">responseType</span><span class="p">:</span> <span class="kt">Todo</span><span class="o">.</span><span class="k">self</span><span class="p">)</span> <span class="p">{</span> <span class="n">todo</span> <span class="k">in</span>
          <span class="c1">// do something with todo</span>
       <span class="p">}</span>
@@ -604,13 +605,14 @@
 
 <p>or with <strong>async await</strong></p>
 <pre class="highlight swift"><code><span class="k">do</span> <span class="p">{</span>
-    <span class="k">let</span> <span class="nv">todo</span><span class="p">:</span> <span class="kt">Todo</span> <span class="o">=</span> <span class="kt">Router</span><span class="o">&lt;</span><span class="kt">TodosRoute</span><span class="o">&gt;</span><span class="p">()</span>
+    <span class="k">let</span> <span class="nv">todo</span><span class="p">:</span> <span class="kt">Todo</span> <span class="o">=</span> <span class="kt">Client</span><span class="o">&lt;</span><span class="kt">TodosRepository</span><span class="o">&gt;</span><span class="p">()</span>
     <span class="o">.</span><span class="nf">request</span><span class="p">(</span><span class="nv">for</span><span class="p">:</span> <span class="o">.</span><span class="nf">add</span><span class="p">(</span><span class="nv">title</span><span class="p">:</span> <span class="s">"Go shopping!"</span><span class="p">))</span>
     <span class="o">.</span><span class="nf">async</span><span class="p">()</span>
 <span class="p">}</span> <span class="k">catch</span> <span class="k">let</span> <span class="nv">error</span> <span class="p">{</span>
     <span class="k">switch</span> <span class="n">error</span> <span class="k">as?</span> <span class="kt">TNError</span> <span class="p">{</span>
-    <span class="k">case</span> <span class="o">.</span><span class="nf">notSuccess</span><span class="p">(</span><span class="k">let</span> <span class="nv">statusCode</span><span class="p">,</span> <span class="n">_</span><span class="p">):</span>
-     <span class="nf">debugPrint</span><span class="p">(</span><span class="s">"Status code "</span> <span class="o">+</span> <span class="kt">String</span><span class="p">(</span><span class="n">statusCode</span><span class="p">))</span>
+    <span class="k">case</span> <span class="o">.</span><span class="nf">notSuccess</span><span class="p">(</span><span class="k">let</span> <span class="nv">statusCode</span><span class="p">,</span> <span class="k">let</span> <span class="nv">data</span><span class="p">):</span>
+         <span class="k">let</span> <span class="nv">errorModel</span> <span class="o">=</span> <span class="k">try</span><span class="p">?</span> <span class="n">data</span><span class="o">.</span><span class="nf">deserializeJSONData</span><span class="p">()</span> <span class="k">as</span> <span class="kt">MyErrorModel</span>
+     <span class="nf">debugPrint</span><span class="p">(</span><span class="s">"Status code "</span> <span class="o">+</span> <span class="kt">String</span><span class="p">(</span><span class="n">statusCode</span><span class="p">)</span> <span class="o">+</span> <span class="s">". API Error: "</span> <span class="o">+</span> <span class="n">errorModel</span><span class="p">?</span><span class="o">.</span><span class="n">errorMessage</span><span class="p">)</span>
      <span class="k">break</span>
     <span class="k">case</span> <span class="o">.</span><span class="nf">networkError</span><span class="p">(</span><span class="k">let</span> <span class="nv">error</span><span class="p">):</span>
      <span class="nf">debugPrint</span><span class="p">(</span><span class="s">"Network error: "</span> <span class="o">+</span> <span class="n">error</span><span class="o">.</span><span class="n">localizedDescription</span><span class="p">)</span>
@@ -707,7 +709,7 @@
 
 <p>Finally, pass the <strong>CitiesTransformer</strong> in the Request&rsquo;s start method:</p>
 <h4 id='example' class='heading'>Example</h4>
-<pre class="highlight swift"><code><span class="kt">Router</span><span class="o">&lt;</span><span class="kt">CityRoute</span><span class="o">&gt;</span><span class="p">()</span>
+<pre class="highlight swift"><code><span class="kt">Client</span><span class="o">&lt;</span><span class="kt">CitiesRepository</span><span class="o">&gt;</span><span class="p">()</span>
     <span class="o">.</span><span class="nf">request</span><span class="p">(</span><span class="nv">for</span><span class="p">:</span> <span class="o">.</span><span class="n">cities</span><span class="p">)</span>
     <span class="o">.</span><span class="nf">success</span><span class="p">(</span><span class="nv">transformer</span><span class="p">:</span> <span class="kt">CitiesTransformer</span><span class="o">.</span><span class="k">self</span><span class="p">)</span> <span class="p">{</span> <span class="n">cities</span> <span class="k">in</span>
         <span class="k">self</span><span class="o">.</span><span class="n">cities</span> <span class="o">=</span> <span class="n">cities</span>
@@ -724,7 +726,7 @@
 
 <p>or with <strong>async await</strong></p>
 <pre class="highlight swift"><code><span class="k">do</span> <span class="p">{</span>
-    <span class="k">let</span> <span class="nv">cities</span> <span class="o">=</span> <span class="n">await</span> <span class="kt">Router</span><span class="o">&lt;</span><span class="kt">CityRoute</span><span class="o">&gt;</span><span class="p">()</span>
+    <span class="k">let</span> <span class="nv">cities</span> <span class="o">=</span> <span class="n">await</span> <span class="kt">Client</span><span class="o">&lt;</span><span class="kt">CitiesRepository</span><span class="o">&gt;</span><span class="p">()</span>
         <span class="o">.</span><span class="nf">request</span><span class="p">(</span><span class="nv">for</span><span class="p">:</span> <span class="o">.</span><span class="n">cities</span><span class="p">)</span>
         <span class="o">.</span><span class="nf">async</span><span class="p">(</span><span class="nv">using</span><span class="p">:</span> <span class="kt">CitiesTransformer</span><span class="o">.</span><span class="k">self</span><span class="p">)</span>
 <span class="p">}</span> <span class="k">catch</span> <span class="k">let</span> <span class="nv">error</span> <span class="p">{</span>
@@ -758,17 +760,17 @@ if let path = Bundle.main.path(forResource: &quot;MockData&quot;, ofType: &quot;
 <code>swift
 configuration.mockDataEnabled = true
 </code></li>
-<li><p>Define the mockFilePath path in your Routes
+<li><p>Define the mockFilePath path in your endpoints.
  #### Example</p>
-<pre class="highlight swift"><code><span class="kd">enum</span> <span class="kt">CityRoute</span><span class="p">:</span> <span class="kt">RouteProtocol</span> <span class="p">{</span>
-<span class="k">case</span> <span class="n">cities</span>
+<pre class="highlight swift"><code><span class="kd">enum</span> <span class="kt">CitiesRepository</span><span class="p">:</span> <span class="kt">EndpointProtocol</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="n">cities</span>
 
-<span class="kd">func</span> <span class="nf">configure</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">RouteConfiguration</span> <span class="p">{</span>
+    <span class="kd">func</span> <span class="nf">configure</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">EndpointConfiguration</span> <span class="p">{</span>
     <span class="k">switch</span> <span class="k">self</span> <span class="p">{</span>
     <span class="k">case</span> <span class="o">.</span><span class="nv">cities</span><span class="p">:</span>
-        <span class="k">return</span> <span class="kt">RouteConfiguration</span><span class="p">(</span><span class="nv">method</span><span class="p">:</span> <span class="o">.</span><span class="k">get</span><span class="p">,</span>
-                                    <span class="nv">path</span><span class="p">:</span> <span class="o">.</span><span class="nf">path</span><span class="p">([</span><span class="s">"cities"</span><span class="p">]),</span>
-                                    <span class="nv">mockFilePath</span><span class="p">:</span> <span class="o">.</span><span class="nf">path</span><span class="p">([</span><span class="s">"Cities"</span><span class="p">,</span> <span class="s">"cities.json"</span><span class="p">]))</span>
+        <span class="k">return</span> <span class="kt">EndpointConfiguration</span><span class="p">(</span><span class="nv">method</span><span class="p">:</span> <span class="o">.</span><span class="k">get</span><span class="p">,</span>
+                                     <span class="nv">path</span><span class="p">:</span> <span class="o">.</span><span class="nf">path</span><span class="p">([</span><span class="s">"cities"</span><span class="p">]),</span>
+                                     <span class="nv">mockFilePath</span><span class="p">:</span> <span class="o">.</span><span class="nf">path</span><span class="p">([</span><span class="s">"Cities"</span><span class="p">,</span> <span class="s">"cities.json"</span><span class="p">]))</span>
         <span class="p">}</span>
     <span class="p">}</span>
 <span class="p">}</span>
@@ -849,7 +851,7 @@ configuration.mockDataEnabled = true
 </code></pre></li>
 <li><p><strong>Example with Request</strong></p>
 <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">body</span><span class="p">:</span> <span class="n">some</span> <span class="kt">View</span> <span class="p">{</span>
-    <span class="kt">TermiNetwork</span><span class="o">.</span><span class="kt">Image</span><span class="p">(</span><span class="nv">withRequest</span><span class="p">:</span> <span class="kt">Router</span><span class="o">&lt;</span><span class="kt">CityRoute</span><span class="o">&gt;</span><span class="p">()</span><span class="o">.</span><span class="nf">request</span><span class="p">(</span><span class="nv">for</span><span class="p">:</span> <span class="o">.</span><span class="nf">image</span><span class="p">(</span><span class="nv">city</span><span class="p">:</span> <span class="n">city</span><span class="p">)),</span>
+    <span class="kt">TermiNetwork</span><span class="o">.</span><span class="kt">Image</span><span class="p">(</span><span class="nv">withRequest</span><span class="p">:</span> <span class="kt">Client</span><span class="o">&lt;</span><span class="kt">CitiesRepository</span><span class="o">&gt;</span><span class="p">()</span><span class="o">.</span><span class="nf">request</span><span class="p">(</span><span class="nv">for</span><span class="p">:</span> <span class="o">.</span><span class="nf">image</span><span class="p">(</span><span class="nv">city</span><span class="p">:</span> <span class="n">city</span><span class="p">)),</span>
                        <span class="n">defaultImage</span><span class="p">:</span> <span class="kt">UIImage</span><span class="p">(</span><span class="nv">named</span><span class="p">:</span> <span class="s">"DefaultThumbImage"</span><span class="p">))</span>
 <span class="p">}</span>
 </code></pre></li>
@@ -872,7 +874,7 @@ configuration.mockDataEnabled = true
 </code></pre></li>
 <li><p><strong>Example with Request</strong></p>
 <pre class="highlight swift"><code><span class="k">let</span> <span class="nv">imageView</span> <span class="o">=</span> <span class="kt">UIImageView</span><span class="p">()</span> <span class="c1">// or NSImageView (macOS), or WKInterfaceImage (watchOS)</span>
-<span class="n">imageView</span><span class="o">.</span><span class="nf">tn_setRemoteImage</span><span class="p">(</span><span class="nv">request</span><span class="p">:</span> <span class="kt">Router</span><span class="o">&lt;</span><span class="kt">CityRoute</span><span class="o">&gt;</span><span class="p">()</span><span class="o">.</span><span class="nf">request</span><span class="p">(</span><span class="nv">for</span><span class="p">:</span> <span class="o">.</span><span class="nf">thumb</span><span class="p">(</span><span class="nv">withID</span><span class="p">:</span> <span class="s">"3125"</span><span class="p">)),</span>
+<span class="n">imageView</span><span class="o">.</span><span class="nf">tn_setRemoteImage</span><span class="p">(</span><span class="nv">request</span><span class="p">:</span> <span class="kt">Client</span><span class="o">&lt;</span><span class="kt">CitiesRepository</span><span class="o">&gt;</span><span class="p">()</span><span class="o">.</span><span class="nf">request</span><span class="p">(</span><span class="nv">for</span><span class="p">:</span> <span class="o">.</span><span class="nf">thumb</span><span class="p">(</span><span class="nv">withID</span><span class="p">:</span> <span class="s">"3125"</span><span class="p">)),</span>
                             <span class="n">defaultImage</span><span class="p">:</span> <span class="kt">UIImage</span><span class="p">(</span><span class="nv">named</span><span class="p">:</span> <span class="s">"DefaultThumbImage"</span><span class="p">),</span>
                             <span class="nv">preprocessImage</span><span class="p">:</span> <span class="p">{</span> <span class="n">image</span> <span class="k">in</span>
     <span class="c1">// Optionally pre-process image and return the new image.</span>
@@ -918,7 +920,7 @@ configuration.mockDataEnabled = true
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2022 <a class="link" href="https://github.com/billp/TermiNetwork" target="_blank" rel="external noopener">Vasilis Panagiotopoulos</a>. All rights reserved. (Last updated: 2022-12-16)</p>
+      <p>&copy; 2023 <a class="link" href="https://github.com/billp/TermiNetwork" target="_blank" rel="external noopener">Vasilis Panagiotopoulos</a>. All rights reserved. (Last updated: 2023-04-24)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.3</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
     </section>
   </body>

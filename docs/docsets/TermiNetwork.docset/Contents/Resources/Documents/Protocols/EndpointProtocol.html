@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>QueueFailureMode Enumeration Reference</title>
+    <title>EndpointProtocol Protocol Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset="utf-8">
@@ -14,9 +14,9 @@
   </head>
   <body>
 
-    <a name="//apple_ref/swift/Enum/QueueFailureMode" class="dashAnchor"></a>
+    <a name="//apple_ref/swift/Protocol/EndpointProtocol" class="dashAnchor"></a>
 
-    <a title="QueueFailureMode Enumeration Reference"></a>
+    <a title="EndpointProtocol Protocol Reference"></a>
 
     <header class="header">
       <p class="header-col header-col--primary">
@@ -50,7 +50,7 @@
     <p class="breadcrumbs">
       <a class="breadcrumb" href="../index.html">TermiNetwork Reference</a>
       <img class="carat" src="../img/carat.png" alt=""/>
-      QueueFailureMode Enumeration Reference
+      EndpointProtocol Protocol Reference
     </p>
 
     <div class="content-wrapper">
@@ -224,15 +224,15 @@
 
         <section class="section">
           <div class="section-content top-matter">
-            <h1>QueueFailureMode</h1>
+            <h1>EndpointProtocol</h1>
               <div class="declaration">
                 <div class="language">
                   
-                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">QueueFailureMode</span></code></pre>
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">EndpointProtocol</span></code></pre>
 
                 </div>
               </div>
-            <p>Type that specifies the behavior of the queue when a request fails</p>
+            <p>Use this protocol to define repositories as enums.</p>
 
           </div>
         </section>
@@ -244,9 +244,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12TermiNetwork16QueueFailureModeO9cancelAllyA2CmF"></a>
-                    <a name="//apple_ref/swift/Element/cancelAll" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12TermiNetwork16QueueFailureModeO9cancelAllyA2CmF">cancelAll</a>
+                    <a name="/s:12TermiNetwork16EndpointProtocolP9configureAA0C13ConfigurationCyF"></a>
+                    <a name="//apple_ref/swift/Method/configure()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TermiNetwork16EndpointProtocolP9configureAA0C13ConfigurationCyF">configure()</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -254,43 +254,21 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Cancels the execution of the queue after a request (operation) fails</p>
+                        <p>Configure your endpoints by setting defining this function. See
+Examples/Communication/Repositories/CitiesRepository.swift for an example.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="k">case</span> <span class="n">cancelAll</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">configure</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/EndpointConfiguration.html">EndpointConfiguration</a></span></code></pre>
 
                         </div>
                       </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:12TermiNetwork16QueueFailureModeO8continueyA2CmF"></a>
-                    <a name="//apple_ref/swift/Element/continue" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12TermiNetwork16QueueFailureModeO8continueyA2CmF">continue</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Continues the execution of the queue after a request (operation) fails</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="k">case</span> <span class="err">`</span><span class="k">continue</span><span class="err">`</span></code></pre>
-
-                        </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>An EndpointProtocol for each endpoint.</p>
                       </div>
                     </section>
                   </div>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>QueueFailureMode Enumeration Reference</title>
+    <title>Client Class Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset="utf-8">
@@ -14,9 +14,9 @@
   </head>
   <body>
 
-    <a name="//apple_ref/swift/Enum/QueueFailureMode" class="dashAnchor"></a>
+    <a name="//apple_ref/swift/Class/Client" class="dashAnchor"></a>
 
-    <a title="QueueFailureMode Enumeration Reference"></a>
+    <a title="Client Class Reference"></a>
 
     <header class="header">
       <p class="header-col header-col--primary">
@@ -50,7 +50,7 @@
     <p class="breadcrumbs">
       <a class="breadcrumb" href="../index.html">TermiNetwork Reference</a>
       <img class="carat" src="../img/carat.png" alt=""/>
-      QueueFailureMode Enumeration Reference
+      Client Class Reference
     </p>
 
     <div class="content-wrapper">
@@ -224,15 +224,15 @@
 
         <section class="section">
           <div class="section-content top-matter">
-            <h1>QueueFailureMode</h1>
+            <h1>Client</h1>
               <div class="declaration">
                 <div class="language">
                   
-                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">QueueFailureMode</span></code></pre>
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">final</span> <span class="kd">class</span> <span class="kt">Client</span><span class="o">&lt;</span><span class="kt">Repository</span><span class="o">&gt;</span> <span class="k">where</span> <span class="kt">Repository</span> <span class="p">:</span> <span class="kt"><a href="../Protocols/EndpointProtocol.html">EndpointProtocol</a></span></code></pre>
 
                 </div>
               </div>
-            <p>Type that specifies the behavior of the queue when a request fails</p>
+            <p>This class is used to create instances of Repository that can be used to start requests based on the given endpoint.</p>
 
           </div>
         </section>
@@ -240,13 +240,22 @@
         <section class="section">
           <div class="section-content">
             <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Properties"></a>
+                <a name="//apple_ref/swift/Section/Properties" class="dashAnchor"></a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Properties"></a>
+                  <h3 class="section-name"><span>Properties</span>
+</h3>
+                </div>
+              </div>
               <ul class="item-container">
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12TermiNetwork16QueueFailureModeO9cancelAllyA2CmF"></a>
-                    <a name="//apple_ref/swift/Element/cancelAll" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12TermiNetwork16QueueFailureModeO9cancelAllyA2CmF">cancelAll</a>
+                    <a name="/s:12TermiNetwork6ClientC13configurationAA13ConfigurationCSgvp"></a>
+                    <a name="//apple_ref/swift/Property/configuration" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TermiNetwork6ClientC13configurationAA13ConfigurationCSgvp">configuration</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -254,14 +263,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Cancels the execution of the queue after a request (operation) fails</p>
+                        <p>Repository configuration</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="k">case</span> <span class="n">cancelAll</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">configuration</span><span class="p">:</span> <span class="kt"><a href="../Classes/Configuration.html">Configuration</a></span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
@@ -271,9 +280,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12TermiNetwork16QueueFailureModeO8continueyA2CmF"></a>
-                    <a name="//apple_ref/swift/Element/continue" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12TermiNetwork16QueueFailureModeO8continueyA2CmF">continue</a>
+                    <a name="/s:12TermiNetwork6ClientC11environment13configurationACyxGAA19EnvironmentProtocol_pSg_AA13ConfigurationCSgtcfc"></a>
+                    <a name="//apple_ref/swift/Method/init(environment:configuration:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TermiNetwork6ClientC11environment13configurationACyxGAA19EnvironmentProtocol_pSg_AA13ConfigurationCSgtcfc">init(environment:<wbr>configuration:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -281,16 +290,63 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Continues the execution of the queue after a request (operation) fails</p>
+                        <p>Initialize with environment that overrides the one set by Environment.set(_).</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="k">case</span> <span class="err">`</span><span class="k">continue</span><span class="err">`</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">environment</span><span class="p">:</span> <span class="kt"><a href="../Protocols/EnvironmentProtocol.html">EnvironmentProtocol</a></span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+            <span class="nv">configuration</span><span class="p">:</span> <span class="kt"><a href="../Classes/Configuration.html">Configuration</a></span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span></code></pre>
 
                         </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TermiNetwork6ClientC7request3forAA7RequestCx_tF"></a>
+                    <a name="//apple_ref/swift/Method/request(for:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TermiNetwork6ClientC7request3forAA7RequestCx_tF">request(for:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns a Request that can be used later, e.g. for starting the request in a later time or canceling it.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">request</span><span class="p">(</span><span class="k">for</span> <span class="nv">endpoint</span><span class="p">:</span> <span class="kt">Repository</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Request.html">Request</a></span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>endpoint</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>a RepositoryProtocol enum value.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>

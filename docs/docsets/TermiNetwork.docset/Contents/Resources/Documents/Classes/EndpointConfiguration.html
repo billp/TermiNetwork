@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>QueueFailureMode Enumeration Reference</title>
+    <title>EndpointConfiguration Class Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset="utf-8">
@@ -14,9 +14,9 @@
   </head>
   <body>
 
-    <a name="//apple_ref/swift/Enum/QueueFailureMode" class="dashAnchor"></a>
+    <a name="//apple_ref/swift/Class/EndpointConfiguration" class="dashAnchor"></a>
 
-    <a title="QueueFailureMode Enumeration Reference"></a>
+    <a title="EndpointConfiguration Class Reference"></a>
 
     <header class="header">
       <p class="header-col header-col--primary">
@@ -50,7 +50,7 @@
     <p class="breadcrumbs">
       <a class="breadcrumb" href="../index.html">TermiNetwork Reference</a>
       <img class="carat" src="../img/carat.png" alt=""/>
-      QueueFailureMode Enumeration Reference
+      EndpointConfiguration Class Reference
     </p>
 
     <div class="content-wrapper">
@@ -224,15 +224,15 @@
 
         <section class="section">
           <div class="section-content top-matter">
-            <h1>QueueFailureMode</h1>
+            <h1>EndpointConfiguration</h1>
               <div class="declaration">
                 <div class="language">
                   
-                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">QueueFailureMode</span></code></pre>
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">final</span> <span class="kd">class</span> <span class="kt">EndpointConfiguration</span></code></pre>
 
                 </div>
               </div>
-            <p>Type that specifies the behavior of the queue when a request fails</p>
+            <p>Endpoint configuration class which is used in EndpointProtocol implementations.</p>
 
           </div>
         </section>
@@ -244,9 +244,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12TermiNetwork16QueueFailureModeO9cancelAllyA2CmF"></a>
-                    <a name="//apple_ref/swift/Element/cancelAll" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12TermiNetwork16QueueFailureModeO9cancelAllyA2CmF">cancelAll</a>
+                    <a name="/s:12TermiNetwork21EndpointConfigurationC6method4path6params7headers13configuration12mockFilePathAcA6MethodO_AA0L0OSDySSypSgGSgSDyS2SGSgAA0D0CSgAMSgtcfc"></a>
+                    <a name="//apple_ref/swift/Method/init(method:path:params:headers:configuration:mockFilePath:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TermiNetwork21EndpointConfigurationC6method4path6params7headers13configuration12mockFilePathAcA6MethodO_AA0L0OSDySSypSgGSgSDyS2SGSgAA0D0CSgAMSgtcfc">init(method:<wbr>path:<wbr>params:<wbr>headers:<wbr>configuration:<wbr>mockFilePath:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -254,43 +254,102 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Cancels the execution of the queue after a request (operation) fails</p>
+                        <p>Endpoint configuration initializer.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="k">case</span> <span class="n">cancelAll</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">method</span><span class="p">:</span> <span class="kt"><a href="../Enums/Method.html">Method</a></span><span class="p">,</span>
+            <span class="nv">path</span><span class="p">:</span> <span class="kt"><a href="../Enums/Path.html">Path</a></span><span class="p">,</span>
+            <span class="nv">params</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">Any</span><span class="p">?]?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+            <span class="nv">headers</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">String</span><span class="p">]?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+            <span class="nv">configuration</span><span class="p">:</span> <span class="kt"><a href="../Classes/Configuration.html">Configuration</a></span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+            <span class="nv">mockFilePath</span><span class="p">:</span> <span class="kt"><a href="../Enums/Path.html">Path</a></span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:12TermiNetwork16QueueFailureModeO8continueyA2CmF"></a>
-                    <a name="//apple_ref/swift/Element/continue" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12TermiNetwork16QueueFailureModeO8continueyA2CmF">continue</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Continues the execution of the queue after a request (operation) fails</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="k">case</span> <span class="err">`</span><span class="k">continue</span><span class="err">`</span></code></pre>
-
-                        </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>method</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A Method to use, for example .get, .post, etc.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>path</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A path of the request (will be appended to the base URL, for example .path([&ldquo;user&rdquo;, &ldquo;13&rdquo;]).</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>params</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The parameters of the request.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>headers</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A configuration object (Optional, e.g. if you want ot use custom
+configuration for a specific endpoint).</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>configuration</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The configuration object of the request.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>mockFilePath</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A path of the file in the mock data bundle specified in configuration object.
+This will be used only if useMockData is set to true in the configuration object.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
