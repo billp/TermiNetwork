@@ -34,7 +34,7 @@ class TestPinning: XCTestCase {
     }
 
     var validCertPath: String {
-        return bundle.path(forResource: "www.billp.dev",
+        return bundle.path(forResource: "terminetwork.billp.dev",
                            ofType: "cer",
                            inDirectory: nil,
                            forLocalization: nil) ?? ""

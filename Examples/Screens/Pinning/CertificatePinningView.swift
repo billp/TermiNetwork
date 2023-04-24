@@ -51,7 +51,7 @@ struct CertificatePinningView: View {
     }
 
     func startRequest() {
-        let certificateName = isCertificateValid ? "www.billp.dev" : "forums.swift.org"
+        let certificateName = isCertificateValid ? "terminetwork.billp.dev" : "forums.swift.org"
 
         let configuration = Configuration()
         guard let certUrlPath = Bundle.main.path(forResource: certificateName, ofType: "cer") else {

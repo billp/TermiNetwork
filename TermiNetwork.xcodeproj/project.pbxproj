@@ -10,6 +10,8 @@
 		2300B81929092EA4006C2445 /* Request+FileOperationsAsync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2300B81829092EA4006C2445 /* Request+FileOperationsAsync.swift */; };
 		2305D18A290993DD00E6CEB0 /* TestDownloadOperationsAsync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2305D189290993DD00E6CEB0 /* TestDownloadOperationsAsync.swift */; };
 		2305D18C2909957400E6CEB0 /* TestUploadOperationsAsync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2305D18B2909957400E6CEB0 /* TestUploadOperationsAsync.swift */; };
+		23382C3E29F6786500680A2A /* terminetwork.billp.dev.cer in Resources */ = {isa = PBXBuildFile; fileRef = 23382C3D29F6786500680A2A /* terminetwork.billp.dev.cer */; };
+		23382C3F29F6786500680A2A /* terminetwork.billp.dev.cer in Resources */ = {isa = PBXBuildFile; fileRef = 23382C3D29F6786500680A2A /* terminetwork.billp.dev.cer */; };
 		2368F53A28F5B85900639D17 /* TestRequestAsync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2368F53928F5B85900639D17 /* TestRequestAsync.swift */; };
 		2368F53C28F5B98E00639D17 /* Request+Async.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2368F53B28F5B98E00639D17 /* Request+Async.swift */; };
 		23ACE2692932369B00BA45D5 /* www.billp.dev.cer in Resources */ = {isa = PBXBuildFile; fileRef = 2332504629251BC30082EDC7 /* www.billp.dev.cer */; };
@@ -164,6 +166,7 @@
 		2305D189290993DD00E6CEB0 /* TestDownloadOperationsAsync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestDownloadOperationsAsync.swift; sourceTree = "<group>"; };
 		2305D18B2909957400E6CEB0 /* TestUploadOperationsAsync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestUploadOperationsAsync.swift; sourceTree = "<group>"; };
 		2332504629251BC30082EDC7 /* www.billp.dev.cer */ = {isa = PBXFileReference; lastKnownFileType = file; name = www.billp.dev.cer; path = Tests/www.billp.dev.cer; sourceTree = SOURCE_ROOT; };
+		23382C3D29F6786500680A2A /* terminetwork.billp.dev.cer */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = terminetwork.billp.dev.cer; sourceTree = "<group>"; };
 		2368F53928F5B85900639D17 /* TestRequestAsync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestRequestAsync.swift; sourceTree = "<group>"; };
 		2368F53B28F5B98E00639D17 /* Request+Async.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Request+Async.swift"; sourceTree = "<group>"; };
 		23B36A07277BB5B800A270B7 /* CryptoKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CryptoKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS15.2.sdk/System/Library/Frameworks/CryptoKit.framework; sourceTree = DEVELOPER_DIR; };
@@ -640,6 +643,7 @@
 				F35B533D2443325400C1853A /* MockData.bundle */,
 				F33684D3246692E400C64471 /* photo.jpg */,
 				F383AEAB257ED51500DE43FA /* forums.swift.org.cer */,
+				23382C3D29F6786500680A2A /* terminetwork.billp.dev.cer */,
 				2332504629251BC30082EDC7 /* www.billp.dev.cer */,
 			);
 			name = Resources;
@@ -880,6 +884,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				23382C3E29F6786500680A2A /* terminetwork.billp.dev.cer in Resources */,
 				23ACE26B2932371100BA45D5 /* www.billp.dev.cer in Resources */,
 				23ACE26A2932371100BA45D5 /* forums.swift.org.cer in Resources */,
 				F35B533E2443325400C1853A /* MockData.bundle in Resources */,
@@ -894,6 +899,7 @@
 				23ACE2692932369B00BA45D5 /* www.billp.dev.cer in Resources */,
 				F383AEAD257ED51500DE43FA /* forums.swift.org.cer in Resources */,
 				F355608F257527C40047D46D /* Assets.xcassets in Resources */,
+				23382C3F29F6786500680A2A /* terminetwork.billp.dev.cer in Resources */,
 				F3309DB4258AA05700BB018D /* Launch Screen.storyboard in Resources */,
 				F37A17FE257D49A8003EFB1F /* MockData.bundle in Resources */,
 			);
@@ -1327,7 +1333,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.1.0;
+				MARKETING_VERSION = 3.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.billp.TermiNetworkExamples;
 				PRODUCT_NAME = TermiNetworkExamples;
 				SDKROOT = iphoneos;
@@ -1350,7 +1356,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.1.0;
+				MARKETING_VERSION = 3.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.billp.TermiNetworkExamples;
 				PRODUCT_NAME = TermiNetworkExamples;
 				SDKROOT = iphoneos;
