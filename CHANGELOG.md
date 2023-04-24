@@ -1,6 +1,19 @@
 # Changelog
 
-## [3.2.0](https://github.com/billp/TermiNetwork/tree/HEAD) (2022-12-16)
+## [4.0](https://github.com/billp/TermiNetwork/tree/4.0) (2023-04-24)
+
+[Full Changelog](https://github.com/billp/TermiNetwork/compare/3.2.0...4.0)
+
+**Closed issues:**
+
+- SwiftUI Image: support modifier instead of using TermiNetwork.Image view [\#45](https://github.com/billp/TermiNetwork/issues/45)
+- Name refactor to align with the Repository pattern  [\#35](https://github.com/billp/TermiNetwork/issues/35)
+
+**Merged pull requests:**
+
+- Name refactor to align with the Repository pattern \(35\) [\#53](https://github.com/billp/TermiNetwork/pull/53) ([billp](https://github.com/billp))
+
+## [3.2.0](https://github.com/billp/TermiNetwork/tree/3.2.0) (2022-12-16)
 
 [Full Changelog](https://github.com/billp/TermiNetwork/compare/3.1.1...3.2.0)
 
