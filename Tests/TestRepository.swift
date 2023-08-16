@@ -39,7 +39,6 @@ enum TestRepository: EndpointProtocol {
     case testEncryptParams(value: String?)
     case dataUpload(data: Data, param: String)
     case fileUpload(url: URL, param: String)
-    case fileUploadWithStatusCode(url: URL, param: String, status: Int)
     case fileDownload
 
     func testPinningConfiguration(withCertPaths certPaths: [String]) -> Configuration {
@@ -128,27 +127,22 @@ enum TestRepository: EndpointProtocol {
         case .dataUpload(let data, let param):
             return .init(method: .post,
                          path: .path(["file_upload"]),
-                         params: ["file": MultipartFormDataPartType.data(data: data,
-                                                                         filename: "test.jpg",
-                                                                         contentType: "image/jpeg"),
-                                  "test_param": MultipartFormDataPartType.value(value: param)]
+                         params: ["file": .data(data: data,
+                                                filename: "test.jpg",
+                                                contentType: "image/jpeg"),
+                                  "test_param": .value(value: param)]
             )
         case .fileUpload(let url, let param):
             return .init(method: .post,
                          path: .path(["file_upload"]),
-                         params: ["file": MultipartFormDataPartType.url(url),
-                                  "test_param": MultipartFormDataPartType.value(value: param)]
+                         params: ["file": .url(url),
+                                  "test_param": .value(value: param)]
             )
         case .fileDownload:
             return EndpointConfiguration(method: .get,
                                          path: .path(["downloads", "3cwHqdwsRyuX"]))
-        case .fileUploadWithStatusCode(let url, let param, let status):
-            return .init(method: .post,
-                         path: .path(["file_upload"]),
-                         params: ["file": MultipartFormDataPartType.url(url),
-                                  "test_param": MultipartFormDataPartType.value(value: param),
-                                  "status": status]
-            )
         }
     }
 }
+
+// swiftlint:enable function_body_length cyclomatic_complexity

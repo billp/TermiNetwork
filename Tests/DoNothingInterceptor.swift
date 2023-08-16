@@ -17,10 +17,10 @@
 // FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
 // ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-// swiftlint:disable compiler_protocol_init
-
 import Foundation
 import TermiNetwork
+
+// swiftlint:disable compiler_protocol_init
 
 final class DoNothingInterceptor: InterceptorProtocol {
     func requestFinished(responseData data: Data?,
@@ -31,3 +31,5 @@ final class DoNothingInterceptor: InterceptorProtocol {
         proceed(.continue)
     }
 }
+
+// swiftlint:enable compiler_protocol_init

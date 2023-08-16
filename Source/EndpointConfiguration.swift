@@ -22,7 +22,7 @@ import Foundation
 /// Endpoint configuration class which is used in EndpointProtocol implementations.
 public final class EndpointConfiguration {
     /// A Method to use, for example .get, .post, etc.
-    var method: Method
+    var method: HttpMethod
     /// A path of the request (will be appended to the base URL, for example .path(["user", "13"]).
     var path: Path
     /// The parameters of the request.
@@ -46,7 +46,7 @@ public final class EndpointConfiguration {
     ///   - configuration: The configuration object of the request.
     ///   - mockFilePath: A path of the file in the mock data bundle specified in configuration object.
     ///         This will be used only if useMockData is set to true in the configuration object.
-    public init(method: Method,
+    public init(method: HttpMethod,
                 path: Path,
                 params: [String: Any?]? = nil,
                 headers: [String: String]? = nil,
@@ -55,6 +55,54 @@ public final class EndpointConfiguration {
         self.method = method
         self.path = path
         self.params = params
+        self.headers = headers
+        self.configuration = configuration
+        self.mockFilePath = mockFilePath
+    }
+
+    /// Endpoint configuration initializer for multipart/form-data.
+    /// 
+    /// - parameters:
+    ///   - method: A Method to use, for example .get, .post, etc.
+    ///   - path: A path of the request (will be appended to the base URL, for example .path(["user", "13"]).
+    ///   - params: The parameters of the request as multipart/form-data values.
+    ///   - headers: A configuration object (Optional, e.g. if you want ot use custom
+    ///   configuration for a specific endpoint).
+    ///   - configuration: The configuration object of the request.
+    ///   - mockFilePath: A path of the file in the mock data bundle specified in configuration object.
+    ///         This will be used only if useMockData is set to true in the configuration object.
+    public init(method: HttpMethod,
+                path: Path,
+                params: [String: MultipartFormDataPartType?]? = nil,
+                headers: [String: String]? = nil,
+                configuration: Configuration? = nil,
+                mockFilePath: Path? = nil) {
+        self.method = method
+        self.path = path
+        self.params = params
+        self.headers = headers
+        self.configuration = configuration
+        self.mockFilePath = mockFilePath
+    }
+
+    /// Endpoint configuration convinience initializer without params.
+    /// 
+    /// - parameters:
+    ///   - method: A Method to use, for example .get, .post, etc.
+    ///   - path: A path of the request (will be appended to the base URL, for example .path(["user", "13"]).
+    ///   - params: The parameters of the request as multipart/form-data values.
+    ///   - headers: A configuration object (Optional, e.g. if you want ot use custom
+    ///   configuration for a specific endpoint).
+    ///   - configuration: The configuration object of the request.
+    ///   - mockFilePath: A path of the file in the mock data bundle specified in configuration object.
+    ///         This will be used only if useMockData is set to true in the configuration object.
+    public init(method: HttpMethod,
+                path: Path,
+                headers: [String: String]? = nil,
+                configuration: Configuration? = nil,
+                mockFilePath: Path? = nil) {
+        self.method = method
+        self.path = path
         self.headers = headers
         self.configuration = configuration
         self.mockFilePath = mockFilePath

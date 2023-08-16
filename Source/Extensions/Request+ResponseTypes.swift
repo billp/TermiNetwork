@@ -198,11 +198,11 @@ extension Request {
 
     // MARK: Image
 
-    func makeImageResponseSuccessHandler(responseHandler: @escaping (ImageType) -> Void)
+    func makeImageResponseSuccessHandler(responseHandler: @escaping (TNImageType) -> Void)
         -> ((Data, URLResponse?) -> Void)? {
         return { [weak self] data, urlResponse in
             guard let self = self else { return }
-            let image = ImageType(data: data)
+            let image = TNImageType(data: data)
 
             if image == nil {
                 let tnError = TNError.responseInvalidImageData
@@ -217,7 +217,7 @@ extension Request {
             } else {
                 self.handleDataTaskCompleted(with: data,
                                              urlResponse: urlResponse,
-                                             onSuccessCallback: { responseHandler(image ?? ImageType()) })
+                                             onSuccessCallback: { responseHandler(image ?? TNImageType()) })
             }
         }
     }

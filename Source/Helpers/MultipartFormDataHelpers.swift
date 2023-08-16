@@ -23,10 +23,11 @@ import Foundation
 import MobileCoreServices
 #endif
 
-class MultipartFormDataHelpers {
+final class MultipartFormDataHelpers {
     fileprivate struct Constants {
         static let crlf = "\r\n"
     }
+
     /// Generates a random string that will be used as multipart boundary.
     static func generateBoundary() -> String {
         let randomString = String(Double.random(in: 0..<65535)).replacingOccurrences(of: ".", with: "")
@@ -90,17 +91,13 @@ class MultipartFormDataHelpers {
         return "application/octet-stream"
     }
 
-    static func fileSize(withURL url: URL) -> Int {
-        var attributes: [FileAttributeKey: Any]? {
-            do {
-                return try FileManager.default.attributesOfItem(atPath: url.path)
-            } catch let error as NSError {
-                print("FileAttribute error: \(error)")
-            }
-            return nil
+    static func fileSize(withURL url: URL) throws -> Int {
+        do {
+            let attributes = try FileManager.default.attributesOfItem(atPath: url.path)
+            return attributes[.size] as? Int ?? 0
+        } catch let error {
+            throw TNError.multipartFormDataUrlFileError(error)
         }
-
-        return attributes?[.size] as? Int ?? 0
     }
 
     static func contentLength(forParams params: [String: MultipartFormDataPartType],
@@ -125,7 +122,7 @@ class MultipartFormDataHelpers {
                 filename = fname ?? key
                 contentType = ctype
             } else if case .url(let url) = value {
-                contentLength += MultipartFormDataHelpers.fileSize(withURL: url)
+                contentLength += try MultipartFormDataHelpers.fileSize(withURL: url)
                 filename = url.lastPathComponent
                 contentType = MultipartFormDataHelpers.mimeTypeForPath(path: url.path)
             }

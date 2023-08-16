@@ -107,19 +107,18 @@ class TestInterceptors: XCTestCase {
         var successCount = 0
 
         client.request(for: .fileUpload(url: url, param: "test"))
-            .upload(responseType: FileResponse.self,
-                    progressUpdate: { bytesSent, totalBytes, progress in
-                        if bytesSent == totalBytes && progress == 1 {
-                            progressSucceded = true
-                        }
-                    },
-                    responseHandler: { response in
-                        if response.success && response.checksum == checksum {
-                            successCount  += 1
-                        }
-                        failed = !progressSucceded
-                        expectation.fulfill()
-                    })
+            .upload(progressUpdate: { bytesSent, totalBytes, progress in
+                if bytesSent == totalBytes && progress == 1 {
+                    progressSucceded = true
+                }
+            })
+            .success(responseType: FileResponse.self) { response in
+                if response.success && response.checksum == checksum {
+                    successCount  += 1
+                }
+                failed = !progressSucceded
+                expectation.fulfill()
+            }
             .failure { _ in
                 failed = true
                 expectation.fulfill()
@@ -148,15 +147,15 @@ class TestInterceptors: XCTestCase {
         client.request(for: .fileDownload)
             .download(destinationPath: cacheURL.path,
                       progressUpdate: { bytesSent, totalBytes, progress in
-                        if bytesSent == totalBytes && progress == 1 {
-                            failed = false
-                        }
-                    }, completionHandler: {
-                        failed = TestHelpers.sha256(url: cacheURL) !=
-                            "63b54b4506e233839f55e1228b59a1fcdec7d5ff9c13073c8a1faf92e9dcc977"
+                if bytesSent == totalBytes && progress == 1 {
+                    failed = false
+                }
+            }).success {
+                failed = TestHelpers.sha256(url: cacheURL) !=
+                "63b54b4506e233839f55e1228b59a1fcdec7d5ff9c13073c8a1faf92e9dcc977"
 
-                        expectation.fulfill()
-                    })
+                expectation.fulfill()
+            }
             .failure { error in
                 failed = true
                 print(String(describing: error.localizedDescription))

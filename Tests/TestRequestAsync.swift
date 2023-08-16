@@ -193,8 +193,10 @@ class TestRequestAsync: XCTestCase {
         XCTAssert(!failed)
     }
 
-    func testResponseValidImageData() async {
-        let image = try? await client.request(for: .testImage(imageName: "sample.jpeg")).async(as: UIImage.self)
+    @MainActor func testResponseValidImageData() async {
+        let image = try? await client
+            .request(for: .testImage(imageName: "sample.jpeg"))
+            .async(as: TNImageType.self)
 
         XCTAssertNotNil(image)
     }

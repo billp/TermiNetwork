@@ -17,8 +17,6 @@
 // FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
 // ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-// swiftlint:disable cyclomatic_complexity
-
 import Foundation
 
 internal class Log {
@@ -28,7 +26,8 @@ internal class Log {
         case unknown
     }
 
-    // swiftlint:disable function_body_length
+    // swiftlint:disable function_body_length cyclomatic_complexity
+
     static func logRequest(request: Request?,
                            data: Data?,
                            state: State = .unknown,
@@ -119,6 +118,8 @@ internal class Log {
             break
         }
     }
+
+    // swiftlint:enable function_body_length cyclomatic_complexity
 
     static func logProgress(request: Request?,
                             bytesProcessed: Int,

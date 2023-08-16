@@ -25,22 +25,11 @@ public protocol EnvironmentProtocol {
     func configure() -> Environment
 }
 
-/// The url scheme that will be used in an environment.
-public enum URLScheme: String {
-    /// HTTP Schema.
-    case http
-    /// HTTPS Schema.
-    case https
-}
-
 /// The Environment contains information about host, port, configuration and it's used in Request instances.
 open class Environment {
-    private enum EnvironmentType {
-        case normal(scheme: URLScheme, host: String, port: Int?, suffix: Path?)
-        case url(String)
-    }
 
     // MARK: Private Properties
+
     private var type: EnvironmentType
 
     // MARK: Public Properties
@@ -49,6 +38,7 @@ open class Environment {
     public var configuration: Configuration?
 
     // MARK: Static members
+
     /// The current global environment. Use this property to set your environment globally.
     public static var current: Environment!
 
@@ -113,5 +103,12 @@ extension Environment {
         case let .url(url):
             return url
         }
+    }
+
+    public var url: URL {
+        guard let url = URL(string: stringURL) else {
+            fatalError("Unable to create URL")
+        }
+        return url
     }
 }

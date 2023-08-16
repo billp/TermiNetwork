@@ -10,6 +10,14 @@
 		2300B81929092EA4006C2445 /* Request+FileOperationsAsync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2300B81829092EA4006C2445 /* Request+FileOperationsAsync.swift */; };
 		2305D18A290993DD00E6CEB0 /* TestDownloadOperationsAsync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2305D189290993DD00E6CEB0 /* TestDownloadOperationsAsync.swift */; };
 		2305D18C2909957400E6CEB0 /* TestUploadOperationsAsync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2305D18B2909957400E6CEB0 /* TestUploadOperationsAsync.swift */; };
+		232FA1D52A8E80A1007907A5 /* RequestType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 232FA1D42A8E80A1007907A5 /* RequestType.swift */; };
+		232FA1D72A8E80F2007907A5 /* HttpMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 232FA1D62A8E80F2007907A5 /* HttpMethod.swift */; };
+		232FA1D92A8E8D49007907A5 /* URLScheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 232FA1D82A8E8D49007907A5 /* URLScheme.swift */; };
+		232FA1DB2A8E8D8F007907A5 /* RequestBodyType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 232FA1DA2A8E8D8F007907A5 /* RequestBodyType.swift */; };
+		232FA1DD2A8E8DBD007907A5 /* EnvironmentType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 232FA1DC2A8E8DBD007907A5 /* EnvironmentType.swift */; };
+		232FA1DF2A8E8DE3007907A5 /* InterceptionAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 232FA1DE2A8E8DE3007907A5 /* InterceptionAction.swift */; };
+		232FA1E12A8E8E2E007907A5 /* QueueFailureMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 232FA1E02A8E8E2E007907A5 /* QueueFailureMode.swift */; };
+		232FA1E32A8E8EA4007907A5 /* PathType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 232FA1E22A8E8EA4007907A5 /* PathType.swift */; };
 		23382C3E29F6786500680A2A /* terminetwork.billp.dev.cer in Resources */ = {isa = PBXBuildFile; fileRef = 23382C3D29F6786500680A2A /* terminetwork.billp.dev.cer */; };
 		23382C3F29F6786500680A2A /* terminetwork.billp.dev.cer in Resources */ = {isa = PBXBuildFile; fileRef = 23382C3D29F6786500680A2A /* terminetwork.billp.dev.cer */; };
 		2368F53A28F5B85900639D17 /* TestRequestAsync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2368F53928F5B85900639D17 /* TestRequestAsync.swift */; };
@@ -165,6 +173,14 @@
 		2300B81829092EA4006C2445 /* Request+FileOperationsAsync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Request+FileOperationsAsync.swift"; sourceTree = "<group>"; };
 		2305D189290993DD00E6CEB0 /* TestDownloadOperationsAsync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestDownloadOperationsAsync.swift; sourceTree = "<group>"; };
 		2305D18B2909957400E6CEB0 /* TestUploadOperationsAsync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestUploadOperationsAsync.swift; sourceTree = "<group>"; };
+		232FA1D42A8E80A1007907A5 /* RequestType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestType.swift; sourceTree = "<group>"; };
+		232FA1D62A8E80F2007907A5 /* HttpMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HttpMethod.swift; sourceTree = "<group>"; };
+		232FA1D82A8E8D49007907A5 /* URLScheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLScheme.swift; sourceTree = "<group>"; };
+		232FA1DA2A8E8D8F007907A5 /* RequestBodyType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestBodyType.swift; sourceTree = "<group>"; };
+		232FA1DC2A8E8DBD007907A5 /* EnvironmentType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnvironmentType.swift; sourceTree = "<group>"; };
+		232FA1DE2A8E8DE3007907A5 /* InterceptionAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterceptionAction.swift; sourceTree = "<group>"; };
+		232FA1E02A8E8E2E007907A5 /* QueueFailureMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueueFailureMode.swift; sourceTree = "<group>"; };
+		232FA1E22A8E8EA4007907A5 /* PathType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathType.swift; sourceTree = "<group>"; };
 		2332504629251BC30082EDC7 /* www.billp.dev.cer */ = {isa = PBXFileReference; lastKnownFileType = file; name = www.billp.dev.cer; path = Tests/www.billp.dev.cer; sourceTree = SOURCE_ROOT; };
 		23382C3D29F6786500680A2A /* terminetwork.billp.dev.cer */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = terminetwork.billp.dev.cer; sourceTree = "<group>"; };
 		2368F53928F5B85900639D17 /* TestRequestAsync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestRequestAsync.swift; sourceTree = "<group>"; };
@@ -315,6 +331,24 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		232FA1D32A8E8090007907A5 /* Enums */ = {
+			isa = PBXGroup;
+			children = (
+				232FA1D42A8E80A1007907A5 /* RequestType.swift */,
+				232FA1D62A8E80F2007907A5 /* HttpMethod.swift */,
+				232FA1D82A8E8D49007907A5 /* URLScheme.swift */,
+				232FA1DA2A8E8D8F007907A5 /* RequestBodyType.swift */,
+				232FA1DC2A8E8DBD007907A5 /* EnvironmentType.swift */,
+				232FA1DE2A8E8DE3007907A5 /* InterceptionAction.swift */,
+				232FA1E02A8E8E2E007907A5 /* QueueFailureMode.swift */,
+				F3850C9A243D104900F7CC13 /* Path.swift */,
+				232FA1E22A8E8EA4007907A5 /* PathType.swift */,
+				F3850C9B243D104900F7CC13 /* TNError.swift */,
+				F3F4828C245EE58C00656449 /* MultipartFormDataStream.swift */,
+			);
+			path = Enums;
+			sourceTree = "<group>";
+		};
 		F30A2985258783970046C8E6 /* Middleware */ = {
 			isa = PBXGroup;
 			children = (
@@ -610,6 +644,7 @@
 		F3850C94243D104900F7CC13 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				232FA1D32A8E8090007907A5 /* Enums */,
 				F31F88AB257AEB3800D9A802 /* SwiftUI */,
 				F3116AA12460A04B00DFE453 /* Helpers */,
 				F3116AA62460A06600DFE453 /* Protocols */,
@@ -621,11 +656,8 @@
 				F3F255E8244C33B800517BF7 /* EndpointConfiguration.swift */,
 				F3850C9F243D104900F7CC13 /* Queue.swift */,
 				F3850C98243D104900F7CC13 /* Session.swift */,
-				F3850C9B243D104900F7CC13 /* TNError.swift */,
 				F3850C9C243D104900F7CC13 /* Operation.swift */,
-				F3850C9A243D104900F7CC13 /* Path.swift */,
 				F37C5F6224589E26005BF48B /* SessionTaskFactory.swift */,
-				F3F4828C245EE58C00656449 /* MultipartFormDataStream.swift */,
 				F3319E9B246AD71C00D94AFE /* MultipartFormDataPartType.swift */,
 				F34BA6712590E63D007CE8D6 /* CertificatePinningManager.swift */,
 				F373779125C4B4720075EFA3 /* Reachability.swift */,
@@ -832,8 +864,9 @@
 		F3196824243D01E1008725CE /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				BuildIndependentTargetsInParallel = YES;
 				LastSwiftUpdateCheck = 1220;
-				LastUpgradeCheck = 1400;
+				LastUpgradeCheck = 1500;
 				ORGANIZATIONNAME = "Bill Panagiotopoulos";
 				TargetAttributes = {
 					F319682C243D01E1008725CE = {
@@ -952,8 +985,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				F3850CA8243D104900F7CC13 /* Session.swift in Sources */,
+				232FA1E12A8E8E2E007907A5 /* QueueFailureMode.swift in Sources */,
 				F3850CAD243D104900F7CC13 /* Log.swift in Sources */,
 				F3116AA92460A06600DFE453 /* EndpointProtocol.swift in Sources */,
+				232FA1DD2A8E8DBD007907A5 /* EnvironmentType.swift in Sources */,
+				232FA1D52A8E80A1007907A5 /* RequestType.swift in Sources */,
+				232FA1D72A8E80F2007907A5 /* HttpMethod.swift in Sources */,
 				F3A0E84A25AB8F8A00A81DDD /* Types.swift in Sources */,
 				F3116AB82460A09E00DFE453 /* Request+Mock.swift in Sources */,
 				F31F88B4257C056200D9A802 /* Cache.swift in Sources */,
@@ -961,6 +998,7 @@
 				F30B77D625967FE600681359 /* Request+Interceptors.swift in Sources */,
 				F3F4828D245EE58C00656449 /* MultipartFormDataStream.swift in Sources */,
 				F3116ABA2460A09E00DFE453 /* Request+FileOperations.swift in Sources */,
+				232FA1E32A8E8EA4007907A5 /* PathType.swift in Sources */,
 				F3116ABE2460A09E00DFE453 /* Data+Extensions.swift in Sources */,
 				F3850CA6243D104900F7CC13 /* Client.swift in Sources */,
 				F33ACF4D2587F904004DAC46 /* Request+ResponseHeaders.swift in Sources */,
@@ -969,6 +1007,7 @@
 				F387B0E82579501000A8C0C7 /* Decodable+Transformer.swift in Sources */,
 				2368F53C28F5B98E00639D17 /* Request+Async.swift in Sources */,
 				F3116AC32460A91B00DFE453 /* MultipartFormDataHelpers.swift in Sources */,
+				232FA1DF2A8E8DE3007907A5 /* InterceptionAction.swift in Sources */,
 				F3319E9C246AD71C00D94AFE /* MultipartFormDataPartType.swift in Sources */,
 				F373779225C4B4720075EFA3 /* Reachability.swift in Sources */,
 				F3116AAA2460A06600DFE453 /* RequestMiddlewareProtocol.swift in Sources */,
@@ -976,7 +1015,9 @@
 				F3F255E9244C33B800517BF7 /* EndpointConfiguration.swift in Sources */,
 				F3850CB0243D104900F7CC13 /* Request.swift in Sources */,
 				F3116AA42460A04B00DFE453 /* RequestBodyGenerators.swift in Sources */,
+				232FA1DB2A8E8D8F007907A5 /* RequestBodyType.swift in Sources */,
 				F3850CAB243D104900F7CC13 /* TNError.swift in Sources */,
+				232FA1D92A8E8D49007907A5 /* URLScheme.swift in Sources */,
 				F3116AB62460A09E00DFE453 /* UIImageView+Extensions.swift in Sources */,
 				F3AA5132256EA13E00D64D31 /* FileStreamer.swift in Sources */,
 				F309C0ED25A512AB00D10877 /* Request+ResponseTypes.swift in Sources */,
@@ -1122,12 +1163,14 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_ENTITLEMENTS = "";
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -1186,12 +1229,14 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_ENTITLEMENTS = "";
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -1221,6 +1266,8 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				INFOPLIST_FILE = TermiNetwork/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -1231,6 +1278,8 @@
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				MARKETING_VERSION = 3.1.1;
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu11 gnu++14";
 				PRODUCT_BUNDLE_IDENTIFIER = com.billp.TermiNetwork;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				RESOURCES_TARGETED_DEVICE_FAMILY = "";
@@ -1254,6 +1303,8 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				INFOPLIST_FILE = TermiNetwork/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -1264,6 +1315,8 @@
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				MARKETING_VERSION = 3.1.1;
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu11 gnu++14";
 				PRODUCT_BUNDLE_IDENTIFIER = com.billp.TermiNetwork;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				RESOURCES_TARGETED_DEVICE_FAMILY = "";
@@ -1283,12 +1336,14 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEAD_CODE_STRIPPING = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				INFOPLIST_FILE = Tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 13.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.billp.TermiNetworkTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "watchsimulator watchos iphoneos iphonesimulator macosx appletvsimulator appletvos";
@@ -1305,12 +1360,14 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEAD_CODE_STRIPPING = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				INFOPLIST_FILE = Tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 13.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.billp.TermiNetworkTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "watchsimulator watchos iphoneos iphonesimulator macosx appletvsimulator appletvos";

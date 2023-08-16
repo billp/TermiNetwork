@@ -1,4 +1,4 @@
-// Path.swift
+// RequestType.swift
 //
 // Copyright © 2018-2023 Vassilis Panagiotopoulos. All rights reserved.
 //
@@ -19,27 +19,9 @@
 
 import Foundation
 
-/// URL path representation based on String components.
-public enum Path {
-    // MARK: Public properties
-
-    /// Returns the constructed path as String based on .path components.
-    public var convertedPath: String {
-        switch self {
-        case .path(let components):
-            return components.joined(separator: "/")
-        }
-    }
-
-    // MARK: Public methods
-
-    /// An enum case that can be used where path is needed. For example: .path(["user", "1", "details"]).
-    /// Later you can call covertedPath to construct the path as String (e.g. /user/1/details)
-    case path(_ components: [String])
-}
-
-/// The type of the path specified in request construction methods.
-internal enum SNPathType: Error {
-    case relative
-    case absolute
+/// Internal type for figuring out the type of the request
+internal enum RequestType {
+    case data
+    case upload
+    case download(String)
 }

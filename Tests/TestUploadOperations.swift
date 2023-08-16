@@ -56,16 +56,15 @@ class TestUploadOperations: XCTestCase {
         let checksum = TestHelpers.sha256(url: URL(fileURLWithPath: filePath))
 
         client.request(for: .dataUpload(data: uploadData, param: "bhbbrbrbrhbh"))
-            .upload(responseType: FileResponse.self,
-                    progressUpdate: { bytesSent, totalBytes, progress in
-                        completed = bytesSent == totalBytes && progress == 1
-                    },
-                    responseHandler: { response in
-                        failed = !(response.success &&
-                                    response.checksum == checksum &&
-                                    response.param == "bhbbrbrbrhbh")
-                        expectation.fulfill()
-                    })
+            .upload(progressUpdate: { bytesSent, totalBytes, progress in
+                completed = bytesSent == totalBytes && progress == 1
+            })
+            .success(responseType: FileResponse.self) { response in
+                failed = !(response.success &&
+                           response.checksum == checksum &&
+                           response.param == "bhbbrbrbrhbh")
+                expectation.fulfill()
+            }
             .failure { error in
                 print(String(describing: error.localizedDescription))
                 expectation.fulfill()
@@ -90,14 +89,13 @@ class TestUploadOperations: XCTestCase {
         let checksum = TestHelpers.sha256(url: URL(fileURLWithPath: filePath))
 
         client.request(for: .dataUpload(data: uploadData, param: "bhbbrbrbrhbh"))
-            .upload(transformer: TestUploadTransformer.self,
-                    progressUpdate: { bytesSent, totalBytes, progress in
-                        completed = bytesSent == totalBytes && progress == 1
-                    },
-                    responseHandler: { response in
-                        failed = !(response.value == checksum && response.param == "bhbbrbrbrhbh")
-                        expectation.fulfill()
-                    })
+            .upload(progressUpdate: { bytesSent, totalBytes, progress in
+                completed = bytesSent == totalBytes && progress == 1
+            })
+            .success(transformer: TestUploadTransformer.self) { response in
+                failed = !(response.value == checksum && response.param == "bhbbrbrbrhbh")
+                expectation.fulfill()
+            }
             .failure { error in
                 print(String(describing: error.localizedDescription))
                 expectation.fulfill()
@@ -127,20 +125,19 @@ class TestUploadOperations: XCTestCase {
         for _ in 0..<iterations {
             client.request(for: .fileUpload(url: url, param: "bhbbrbrbrhbh"))
                 .queue(queue)
-                .upload(responseType: FileResponse.self,
-                        progressUpdate: { bytesSent, totalBytes, progress in
-                            if bytesSent == totalBytes && progress == 1 {
-                                progressSuccessCount += 1
-                            }
-                        },
-                        responseHandler: { response in
-                            if response.success && response.checksum == checksum {
-                                successCount  += 1
-                            }
-                            if progressSuccessCount == iterations {
-                                expectation.fulfill()
-                            }
-                        })
+                .upload(progressUpdate: { bytesSent, totalBytes, progress in
+                    if bytesSent == totalBytes && progress == 1 {
+                        progressSuccessCount += 1
+                    }
+                })
+                .success(responseType: FileResponse.self) { response in
+                    if response.success && response.checksum == checksum {
+                        successCount  += 1
+                    }
+                    if progressSuccessCount == iterations {
+                        expectation.fulfill()
+                    }
+                }
                 .failure { error in
                     print(String(describing: error.localizedDescription))
                     expectation.fulfill()
@@ -169,29 +166,28 @@ class TestUploadOperations: XCTestCase {
         for key in 0..<iterations {
             client.request(for: .fileUpload(url: urls[key]!, param: "bhbbrbrbrhbh"))
                 .queue(queue)
-                .upload(responseType: FileResponse.self,
-                        progressUpdate: { bytesSent, totalBytes, progress in
-                            if bytesSent == totalBytes && progress == 1 {
-                                progressSuccessCount += 1
-                            }
-                        },
-                        responseHandler: { response in
-                            if response.success && response.checksum == checksums[key] {
-                                successCount  += 1
-                            } else {
-                                XCTAssert(false, "Files not match!")
-                            }
-                            try? FileManager.default.removeItem(at: urls[key]!)
-                            if progressSuccessCount == iterations {
-                                expectation.fulfill()
-                            }
-                        })
+                .upload(progressUpdate: { bytesSent, totalBytes, progress in
+                    if bytesSent == totalBytes && progress == 1 {
+                        progressSuccessCount += 1
+                    }
+                })
+                .success(responseType: FileResponse.self) { response in
+                    if response.success && response.checksum == checksums[key] {
+                        successCount  += 1
+                    } else {
+                        XCTAssert(false, "Files not match!")
+                    }
+                    try? FileManager.default.removeItem(at: urls[key]!)
+                    if progressSuccessCount == iterations {
+                        expectation.fulfill()
+                    }
+                }
                 .failure { error in
                     print(String(describing: error.localizedDescription))
                     try? FileManager.default.removeItem(at: urls[key]!)
                     expectation.fulfill()
                 }
-            }
+        }
 
         wait(for: [expectation], timeout: 500)
 
@@ -200,24 +196,82 @@ class TestUploadOperations: XCTestCase {
 
     func testInvalidFileUrlUpload() {
         let expectation = XCTestExpectation(description: "testInvalidFileUrlUpload")
-
         var failed: Bool = false
 
         client.request(for: .fileUpload(url: URL(string: "http://www.google.com")!,
                                         param: "tsttt"))
-            .upload(responseType: FileResponse.self,
-                    progressUpdate: nil,
-                    responseHandler: { _ in
-                        expectation.fulfill()
-                    })
-            .failure { error in
-                print(error.localizedDescription! as Any)
-                failed = true
-                expectation.fulfill()
-            }
+        .upload()
+        .success(responseType: FileResponse.self) { _ in
+            expectation.fulfill()
+        }
+        .failure { error in
+            print(error.localizedDescription! as Any)
+            failed = true
+            expectation.fulfill()
+        }
 
         wait(for: [expectation], timeout: 60)
 
         XCTAssert(failed)
+    }
+
+    func testInvalidFileUrlUploadWithoutRepository() {
+        let expectation = XCTestExpectation(description: "testInvalidFileUrlUpload")
+        var failed: Bool = true
+
+        Request(method: .post,
+                url: Env.termiNetworkRemote.configure().stringURL,
+                params: [
+                    "file1": .url(.init(string: "/path/to/file.zip")!),
+                    "file2": .data(data: Data(), filename: "test.png", contentType: "zip"),
+                    "expiration_date": .value(value: Date().description)
+                ])
+        .upload { _, _, progress in
+            debugPrint("\(progress * 100)% completed")
+        }
+        .success {
+            failed = true
+            expectation.fulfill()
+        }
+        .failure { _ in
+            failed = false
+            expectation.fulfill()
+        }
+
+        wait(for: [expectation], timeout: 60)
+
+        XCTAssert(!failed)
+    }
+
+    func testValidFileUrlUploadWithoutRepository() {
+        let expectation = XCTestExpectation(description: "testInvalidFileUrlUpload")
+        var failed: Bool = true
+
+        guard let url = Bundle(for: TestUploadOperations.self).url(forResource: "photo",
+                                                                   withExtension: "jpg") else {
+            XCTAssert(false)
+            return
+        }
+
+        Request(method: .post,
+                url: "\(Env.termiNetworkRemote.configure().stringURL)/file_upload",
+                params: [
+                    "file": .url(url)
+                ], configuration: .init(verbose: true))
+        .upload { _, _, progress in
+            debugPrint("\(progress * 100)% completed")
+        }
+        .success {
+            failed = false
+            expectation.fulfill()
+        }
+        .failure { _ in
+            failed = true
+            expectation.fulfill()
+        }
+
+        wait(for: [expectation], timeout: 60)
+
+        XCTAssert(!failed)
     }
 }

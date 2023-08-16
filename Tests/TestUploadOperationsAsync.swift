@@ -258,4 +258,47 @@ class TestUploadOperationsAsync: XCTestCase {
 
         XCTAssert(failed)
     }
+
+    func testInvalidFileUrlUploadWithoutRepository() async {
+        do {
+            try await Request(method: .post,
+                    url: Env.termiNetworkRemote.configure().stringURL,
+                    params: [
+                        "file1": .url(.init(string: "/path/to/file.zip")!),
+                        "file2": .data(data: Data(), filename: "test.png", contentType: "zip"),
+                        "expiration_date": .value(value: Date().description)
+                    ])
+            .asyncUpload(as: Data.self) { _, _, progress in
+                debugPrint("\(progress * 100)% completed")
+            }
+            XCTAssert(true)
+        } catch let error {
+            print(error)
+            XCTAssert(true)
+        }
+    }
+
+    func testValidFileUrlUploadWithoutRepository() async {
+
+        guard let url = Bundle(for: TestUploadOperations.self).url(forResource: "photo",
+                                                                   withExtension: "jpg") else {
+            XCTAssert(false)
+            return
+        }
+
+        do {
+            try await Request(method: .post,
+                              url: "\(Env.termiNetworkRemote.configure().stringURL)/file_upload",
+                              params: [
+                                "file": .url(url)
+                              ])
+            .asyncUpload(as: String.self, progressUpdate: { _, _, progress in
+                debugPrint("\(progress * 100)% completed")
+            })
+
+            XCTAssert(true)
+        } catch {
+            XCTAssert(false)
+        }
+    }
 }

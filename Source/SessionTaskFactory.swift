@@ -92,19 +92,18 @@ internal class SessionTaskFactory {
             return nil
         }
 
-        // Set the type of the request
-        request.requestType = .upload
-
         var urlRequest: URLRequest
 
         let boundary = MultipartFormDataHelpers.generateBoundary()
         request.configuration.requestBodyType = .multipartFormData(boundary: boundary)
         request.multipartBoundary = boundary
+
         do {
-            request.multipartFormDataStream = try MultipartFormDataStream(request: request,
-                                                                          params: params,
-                                                                          boundary: boundary,
-                                                                          uploadProgressCallback: progressUpdate)
+            request.multipartFormDataStream = try MultipartFormDataStream(
+                request: request,
+                params: params,
+                boundary: boundary,
+                uploadProgressCallback: progressUpdate)
             urlRequest = try request.asRequest()
         } catch let error {
             guard let tnError = error as? TNError else {
@@ -165,9 +164,6 @@ internal class SessionTaskFactory {
                                             onFailureCallback: { onFailure?(tnError, nil) })
             return nil
         }
-
-        // Set the type of the request
-        request.requestType = .download(destinationPath)
 
         let callback: ((URL?, URLResponse?, Error?) -> Void)? = { [weak request] url, urlResponse, error in
             guard let request = request else { return }
