@@ -40,7 +40,12 @@ class TestExtensions: XCTestCase {
         var failed = true
         let imageSize = CGSize(width: 86, height: 32)
 
+#if os(macOS)
+        let imageView = NSImageView()
+#else
         let imageView = UIImageView()
+#endif
+
         imageView.tn_setRemoteImage(url: sampleImageURL,
                                     defaultImage: nil,
                                     resize: imageSize,
@@ -65,7 +70,12 @@ class TestExtensions: XCTestCase {
         let expectation = XCTestExpectation(description: "Test testImageViewRemoteInvalidURL")
         var failed = true
 
+#if os(macOS)
+        let imageView = NSImageView()
+#else
         let imageView = UIImageView()
+#endif
+
         imageView.tn_setRemoteImage(url: "abcdef",
                                     defaultImage: nil,
                                     resize: CGSize(width: 50, height: 50),
@@ -85,7 +95,12 @@ class TestExtensions: XCTestCase {
         var failed = true
         var tmp = 0
 
+#if os(macOS)
+        let imageView = NSImageView()
+#else
         let imageView = UIImageView()
+#endif
+
         imageView.tn_setRemoteImage(request: Request.init(method: .get, url: sampleImageURL),
                                     defaultImage: nil,
                                     preprocessImage: { image in
@@ -105,7 +120,12 @@ class TestExtensions: XCTestCase {
         var failed = true
         var tmp = 0
 
+#if os(macOS)
+        let imageView = NSImageView()
+#else
         let imageView = UIImageView()
+#endif
+
         imageView.tn_setRemoteImage(request: Request.init(method: .get, url: "dtest!@#"),
                                     defaultImage: nil,
                                     preprocessImage: { image in

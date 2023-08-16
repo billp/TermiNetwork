@@ -32,9 +32,21 @@ extension Request {
     ///    - responseHandler: The completion handler with the error.
     /// - returns: The Request object.
     @discardableResult
+    public func success(responseHandler: @escaping SuccessCallbackWithoutType) -> Request {
+        self.successCompletionHandler = self.makeResponseSuccessHandler(responseHandler: responseHandler)
+        executeCurrentOperationIfNeeded()
+        return self
+    }
+
+    /// Executed when the request is failed.
+    ///
+    /// - parameters:
+    ///    - responseHandler: The completion handler with the error.
+    /// - returns: The Request object.
+    @discardableResult
     public func failure(responseHandler: @escaping FailureCallbackWithoutType) -> Request {
         self.failureCompletionHandler = self.makeResponseFailureHandler(responseHandler: responseHandler)
-        executeDataRequestIfNeeded()
+        executeCurrentOperationIfNeeded()
         return self
     }
 
@@ -51,7 +63,7 @@ extension Request {
                                       responseHandler: @escaping SuccessCallback<T>) -> Request {
         self.successCompletionHandler = self.makeDecodableResponseSuccessHandler(decodableType: T.self,
                                                                                  responseHandler: responseHandler)
-        executeDataRequestIfNeeded()
+        executeCurrentOperationIfNeeded()
         return self
     }
 
@@ -66,7 +78,7 @@ extension Request {
                                       responseHandler: @escaping FailureCallbackWithType<T>) -> Request {
         self.failureCompletionHandler = self.makeDecodableResponseFailureHandler(decodableType: T.self,
                                                                                  responseHandler: responseHandler)
-        executeDataRequestIfNeeded()
+        executeCurrentOperationIfNeeded()
         return self
     }
 
@@ -84,7 +96,7 @@ extension Request {
                                             -> Request {
         self.successCompletionHandler = self.makeTransformedResponseSuccessHandler(transformer: transformer,
                                                                                    responseHandler: responseHandler)
-        executeDataRequestIfNeeded()
+        executeCurrentOperationIfNeeded()
         return self
     }
 
@@ -101,7 +113,7 @@ extension Request {
                                             -> Request {
         self.failureCompletionHandler = self.makeTransformedResponseFailureHandler(transformer: transformer,
                                                                                    responseHandler: responseHandler)
-        executeDataRequestIfNeeded()
+        executeCurrentOperationIfNeeded()
         return self
     }
 
@@ -114,10 +126,10 @@ extension Request {
     ///    - responseHandler: The completion handler with the Image object.
     /// - returns: The Request object.
     @discardableResult
-    public func success(responseType: ImageType.Type,
-                        responseHandler: @escaping SuccessCallback<ImageType>) -> Request {
+    public func success(responseType: TNImageType.Type,
+                        responseHandler: @escaping SuccessCallback<TNImageType>) -> Request {
         self.successCompletionHandler = self.makeImageResponseSuccessHandler(responseHandler: responseHandler)
-        executeDataRequestIfNeeded()
+        executeCurrentOperationIfNeeded()
         return self
     }
 
@@ -133,7 +145,7 @@ extension Request {
     public func success(responseType: String.Type,
                         responseHandler: @escaping SuccessCallback<String>) -> Request {
         self.successCompletionHandler = self.makeStringResponseSuccessHandler(responseHandler: responseHandler)
-        executeDataRequestIfNeeded()
+        executeCurrentOperationIfNeeded()
         return self
     }
 
@@ -147,7 +159,7 @@ extension Request {
     public func failure(responseType: String.Type,
                         responseHandler: @escaping FailureCallbackWithType<String>) -> Request {
         self.failureCompletionHandler = self.makeStringResponseFailureHandler(responseHandler: responseHandler)
-        executeDataRequestIfNeeded()
+        executeCurrentOperationIfNeeded()
         return self
     }
 
@@ -163,7 +175,7 @@ extension Request {
     public func success(responseType: Data.Type,
                         responseHandler: @escaping SuccessCallback<Data>) -> Request {
         self.successCompletionHandler = self.makeDataResponseSuccessHandler(responseHandler: responseHandler)
-        executeDataRequestIfNeeded()
+        executeCurrentOperationIfNeeded()
         return self
     }
 
@@ -177,7 +189,7 @@ extension Request {
     public func failure(responseType: Data.Type,
                         responseHandler: @escaping FailureCallbackWithType<Data>) -> Request {
         self.failureCompletionHandler = self.makeDataResponseFailureHandler(responseHandler: responseHandler)
-        executeDataRequestIfNeeded()
+        executeCurrentOperationIfNeeded()
         return self
     }
 }

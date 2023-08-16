@@ -1,4 +1,4 @@
-// RequestBodyGenerators.swift
+// EnvironmentType.swift
 //
 // Copyright © 2018-2023 Vassilis Panagiotopoulos. All rights reserved.
 //
@@ -19,25 +19,7 @@
 
 import Foundation
 
-class RequestBodyGenerator {
-    static func generateURLEncodedString(with params: [String: Any?]) throws -> String {
-        // Create query string from the given params
-        let queryString = try params.filter({ $0.value != nil }).map { param -> String in
-            if let value = String(describing: param.value!)
-                .addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) {
-                return param.key + "=" + value
-            } else {
-                throw TNError.invalidParams
-            }
-        }.joined(separator: "&")
-
-        return queryString
-    }
-
-    static func generateJSONBodyData(with params: [String: Any?]) throws -> Data {
-        guard let body = try params.toJSONData() else {
-            throw TNError.invalidParams
-        }
-        return body
-    }
+internal enum EnvironmentType {
+    case normal(scheme: URLScheme, host: String, port: Int?, suffix: Path?)
+    case url(String)
 }

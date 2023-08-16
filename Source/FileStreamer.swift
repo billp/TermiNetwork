@@ -19,7 +19,7 @@
 
 import Foundation
 
-typealias ChunkType = (Data?) -> Void
+typealias ChunkType = (Data?) throws -> Void
 
 internal class FileStreamer {
     var nextChunkClosure: ChunkType?
@@ -32,20 +32,20 @@ internal class FileStreamer {
 
     lazy var buffer = UnsafeMutablePointer<UInt8>.allocate(capacity: bufferSize)
 
-    init(url: URL, bufferSize: Int) {
+    init(url: URL, bufferSize: Int) throws {
         self.url = url
         self.bufferSize = bufferSize
-        self.fileSize = MultipartFormDataHelpers.fileSize(withURL: url)
+        self.fileSize = try MultipartFormDataHelpers.fileSize(withURL: url)
         self.fileHandle = FileHandle(forReadingAtPath: url.path)
     }
 
     func readNextChunk(seekToOffset offset: Int = 0, nextChunkClosure: ChunkType? = nil) throws {
         if let fileHandle = fileHandle {
-            autoreleasepool {
-                try? fileHandle.seek(toOffset: UInt64(offset))
+            try autoreleasepool {
+                try fileHandle.seek(toOffset: UInt64(offset))
                 self.sizeRead = offset + self.bufferSize
                 let data = fileHandle.readData(ofLength: self.bufferSize)
-                    nextChunkClosure?(data)
+                try nextChunkClosure?(data)
             }
         }
     }

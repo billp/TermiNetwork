@@ -222,4 +222,5 @@ extension Configuration {
         }
         return leftClone
     }
+    // swiftlint:enable cyclomatic_complexity
 }

@@ -17,9 +17,9 @@
 // FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
 // ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-// swiftlint:disable identifier_name
-
 import Foundation
+
+// swiftlint:disable identifier_name
 
 /// This class is inherited by Request to control the execution of the request.
 public class Operation: Foundation.Operation {
@@ -60,3 +60,5 @@ public class Operation: Foundation.Operation {
         _finished = finished
     }
 }
+
+// swiftlint:enable identifier_name

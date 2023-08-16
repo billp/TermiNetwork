@@ -36,10 +36,10 @@ extension ImageViewType {
     private static var imageViewQueue: Queue = Queue()
 
     fileprivate static func downloadImage(request: Request,
-                                          onSuccess: @escaping SuccessCallback<ImageType>,
+                                          onSuccess: @escaping SuccessCallback<TNImageType>,
                                           onFailure: @escaping FailureCallback) throws -> Request {
         request.queue(imageViewQueue)
-            .success(responseType: ImageType.self, responseHandler: onSuccess)
+            .success(responseType: TNImageType.self, responseHandler: onSuccess)
             .failure(responseType: Data.self) { (data, error) in
                 onFailure(error, data)
             }
@@ -61,7 +61,7 @@ extension ImageViewType {
     ///            If the request fails, an error will be returned (optional)
     public func tn_setRemoteImage(url: String,
                                   configuration: Configuration? = nil,
-                                  defaultImage: ImageType? = nil,
+                                  defaultImage: TNImageType? = nil,
                                   resize: CGSize? = nil,
                                   preprocessImage: ImagePreprocessType? = nil,
                                   onFinish: ImageOnFinishCallbackType? = nil) {
@@ -91,7 +91,7 @@ extension ImageViewType {
     ///     - onFinish: A block of code to execute after the completion of the download image request.
     ///            If the request fails, an error will be returned (optional)
     public func tn_setRemoteImage(request: Request,
-                                  defaultImage: ImageType? = nil,
+                                  defaultImage: TNImageType? = nil,
                                   resize: CGSize? = nil,
                                   preprocessImage: ImagePreprocessType? = nil,
                                   onFinish: ImageOnFinishCallbackType? = nil) {
@@ -108,7 +108,7 @@ extension ImageViewType {
 
     // MARK: Helpers
     private func makeRequest(with request: Request,
-                             defaultImage: ImageType? = nil,
+                             defaultImage: TNImageType? = nil,
                              resize: CGSize? = nil,
                              preprocessImage: ImagePreprocessType? = nil,
                              onFinish: ImageOnFinishCallbackType? = nil) throws {

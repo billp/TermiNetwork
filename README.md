@@ -2,7 +2,7 @@
 <p align="center">
   <img src="https://raw.githubusercontent.com/billp/TermiNetwork/master/TermiNetworkLogo.svg" alt="" data-canonical-src="" width="500rem" />
 </p>
-who
+
 <p align="center"><b> A zero-dependency networking solution for building modern and secure iOS, watchOS, macOS and tvOS applications.</b>
   <br /><br />
   <img src="https://github.com/billp/TermiNetwork/actions/workflows/main.yml/badge.svg" />
@@ -49,6 +49,8 @@ who
 	  - [Repository setup](#setup_repositories)
 	  - [Make a request](#construct_request)
 - [Queue Hooks](#queue_hooks)
+- [File/Data Upload](#file_upload)
+- [File Download](#file_download)
 - [Error Handling](#error_handling)
 - [Cancelling a Request](#request_cancelling)
 - [Reachability](#reachability)
@@ -357,7 +359,63 @@ Queue.shared.afterEachRequestCallback = { request, data, urlResponse, error
 }
 ```
 
- For more information take a look at <a href="https://billp.github.io/TermiNetwork/Classes/Queue.html" target="_blank">Queue</a> in documentation.
+For more information take a look at <a href="https://billp.github.io/TermiNetwork/Classes/Queue.html" target="_blank">Queue</a> in documentation.
+
+<a name="file_upload"></a>
+
+## File/Data Upload
+
+You can use the **.upload**, **.asyncUpload** methods of a Request object to start an upload operation. The upload is perfomed by passing a Content-Type: multipart/form-data request header. All the param values should be passed as MultipartFormDataPartType.
+
+#### Example
+
+```swift
+do {
+    try await Request(method: .post,
+	    url: "https://mywebsite.com/upload",
+	    params: [
+		"file1": MultipartFormDataPartType.url(.init(filePath: "/path/to/file.zip")),
+		"file2": MultipartFormDataPartType.data(data: Data(), filename: "test.png", contentType: "zip"),
+		"expiration_date": MultipartFormDataPartType.value(value: Date.now.ISO8601Format())
+	    ])
+    .asyncUpload(as: ResponseModel.self) { _, _, progress in
+	debugPrint("\(progress * 100)% completed")
+    }
+
+    debugPrint("Upload finished)
+} catch let error {
+    debugPrint(error)
+}
+```
+
+<a name="file_download"></a>
+
+## File Download
+
+You can use the **.download**, **.asyncDownload** methods of a Request object to start a download operation. The only thing you need to pass is the local file path of the file to be saved.
+
+#### Example
+
+```swift
+
+guard var localFile = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first.appendPathComponent("download.zip") else {
+    return
+}
+
+do {
+    try await Request(method: .get, 
+		      url: "https://mywebsite.com/files/download.zip")
+	.asyncDownload(destinationPath: localFile.path,
+		       progressUpdate: { bytesSent, totalBytes, progress in
+		debugPrint("\(progress * 100)% completed")
+	})
+} catch let error {
+    debugPrint(error.localizedDescription)
+}
+
+debugPrint("File saved to: \(localFile.path)")
+
+```
 
 <a name="error_handling"></a>
 

@@ -20,78 +20,20 @@
 import Foundation
 
 public extension Request {
-    // MARK: Upload - Decodable
-
-    /// Executed when the upload request is succeeded and the response has successfully deserialized.
-    ///
-    /// - parameters:
-    ///    - responseType: The type of the model that will be deserialized and will be passed to the success block.
-    ///    - progressUpdate: specifies a progress callback to get upload progress updates.
-    ///    - responseHandler: The completion handler with the deserialized object
-    /// - returns: The Request object.
-    @discardableResult
-    func upload<T: Decodable>(responseType: T.Type,
-                              progressUpdate: ProgressCallbackType?,
-                              responseHandler: @escaping SuccessCallback<T>) -> Request {
-        self.successCompletionHandler = self.makeDecodableResponseSuccessHandler(decodableType: T.self,
-                                                                                 responseHandler: responseHandler)
-        executeUploadRequestIfNeeded(withProgressCallback: progressUpdate)
-        return self
-    }
-
-    // MARK: Upload - Transformers
-
-    /// Executed when the request is succeeded and the response has successfully transformed.
-    ///
-    /// - parameters:
-    ///    - transformer: The transformer type that handles the transformation.
-    ///    - progressUpdate: specifies a progress callback to get upload progress updates.
-    ///    - responseHandler: The completion handler with the deserialized object as ToType.
-    /// - returns: The Request object.
-    @discardableResult
-    func upload<FromType: Decodable, ToType>(transformer: Transformer<FromType, ToType>.Type,
-                                             progressUpdate: ProgressCallbackType?,
-                                             responseHandler: @escaping SuccessCallback<ToType>)
-                                            -> Request {
-        self.successCompletionHandler = self.makeTransformedResponseSuccessHandler(transformer: transformer,
-                                                                                   responseHandler: responseHandler)
-        executeUploadRequestIfNeeded(withProgressCallback: progressUpdate)
-        return self
-    }
-
-    // MARK: Upload - String
-
-    /// Executed when the request is succeeded and the response is String type.
-    ///
-    /// - parameters:
-    ///    - responseType: A type of String.
-    ///    - progressUpdate: specifies a progress callback to get upload progress updates.
-    ///    - responseHandler: The completion handler with the String object.
-    /// - returns: The Request object.
-    @discardableResult
-    func upload(responseType: String.Type,
-                progressUpdate: ProgressCallbackType?,
-                responseHandler: @escaping (String) -> Void) -> Request {
-        self.successCompletionHandler = self.makeStringResponseSuccessHandler(responseHandler: responseHandler)
-        executeUploadRequestIfNeeded(withProgressCallback: progressUpdate)
-        return self
-    }
-
     // MARK: Upload - Data
 
     /// Executed when the request is succeeded and the response is Data type.
     ///
     /// - parameters:
-    ///    - responseType: A type of Data.
     ///    - progressUpdate: specifies a progress callback to get upload progress updates.
-    ///    - responseHandler: The completion handler with the Data object.
     /// - returns: The Request object.
     @discardableResult
-    func upload(responseType: Data.Type,
-                progressUpdate: ProgressCallbackType?,
-                responseHandler: @escaping SuccessCallback<Data>) -> Request {
-        self.successCompletionHandler = self.makeDataResponseSuccessHandler(responseHandler: responseHandler)
-        executeUploadRequestIfNeeded(withProgressCallback: progressUpdate)
+    func upload(progressUpdate: ProgressCallbackType? = nil) -> Request {
+        checkUploadParamsType()
+
+        self.requestType = .upload
+        self.progressUpdate = progressUpdate
+
         return self
     }
 
@@ -106,11 +48,27 @@ public extension Request {
     /// - returns: The Request object.
     @discardableResult
     func download(destinationPath: String,
-                  progressUpdate: ProgressCallbackType?,
-                  completionHandler: @escaping SuccessCallbackWithoutType) -> Request {
-        self.successCompletionHandler = self.makeResponseSuccessHandler(responseHandler: completionHandler)
-        executeDownloadRequestIfNeeded(withFilePath: destinationPath,
-                                       progressUpdate: progressUpdate)
+                  progressUpdate: ProgressCallbackType?) -> Request {
+        checkUploadParamsType()
+
+        self.requestType = .download(destinationPath)
+        self.progressUpdate = progressUpdate
+
+        executeCurrentOperationIfNeeded()
+
         return self
+    }
+
+    /// Used internally to verify upload multipart/form-data params.
+    ///
+    /// - throws: TNError.uploadOperationInvalidParams.
+    internal func checkUploadParamsType() {
+        guard let params else { return }
+        if !params.values.allSatisfy({ $0 is MultipartFormDataPartType }) {
+            fatalError("""
+"Upload param values should have a type of \(MultipartFormDataPartType.self).
+Refer to documentation for more details.
+""")
+        }
     }
 }

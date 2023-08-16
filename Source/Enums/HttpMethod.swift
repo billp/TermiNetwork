@@ -1,4 +1,4 @@
-// RequestBodyGenerators.swift
+// HttpMethod.swift
 //
 // Copyright © 2018-2023 Vassilis Panagiotopoulos. All rights reserved.
 //
@@ -19,25 +19,24 @@
 
 import Foundation
 
-class RequestBodyGenerator {
-    static func generateURLEncodedString(with params: [String: Any?]) throws -> String {
-        // Create query string from the given params
-        let queryString = try params.filter({ $0.value != nil }).map { param -> String in
-            if let value = String(describing: param.value!)
-                .addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) {
-                return param.key + "=" + value
-            } else {
-                throw TNError.invalidParams
-            }
-        }.joined(separator: "&")
-
-        return queryString
-    }
-
-    static func generateJSONBodyData(with params: [String: Any?]) throws -> Data {
-        guard let body = try params.toJSONData() else {
-            throw TNError.invalidParams
-        }
-        return body
-    }
+/// The HTTP request method based on specification of https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html.
+public enum HttpMethod: String {
+    /// GET request method.
+    case get
+    /// HEAD request method.
+    case head
+    /// POST request method.
+    case post
+    /// PUT request method.
+    case put
+    /// DELETE request method.
+    case delete
+    /// CONNECT request method.
+    case connect
+    /// OPTIONS request method.
+    case options
+    /// TRACE request method.
+    case trace
+    /// PATCH request method.
+    case patch
 }

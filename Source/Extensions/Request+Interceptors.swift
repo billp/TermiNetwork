@@ -181,8 +181,8 @@ extension Request {
                             finishCallback: @escaping InterceptorFinishedCallbackType) {
 
         request
-            .upload(responseType: Data.self,
-                       progressUpdate: self.progressCallback) { [weak self, weak request] data in
+            .upload(progressUpdate: self.progressCallback)
+            .success(responseType: Data.self) { [weak self, weak request] data in
                 guard let self = self else { return }
                 guard let request = request else { return }
 
@@ -212,7 +212,8 @@ extension Request {
         request
             .queue(request.queue)
             .download(destinationPath: filePath,
-                      progressUpdate: self.progressCallback) { [weak self, weak request] in
+                      progressUpdate: self.progressCallback)
+            .success { [weak self, weak request] in
                 guard let self = self else { return }
                 guard let request = request else { return }
 

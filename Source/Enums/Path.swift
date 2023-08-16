@@ -1,4 +1,4 @@
-// RequestBodyGenerators.swift
+// Path.swift
 //
 // Copyright © 2018-2023 Vassilis Panagiotopoulos. All rights reserved.
 //
@@ -19,25 +19,21 @@
 
 import Foundation
 
-class RequestBodyGenerator {
-    static func generateURLEncodedString(with params: [String: Any?]) throws -> String {
-        // Create query string from the given params
-        let queryString = try params.filter({ $0.value != nil }).map { param -> String in
-            if let value = String(describing: param.value!)
-                .addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) {
-                return param.key + "=" + value
-            } else {
-                throw TNError.invalidParams
-            }
-        }.joined(separator: "&")
+/// URL path representation based on String components.
+public enum Path {
+    // MARK: Public properties
 
-        return queryString
-    }
-
-    static func generateJSONBodyData(with params: [String: Any?]) throws -> Data {
-        guard let body = try params.toJSONData() else {
-            throw TNError.invalidParams
+    /// Returns the constructed path as String based on .path components.
+    public var convertedPath: String {
+        switch self {
+        case .path(let components):
+            return components.joined(separator: "/")
         }
-        return body
     }
+
+    // MARK: Public methods
+
+    /// An enum case that can be used where path is needed. For example: .path(["user", "1", "details"]).
+    /// Later you can call covertedPath to construct the path as String (e.g. /user/1/details)
+    case path(_ components: [String])
 }
