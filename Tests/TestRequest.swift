@@ -169,6 +169,32 @@ class TestRequest: XCTestCase {
         XCTAssert(!failed)
     }
 
+    func testEncodableParams() {
+        let expectation = XCTestExpectation(description: "testPostParams")
+        var failed = true
+
+        client.request(for: .testPostParamsxWWWFormURLEncoded(value1: true,
+                                                              value2: 3,
+                                                              value3: 5.13453124189,
+                                                              value4: "test",
+                                                              value5: nil))
+        .success(responseType: TestParams.self) { object in
+            failed = !(object.param1 == "true" &&
+                       object.param2 == "3" &&
+                       object.param3 == "5.13453124189" &&
+                       object.param4 == "test" &&
+                       object.param5 == nil)
+            expectation.fulfill()
+        }
+        .failure { _ in
+            expectation.fulfill()
+        }
+
+        wait(for: [expectation], timeout: 60)
+
+        XCTAssert(!failed)
+    }
+
     func testJSONRequestPostParams() {
         let expectation = XCTestExpectation(description: "testJSONRequestPostParams")
         var failed = true

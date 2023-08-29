@@ -29,6 +29,7 @@ enum TestRepository: EndpointProtocol {
     case testGetParams(value1: Bool, value2: Int, value3: Double, value4: String, value5: String?)
     case testPostParams(value1: Bool, value2: Int, value3: Double, value4: String, value5: String?)
     case testPostParamsxWWWFormURLEncoded(value1: Bool, value2: Int, value3: Double, value4: String, value5: String?)
+    case testEncodable(_ request: TestEncodableParams)
     case testInvalidParams(value1: String, value2: String)
     case testStatusCode(code: Int)
     case testEmptyBody
@@ -149,6 +150,11 @@ enum TestRepository: EndpointProtocol {
                                   "test_param": MultipartFormDataPartType.value(value: param),
                                   "status": status]
             )
+        case .testEncodable(let request):
+            return .init(method: .post,
+                         path: .path(["test_params"]),
+                         params: request,
+                         configuration: Configuration(requestBodyType: .xWWWFormURLEncoded))
         }
     }
 }

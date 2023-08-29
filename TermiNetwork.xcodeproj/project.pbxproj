@@ -14,6 +14,7 @@
 		23382C3F29F6786500680A2A /* terminetwork.billp.dev.cer in Resources */ = {isa = PBXBuildFile; fileRef = 23382C3D29F6786500680A2A /* terminetwork.billp.dev.cer */; };
 		2368F53A28F5B85900639D17 /* TestRequestAsync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2368F53928F5B85900639D17 /* TestRequestAsync.swift */; };
 		2368F53C28F5B98E00639D17 /* Request+Async.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2368F53B28F5B98E00639D17 /* Request+Async.swift */; };
+		23AAFC012A9DEDE2001018E7 /* EncodableParamsRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23AAFC002A9DEDE2001018E7 /* EncodableParamsRequest.swift */; };
 		23ACE2692932369B00BA45D5 /* www.billp.dev.cer in Resources */ = {isa = PBXBuildFile; fileRef = 2332504629251BC30082EDC7 /* www.billp.dev.cer */; };
 		23ACE26A2932371100BA45D5 /* forums.swift.org.cer in Resources */ = {isa = PBXBuildFile; fileRef = F383AEAB257ED51500DE43FA /* forums.swift.org.cer */; };
 		23ACE26B2932371100BA45D5 /* www.billp.dev.cer in Resources */ = {isa = PBXBuildFile; fileRef = 2332504629251BC30082EDC7 /* www.billp.dev.cer */; };
@@ -169,6 +170,7 @@
 		23382C3D29F6786500680A2A /* terminetwork.billp.dev.cer */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = terminetwork.billp.dev.cer; sourceTree = "<group>"; };
 		2368F53928F5B85900639D17 /* TestRequestAsync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestRequestAsync.swift; sourceTree = "<group>"; };
 		2368F53B28F5B98E00639D17 /* Request+Async.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Request+Async.swift"; sourceTree = "<group>"; };
+		23AAFC002A9DEDE2001018E7 /* EncodableParamsRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncodableParamsRequest.swift; sourceTree = "<group>"; };
 		23B36A07277BB5B800A270B7 /* CryptoKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CryptoKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS15.2.sdk/System/Library/Frameworks/CryptoKit.framework; sourceTree = DEVELOPER_DIR; };
 		F309C0EC25A512AB00D10877 /* Request+ResponseTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Request+ResponseTypes.swift"; sourceTree = "<group>"; };
 		F30A2986258783B40046C8E6 /* CryptoMiddleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoMiddleware.swift; sourceTree = "<group>"; };
@@ -315,6 +317,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		23AAFBFF2A9DEDC0001018E7 /* Request */ = {
+			isa = PBXGroup;
+			children = (
+				23AAFC002A9DEDE2001018E7 /* EncodableParamsRequest.swift */,
+			);
+			path = Request;
+			sourceTree = "<group>";
+		};
 		F30A2985258783970046C8E6 /* Middleware */ = {
 			isa = PBXGroup;
 			children = (
@@ -601,6 +611,7 @@
 		F3850C7E243D103700F7CC13 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				23AAFBFF2A9DEDC0001018E7 /* Request */,
 				F31126B1257A564700775D7E /* Rest */,
 				F31126B0257A563F00775D7E /* Domain */,
 			);
@@ -1005,6 +1016,7 @@
 				F398575225AC945A00DCCAAE /* TestMockedRequest.swift in Sources */,
 				F3850C93243D103700F7CC13 /* TestTNErrors.swift in Sources */,
 				F3850C8E243D103700F7CC13 /* TestHeaders.swift in Sources */,
+				23AAFC012A9DEDE2001018E7 /* EncodableParamsRequest.swift in Sources */,
 				F3850C87243D103700F7CC13 /* TestExtensions.swift in Sources */,
 				F3A4B15125969694004812B6 /* TestInterceptors.swift in Sources */,
 				F31126A5257A55E000775D7E /* TestModel.swift in Sources */,
