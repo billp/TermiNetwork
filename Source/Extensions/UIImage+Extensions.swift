@@ -20,19 +20,19 @@
 import Foundation
 
 #if os(macOS)
-extension ImageType {
+extension TNImageType {
     // MARK: Resizing
     /// Resize the image to the given size.
     ///
     /// - Parameter
     ///     - size: The size to resize the image to.
     /// - Returns: The resized image.
-    func tn_resize(_ targetSize: NSSize) -> ImageType? {
+    func tn_resize(_ targetSize: NSSize) -> TNImageType? {
         let frame = NSRect(x: 0, y: 0, width: targetSize.width, height: targetSize.height)
         guard let representation = self.bestRepresentation(for: frame, context: nil, hints: nil) else {
             return nil
         }
-        let image = ImageType(size: targetSize, flipped: false, drawingHandler: { (_) -> Bool in
+        let image = TNImageType(size: targetSize, flipped: false, drawingHandler: { (_) -> Bool in
             return representation.draw(in: frame)
         })
 
@@ -42,14 +42,14 @@ extension ImageType {
 #elseif os(iOS) || os(watchOS) || os(tvOS)
 import UIKit
 
-extension ImageType {
+extension TNImageType {
     ///
     /// Resizes an UIImage object.
     ///
     /// - parameters:
     ///     - size: The size of the new image.
     /// - returns: The new resized UIImage object.
-    func tn_resize(_ targetSize: CGSize) -> ImageType? {
+    func tn_resize(_ targetSize: CGSize) -> TNImageType? {
         // Determine the scale factor that preserves aspect ratio
         let widthRatio = targetSize.width / size.width
         let heightRatio = targetSize.height / size.height

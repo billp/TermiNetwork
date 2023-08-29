@@ -16,10 +16,11 @@
 // PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE
 // FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
 // ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-// swiftlint:disable type_body_length
 
 import XCTest
 import TermiNetwork
+
+// swiftlint:disable type_body_length
 
 class TestRequest: XCTestCase {
     lazy var client: Client<TestRepository> = {
@@ -158,6 +159,33 @@ class TestRequest: XCTestCase {
                     object.param3 == "5.13453124189" &&
                     object.param4 == "test" &&
                     object.param5 == nil)
+                expectation.fulfill()
+            }
+            .failure { _ in
+                expectation.fulfill()
+            }
+
+        wait(for: [expectation], timeout: 60)
+
+        XCTAssert(!failed)
+    }
+
+    func testPostParamsWithEncodable() {
+        let expectation = XCTestExpectation(description: "testPostParamsWithEncodable")
+        var failed = true
+
+        client
+            .request(for: .testEncodable(.init(value1: true,
+                                                 value2: 3,
+                                                 value3: 5.13453124189,
+                                                 value4: "test",
+                                                 value5: nil)))
+            .success(responseType: TestJSONParams.self) { object in
+                failed = !(object.param1 == true &&
+                           object.param2 == 3 &&
+                           object.param3 == 5.13453124189 &&
+                           object.param4 == "test" &&
+                           object.param5 == nil)
                 expectation.fulfill()
             }
             .failure { _ in
@@ -431,3 +459,5 @@ class TestRequest: XCTestCase {
         XCTAssert(!failed)
     }
 }
+
+// swiftlint:enable type_body_length

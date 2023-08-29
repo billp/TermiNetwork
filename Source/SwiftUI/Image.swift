@@ -23,39 +23,39 @@ import SwiftUI
 
 #if os(macOS)
 /// The Image type depending on platform: UIImage for iOS or NSImage for macOS.
-public typealias ImageType = NSImage
+public typealias TNImageType = NSImage
 #elseif os(iOS) || os(watchOS) || os(tvOS)
 /// The Image type depending on platform: UIImage for iOS or NSImage for macOS.
-public typealias ImageType = UIImage
+public typealias TNImageType = UIImage
 #endif
 
 /// Callback type for image preprocess used in UIImageView|NSImage|WKInterfaceImage and Image (SwiftUI) helpers
 /// - parameters:
 ///     - image: The downloaded image.
 /// - returns: The new transformed image.
-public typealias ImagePreprocessType = (_ image: ImageType) -> (ImageType)
+public typealias ImagePreprocessType = (_ image: TNImageType) -> (TNImageType)
 /// Callback type for image downloaded event.
 /// - parameters:
 ///     - image: The downloaded image.
 ///     - error: A TNError object if it fails to download.
 /// - returns: The new transformed image.
-public typealias ImageOnFinishCallbackType = (_ image: ImageType?, _ error: TNError?) -> Void
+public typealias ImageOnFinishCallbackType = (_ image: TNImageType?, _ error: TNError?) -> Void
 
 @available(iOS 13.0, *)
 /// :nodoc:
 final class ImageLoader: ObservableObject {
     private var request: Request
     private var url: String?
-    private var defaultImage: ImageType?
+    private var defaultImage: TNImageType?
     private var resize: CGSize?
     private var preprocessImageClosure: ImagePreprocessType?
     private var onFinishImageClosure: ImageOnFinishCallbackType?
 
-    @Published var image = ImageType()
+    @Published var image = TNImageType()
 
     init(with url: String,
          configuration: Configuration? = nil,
-         defaultImage: ImageType? = nil,
+         defaultImage: TNImageType? = nil,
          resize: CGSize? = nil,
          preprocessImage: ImagePreprocessType? = nil,
          onFinish: ImageOnFinishCallbackType? = nil) {
@@ -70,7 +70,7 @@ final class ImageLoader: ObservableObject {
     }
 
     init(with request: Request,
-         defaultImage: ImageType? = nil,
+         defaultImage: TNImageType? = nil,
          resize: CGSize? = nil,
          preprocessImage: ImagePreprocessType? = nil,
          onFinish: ImageOnFinishCallbackType? = nil) {
@@ -85,13 +85,13 @@ final class ImageLoader: ObservableObject {
     func loadImage() {
         if let url = url,
            let cachedImageData = Cache.shared[url],
-           let image = ImageType(data: cachedImageData) {
+           let image = TNImageType(data: cachedImageData) {
             self.image = image
             return
         }
 
-        self.image = defaultImage ?? ImageType()
-        request.success(responseType: ImageType.self) { [weak self] image in
+        self.image = defaultImage ?? TNImageType()
+        request.success(responseType: TNImageType.self) { [weak self] image in
             guard let self = self else { return }
             self.handlePreprocessImage(image: image) { [weak self] preprocessedImage in
                 guard let self = self else { return }
@@ -109,7 +109,7 @@ final class ImageLoader: ObservableObject {
     }
 
     // MARK: Helpers
-    private func updateImage(_ image: ImageType) {
+    private func updateImage(_ image: TNImageType) {
         self.image = image
         if let url = url {
             DispatchQueue.global(qos: .utility).async {
@@ -126,8 +126,8 @@ final class ImageLoader: ObservableObject {
         }
     }
 
-    private func handlePreprocessImage(image: ImageType,
-                                       onFinish: ((ImageType?) -> Void)? = nil) {
+    private func handlePreprocessImage(image: TNImageType,
+                                       onFinish: ((TNImageType?) -> Void)? = nil) {
         var image = image
         if let preprocessImage = self.preprocessImageClosure {
             DispatchQueue.global(qos: .background).async {
@@ -143,8 +143,8 @@ final class ImageLoader: ObservableObject {
             onFinish?(nil)
         }
     }
-    private func handleResizeImage(image: ImageType,
-                                   onFinish: ((ImageType) -> Void)? = nil) {
+    private func handleResizeImage(image: TNImageType,
+                                   onFinish: ((TNImageType) -> Void)? = nil) {
         if let size = self.resize {
             DispatchQueue.global(qos: .userInteractive).async {
                 let image = image.tn_resize(size) ?? image
@@ -189,7 +189,7 @@ public struct Image: View {
     ///            If the request fails, an error will be returned
     public init(url: String,
                 configuration: Configuration? = nil,
-                defaultImage: ImageType? = nil,
+                defaultImage: TNImageType? = nil,
                 resizeTo size: CGSize? = nil,
                 preprocessImage: ImagePreprocessType? = nil,
                 onFinish: ImageOnFinishCallbackType? = nil) {
@@ -212,7 +212,7 @@ public struct Image: View {
     ///     - preprocessImage: A block of code that preprocesses the after the download.
     ///     This block will run in the background thread (optional)
     public init(request: Request,
-                defaultImage: ImageType? = nil,
+                defaultImage: TNImageType? = nil,
                 resizeTo size: CGSize? = nil,
                 preprocessImage: ImagePreprocessType? = nil,
                 onFinish: ImageOnFinishCallbackType? = nil) {

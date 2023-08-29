@@ -17,13 +17,20 @@
 // FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
 // ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-
 import Foundation
 
-struct TestEncodableParams: Encodable {
+struct TestEncodableRequest: Encodable {
     var value1: Bool
     var value2: Int
     var value3: Double
     var value4: String
     var value5: String?
+
+    enum CodingKeys: String, CodingKey {
+        case value1 = "key1"
+        case value2 = "key2"
+        case value3 = "key3"
+        case value4 = "key4"
+        case value5 = "key5"
+    }
 }

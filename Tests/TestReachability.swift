@@ -18,6 +18,8 @@
 // ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 import XCTest
+import SystemConfiguration
+
 @testable import TermiNetwork
 
 class TestReachability: XCTestCase {
@@ -55,9 +57,17 @@ class TestReachability: XCTestCase {
         let expectation = XCTestExpectation(description: "testReachabilityConnectedToWIFI")
         var failed = true
 
+        var flags: [SCNetworkReachabilityFlags]
+
+#if os(macOS)
+        flags = [.isDirect]
+#else
+        flags = [.isWWAN]
+#endif
+
         let reachability = Reachability()
         try? reachability.monitorState { _ in
-            failed = !(reachability.containsFlags([.reachable]) && !reachability.containsFlags([.isWWAN]))
+            failed = !(reachability.containsFlags([.reachable]) && !reachability.containsFlags(flags))
             expectation.fulfill()
         }
 
@@ -70,9 +80,17 @@ class TestReachability: XCTestCase {
         let expectation = XCTestExpectation(description: "testReachabilityStopMonitoringFlagsWIFI")
         var failed = true
 
+        var flags: [SCNetworkReachabilityFlags]
+
+#if os(macOS)
+        flags = [.isDirect]
+#else
+        flags = [.isWWAN]
+#endif
+
         let reachability = Reachability()
         try? reachability.monitorState { _ in
-            failed = !(reachability.containsFlags([.reachable]) && !reachability.containsFlags([.isWWAN]))
+            failed = !(reachability.containsFlags([.reachable]) && !reachability.containsFlags(flags))
             expectation.fulfill()
         }
 
@@ -130,8 +148,8 @@ class TestReachability: XCTestCase {
         var failed = true
 
         let reachability = Reachability(hostname: "127.0.0.1")
-        try? reachability.monitorState { _ in
-            failed = !(reachability.containsFlags([.reachable]) && !reachability.containsFlags([.isWWAN]))
+        try? reachability.monitorState { state in
+            failed = state != .wifi
             expectation.fulfill()
         }
 

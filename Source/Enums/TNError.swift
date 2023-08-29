@@ -17,9 +17,9 @@
 // FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
 // ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-// swiftlint:disable line_length
-
 import Foundation
+
+// swiftlint:disable line_length
 
 /// Custom error definition.
 public enum TNError: Error {
@@ -67,8 +67,10 @@ public enum TNError: Error {
     case cannotReadResponseHeaders
     /// Thrown when the response is empty.
     case emptyResponse
-    /// Thrown the reachability core function call cannot be itialized.
+    /// Thrown when reachability core function call cannot be itialized.
     case reachabilityError
+    /// Thrown when multipart form data file url error occurs.
+    case multipartFormDataUrlFileError(Error)
 }
 
 extension TNError: LocalizedError {
@@ -129,6 +131,10 @@ extension TNError: LocalizedError {
             return NSLocalizedString("The response should not be empty.", comment: "TNError")
         case .reachabilityError:
             return NSLocalizedString("Cannot initialize reachability.", comment: "TNError")
+        case .multipartFormDataUrlFileError(let error):
+            return NSLocalizedString("multipart/form-data file error \(error.localizedDescription).", comment: "TNError")
         }
     }
 }
+
+// swiftlint:enable line_length

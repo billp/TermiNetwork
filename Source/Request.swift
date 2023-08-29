@@ -19,51 +19,25 @@
 
 import Foundation
 
-// MARK: Enums
-/// The HTTP request method based on specification of https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html.
-public enum Method: String {
-    /// GET request method.
-    case get
-    /// HEAD request method.
-    case head
-    /// POST request method.
-    case post
-    /// PUT request method.
-    case put
-    /// DELETE request method.
-    case delete
-    /// CONNECT request method.
-    case connect
-    /// OPTIONS request method.
-    case options
-    /// TRACE request method.
-    case trace
-    /// PATCH request method.
-    case patch
-}
-
-/// Internal type for figuring out the type of the request
-internal enum RequestType {
-    case data
-    case upload
-    case download(String)
-}
+// swiftlint:disable type_body_length
 
 /// The core class of TermiNetwork. It handles the request creation and its execution.
 public final class Request: Operation {
+
     // MARK: Internal properties
 
-    internal var method: Method!
+    internal var method: HttpMethod!
     internal var queue: Queue = Queue.shared
     internal var dataTask: URLSessionTask?
     internal var responseData: Data?
     internal var error: TNError?
     internal var path: String!
-    internal var pathType: SNPathType = .relative
+    internal var pathType: PathType = .relative
     internal var mockFilePath: Path?
     internal var multipartBoundary: String?
     internal var multipartFormDataStream: MultipartFormDataStream?
     internal var requestType: RequestType = .data
+    internal var progressUpdate: ProgressCallbackType?
     internal var urlRequestLogInitiated: Bool = false
     internal var responseHeadersClosure: ((URLResponse?) -> Void)?
     internal var processedHeaders: [String: String]?
@@ -112,52 +86,48 @@ public final class Request: Operation {
     /// Initializes a Request.
     ///
     /// - parameters:
-    ///   - method: A Method to use, for example: .get, .post, etc.
+    ///   - method: The http method to use, for example: .get, .post, etc.
     ///   - url: The URL of the request.
     ///   - headers: A Dictionary of header values, etc. ["Content-type": "text/html"] (optional)
     ///   - params: The parameters of the request. (optional)
     ///   - configuration: A configuration object (optional, e.g. if you want ot use custom
     ///   configuration for the request).
-    public init(method: Method,
+    public init(method: HttpMethod,
                 url: String,
                 headers: [String: String]? = nil,
                 params: [String: Any?]? = nil,
                 configuration: Configuration? = nil) {
         self.method = method
-        self.headers = headers
-        self.params = params
+        self.headers = headers?.compactMapValues { $0 }
+        self.params = params?.compactMapValues { $0 }
         self.pathType = .absolute
         self.path = url
         self.configuration = configuration ?? Configuration.makeDefaultConfiguration()
     }
 
-    /// Initializes a Request.
+    /// Initializes a Request for multipart/form-data upload operations.
     ///
     /// - parameters:
-    ///     - method: The method of request, e.g. .get, .post, .head, etc.
-    ///     - url: The URL of the request
-    ///     - headers: A Dictionary of header values, etc. ["Content-type": "text/html"] (optional)
-    convenience init(method: Method,
-                     url: String,
-                     headers: [String: String]? = nil) {
-        self.init(method: method, url: url, headers: nil, params: nil)
+    ///   - method: The http method to use, for example: .get, .post, etc.
+    ///   - url: The URL of the request.
+    ///   - headers: A Dictionary of header values, etc. ["Content-type": "text/html"] (optional)
+    ///   - params: The parameters of the request. (optional)
+    ///   - configuration: A configuration object (optional, e.g. if you want ot use custom
+    ///   configuration for the request).
+    public init(method: HttpMethod,
+                url: String,
+                headers: [String: String]? = nil,
+                params: [String: MultipartFormDataPartType?]? = nil,
+                configuration: Configuration? = nil) {
+        self.method = method
+        self.headers = headers?.compactMapValues { $0 }
+        self.params = params?.compactMapValues { $0 }
+        self.pathType = .absolute
+        self.path = url
+        self.configuration = configuration ?? Configuration.makeDefaultConfiguration()
     }
 
-    /// Initializes a Request.
-    ///
-    /// - parameters:
-    ///    - method: The method of request, e.g. .get, .post, .head, etc.
-    ///    - url: The URL of the request
-    ///    - headers: A Dictionary of header values, etc. ["Content-type": "text/html"] (optional)
-    ///    - configuration: A Configuration object
-    convenience init(method: Method,
-                     url: String,
-                     headers: [String: String]? = nil,
-                     configuration: Configuration = Configuration.makeDefaultConfiguration()) {
-        self.init(method: method, url: url, headers: nil, params: nil, configuration: configuration)
-    }
-
-    /// Initializes a Request.
+    /// Initializes a Request using an endpoint.
     ///
     /// - parameters:
     ///   - endpoint: a EndpointProtocol enum value
@@ -166,8 +136,8 @@ public final class Request: Operation {
                   configuration: Configuration? = nil) {
         let repositoryConfiguration = endpoint.configure()
         self.method = repositoryConfiguration.method
-        self.headers = repositoryConfiguration.headers
-        self.params = repositoryConfiguration.params
+        self.headers = repositoryConfiguration.headers?.compactMapValues { $0 }
+        self.params = repositoryConfiguration.params?.compactMapValues { $0 }
         self.path = repositoryConfiguration.path.convertedPath
         self.environment = environment
         self.mockFilePath = repositoryConfiguration.mockFilePath
@@ -269,7 +239,7 @@ public final class Request: Operation {
         }
 
         // Set body params if method is not get
-        if method != Method.get {
+        if method != HttpMethod.get {
             let requestBodyType = configuration.requestBodyType ??
                 Configuration.makeDefaultConfiguration().requestBodyType!
 
@@ -349,6 +319,7 @@ public final class Request: Operation {
         guard dataTask == nil else {
             return
         }
+
         dataTask = SessionTaskFactory.makeDataTask(with: self,
                                                    completionHandler: { [weak self] data, urlResponse in
             guard let self = self else { return }
@@ -483,4 +454,18 @@ public final class Request: Operation {
                            error: error)
         }
     }
+
+    func executeCurrentOperationIfNeeded() {
+        switch requestType {
+        case .data:
+            executeDataRequestIfNeeded()
+        case .upload:
+            executeUploadRequestIfNeeded(withProgressCallback: progressUpdate)
+        case .download(let destinationPath):
+            executeDownloadRequestIfNeeded(withFilePath: destinationPath,
+                                           progressUpdate: progressUpdate)
+        }
+    }
 }
+
+// swiftlint:enable type_body_length

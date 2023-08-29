@@ -146,5 +146,4 @@ class TestTransformers: XCTestCase {
 
         XCTAssert(!failed)
     }
-
 }

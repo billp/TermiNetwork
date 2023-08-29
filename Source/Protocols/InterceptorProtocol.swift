@@ -19,16 +19,6 @@
 
 import Foundation
 
-/// This will be used in interceptor callback as an action to inteceptors chain.
-public enum InterceptionAction {
-    /// Continue with the next interceptor or final callbacks if there is no other interceptor in chain.
-    case `continue`
-    /// Retry the request
-    /// - Parameters
-    ///     - delay: The delay between retries in seconds. Pass nil value for no delay.
-    case retry(delay: TimeInterval?)
-}
-
 /// Use this protocol to create interceptors that can be passed to Configuration instances.
 /// Every class which implements this protocol will intercept between request completion and callbacks.
 public protocol InterceptorProtocol {

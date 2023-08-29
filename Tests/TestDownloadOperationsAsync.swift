@@ -78,6 +78,37 @@ class TestDownloadOperationsAsync: XCTestCase {
         XCTAssert(!failed)
     }
 
+    func testFileDownloadWithoutRepository() async {
+        var failed = true
+
+        guard var cacheURL = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first else {
+            XCTAssert(false)
+            return
+        }
+        cacheURL.appendPathComponent("testDownload")
+
+        try? FileManager.default.removeItem(at: cacheURL)
+
+        do {
+            try await Request(method: .get,
+                              url: "\(Env.termiNetworkRemote.configure().stringURL)/downloads/3cwHqdwsRyuX")
+            .asyncDownload(destinationPath: cacheURL.path,
+                           progressUpdate: { bytesSent, totalBytes, progress in
+                if bytesSent == totalBytes && progress == 1 {
+                    failed = false
+                }
+            })
+
+            failed = TestHelpers.sha256(url: cacheURL) !=
+            "63b54b4506e233839f55e1228b59a1fcdec7d5ff9c13073c8a1faf92e9dcc977"
+        } catch let error {
+            failed = true
+            print(error.localizedDescription)
+        }
+
+        XCTAssert(!failed)
+    }
+
     func testFileDownloadCancel() {
         let expectation = XCTestExpectation(description: "testFileDownloadCancel")
 

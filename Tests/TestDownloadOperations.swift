@@ -66,13 +66,13 @@ class TestDownloadOperations: XCTestCase {
                         if bytesSent == totalBytes && progress == 1 {
                             failed = false
                         }
-                      },
-                      completionHandler: {
+                      })
+            .success(responseType: Data.self) { _ in
                         failed = TestHelpers.sha256(url: cacheURL) !=
                             "63b54b4506e233839f55e1228b59a1fcdec7d5ff9c13073c8a1faf92e9dcc977"
 
                         expectation.fulfill()
-                      })
+                      }
             .failure { error in
                 failed = true
                 print(String(describing: error.localizedDescription))
@@ -92,14 +92,14 @@ class TestDownloadOperations: XCTestCase {
         client.request(for: .fileDownload)
             .download(destinationPath: "",
                       progressUpdate: { bytesSent, totalBytes, progress in
-                        if bytesSent == totalBytes && progress == 1 {
-                            failed = false
-                        }
-                      },
-                      completionHandler: {
-                        failed = true
-                        expectation.fulfill()
-                      })
+                if bytesSent == totalBytes && progress == 1 {
+                    failed = false
+                }
+            })
+            .success {
+                failed = true
+                expectation.fulfill()
+            }
             .failure { error in
                 if case .invalidFileURL = error {
                     failed = false

@@ -71,29 +71,33 @@ internal class MultipartFormDataStream: NSObject, StreamDelegate {
         super.init()
         try createBodyParts(with: params,
                             boundary: boundary)
-        processNextBodyPart()
+        try processNextBodyPart()
     }
 
     func stream(_ aStream: Stream, handle eventCode: Stream.Event) {
         if aStream == boundStreams.output {
             if bytesLeft > 0 && boundStreams.output.hasSpaceAvailable {
-                try? processData()
+                do {
+                    try processData()
+                } catch {
+                    aStream.close()
+                }
             } else if bodyParts.count == 0 {
                 aStream.close()
             }
         }
     }
 
-    func processData() throws {
+    private func processData() throws {
         switch currentBodyPart {
         case .data(let data):
-            processNextDataChunk(data)
+            try processNextDataChunk(data)
         case .stream(let stream, _):
             try stream.readNextChunk(seekToOffset: currentBytesSent+1) { [weak self] data in
                 if let data = data, data.count > 0 {
-                    self?.processNextDataChunk(data)
+                    try self?.processNextDataChunk(data)
                 } else {
-                    self?.processNextBodyPart()
+                    try self?.processNextBodyPart()
                 }
             }
         default:
@@ -101,7 +105,7 @@ internal class MultipartFormDataStream: NSObject, StreamDelegate {
         }
     }
 
-    fileprivate func processNextBodyPart() {
+    fileprivate func processNextBodyPart() throws {
         guard bodyParts.count > 0 else {
             return
         }
@@ -109,10 +113,8 @@ internal class MultipartFormDataStream: NSObject, StreamDelegate {
 
         if case .data(let data) = currentBodyPart {
             bytesLeft = data.count
-        } else if case .stream(_,
-                               let url) = currentBodyPart {
-            bytesLeft = MultipartFormDataHelpers.fileSize(withURL: url)
-
+        } else if case .stream(_, let url) = currentBodyPart {
+            bytesLeft = try MultipartFormDataHelpers.fileSize(withURL: url)
         }
     }
 
@@ -174,12 +176,12 @@ internal class MultipartFormDataStream: NSObject, StreamDelegate {
                 guard url.isFileURL else {
                     throw TNError.invalidFileURL(url.absoluteString)
                 }
-                totalBytes += createStreamBodyPart(withUrl: url,
-                                                   shouldOpenBody:
-                                                    shouldOpenBody,
-                                                   isLastPart: isLastPart,
-                                                   boundary: boundary,
-                                                   key: key)
+                totalBytes += try createStreamBodyPart(
+                    withUrl: url,
+                    shouldOpenBody: shouldOpenBody,
+                    isLastPart: isLastPart,
+                    boundary: boundary,
+                    key: key)
             }
         }
     }
@@ -188,9 +190,9 @@ internal class MultipartFormDataStream: NSObject, StreamDelegate {
                                           shouldOpenBody: Bool,
                                           isLastPart: Bool,
                                           boundary: String,
-                                          key: String) -> Int {
+                                          key: String) throws -> Int {
         var bytes = 0
-        let stream = FileStreamer(url: url, bufferSize: Constants.bufferSize)
+        let stream = try FileStreamer(url: url, bufferSize: Constants.bufferSize)
         if shouldOpenBody {
             let openBodyData = MultipartFormDataHelpers.openBodyPart(boundary: boundary)
             bodyParts.append(.data(openBodyData))
@@ -198,15 +200,15 @@ internal class MultipartFormDataStream: NSObject, StreamDelegate {
         }
         let formData = MultipartFormDataHelpers
             .generateContentDisposition(
-                        boundary: boundary,
-                        name: key,
-                        filename: url.lastPathComponent,
-                        contentType: MultipartFormDataHelpers.mimeTypeForPath(path: url.path))
+                boundary: boundary,
+                name: key,
+                filename: url.lastPathComponent,
+                contentType: MultipartFormDataHelpers.mimeTypeForPath(path: url.path))
         bodyParts.append(.data(formData))
         bytes += formData.count
 
         bodyParts.append(.stream(stream: stream, fileURL: url))
-        bytes += MultipartFormDataHelpers.fileSize(withURL: url)
+        bytes += try MultipartFormDataHelpers.fileSize(withURL: url)
 
         let closeBodyData = MultipartFormDataHelpers.closeBodyPart(boundary: boundary,
                                                                      isLastPart: isLastPart)
@@ -216,10 +218,10 @@ internal class MultipartFormDataStream: NSObject, StreamDelegate {
         return bytes
     }
 
-    fileprivate func processNextDataChunk(_ data: Data) {
+    fileprivate func processNextDataChunk(_ data: Data) throws {
         let count = data.count
 
-        data.withUnsafeBytes { [weak self] buffer in
+        try data.withUnsafeBytes { [weak self] buffer in
             guard let self = self else { return }
             var maxLength = 0
             if case .stream = currentBodyPart {
@@ -255,7 +257,7 @@ internal class MultipartFormDataStream: NSObject, StreamDelegate {
             if bytesLeft == 0 {
                 currentOffset = 0
                 currentBytesSent = -1
-                processNextBodyPart()
+                try processNextBodyPart()
             }
         }
     }

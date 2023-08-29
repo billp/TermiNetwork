@@ -16,10 +16,11 @@
 // PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE
 // FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
 // ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-// swiftlint:disable type_body_length
 
 import XCTest
 import TermiNetwork
+
+// swiftlint:disable type_body_length
 
 class TestTNErrors: XCTestCase {
     lazy var client: Client<TestRepository> = .init()
@@ -91,7 +92,7 @@ class TestTNErrors: XCTestCase {
 
     func testInvalidURL() {
         do {
-            try _ = Request(method: .get, url: "http://εεε.google.κωμ", headers: nil, params: nil).asRequest()
+            try _ = Request(method: .get, url: "", headers: nil, params: nil).asRequest()
             XCTAssert(false)
         } catch TNError.invalidURL {
             XCTAssert(true)
@@ -137,7 +138,7 @@ class TestTNErrors: XCTestCase {
                                             value3: 2,
                                             value4: "",
                                             value5: nil))
-            .success(responseType: UIImage.self) { _ in
+            .success(responseType: TNImageType.self) { _ in
                 failed = true
                 expectation.fulfill()
             }
@@ -161,7 +162,7 @@ class TestTNErrors: XCTestCase {
         var failed = true
 
         client.request(for: .testImage(imageName: "sample.jpeg"))
-            .success(responseType: UIImage.self) { _ in
+            .success(responseType: TNImageType.self) { _ in
                 expectation.fulfill()
                 failed = false
             }
@@ -400,3 +401,5 @@ class TestTNErrors: XCTestCase {
         XCTAssert(!failed)
     }
 }
+
+// swiftlint:enable type_body_length

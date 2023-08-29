@@ -106,11 +106,11 @@ public extension Request {
     /// - returns: The response data as string.
     /// - throws: A TNError in case of failure.
     @discardableResult
-    func async(as type: ImageType.Type) async throws -> ImageType {
+    func async(as type: TNImageType.Type) async throws -> TNImageType {
         try await withTaskCancellationHandler {
             try checkTaskCancellation()
             return try await withCheckedThrowingContinuation { configuration in
-                success(responseType: ImageType.self) { response in
+                success(responseType: TNImageType.self) { response in
                     configuration.resume(returning: response)
                 }
                 .failure { error in

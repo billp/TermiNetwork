@@ -1,4 +1,4 @@
-// RequestBodyGenerators.swift
+// InterceptionAction.swift
 //
 // Copyright © 2018-2023 Vassilis Panagiotopoulos. All rights reserved.
 //
@@ -19,25 +19,12 @@
 
 import Foundation
 
-class RequestBodyGenerator {
-    static func generateURLEncodedString(with params: [String: Any?]) throws -> String {
-        // Create query string from the given params
-        let queryString = try params.filter({ $0.value != nil }).map { param -> String in
-            if let value = String(describing: param.value!)
-                .addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) {
-                return param.key + "=" + value
-            } else {
-                throw TNError.invalidParams
-            }
-        }.joined(separator: "&")
-
-        return queryString
-    }
-
-    static func generateJSONBodyData(with params: [String: Any?]) throws -> Data {
-        guard let body = try params.toJSONData() else {
-            throw TNError.invalidParams
-        }
-        return body
-    }
+/// This will be used in interceptor callback as an action to inteceptors chain.
+public enum InterceptionAction {
+    /// Continue with the next interceptor or final callbacks if there is no other interceptor in chain.
+    case `continue`
+    /// Retry the request
+    /// - Parameters
+    ///     - delay: The delay between retries in seconds. Pass nil value for no delay.
+    case retry(delay: TimeInterval?)
 }

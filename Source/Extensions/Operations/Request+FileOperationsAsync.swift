@@ -33,16 +33,16 @@ import Foundation
     func asyncUpload<T: Decodable>(as type: T.Type,
                                    progressUpdate: ProgressCallbackType?) async throws -> T {
         try await withTaskCancellationHandler {
+            checkUploadParamsType()
             try checkTaskCancellation()
             return try await withCheckedThrowingContinuation { configuration in
-                upload(responseType: type.self,
-                       progressUpdate: progressUpdate,
-                       responseHandler: { response in
-                    configuration.resume(returning: response)
-                })
-                .failure { error in
-                    configuration.resume(throwing: error)
-                }
+                upload(progressUpdate: progressUpdate)
+                    .success(responseType: type) { response in
+                        configuration.resume(returning: response)
+                    }
+                    .failure { error in
+                        configuration.resume(throwing: error)
+                    }
             }
         } onCancel: { [weak self] in
             self?.cancel()
@@ -62,16 +62,16 @@ import Foundation
         progressUpdate: ProgressCallbackType? = nil
     ) async throws -> To {
         try await withTaskCancellationHandler {
+            checkUploadParamsType()
             try checkTaskCancellation()
             return try await withCheckedThrowingContinuation { configuration in
-                upload(transformer: transformer,
-                       progressUpdate: progressUpdate,
-                       responseHandler: { response in
-                    configuration.resume(returning: response)
-                })
-                .failure { error in
-                    configuration.resume(throwing: error)
-                }
+                upload(progressUpdate: progressUpdate)
+                    .success(transformer: transformer) { response in
+                        configuration.resume(returning: response)
+                    }
+                    .failure { error in
+                        configuration.resume(throwing: error)
+                    }
             }
         } onCancel: { [weak self] in
             self?.cancel()
@@ -85,19 +85,19 @@ import Foundation
     ///    - progressUpdate: specifies a progress callback to get upload progress updates.
     /// - returns: The String response.
     @discardableResult
-    func asyncUplaod(as type: String.Type,
+    func asyncUpload(as type: String.Type,
                      progressUpdate: ProgressCallbackType?) async throws -> String {
         try await withTaskCancellationHandler {
+            checkUploadParamsType()
             try checkTaskCancellation()
             return try await withCheckedThrowingContinuation { configuration in
-                upload(responseType: String.self,
-                       progressUpdate: progressUpdate,
-                       responseHandler: { response in
-                    configuration.resume(returning: response)
-                })
-                .failure { error in
-                    configuration.resume(throwing: error)
-                }
+                upload(progressUpdate: progressUpdate)
+                    .success(responseType: type) { response in
+                        configuration.resume(returning: response)
+                    }
+                    .failure { error in
+                        configuration.resume(throwing: error)
+                    }
             }
         } onCancel: { [weak self] in
             self?.cancel()
@@ -116,16 +116,16 @@ import Foundation
     func asyncUpload(as type: Data.Type,
                      progressUpdate: ProgressCallbackType?) async throws -> Data {
         try await withTaskCancellationHandler {
+            checkUploadParamsType()
             try checkTaskCancellation()
             return try await withCheckedThrowingContinuation { configuration in
-                upload(responseType: Data.self,
-                       progressUpdate: progressUpdate,
-                       responseHandler: { response in
-                    configuration.resume(returning: response)
-                })
-                .failure { error in
-                    configuration.resume(throwing: error)
-                }
+                upload(progressUpdate: progressUpdate)
+                    .success(responseType: type) { response in
+                        configuration.resume(returning: response)
+                    }
+                    .failure { error in
+                        configuration.resume(throwing: error)
+                    }
             }
         } onCancel: { [weak self] in
             self?.cancel()
@@ -144,13 +144,14 @@ import Foundation
         progressUpdate: ProgressCallbackType? = nil
     ) async throws {
         try await withTaskCancellationHandler {
+            checkUploadParamsType()
             try checkTaskCancellation()
             return try await withCheckedThrowingContinuation { configuration in
                 download(destinationPath: destinationPath,
-                         progressUpdate: progressUpdate,
-                         completionHandler: {
+                         progressUpdate: progressUpdate)
+                .success {
                     configuration.resume()
-                })
+                }
                 .failure { error in
                     configuration.resume(throwing: error)
                 }

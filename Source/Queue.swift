@@ -19,14 +19,6 @@
 
 import Foundation
 
-/// Type that specifies the behavior of the queue when a request fails
-public enum QueueFailureMode {
-    /// Cancels the execution of the queue after a request (operation) fails
-    case cancelAll
-    /// Continues the execution of the queue after a request (operation) fails
-    case `continue`
-}
-
 /// Hook type for beforeAllRequestsCallback queue property
 public typealias BeforeQueueStartCallbackType = () -> Void
 /// Hook type for afterAllRequestsCallback queue property
