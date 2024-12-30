@@ -434,15 +434,17 @@ public final class Request: Operation, @unchecked Sendable {
 
         self.responseHeadersClosure?(urlResponse)
 
+        if isExecuting {
+            executing(false)
+            finished(true)
+        }
+        
         switch self.queue.failureMode {
         case .continue:
             break
         case .cancelAll:
             self.queue.cancelAllOperations()
         }
-
-        executing(false)
-        finished(true)
 
         self.queue.afterOperationFinished(request: self,
                                           data: data,
