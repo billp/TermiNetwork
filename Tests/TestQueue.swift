@@ -289,12 +289,6 @@ class TestQueue: XCTestCase {
         let expectation = XCTestExpectation(description: "testQueueFailureModeContinue")
         queue.maxConcurrentOperationCount = 1
 
-        queue.afterAllRequestsCallback = { _ in
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: {
-                expectation.fulfill()
-            })
-        }
-
         for index in 1...8 {
             let url = index == 1 ? "http://localhost.unkownhost" : "http://google.com"
 
@@ -303,6 +297,11 @@ class TestQueue: XCTestCase {
             call.queue(queue)
                 .success(responseType: Data.self) { _ in
                     numberOfRequests -= 1
+                }
+                .failure { error in
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 10, execute: {
+                        expectation.fulfill()
+                    })
                 }
         }
 
