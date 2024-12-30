@@ -22,7 +22,7 @@ import Foundation
 // swiftlint:disable type_body_length
 
 /// The core class of TermiNetwork. It handles the request creation and its execution.
-public final class Request: Operation {
+public final class Request: Operation, @unchecked Sendable {
 
     // MARK: Internal properties
 

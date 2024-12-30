@@ -99,7 +99,6 @@ class TestDownloadOperationsAsync: XCTestCase {
                 }
             })
             
-            print(TestHelpers.sha256(url: cacheURL))
             failed = TestHelpers.sha256(url: cacheURL) !=
             "b64fb87ce1e10bc7aa14e272262753200414f74a3059c5d7afb443c36be06531"
         } catch let error {

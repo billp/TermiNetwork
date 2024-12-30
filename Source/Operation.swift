@@ -22,7 +22,7 @@ import Foundation
 // swiftlint:disable identifier_name
 
 /// This class is inherited by Request to control the execution of the request.
-public class Operation: Foundation.Operation {
+public class Operation: Foundation.Operation, @unchecked Sendable {
     internal var _executing = false {
         willSet {
             willChangeValue(forKey: "isExecuting")
