@@ -279,7 +279,8 @@ class TestQueue: XCTestCase {
 
         wait(for: [expectation], timeout: 40)
 
-        XCTAssert(queue.operationCount == 0 && numberOfRequests == 3)
+        XCTAssertEqual(queue.operationCount, 0)
+        XCTAssertEqual(numberOfRequests, 3)
     }
 
     func testQueueFailureModeContinue() {
@@ -295,7 +296,7 @@ class TestQueue: XCTestCase {
         }
 
         for index in 1...8 {
-            let url = "http://google.com"
+            let url = index == 1 ? "http://localhost.unkownhost" : "http://google.com"
 
             let call = Request(method: .get, url: url, headers: nil, params: nil)
 
@@ -303,14 +304,11 @@ class TestQueue: XCTestCase {
                 .success(responseType: Data.self) { _ in
                     numberOfRequests -= 1
                 }
-            
-            if index == 1 {
-                call.cancel()
-            }
         }
 
         wait(for: [expectation], timeout: 60)
 
-        XCTAssert(queue.operationCount == 0 && numberOfRequests == 1)
+        XCTAssertEqual(queue.operationCount, 0)
+        XCTAssertEqual(numberOfRequests, 1)
     }
 }
