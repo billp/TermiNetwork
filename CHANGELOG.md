@@ -1,5 +1,24 @@
 # Changelog
 
+## [4.1](https://github.com/billp/TermiNetwork/tree/4.1) (2024-12-30)
+
+[Full Changelog](https://github.com/billp/TermiNetwork/compare/4.0...4.1)
+
+**Implemented enhancements:**
+
+- Add support for Xcode 16.x [\#59](https://github.com/billp/TermiNetwork/issues/59)
+- Refactor upload operations to restrict users from giving any type of values [\#56](https://github.com/billp/TermiNetwork/issues/56)
+- Refactor upload operations to restrict users from giving any type of … [\#58](https://github.com/billp/TermiNetwork/pull/58) ([billp](https://github.com/billp))
+
+**Closed issues:**
+
+- Unable to upload files. Wrong body type and exception is thrown [\#55](https://github.com/billp/TermiNetwork/issues/55)
+- Issue with interceptors and catching errors. [\#54](https://github.com/billp/TermiNetwork/issues/54)
+
+**Merged pull requests:**
+
+- Add support for Xcode 16.x \(\#59\) [\#60](https://github.com/billp/TermiNetwork/pull/60) ([billp](https://github.com/billp))
+
 ## [4.0](https://github.com/billp/TermiNetwork/tree/4.0) (2023-04-24)
 
 [Full Changelog](https://github.com/billp/TermiNetwork/compare/3.2.0...4.0)
