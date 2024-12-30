@@ -72,7 +72,7 @@ enum Env: EnvironmentProtocol {
                                configuration: requestConfiguration)
         case .termiNetworkRemote:
             return Environment(scheme: .https,
-                               host: "terminetwork.billp.dev",
+                               host: "terminetwork-backend.billp.dev",
                                configuration: requestConfiguration2)
         case .invalidHost:
             return Environment(scheme: .http,

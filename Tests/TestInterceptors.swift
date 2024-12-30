@@ -152,7 +152,7 @@ class TestInterceptors: XCTestCase {
                 }
             }).success {
                 failed = TestHelpers.sha256(url: cacheURL) !=
-                "63b54b4506e233839f55e1228b59a1fcdec7d5ff9c13073c8a1faf92e9dcc977"
+                "b64fb87ce1e10bc7aa14e272262753200414f74a3059c5d7afb443c36be06531"
 
                 expectation.fulfill()
             }
