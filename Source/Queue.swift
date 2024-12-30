@@ -42,7 +42,7 @@ public typealias AfterEachRequestCallbackType = (
     _ error: Error?) -> Void
 
 /// Use this class to create custom queues.
-public final class Queue: OperationQueue {
+public final class Queue: OperationQueue, @unchecked Sendable {
     // MARK: Static properties
 
     /// The default queue of TermiNetwork used in all Request objects.
