@@ -27,7 +27,7 @@ enum DemoEnvironment: EnvironmentProtocol {
         switch self {
         case .production:
             return TermiNetwork.Environment(scheme: .https,
-                                            host: "terminetwork.billp.dev",
+                                            host: "terminetwork-backend.billp.dev",
                                             configuration: defaultConfiguration)
         }
     }
