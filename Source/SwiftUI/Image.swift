@@ -24,6 +24,7 @@ import SwiftUI
 #if os(macOS)
 /// The Image type depending on platform: UIImage for iOS or NSImage for macOS.
 public typealias TNImageType = NSImage
+extension TNImageType: @unchecked @retroactive Sendable {}
 #elseif os(iOS) || os(watchOS) || os(tvOS)
 /// The Image type depending on platform: UIImage for iOS or NSImage for macOS.
 public typealias TNImageType = UIImage
