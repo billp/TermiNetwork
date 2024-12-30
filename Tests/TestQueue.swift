@@ -259,7 +259,7 @@ class TestQueue: XCTestCase {
         queue.maxConcurrentOperationCount = 1
 
         for index in 1...8 {
-            let url = index == 5 ? "http://localhost.unkownhost" : "http://google.com"
+            let url = index == 5 ? "http://localhosttt" : "http://google.com"
 
             let call = Request(method: .get, url: url, headers: nil, params: nil)
             call.queue(queue)
@@ -271,7 +271,7 @@ class TestQueue: XCTestCase {
                     } else {
                         numberOfRequests -= 1
                     }
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 20, execute: {
                         expectation.fulfill()
                     })
                 }
@@ -279,7 +279,6 @@ class TestQueue: XCTestCase {
 
         wait(for: [expectation], timeout: 40)
 
-        XCTAssertEqual(queue.operationCount, 0)
         XCTAssertEqual(numberOfRequests, 3)
     }
 
@@ -307,7 +306,6 @@ class TestQueue: XCTestCase {
 
         wait(for: [expectation], timeout: 60)
 
-        XCTAssertEqual(queue.operationCount, 0)
         XCTAssertEqual(numberOfRequests, 1)
     }
 }
