@@ -33,8 +33,8 @@ struct Reachability: View {
         }
         .padding([.leading, .trailing, .top], 20)
         .navigationTitle("Reachability")
-        .onDisappear { [unowned viewModel] in
-            viewModel.onDisappear()
+        .onDisappear { [weak viewModel] in
+            viewModel?.onDisappear()
         }
     }
 }

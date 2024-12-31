@@ -67,7 +67,7 @@ extension CityExplorerDetails {
             let request = Client<CitiesRepository>().request(for: .city(id: city.cityID))
 
             do {
-                city = try await request.asyncUpload(using: CityTransformer.self)
+                city = try await request.async(using: CityTransformer.self)
                 self.cityFetched = true
             } catch let error as TNError {
                 switch error {
