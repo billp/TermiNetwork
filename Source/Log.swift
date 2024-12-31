@@ -59,7 +59,7 @@ internal class Log {
         print(String(format: "🎛️ Method: %@", request.method.rawValue.uppercased()))
         if case .data = request.requestType,
            case .started = state {
-            print(String(format: "🔮 CURL: %@", urlRequest.curlString))
+            print(String(format: "🔮 cURL: %@", urlRequest.curlString))
         }
 
         if request.configuration.certificateData != nil {

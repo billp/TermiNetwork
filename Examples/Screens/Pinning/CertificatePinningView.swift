@@ -48,6 +48,9 @@ struct CertificatePinningView: View {
         }
         .padding([.leading, .trailing, .top], 20)
         .navigationTitle("Certificate Pinning")
+        .onAppear {
+            Environment.current.configuration?.mockDataEnabled = false
+        }
     }
 
     func startRequest() {
